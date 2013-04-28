@@ -10,7 +10,8 @@ public class Application extends Controller {
     public static Result index() {
     	//Just want to test
     	//test kedua kali
-        return ok(index.render("Your new application is ready."));
+    	//test
+        return ok(index.render("Your new application is ready...haha"));
     }
   
 }
