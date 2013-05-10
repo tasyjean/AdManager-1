@@ -41,7 +41,6 @@ public class CompressController extends Controller{
         } 
 
         output = compressor.compress(output);
-
         return output;
     }
 }
