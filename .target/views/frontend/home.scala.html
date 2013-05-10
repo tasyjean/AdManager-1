@@ -1,0 +1,72 @@
+@(message: String)
+
+@import helper._
+
+@main("") {
+    
+      <div class="promo">
+        <h1>Langkah Mudah Beriklan di Teknimo</h1>
+        <p class="lead" style="max-width:700px;margin:0 auto">Hanya membutuhkan 5 langkah sederhana untuk memasang iklan, seluruh sisanya akan ditangani oleh sistem kami secara otomatis dan akurat</p></br></br>
+
+        <!-- step by step -->
+        <div class="container-fluid">
+            
+            <div class="span2 step">
+              <h1>1</h1>
+              <div class="step-kotak">
+                <h1>Registrasi</h1>
+                <h2>atau login jika sudah mendaftar</h2>
+              </div>
+            </div>
+
+            <div class="span2 step">
+              <h1>2</h1>
+              <div class="step-kotak">
+                <h1>Tambah Iklan</h1>
+                <h2>tambah atau cukup atur iklan yang sudah ada</h2>
+              </div>
+            </div>
+
+            <div class="span2 step">
+              <h1>3</h1>
+              <div class="step-kotak">
+                <h1>Bayar</h1>
+                <h2>dengan menggunakan layanan bank atau e-payment</h2>
+              </div>
+            </div>
+
+            <div class="span2 step">
+              <h1>4</h1>
+              <div class="step-kotak">
+                <h1>Iklan Tampil</h1>
+                <h2>iklan aktif dan tampil di layanan Teknimo</h2>
+              </div>
+            </div>
+
+            <div class="span2 step">
+              <h1>5</h1>
+              <div class="step-kotak">
+                <h1>Review</h1>
+                <h2>review laporan lengkap untuk evaluasi</h2>
+              </div>
+            </div>
+
+         </div> </br></br>
+       <form action="registration" method="get"><button type="submit" formaction="registration" class="btn btn-success kotak-daftar" href="registration">Registrasi Sekarang</br><font style="font-size:0.7em">atau klik <a href="login">di sini</a> jika sudah mendaftar</font></button></form>
+      </div>
+
+      <hr style="">
+
+      <div class="row-fluid" >
+        <div class="span6 ringkasan-artikel" style="float:left;">
+          <h3>Tentang Teknimo</h3>
+          <p>Teknimo merupakan website blog yang berisi berita, artikel, review dan opini-opini yang berkaitan dengan perkembangan teknologi, khususnya teknologi informasi dan komunikasi. Didirikan pada tanggal 2 Oktober 2012 dan dapat di akses di alamat <a href="http://www.teknimo.com">http://www.teknimo.com</a> </p>
+          <p><a class="btn" href="about">Lebih Lengkap »</a></p>
+        </div>
+        <div class="span6 ringkasan-artikel" style="float:right">
+          <h3>Bantuan Lebih Lanjut</h3>
+          <p>Ads Manager merupakan aplikasi yang difungsikan untuk mengelola iklan untuk website teknimo. Kegiatan seperti menambahkan iklan, mengelola pembayaran, melihat laporan, pengaturan iklan hingga perhitungan biaya ada disini semua. Baca bantuan penggunaan dulu sebelum menggunakan sistem.</p>
+          <p><a class="btn" href="help">Lebih Lengkap »</a></p>
+        </div>
+      </div>
+}

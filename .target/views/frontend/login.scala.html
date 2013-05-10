@@ -1,0 +1,27 @@
+@(message: String)
+
+@import helper._
+
+@main("Masuk") {
+    
+    <div class="artikel">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a><span class="divider">/<span><li>
+        <li><a href="login">Masuk</a><li>
+      </ul>
+
+      <p>Untuk masuk ke dalam sistem, silahkan masukan email dan password yang sudah terdaftar sebelumnya, atau buka menu registrasi jika belum terdaftar</p>
+
+      </div>
+      <form class="form-login">
+          <h3 class="">Masuk</h3>
+          <input type="text" class="input-block-level" placeholder="Alamat Email">
+          <input type="password" class="input-block-level" placeholder="Password">
+          <label class="checkbox">
+            <input type="checkbox" value="remember-me"> Ingat Saya
+          </label>
+          <button style="text-align:right" class="btn btn-primary" type="submit">Masuk</button>
+          <p style="text-align:right"><a  href="#">Lupa Password?</a></p>
+
+  </form>
+}

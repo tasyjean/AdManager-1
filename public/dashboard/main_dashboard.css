@@ -1,0 +1,248 @@
+.navbare{
+	background-color: #F1F1F1;
+	min-width: 70%;
+	height: 80px;
+	background: url('images/sidebar_bg.png') repeat #353c3e;
+
+
+}
+
+.navbar .brand {
+	padding : 23px 5px 5px 5px;
+	margin-left:36px;
+}
+
+
+.footer-text p{
+  margin: 0 auto;
+  text-align: center;
+  color:#ffffff;
+  padding: 2px;
+  font-size: 0.85em;
+}
+
+/*Tampilan login dashboard -----------------*/
+.navbar .auth img.avatar{
+	top:0px;
+	padding:0px;
+	margin-left:1px;
+	border:0px solid #2c3234;
+	float:left;
+	width: 50px;
+	height:50px;
+	display: block;
+	float:left;
+}
+.navbar .auth img.avatar:hover{
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+}
+.auth-view {
+	min-width: 200px;
+	margin :5px;
+	display:block;
+}
+.auth-view:hover{
+	background: url('images/sidebar_bg.png') repeat #353c3e;
+
+	color:#ffffff;
+}
+
+.dropdown:hover > ul.dropdown-menu{
+    display: block;    
+}
+
+.auth-view:active{
+	background-color: #ffffff;	
+}
+.navbar .auth .blok-nama{
+	float:left;
+
+}
+
+.navbar .auth span.jabatan{
+	float:right;
+	font-size: 12px;
+	text-shadow: 0 0px 0px;
+	color:#ffffff;
+
+}
+
+.navbar .auth span.name{
+	float:right;
+	top:3px;
+	font-weight:bold;
+	color:#ffffff;
+	font-size:14px;
+	display:inherit;
+	text-transform:capitalize;
+	text-shadow: 0 0px 0px;
+}
+.btn-menu-auth {
+	min-width: 200px;
+
+}
+.btn-link{
+	padding: 0px 0px;
+	margin-top:0px;
+	height: 50px;
+	margin: 0 auto;
+	text-align: right;
+	float:right;
+	width: 100%;
+	height: 100%;
+
+}
+.navbar .btn,.navbar .btn-group{margin-top:1.5px;}
+.anu{
+	margin: 2px 2px 2px 2px;
+	background-color: #000;
+}
+/*daftar menu */
+.menu-auth{
+	position: absolute;
+	top: 50px;
+	left: -1px;
+	z-index: 1000;
+	display: none;
+	float: left;
+	min-width:100%;
+	padding: 5px 0;
+	margin: 2px 0 0;
+	font-size:20px;
+	list-style: none;
+	border: 0px solid #000;
+	border-top: 0px;
+	color:#fff;
+	border: 0px solid rgba(0, 0, 0, 0.2);
+	-webkit-border-radius: 0px 0px 5px 5px;
+	-moz-border-radius: 0px 0px 5px 5px;
+	border-radius: 0px 0px 5px 5px;
+	-webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+
+	background: url('images/sidebar_bg.png') repeat #353c3e;
+
+}
+
+.btn:focus {
+	outline: none;
+	outline: 0px auto -webkit-focus-ring-color;
+	outline-offset: 0px;
+}
+.btn:hover {
+	background-position: 0 0;
+	-webkit-box-shadow: 0 0 0px #b6d4e8;
+	-moz-box-shadow: 0 0 0px #b6d4e8;
+	box-shadow: 0 0 0px #b6d4e8;
+}
+
+.dropdown-menu li>a {
+	display: block;
+	padding: 3px 10px;
+	clear: both;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 30px;
+	color: #fff;
+	white-space: nowrap;
+}
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a { 
+background-color: #EF643E;
+background-image: linear-gradient(to bottom, #EF643E, #EF643E);
+background-repeat: repeat-x;
+color: #FFFFFF;
+text-decoration: none;
+}
+.space{
+	margin-right: 3px;
+}
+
+/*------------------------------------------------------------------------*/
+
+/*--------------------------------Manipulasi bagian konten */
+
+/*Mulai dari ngangkat tampilan ke atas */
+body>.container {
+	background: url('images/sidebar_bg.png') repeat #353c3e;
+	-webkit-border-radius: 0px 0px 7px 7px;
+	-moz-border-radius: 0px 0px 7px 7px;
+	border-radius: 0px 0px 7px 7px;
+	margin-top: 0px;
+	margin-bottom: 40px;
+}
+/* menu selected */
+.container aside nav ul li.selected {
+	color: #000000;
+	width: 100%;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #ef643e;
+}
+/*Warna */
+.container aside nav ul li a {
+	font-family: Arial;
+	padding: 10px 28px 12px;
+	display: block;
+	font-size: 17px;
+	color: #ffffff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75);
+}
+.tengahkan_icon_menu{
+	margin-top:3px;
+}
+/*warna header dan sub header */
+
+#content header { 
+	background-color: #D6DDE1;
+	background-image: linear-gradient(to bottom, #D6DDE1, #D6DDE1);
+	background-repeat: repeat-x;
+	border-bottom: 0px solid #A3A3A3;
+	border-left-color: rgba(0, 0, 0, 0.102);
+	border-radius: 0px 0px 0px 0px;
+	border-right-color: rgba(0, 0, 0, 0.102);
+	border-top: 1px solid rgba(255, 255, 255, 0.553);
+	color: #FFFFFF;
+	padding-bottom: 0px;
+	padding-left: 20px;
+	text-shadow: 0px 0px 0px #FFFFFF;
+}
+#content .sub-header {
+	padding-left: 20px;
+	color: #ffffff;
+	font-size: 13px;
+	text-shadow: 0 0px 0 rgba(0, 0, 0, 0.25);
+	background-color: #dbe3e8;
+	background-image: -moz-linear-gradient(top, #dbe3e8, #dbe3e8);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#dbe3e8), to(#dbe3e8));
+	background-image: -webkit-linear-gradient(top, #dbe3e8, #dbe3e8);
+	background-image: -o-linear-gradient(top, #dbe3e8, #dbe3e8);
+	background-image: linear-gradient(to bottom, #dbe3e8, #dbe3e8);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbe3e8', endColorstr='#dbe3e8', GradientType=0);
+	border-color: #cdd5da #cdd5da #a1b0b9;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.75);
+	border-top: 0px solid #CFD6DB;
+	border-bottom: 0px solid rgba(0, 0, 0, 0.3);
+}
+#content header h1, #content header h2 {
+	font-size: 22px;
+	line-height: 45.400000000000006px;
+	text-shadow: 0 1px 1px #ffffff;
+	font-weight: normal;
+	margin: 0;
+
+}
+
+#content .sub-header h2, #content .sub-header h3 {
+	font-size: 15px;
+	margin: 0;
+	font-family: "Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+	line-height: 26px;
+}

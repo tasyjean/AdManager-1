@@ -1,0 +1,231 @@
+body {
+      padding-top: 0px;
+      padding-bottom: 60px;
+      background: #F5F5F5 url("../images/texture.png");
+      }
+
+      /* Custom container */
+.container {
+    margin: 0 auto;
+    /*padding:10px 10px 10px 10px; */
+    max-width: 960px;
+    background: #fff;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+
+  }
+.container > hr {
+  margin: 10px 0;
+  }
+
+.menu_container {
+    margin: 0 auto;
+    max-width: 960px;
+
+}
+.menu_container > hr {
+  margin: 60px 0;
+}
+
+/* header */
+
+#header{
+  min-height: 130px;
+  max-width: 960px;
+  background-color: #F1F1F1;
+  border-bottom:medium;
+  display:block;
+
+}
+#logo{
+  max-width: 260px;
+  padding: 20px;
+  margin-top: 12px;
+  float:left;
+}
+#menu{
+  float:right;
+  margin: 0 auto;
+  padding: 60px 20px 10px 20px;
+
+/*  background-color: #1A1A1A; */
+}
+
+#menu ul {
+  background-color:#F5F5F5; 
+  border: 0px;
+}
+/* Main marketing message and sign up button */
+.promo {
+    margin: 30px 0;
+    text-align: center;
+    min-height: 300px;
+}
+.promo h1 {
+   font-size: 35px;
+   line-height: 1;
+}
+.promo .lead {
+   font-size: 14px;
+  line-height: 1.25;
+}
+      .promo .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+
+
+      /* Customize the navbar links to be fill the entire space of the .navbar */
+      .navbar .navbar-inner {
+        padding: 0;
+      }
+      .navbar .nav {
+        margin: 0;
+        display: block;
+        width: 100%;
+      }
+      .navbar .nav li {
+        display: table-cell;
+        width: 1%;
+        float: none;
+      }
+      .navbar .nav li a {
+        font-weight: bold;
+        text-align: center;
+        border-left: 1px solid rgba(255,255,255,.75);
+        border-right: 1px solid rgba(0,0,0,.1);
+      }
+      .navbar .nav li:first-child a {
+        border-left: 0;
+        border-radius: 3px 0 0 3px;
+      }
+      .navbar .nav li:last-child a {
+        border-right: 0;
+        border-radius: 0 3px 3px 0;
+      }
+
+
+/*----------------------------Untuk step by step */
+
+.step {
+  background-color: ;
+  padding: 0px;
+  margin: 4px;
+  margin-bottom: 30px;
+}
+.step h1{
+  color :#575757 ;
+  font-size: 2em;
+  font-family: arial;
+  font-weight: bold;
+  margin: 0 auto;
+   margin-bottom: 10px;
+}
+.step-kotak{
+  margin: 0 auto;
+  max-width: 155px;
+  min-height: 90px;
+  background-color: #0084c9;
+  -webkit-border-radius: 5px;
+   border-radius: 5px;
+}
+.step-kotak h1{
+  color:#FFFFFF;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 0 auto;
+  padding: 15px 5px 5px 5px;
+} 
+.step-kotak h2 {
+  color: #FFFFFF;
+  font-size: 0.8em;
+  margin: 0 auto;
+  font-weight: 500;
+  padding: 5px;
+  font-family:arial;
+  letter-spacing: 2px
+  padding-top: 10px;
+  line-height: 14px;
+}
+
+.kotak-daftar a{
+  color:#fAfAfA;
+
+
+}
+
+/*-----------------------------------*/
+.ringkasan-artikel {
+  padding: 15px;
+  text-align: justify;
+}
+
+/* Untuk isi artikel */
+
+.artikel {
+    margin: 10px 40px 30px 30px;
+    max-width: 600px;
+}
+.artikel h1 {
+   font-size: 35px;
+   line-height: 1;
+   color:#575047;
+   text-align: left;
+
+}
+.artikel h1 a{
+  color:#333333;
+}
+.artikel p{
+  line-height: 1.4;
+  text-align: justify;
+}
+.artikel .lead {
+   font-size: 14px;
+  line-height: 1.25;
+}
+.form-login{
+  width: 300px;
+  border: 1px solid #afafaf;
+  background-color: #FAFAFA;
+  margin: 0 auto;
+  padding: 0px 20px 0px 20px;
+  -webkit-border-radius: 5px;
+   border-radius: 5px;  
+  margin-bottom: 50px;
+}
+.form-login h3{
+  margin-top: 4px;
+}
+.form-registrasi{
+  max-width: 400px;
+  border: 1px solid #afafaf;
+  background-color: #FAFAFA;
+  padding: 20px 20px 20px 20px;
+  -webkit-border-radius: 5px;
+   border-radius: 5px;  
+  margin-bottom: 50px;
+}
+.form-registrasi h3{
+  margin-top: 4px;
+}
+.form-registrasi .control-label {
+  text-align: left;
+
+}
+/* Untuk isi artikel ------------------------------*/
+
+.footer-text p{
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 10px;
+  font-size: 0.8em;
+}

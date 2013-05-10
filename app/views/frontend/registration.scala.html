@@ -1,0 +1,60 @@
+@(message: String)
+
+@import helper._
+
+@main("Registrasi") {
+    
+       <div class="artikel">
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a><span class="divider">/<span><li>
+            <li><a href="registration">Registrasi</a><li>
+          </ul>
+          <h1><a href="registration">Registrasi</a></h1><br>
+          <p> Untuk memulai proses registrasi, langkah pertama, masukan data yang dibutuhkan di form berikut :</p>
+          <form class="form-horizontal form-registrasi">
+            <div class="control-group">
+              <label class="control-label" for="inputNamaDepan">Nama Depan</label>
+              <div class="controls">
+                <input type="text" id="inputNamaDepan" placeholder="isi nama depan">
+              </div>
+            </div>
+             <div class="control-group">
+              <label class="control-label" for="inputNamaBelakang">Nama Belakang</label>
+              <div class="controls">
+                <input type="text" id="inputNamaBelakang" placeholder="isi nama belakang">
+              </div>
+            </div>  
+            <div class="control-group error">
+              <label class="control-label" for="inputEmail">Email</label>
+              <div class="controls">
+                <input type="text" id="inputEmail" placeholder="isi email">
+                    <span class="help-inline">Sekedar test Error</span>
+
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="inputPassword">Password</label>
+              <div class="controls">
+                <input type="password" id="inputPassword" placeholder="password">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="inputPassword2">Ulangi Password</label>
+              <div class="controls">
+                <input type="password" id="inputPassword2" placeholder="ulang password">
+              </div>
+            </div>            
+            <div class="control-group">
+              <label class="control-label" for="inputCapctha">Input Captcha</label>
+              <div class="controls">
+                <input type="text" id="inputCaptcha" placeholder="captcha">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls" style="float:right;">
+                <button type="submit" class="btn btn-success btn-large">Daftar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+}

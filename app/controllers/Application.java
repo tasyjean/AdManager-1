@@ -1,16 +1,18 @@
 package controllers;
 
+import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
+
 import play.*;
 import play.mvc.*;
-
+import controllers.frontend.*;
 import views.html.*;
+import views.html.frontend.*;
 
-public class Application extends Controller {
+public class Application extends CompressController {
   
     public static Result index() {
-    	//Just want to test
-    	//test kedua kali
-        return ok(index.render("Your new application is ready."));
+
+    	return ok(home.render("Home"));
     }
-  
+    
 }
