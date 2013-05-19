@@ -12,7 +12,10 @@ public class Application extends CompressController {
   
     public static Result index() {
 
-    	return ok(home.render("Home"));
+    	//SOLUTIOOOON
+    	return redirect(controllers.backend.routes.Backend.index());
+
+    	// return redirect(controllers.frontend.routes.Frontend.home());
     }
     
 }

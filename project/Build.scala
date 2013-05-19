@@ -11,11 +11,17 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "postgresql" % "postgresql" % "9.1-901.jdbc4",
+    "be.objectify" %% "deadbolt-java" % "2.1-RC2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here      
+    //Deadbolt
+    resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("Objectify Play Snapshot Repository", url("http://schaloner.github.com/snapshots/"))(Resolver.ivyStylePatterns)
+
   )
 
 }
