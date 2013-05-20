@@ -4,13 +4,13 @@
 
 # Home page
 GET     /    		                    controllers.Application.index()
-GET     /home                           controllers.frontend.Frontend.home()
+GET     /home                           controllers.frontend.StaticPages.home()
 
-GET     /contact                   		controllers.frontend.Frontend.contact()
-GET     /registration        			controllers.frontend.Frontend.registration()
-GET     /help                    		controllers.frontend.Frontend.help()
-GET     /about		        			controllers.frontend.Frontend.about()
-GET     /login                   		controllers.frontend.Frontend.login()
+GET     /contact                   		controllers.frontend.StaticPages.contact()
+GET     /registration        			controllers.frontend.StaticPages.registration()
+GET     /help                    		controllers.frontend.StaticPages.help()
+GET     /about		        			controllers.frontend.StaticPages.about()
+GET     /login                   		controllers.frontend.StaticPages.login()
 GET 	/dashboard						controllers.backend.Backend.index()
 
 # Map static resources from the /public folder to the /assets URL path
