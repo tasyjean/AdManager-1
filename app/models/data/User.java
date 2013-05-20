@@ -13,7 +13,7 @@ import play.data.validation.*;
 
 import com.avaje.ebean.*;
 
-@Table(name="adsmanager.users")
+@Table(name="adsmanager.user")
 @Entity
 public class User extends Model {
 	
@@ -30,6 +30,8 @@ public class User extends Model {
 	public String last_name;
 	public String company;
 	public String role;
+	
+	@Temporal(TemporalType.DATE)
 	public Date join_date;
 	public int current_balance;
 	public boolean isActive;
@@ -50,9 +52,6 @@ public class User extends Model {
 	public void setId_user(int id_user) {
 		this.id_user = id_user;
 	}
-
-
-
 	public String getEmail() {
 		return email;
 	}

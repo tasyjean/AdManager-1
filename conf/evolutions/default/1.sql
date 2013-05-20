@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-create table adsmanager.users (
+create table adsmanager.user (
   id_user                   integer not null,
   email                     varchar(255),
   password                  varchar(255),
@@ -18,17 +18,17 @@ create table adsmanager.users (
   city                      varchar(255),
   country                   varchar(255),
   validation_key            varchar(255),
-  constraint pk_users primary key (id_user))
+  constraint pk_user primary key (id_user))
 ;
 
-create sequence adsmanager.users_seq;
+create sequence adsmanager.user_seq;
 
 
 
 
 # --- !Downs
 
-drop table if exists adsmanager.users cascade;
+drop table if exists adsmanager.user cascade;
 
-drop sequence if exists adsmanager.users_seq;
+drop sequence if exists adsmanager.user_seq;
 

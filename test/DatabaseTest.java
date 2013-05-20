@@ -58,7 +58,7 @@ public class DatabaseTest {
 
 			@Override
 			public void run() {
-				  Result result = route(fakeRequest(GET,"/home"));
+				  Result result = route(fakeRequest(GET,"/home/"));
 				  assertThat(result).isNotNull();
 				  System.out.println(result);
 

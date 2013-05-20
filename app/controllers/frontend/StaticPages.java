@@ -17,7 +17,7 @@ public class StaticPages extends CompressController {
 		user.password="asajdkalsdk";
 		
 		user.save();
-		User anu= User.find.byId((long) 21);
+		User anu= User.find.byId((long) 3);
 		String anu2=anu.city;
 		
 		return ok(home.render(anu2));
