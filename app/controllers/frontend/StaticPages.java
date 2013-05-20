@@ -1,6 +1,9 @@
 package controllers.frontend;
 
+import models.data.AdsSize;
+import models.data.AdsType;
 import models.data.User;
+import models.data.enumeration.RoleEnum;
 import play.*;
 import play.mvc.*;
 
@@ -11,16 +14,15 @@ public class StaticPages extends CompressController {
     
 	  
 	public static Result home() {
-		User user=new User();
-		user.city="uninisaidjlasjfk";
-		user.email="asfafasf";
-		user.password="asajdkalsdk";
-		
+        User user=new User("komputok@gmail.com", "anuanu", "Subyek", "Predikat", "PT ANU", RoleEnum.ADMINISTRATOR);
 		user.save();
-		User anu= User.find.byId((long) 3);
-		String anu2=anu.city;
+		User bob = User.find.where().eq("id_user", 21).findUnique();
 		
-		return ok(home.render(anu2));
+		AdsSize size=new AdsSize("anu", 333, 111, "Untuk ukuran ngasal sumpah");
+		
+		size.save();
+		
+		return ok(home.render(bob.email));
     }
 	
 	public static Result contact(){

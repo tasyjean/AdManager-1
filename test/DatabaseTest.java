@@ -35,7 +35,7 @@ public class DatabaseTest {
         
 
   }
-  
+    @Test
     public void testGetConnection() {
         running(fakeApplication(), new Runnable() {
             @Override
@@ -52,40 +52,5 @@ public class DatabaseTest {
         });
     }
     
-    @Test
-    public void setData(){
-        running(fakeApplication(), new Runnable() {
-
-			@Override
-			public void run() {
-				  Result result = route(fakeRequest(GET,"/home/"));
-				  assertThat(result).isNotNull();
-				  System.out.println(result);
-
-			}
-        
-        });
-    }
-    @Test
-    public void testGetData() {
-        running(fakeApplication(), new Runnable() {
-            @Override
-            public void run() {
-                Connection conn = DB.getConnection();
-                assertThat(conn).isNotNull();
-                try {
-					ResultSet result;
-					result= conn.createStatement().executeQuery("select email from adsmanager.user");
-					int i=0;
-					while(result.next())
-					{
-						System.out.println(result.getString(1));
-						i++;
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-            }
-        });
-    }
+    
 }
