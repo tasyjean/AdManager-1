@@ -4,9 +4,9 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum CampaignTypeEnum {
 	
-	@EnumValue("C")
+	@EnumValue("contract")
 	CONTRACT,
 	
-	@EnumValue("D")
+	@EnumValue("exclusive")
 	EXCLUSIVE
 }

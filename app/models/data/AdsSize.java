@@ -1,14 +1,16 @@
 package models.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.Max;
 
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="adsmanager.ads_size")
+@Table(schema="adsmanager",name="ads_size")
 public class AdsSize extends Model {
 	/**
 	 * 
@@ -24,10 +26,10 @@ public class AdsSize extends Model {
 	
 	private int height;
 	
-	@Max(10000)
+	@Column(columnDefinition="TEXT")
 	private String description;
 	
-	public static Model.Finder<Long,AdsSize> find = new Model.Finder(Long.class, AdsSize.class);
+	public static Model.Finder<Integer,AdsSize> find = new Model.Finder(Integer.class, AdsSize.class);
 
 	public AdsSize(String name, int width, int height, String description) {
 		super();

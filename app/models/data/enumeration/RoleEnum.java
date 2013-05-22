@@ -4,13 +4,13 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum RoleEnum {
 
-	@EnumValue("A")
+	@EnumValue("administrator")
 	ADMINISTRATOR,
 	
-	@EnumValue("M")
+	@EnumValue("management")
 	MANAGEMENT, 
 	 
-	@EnumValue("P")
+	@EnumValue("advertiser")
 	ADVERTISER
 	
 }

@@ -32,8 +32,6 @@ public class DatabaseTest {
                 assertThat(ds).isNotNull();
             }
         });
-        
-
   }
     @Test
     public void testGetConnection() {
