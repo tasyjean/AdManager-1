@@ -24,7 +24,6 @@ public class StaticPages extends CompressController {
 		
 		AdsSize size=new AdsSize("anu", 333, 111, "Untuk ukuran ngasal sumpah");
 		
-		size.save();
 		
 		return ok(home.render(""));
     }
@@ -37,10 +36,7 @@ public class StaticPages extends CompressController {
 		contacts.add(kontak2);
 		contacts.add(kontak1);
 		user.setUserContact(contacts);
-		user.save();
-
-		kontak1.save();
-		kontak2.save();
+	
 		return ok(contact.render(""));
 	}
 	

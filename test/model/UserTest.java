@@ -49,7 +49,7 @@ public class UserTest {
 			
 			public void run() {
 			UserContact kontak1=new UserContact("anuanua", ContactTypeEnum.HOME_PHONE, "Tilpsadasdusdsf jisdfdfhdfhfdhdsfka ganteng");
-				kontak1.setId_user(User.find.byId((long)21));
+				kontak1.setId_user(User.find.byId(21));
 				kontak1.save();
 			};
 			
@@ -60,7 +60,7 @@ public class UserTest {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				User user= User.find.byId((long) 81);
+				User user= User.find.byId(81);
 				BeanList<UserContact> x= (BeanList<UserContact>)user.getUserContact();
 				System.out.println("Anu : ");
 				

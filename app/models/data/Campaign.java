@@ -1,6 +1,8 @@
 package models.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -45,8 +47,11 @@ public class Campaign extends Model{
 	private int bid_price;
 	private boolean isActivated;
 	private boolean isDeleted;
-	@OneToMany
+	private int budget;
+
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Ads> ads;
+	
 	
 	public static Model.Finder<Integer,Campaign> find = new Model.Finder(Integer.class, Campaign.class);
 
@@ -56,6 +61,25 @@ public class Campaign extends Model{
 
 		super.save();
 	}
+	public void setAds(Collection<Ads> ads){
+        final List<Ads> clone = new ArrayList<Ads>(this.ads);
+        //delete yang udah ada
+        for(Ads x:clone){
+        	getAds().remove(x);
+        	x.setCampaign(null);
+        }
+        for(Ads x:ads){
+        	getAds().add(x);
+        	x.setCampaign(this);
+        }
+	}
+	//Mendapatkan daftar kontak user
+	public List<Ads> getAds(){
+	    if (ads == null) {
+            ads = new ArrayList<Ads>();
+        }
+        return ads;
+    }
 	
 	public int getId_campaign() {
 		return id_campaign;
@@ -135,7 +159,11 @@ public class Campaign extends Model{
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	public int getBudget() {
+		return budget;
+	}
 
-	
-	
+	public void setBudget(int budget) {
+		this.budget = budget;
+	}
 }

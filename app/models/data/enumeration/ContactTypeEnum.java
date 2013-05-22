@@ -16,6 +16,10 @@ public enum ContactTypeEnum {
 	ALTERNATIVE_PHONE,
 	@EnumValue("social_profile")	
 	SOCIAL_PROFILE,
+	@EnumValue("company_website")
+	COMPANY_WEBSITE,
+	@EnumValue("personal_website")
+	PERSONAL_WEBSITE,	
 	@EnumValue("other")
 	OTHER
 }

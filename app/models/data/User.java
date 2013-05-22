@@ -75,7 +75,7 @@ public class User extends Model {
 	//Getter Setter
 	//Set contact
 	public void setUserContact(Collection<UserContact> userContact){
-        final List<UserContact> clone = new ArrayList<UserContact>(userContact);
+        final List<UserContact> clone = new ArrayList<UserContact>(this.userContact);
         //delete yang udah ada
         for(UserContact x:clone){
         	getUserContact().remove(x);
@@ -165,7 +165,6 @@ public class User extends Model {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-
 	public String getProfile_photo() {
 		return profile_photo;
 	}
@@ -187,21 +186,12 @@ public class User extends Model {
 	public String getCountry() {
 		return country;
 	}
-
-
-
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
-
-
 	public String getValidation_key() {
 		return validation_key;
 	}
-
-
-
 	public void setValidation_key(String validation_key) {
 		this.validation_key = validation_key;
 	}

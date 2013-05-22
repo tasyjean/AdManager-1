@@ -18,7 +18,7 @@ public class UserContact extends Model {
 	@Id
 	private int  id_user_contact;
 	@ManyToOne
-	private User id_user;
+	private User user;
 	private String contact_value;
 	private ContactTypeEnum contact_type;
 	@Column(columnDefinition = "TEXT")
@@ -41,10 +41,10 @@ public class UserContact extends Model {
 		this.id_user_contact = id_user_contact;
 	}
 	public User getId_user() {
-		return id_user;
+		return user;
 	}
 	public void setId_user(User id_user) {
-		this.id_user = id_user;
+		this.user = id_user;
 	}
 	public String getContact_value() {
 		return contact_value;
