@@ -4,6 +4,7 @@ import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 
 import play.*;
 import play.mvc.*;
+import views.html.helper.form;
 
 
 public class CompressController extends Controller{
@@ -43,4 +44,5 @@ public class CompressController extends Controller{
         output = compressor.compress(output);
         return output;
     }
+    
 }

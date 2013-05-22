@@ -5,8 +5,8 @@ import play.mvc.*;
 
 import controllers.CompressController;
 import views.html.*;
-import views.html.frontend.*;
-import views.html.backend.*;
+import views.html.frontendView.*;
+import views.html.backendView.*;
 
 public class Backend extends CompressController {
 

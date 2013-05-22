@@ -1,7 +1,10 @@
 package models.custom_helper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import play.db.DB;
 
 import com.avaje.ebean.Ebean;
 
@@ -22,9 +25,17 @@ public class SetInitialData {
 	
 	//Data user + data kontak
 	public void setDataUser(){
+		
+		
 		//Clean Data dulu
 		deleteUserData();
-		
+		try {
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE adsmanager.user_seq RESTART WITH 1;");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Insert data");
+
 		//Data 1
 		User user1=new User("komputok@gmail.com", "password", "Adnan", "Hidayat", RoleEnum.ADMINISTRATOR);
 		user1.setCity("Bandung");
@@ -55,12 +66,28 @@ public class SetInitialData {
 		contact2.add(kontak2_item2);
 		user2.setUserContact(contact2);	
 		user2.save();
+		
+		//Data 3
+		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", RoleEnum.MANAGEMENT);
+		user3.setCity("Jakakerto");
+		user3.setCountry("Indonesia");
+		user3.setCompany("Teknimo");
+		user3.setActive(true);
+		
+		ArrayList<UserContact> contact3=new ArrayList<UserContact>();
+		UserContact kontak3_item1=new UserContact("911",ContactTypeEnum.OTHER,"Hanya hubungi ketika darurat");
+		UserContact kontak3_item2=new UserContact("http://www.teknimo.com", ContactTypeEnum.COMPANY_WEBSITE, "Ini websitenya");
+		contact2.add(kontak3_item1);
+		contact2.add(kontak3_item2);
+		user3.setUserContact(contact3);	
+		user3.save();
 	}
 	
 	public void deleteUserData(){
 		
 		List<User> data=User.find.all();
 		Ebean.delete(data);
+		System.out.println("Delete data");
 	}
 
 }

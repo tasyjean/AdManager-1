@@ -46,11 +46,9 @@ public class AdsAction {
 	public ActionTypeEnum getAction_type() {
 		return action_type;
 	}
-
 	public void setAction_type(ActionTypeEnum action_type) {
 		this.action_type = action_type;
 	}
-
 	public Date getTimestamp() {
 		return timestamp;
 	}

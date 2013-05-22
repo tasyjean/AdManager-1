@@ -1,0 +1,38 @@
+@(loginForm: Form[form.LoginForm])
+
+@import helper._
+
+@main("Masuk") {
+    
+    <div class="artikel">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a><span class="divider">/<span><li>
+        <li><a href="login">Masuk</a><li>
+      </ul>
+
+      <p>Untuk masuk ke dalam sistem, silahkan masukan email dan password yang sudah terdaftar sebelumnya, atau buka menu registrasi jika belum terdaftar</p>
+
+      </div>
+      @helper.form(action=frontend.routes.FrontEndController.authenticate,'class-> "form-login") {
+         <h3 class="">Masuk</h3>
+         
+      	  @if(loginForm.hasGlobalErrors){
+      	  	<p class="error">
+              	@loginForm.globalError.message     	  	 	
+      	  	 </p>
+      	  }
+      	   @if(flash.contains("success")) {
+                <p class="success">
+                    @flash.get("success")
+                </p>
+            }          
+         	<input class=input-block-level type="email" name="email" placeholder="Alamat Email" value="@loginForm("email").value">
+        	<input type="password" name="password" class="input-block-level" placeholder="Password">
+          	<label class="checkbox">
+            <input type="checkbox" name="rememberMe" value="true">Ingat Saya
+          	</label>
+          	<button style="text-align:right" class="btn btn-primary" type="submit">Masuk</button>
+          	<p style="text-align:right"><a  href="#">Lupa Password?</a></p>            
+      }
+
+}

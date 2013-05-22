@@ -78,9 +78,9 @@ public class UserTest {
 			
 			@Override
 			public void run() {
-				User user=User.find.byId((long)141);
+				User user=User.find.byId(141);
 				user.delete();
-				assertThat(User.find.byId((long)141)).isNull();
+				assertThat(User.find.byId(141)).isNull();
 			}
 		});
 	}
