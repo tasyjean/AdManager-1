@@ -15,7 +15,7 @@ import play.db.ebean.Model;
 @Entity
 @Table(name="deposito",schema="adsmanager")
 
-public class Deposito {
+public class Deposito extends Model {
 
 	@Id
 	private int id_deposito;

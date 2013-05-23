@@ -3,6 +3,7 @@ package models.data;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -14,8 +15,9 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="ads_transaction",schema="adsmanager")
-public class AdsTransaction {
+public class AdsTransaction extends Model {
 
+	@Id
 	private int id_ads_transaction;
 	@ManyToOne
 	private Ads ads;

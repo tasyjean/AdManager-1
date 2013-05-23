@@ -10,7 +10,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="notificaton",schema = "adsmanager")
-public class Notification {
+public class Notification extends Model{
 	
 	@Id
 	private int id_notification;

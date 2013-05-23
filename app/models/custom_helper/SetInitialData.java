@@ -10,6 +10,7 @@ import com.avaje.ebean.Ebean;
 
 import models.data.User;
 import models.data.UserContact;
+import models.data.UserRole;
 import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.RoleEnum;
 
@@ -37,7 +38,7 @@ public class SetInitialData {
 		System.out.println("Insert data");
 
 		//Data 1
-		User user1=new User("komputok@gmail.com", "password", "Adnan", "Hidayat", RoleEnum.ADMINISTRATOR);
+		User user1=new User("komputok@gmail.com", "password", "Adnan", "Hidayat", new UserRole(RoleEnum.ADMINISTRATOR));
 		user1.setCity("Bandung");
 		user1.setCountry("Indonesia");
 		user1.setCompany("Teknimo");
@@ -53,7 +54,7 @@ public class SetInitialData {
 		user1.save();
 		
 		//Data 2
-		User user2=new User("gunadarma@gmail.com", "password", "Sayuti", "Hidayat", RoleEnum.ADVERTISER);
+		User user2=new User("gunadarma@gmail.com", "password", "Sayuti", "Hidayat", new UserRole(RoleEnum.ADVERTISER));
 		user2.setCity("Jayapandang");
 		user2.setCountry("Indonesia");
 		user2.setCompany("Sunaya Basah Sejahtera");
@@ -68,7 +69,7 @@ public class SetInitialData {
 		user2.save();
 		
 		//Data 3
-		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", RoleEnum.MANAGEMENT);
+		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", new UserRole(RoleEnum.MANAGEMENT));
 		user3.setCity("Jakakerto");
 		user3.setCountry("Indonesia");
 		user3.setCompany("Teknimo");
@@ -77,8 +78,8 @@ public class SetInitialData {
 		ArrayList<UserContact> contact3=new ArrayList<UserContact>();
 		UserContact kontak3_item1=new UserContact("911",ContactTypeEnum.OTHER,"Hanya hubungi ketika darurat");
 		UserContact kontak3_item2=new UserContact("http://www.teknimo.com", ContactTypeEnum.COMPANY_WEBSITE, "Ini websitenya");
-		contact2.add(kontak3_item1);
-		contact2.add(kontak3_item2);
+		contact3.add(kontak3_item1);
+		contact3.add(kontak3_item2);
 		user3.setUserContact(contact3);	
 		user3.save();
 	}

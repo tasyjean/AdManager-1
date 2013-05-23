@@ -15,11 +15,15 @@ import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
 
+import be.objectify.deadbolt.core.models.Permission;
+import be.objectify.deadbolt.core.models.Role;
+import be.objectify.deadbolt.core.models.Subject;
+
 import com.avaje.ebean.*;
 
 @Entity
 @Table(schema="adsmanager",name="user")
-public class User extends Model {
+public class User extends Model implements Subject {
 	
 	//identifikasi field
 	@Id
@@ -33,7 +37,8 @@ public class User extends Model {
 	private String front_name;
 	private String last_name;
 	private String company;
-	private RoleEnum role;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private UserRole role;
 	
 	@Temporal(TemporalType.DATE)
 	private Date join_date;
@@ -46,6 +51,11 @@ public class User extends Model {
 	private String validation_key;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<UserContact> userContact; 
+    @ManyToMany(cascade=CascadeType.ALL)
+	public List<UserPermission> permissions;
+
+	//Blok untuk parameter subyek ---------------------
+	
 	
 	public static Model.Finder<Integer,User> find = new Model.Finder(Integer.class, User.class);
 
@@ -53,7 +63,7 @@ public class User extends Model {
 		
 	}
 	public User(String email, String password, String front_name,
-			String last_name, RoleEnum role) {
+			String last_name, UserRole role) {
 		super();
 		setEmail(email);
 		setPassword(password);
@@ -86,6 +96,24 @@ public class User extends Model {
         	x.setId_user(this);
         }
 	}
+	
+	//Method untuk subject Deadbolt
+	@Override
+	public String getIdentifier() {
+		return email;
+	}
+	@Override
+	public List<? extends Permission> getPermissions() {
+		return permissions;
+	}
+	@Override
+	public List<? extends Role> getRoles() {
+		List<UserRole> roles=new ArrayList<UserRole>();
+		roles.add(role);
+		return roles;
+	}
+	
+	//Getter Setter
 	//Mendapatkan daftar kontak user
 	public List<UserContact> getUserContact(){
 	    if (userContact == null) {
@@ -138,10 +166,10 @@ public class User extends Model {
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	public RoleEnum getRole() {
+	public UserRole getRole() {
 		return role;
 	}
-	public void setRole(RoleEnum role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 	public Date getJoin_date() {
@@ -177,8 +205,6 @@ public class User extends Model {
 		return city;
 	}
 
-
-
 	public void setCity(String city) {
 		this.city = city;
 	}
@@ -196,10 +222,5 @@ public class User extends Model {
 		this.validation_key = validation_key;
 	}
 
-
-
-	public void test(){
-	
-	}
 	
 }

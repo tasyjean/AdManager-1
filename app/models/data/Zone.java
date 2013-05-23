@@ -13,7 +13,7 @@ import models.data.enumeration.ZoneTypeEnum;
 
 @Entity
 @Table(name="zone",schema="adsmanager")
-public class Zone {
+public class Zone extends Model {
 	
 	@Id
 	private int id_zone;

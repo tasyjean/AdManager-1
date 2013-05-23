@@ -8,7 +8,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="system_prefeence", schema="adsmanager")
-public class SystemPreferences {
+public class SystemPreferences extends Model{
 
 	@Id
 	private int id_system_preferences;

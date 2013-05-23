@@ -4,32 +4,37 @@ import java.util.*;
 
 import javax.validation.*;
 
+import play.i18n.Messages;
 import play.data.validation.Constraints.*;
 import javax.persistence.*;
 
 import javax.validation.Constraint;
 
+import java.text.MessageFormat;
+
 import models.custom_helper.MD5;
 import models.data.User;
+import models.service.Authentificator;
 
 import play.db.ebean.*;
 
 
 public class LoginForm {
-
-	public String email;
 	
+	@Required
+	public String email;
+	@Required
 	public String password;
 	
 	public boolean rememberMe = false;
 	
 	public String validate(){
-		User user=User.find.where()
-				.eq("email", email)
-				.eq("password", MD5.get().md5(password))
-				.findUnique();
-		if(user!=null){
+		boolean valid=new Authentificator().authenticate(email, password);
+		if(valid){
 			return null;
-		}else return "email atau password salah" ;
+		}else{
+			 return Messages.get("constraint.login_salah", "apa ini apa itu");
+		}
 	} 
+	
 }

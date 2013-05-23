@@ -10,7 +10,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="ads",schema="adsmanager")
-public class Ads {
+public class Ads extends Model {
 
 	@Id
 	private int id_ads;
@@ -43,7 +43,7 @@ public class Ads {
 	private int hide_count;
 	private boolean isActive;
 	private boolean isDeleted;
-	
+	private boolean isGanteng;
 	
 	public static Model.Finder<Integer,Ads> find = new Model.Finder(Integer.class, Ads.class);
 

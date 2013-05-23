@@ -229,3 +229,10 @@ body {
   padding-bottom: 10px;
   font-size: 0.8em;
 }
+
+/* error 404 ---------------------------------------*/
+.error404{
+	margin: 0 auto;
+	padding: 40px;
+	text-align: center;
+}

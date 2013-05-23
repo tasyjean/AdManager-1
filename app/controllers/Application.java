@@ -1,8 +1,11 @@
 package controllers;
 
 
+import java.util.ArrayList;
+
 import play.*;
 import play.mvc.*;
+import play.mvc.Http.RequestHeader;
 import controllers.frontend.*;
 import views.html.*;
 import views.html.frontendView.*;
@@ -16,6 +19,32 @@ public class Application extends CompressController {
     	return redirect(controllers.frontend.routes.FrontEndController.home());
 
     	// return redirect(controllers.frontend.routes.Frontend.home());
+    }
+    
+    public static Result testRequest(){
+    	
+    	String host=request().getHeader(HOST);
+    	String method=request().method();
+    	String host2=request().host();
+    	String req=request().path();
+    	String remoteAdress=request().remoteAddress();
+    	String uri=request().uri();
+    	String source=request().getHeader(REFERER);
+    	String agent=request().getHeader(USER_AGENT);
+    	
+    	ArrayList<String> data=new ArrayList<String>();
+    	data.add(host);
+    	data.add(method);
+    	data.add(host2);
+    	data.add(req);
+    	data.add(remoteAdress);
+    	data.add(uri);
+    	data.add(source);
+    	data.add(agent);
+    	
+    	
+    	return ok(testView.render(data));
+    	
     }
     
 }

@@ -1,5 +1,8 @@
+
 @(title: String)(content: Html)
 
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 <!DOCTYPE html>
 
 <html lang="id">
@@ -27,6 +30,11 @@
           <div class="span6" id="logo">
               <img src="@routes.Assets.at("images/logo_small.png")"/>
           </div>
+           @subjectPresent(){
+				<p>Adnan HP
+				Administrator
+				<a href="@controllers.frontend.routes.FrontEndController.logout()">Logout</a>	</p>			
+	         }
           <div class="span8" id="menu">
             <div class="navbar">
               <div class="navbar-inner">
@@ -35,14 +43,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </a>
+            
               <div class="hidden-phone visible-tablet visible-desktop">
               <ul class="nav">
                     <li class="@("active".when(title==""))"><a href="/">Beranda</a></li>
                     <li class="@("active".when(title =="Tentang Kami"))"><a href="about">Tentang</a></li>
                     <li style="min-width:140px" class="@("active".when(title=="Hubungi Kami"))"><a href="contact">Hubungi Kami</a></li>
                     <li class="@("active".when(title=="Bantuan"))"><a href="help">Bantuan</a></li>
-                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
-                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
+					@subjectNotPresent() {
+	                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
+	                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
+	                 }
               </ul>
               </div>
               <div class="nav-collapse hidden-desktop hidden-tablet visible-phone">

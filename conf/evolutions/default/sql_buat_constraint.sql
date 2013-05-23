@@ -1,3 +1,38 @@
+create table adsmanager.user_user_permission (
+user_id_user                   integer not null,
+user_permission_id_permission  integer not null,
+constraint pk_user_user_permission primary key (user_id_user, user_permission_id_permission));
+
+
+create sequence adsmanager.ads_seq;
+create sequence adsmanager.ads_action_seq;
+create sequence adsmanager.ads_placement_seq;
+create sequence adsmanager.ads_size_seq;
+create sequence adsmanager.ads_type_seq;
+create sequence adsmanager.ads_transaction_seq;
+
+create sequence adsmanager.campaign_seq;
+
+create sequence adsmanager.deposito_seq;
+
+create sequence adsmanager.impression_seq;
+
+create sequence adsmanager.notificaton_seq;
+
+create sequence adsmanager.system_prefeence_seq;
+
+create sequence adsmanager.user_seq;
+
+create sequence adsmanager.user_contact_seq;
+
+create sequence adsmanager.user_permission_seq;
+
+create sequence adsmanager.user_role_seq;
+
+create sequence adsmanager.zone_seq;
+
+create sequence adsmanager.zone_channel_seq;
+
 alter table adsmanager.ads add constraint fk_ads_campaign_1 foreign key (campaign_id_campaign) references adsmanager.campaign (id_campaign);
 create index ix_ads_campaign_1 on adsmanager.ads (campaign_id_campaign);
 alter table adsmanager.ads add constraint fk_ads_adsSize_2 foreign key (ads_size_id_ads_size) references adsmanager.ads_size (id_ads_size);
@@ -28,4 +63,13 @@ alter table adsmanager.zone add constraint fk_zone_ads_size_14 foreign key (ads_
 create index ix_zone_ads_size_14 on adsmanager.zone (ads_size_id_ads_size);
 alter table adsmanager.ads_transaction add constraint fk_ads_transaction__7 foreign key (ads_id_ads) references adsmanager.ads (id_ads);
 create index ix_ads_transaction__7 on adsmanager.ads_transaction (ads_id_ads);
+
+alter table adsmanager.user add constraint fk_user_role_13 foreign key (role_id_role) references adsmanager.user_role (id_role);
+create index ix_user_role_13 on adsmanager.user (role_id_role);
+
+
+alter table adsmanager.user_user_permission add constraint fk_user_user_permi_01 foreign key (user_id_user) references adsmanager.user (id_user);
+alter table adsmanager.user_user_permission add constraint fk_user_user_permi_02 foreign key (user_permission_id_permission) references adsmanager.user_permission (id_permission);
+
+
 

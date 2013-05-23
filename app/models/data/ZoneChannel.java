@@ -9,7 +9,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="zone_channel", schema="adsmanager")
-public class ZoneChannel {
+public class ZoneChannel extends Model{
 
 	@Id
 	private int id_zone_channel;
@@ -18,7 +18,6 @@ public class ZoneChannel {
 	@Column(columnDefinition="TEXT")
 	private String channel_description;
 	private boolean isDeleted;
-	
 	public static Model.Finder<Integer,ZoneChannel> find = new Model.Finder(Integer.class, ZoneChannel.class);
 
 	

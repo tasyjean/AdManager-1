@@ -15,7 +15,7 @@ import models.data.enumeration.ActionTypeEnum;
 
 @Entity
 @Table(name="ads_action", schema ="adsmanager")
-public class AdsAction {
+public class AdsAction extends Model {
 
 	@Id
 	private Long id_ads_action;

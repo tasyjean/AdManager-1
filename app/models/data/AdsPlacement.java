@@ -9,7 +9,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="ads_placement",schema="adsmanager")
-public class AdsPlacement {
+public class AdsPlacement extends Model {
 
 	@Id
 	private int id_ads_placement;

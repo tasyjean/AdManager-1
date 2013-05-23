@@ -13,7 +13,7 @@ import play.db.ebean.Model;
 
 @Entity
 @Table(name="impression", schema = "adsmanager")
-public class Impression {
+public class Impression extends Model {
 
 	@Id
 	private Long id_impression;

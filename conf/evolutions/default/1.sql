@@ -22,6 +22,7 @@ create table adsmanager.ads (
   hide_count                integer,
   is_active                 boolean,
   is_deleted                boolean,
+  is_ganteng                boolean,
   constraint pk_ads primary key (id_ads))
 ;
 
@@ -51,14 +52,15 @@ create table adsmanager.ads_size (
 ;
 
 create table adsmanager.ads_transaction (
-  id_ads_transaction        integer,
+  id_ads_transaction        integer not null,
   ads_id_ads                integer,
   transaction_type          varchar(4),
   amount                    integer,
   current_balance           integer,
   timestamp                 timestamp,
   is_deleted                boolean,
-  constraint ck_ads_transaction_transaction_type check (transaction_type in ('cpm','cpa','flat')))
+  constraint ck_ads_transaction_transaction_type check (transaction_type in ('cpm','cpa','flat')),
+  constraint pk_ads_transaction primary key (id_ads_transaction))
 ;
 
 create table adsmanager.ads_type (
@@ -136,7 +138,7 @@ create table adsmanager.user (
   front_name                varchar(255),
   last_name                 varchar(255),
   company                   varchar(255),
-  role                      varchar(13),
+  role_id_role              integer,
   join_date                 timestamp,
   current_balance           integer,
   is_active                 boolean,
@@ -144,7 +146,6 @@ create table adsmanager.user (
   city                      varchar(255),
   country                   varchar(255),
   validation_key            varchar(255),
-  constraint ck_user_role check (role in ('management','advertiser','administrator')),
   constraint pk_user primary key (id_user))
 ;
 
@@ -156,6 +157,19 @@ create table adsmanager.user_contact (
   contact_description       TEXT,
   constraint ck_user_contact_contact_type check (contact_type in ('personal_website','social_profile','other','address','private_phone','email','company_website','alternative_phone','home_phone')),
   constraint pk_user_contact primary key (id_user_contact))
+;
+
+create table adsmanager.user_permission (
+  id_permission             integer not null,
+  permission_value          varchar(255),
+  constraint pk_user_permission primary key (id_permission))
+;
+
+create table adsmanager.user_role (
+  id_role                   integer not null,
+  name                      varchar(13),
+  constraint ck_user_role_name check (name in ('management','advertiser','administrator')),
+  constraint pk_user_role primary key (id_role))
 ;
 
 create table adsmanager.zone (
@@ -179,6 +193,12 @@ create table adsmanager.zone_channel (
   constraint pk_zone_channel primary key (id_zone_channel))
 ;
 
+
+create table adsmanager.user_user_permission (
+  user_id_user                   integer not null,
+  user_permission_id_permission  integer not null,
+  constraint pk_adsmanager.user_user_permission primary key (user_id_user, user_permission_id_permission))
+;
 create sequence adsmanager.ads_seq;
 
 create sequence adsmanager.ads_action_seq;
@@ -186,6 +206,8 @@ create sequence adsmanager.ads_action_seq;
 create sequence adsmanager.ads_placement_seq;
 
 create sequence adsmanager.ads_size_seq;
+
+create sequence adsmanager.ads_transaction_seq;
 
 create sequence adsmanager.ads_type_seq;
 
@@ -202,6 +224,10 @@ create sequence adsmanager.system_prefeence_seq;
 create sequence adsmanager.user_seq;
 
 create sequence adsmanager.user_contact_seq;
+
+create sequence adsmanager.user_permission_seq;
+
+create sequence adsmanager.user_role_seq;
 
 create sequence adsmanager.zone_seq;
 
@@ -231,14 +257,20 @@ alter table adsmanager.impression add constraint fk_adsmanager.impression_adsP_1
 create index ix_adsmanager.impression_adsP_11 on adsmanager.impression (ads_placement_id_ads_placement);
 alter table adsmanager.notificaton add constraint fk_adsmanager.notificaton_use_12 foreign key (user_id_user) references adsmanager.user (id_user);
 create index ix_adsmanager.notificaton_use_12 on adsmanager.notificaton (user_id_user);
-alter table adsmanager.user_contact add constraint fk_adsmanager.user_contact_us_13 foreign key (user_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.user_contact_us_13 on adsmanager.user_contact (user_id_user);
-alter table adsmanager.zone add constraint fk_adsmanager.zone_zone_chann_14 foreign key (zone_channel_id_zone_channel) references adsmanager.zone_channel (id_zone_channel);
-create index ix_adsmanager.zone_zone_chann_14 on adsmanager.zone (zone_channel_id_zone_channel);
-alter table adsmanager.zone add constraint fk_adsmanager.zone_ads_size_15 foreign key (ads_size_id_ads_size) references adsmanager.ads_size (id_ads_size);
-create index ix_adsmanager.zone_ads_size_15 on adsmanager.zone (ads_size_id_ads_size);
+alter table adsmanager.user add constraint fk_adsmanager.user_role_13 foreign key (role_id_role) references adsmanager.user_role (id_role);
+create index ix_adsmanager.user_role_13 on adsmanager.user (role_id_role);
+alter table adsmanager.user_contact add constraint fk_adsmanager.user_contact_us_14 foreign key (user_id_user) references adsmanager.user (id_user);
+create index ix_adsmanager.user_contact_us_14 on adsmanager.user_contact (user_id_user);
+alter table adsmanager.zone add constraint fk_adsmanager.zone_zone_chann_15 foreign key (zone_channel_id_zone_channel) references adsmanager.zone_channel (id_zone_channel);
+create index ix_adsmanager.zone_zone_chann_15 on adsmanager.zone (zone_channel_id_zone_channel);
+alter table adsmanager.zone add constraint fk_adsmanager.zone_ads_size_16 foreign key (ads_size_id_ads_size) references adsmanager.ads_size (id_ads_size);
+create index ix_adsmanager.zone_ads_size_16 on adsmanager.zone (ads_size_id_ads_size);
 
 
+
+alter table adsmanager.user_user_permission add constraint fk_adsmanager.user_user_permi_01 foreign key (user_id_user) references adsmanager.user (id_user);
+
+alter table adsmanager.user_user_permission add constraint fk_adsmanager.user_user_permi_02 foreign key (user_permission_id_permission) references adsmanager.user_permission (id_permission);
 
 # --- !Downs
 
@@ -266,7 +298,13 @@ drop table if exists adsmanager.system_prefeence cascade;
 
 drop table if exists adsmanager.user cascade;
 
+drop table if exists adsmanager.user_user_permission cascade;
+
 drop table if exists adsmanager.user_contact cascade;
+
+drop table if exists adsmanager.user_permission cascade;
+
+drop table if exists adsmanager.user_role cascade;
 
 drop table if exists adsmanager.zone cascade;
 
@@ -279,6 +317,8 @@ drop sequence if exists adsmanager.ads_action_seq;
 drop sequence if exists adsmanager.ads_placement_seq;
 
 drop sequence if exists adsmanager.ads_size_seq;
+
+drop sequence if exists adsmanager.ads_transaction_seq;
 
 drop sequence if exists adsmanager.ads_type_seq;
 
@@ -295,6 +335,10 @@ drop sequence if exists adsmanager.system_prefeence_seq;
 drop sequence if exists adsmanager.user_seq;
 
 drop sequence if exists adsmanager.user_contact_seq;
+
+drop sequence if exists adsmanager.user_permission_seq;
+
+drop sequence if exists adsmanager.user_role_seq;
 
 drop sequence if exists adsmanager.zone_seq;
 
