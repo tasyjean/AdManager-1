@@ -29,7 +29,7 @@ public class UserRole extends Model implements Role {
 		switch (name) {
 			case  ADMINISTRATOR: return "administrator";
 			case  ADVERTISER : return "advertiser";
-			case  MANAGEMENT : return "management";	
+			case  MANAGER : return "manager";	
 			default: return "advertiser";
 		}
 	}

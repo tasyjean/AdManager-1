@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.omg.CORBA.Current;
+
 import be.objectify.deadbolt.java.actions.SubjectNotPresent;
 
+import models.custom_helper.TemplateData;
 import models.data.AdsSize;
 import models.data.AdsType;
 import models.data.User;
@@ -31,51 +34,57 @@ public class FrontEndController extends CompressController {
     static Authentificator auth=new Authentificator();
     
 	public static Result home() {
-		User user= auth.getUserLogin(session());
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("frontname", user.getFront_name()+" "+user.getLast_name());
-		
-		return ok(home.render(map));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();
+		return ok(home.render(data));
     }
 
 	public static Result contact(){
-	
-		return ok(contact.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();	
+		return ok(contact.render(data));
 	}
 	@SubjectNotPresent
 	public static Result registration(){
-		
-		return ok(registration.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();		
+		return ok(registration.render(data));
 	}
 	
 	public static Result help(){
-		return ok(help.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();		
+		return ok(help.render(data));
 	}
 	public static Result authenticate(){
 		Form<LoginForm>  loginForm = Form.form(LoginForm.class).bindFromRequest();
 		if(loginForm.hasErrors()) {
-//            return ok(home.render(loginForm.globalErrors().get(0).message()));
-			  return ok(home.render(new HashMap<String, String>()));
-				
+			TemplateData data=new TemplateData(Http.Context.current());
+			data.setUserData();
+			return ok(login.render(loginForm,data));
         } else {
         	auth.login(loginForm.get().email, session());
-    		return redirect(controllers.backend.routes.Backend.index());
+    		return redirect(controllers.backend.routes.DashboardController.index());
         }
 	}
 	@SubjectNotPresent
 	public static Result login(){
-		return ok(login.render(loginForm));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();
+		return ok(login.render(loginForm,data));
 	}
 	
 	public static Result about(){
-		
-		return ok(about.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();
+		return ok(about.render(data));
 	}
 	
 	public static Result logout(){
 		auth.logout(session());
-//		return ok(home.render(""));
-		return ok(contact.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();
+		return ok(contact.render(data));
 
 	}
 	

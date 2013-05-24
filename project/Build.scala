@@ -18,9 +18,7 @@ object ApplicationBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here   
-    
-    
-    templatesImport += "models._",
+    templatesImport ++= "models.custom_helper.TemplateData",
        
     //Deadbolt
     resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),

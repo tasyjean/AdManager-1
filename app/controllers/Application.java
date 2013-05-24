@@ -32,6 +32,7 @@ public class Application extends CompressController {
     	String source=request().getHeader(REFERER);
     	String agent=request().getHeader(USER_AGENT);
     	
+    	
     	ArrayList<String> data=new ArrayList<String>();
     	data.add(host);
     	data.add(method);

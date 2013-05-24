@@ -1,8 +1,8 @@
-@(loginForm: Form[form.LoginForm])
+@(loginForm: Form[form.LoginForm],templateData: models.custom_helper.TemplateData)
 
 @import helper._
 
-@main("Masuk") {
+@main("Masuk",templateData.getFrontName,templateData.getRole) {
     
     <div class="artikel">
       <ul class="breadcrumb">
@@ -17,9 +17,9 @@
          <h3 class="">Masuk</h3>
          
       	  @if(loginForm.hasGlobalErrors){
-      	  	<p class="error">
+			<div class="alert alert-error">
               	@loginForm.globalError.message     	  	 	
-      	  	 </p>
+			</div>
       	  }
       	   @if(flash.contains("success")) {
                 <p class="success">

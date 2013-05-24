@@ -1,11 +1,13 @@
-@(map : Map[String,String])
+@(templateData: models.custom_helper.TemplateData)
 
 @import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
-@main("") {
+@main("",templateData.getFrontName,templateData.getRole) {
     
       <div class="promo">
-        <h1>Langkah Mudah Beriklan di Teknimo @map</h1>
+        <h1>Langkah Mudah Beriklan di Teknimo</h1>
         <p class="lead" style="max-width:700px;margin:0 auto">Hanya membutuhkan 5 langkah sederhana untuk memasang iklan, seluruh sisanya akan ditangani oleh sistem kami secara otomatis dan akurat</p></br></br>
 
         <!-- step by step -->
@@ -50,11 +52,16 @@
                 <h2>review laporan lengkap untuk evaluasi</h2>
               </div>
             </div>
-
+		@subjectNotPresent(){
          </div> </br></br>
-       <form action="registration" method="get"><button type="submit" formaction="registration" class="btn btn-success kotak-daftar" href="registration">Registrasi Sekarang</br><font style="font-size:0.7em">atau klik <a href="login">di sini</a> jika sudah mendaftar</font></button></form>
-      </div>
-
+       			<form action="registration" method="get"><button type="submit" formaction="registration" class="btn btn-success kotak-daftar" href="registration">Registrasi Sekarang</br><font style="font-size:0.7em">atau klik <a href="login">di sini</a> jika sudah mendaftar</font></button></form>
+      	 </div>
+		}
+		@subjectPresent(){
+         </div> </br></br>
+       		<form action="dashboard" method="get"><button type="submit" formaction="dashboard" class="btn btn-success kotak-daftar" href="dashboard">Masuk ke Dashboard</br></button></form>
+      	</div>
+		}
       <hr style="">
 
       <div class="row-fluid" >

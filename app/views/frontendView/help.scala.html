@@ -1,8 +1,8 @@
-@(message: String)
+@(templateData: models.custom_helper.TemplateData)
 
 @import helper._
 
-@main("Bantuan") {
+@main("Bantuan",templateData.getFrontName,templateData.getRole) {
     
          <div class="artikel">
           <ul class="breadcrumb">

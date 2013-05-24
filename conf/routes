@@ -12,7 +12,7 @@ GET     /help                    		controllers.frontend.FrontEndController.help(
 GET     /about		        			controllers.frontend.FrontEndController.about()
 GET     /login                   		controllers.frontend.FrontEndController.login()
 POST 	/login							controllers.frontend.FrontEndController.authenticate()
-GET 	/dashboard						controllers.backend.Backend.index()
+GET 	/dashboard						controllers.backend.DashboardController.index()
 GET 	/logout							controllers.frontend.FrontEndController.logout()
 
 #untuk kepentingan testing

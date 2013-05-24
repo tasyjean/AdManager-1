@@ -19,7 +19,7 @@ create sequence adsmanager.impression_seq;
 
 create sequence adsmanager.notificaton_seq;
 
-create sequence adsmanager.system_prefeence_seq;
+create sequence adsmanager.system_preferences_seq;
 
 create sequence adsmanager.user_seq;
 

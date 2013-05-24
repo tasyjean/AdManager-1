@@ -7,8 +7,8 @@ public enum RoleEnum {
 	@EnumValue("administrator")
 	ADMINISTRATOR,
 	
-	@EnumValue("management")
-	MANAGEMENT, 
+	@EnumValue("manager")
+	MANAGER, 
 	 
 	@EnumValue("advertiser")
 	ADVERTISER

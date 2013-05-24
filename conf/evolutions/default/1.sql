@@ -124,11 +124,11 @@ create table adsmanager.notificaton (
   constraint pk_notificaton primary key (id_notification))
 ;
 
-create table adsmanager.system_prefeence (
+create table adsmanager.system_preferences (
   id_system_preferences     integer not null,
   key                       varchar(255),
   value                     varchar(255),
-  constraint pk_system_prefeence primary key (id_system_preferences))
+  constraint pk_system_preferences primary key (id_system_preferences))
 ;
 
 create table adsmanager.user (
@@ -168,7 +168,7 @@ create table adsmanager.user_permission (
 create table adsmanager.user_role (
   id_role                   integer not null,
   name                      varchar(13),
-  constraint ck_user_role_name check (name in ('management','advertiser','administrator')),
+  constraint ck_user_role_name check (name in ('advertiser','manager','administrator')),
   constraint pk_user_role primary key (id_role))
 ;
 
@@ -219,7 +219,7 @@ create sequence adsmanager.impression_seq;
 
 create sequence adsmanager.notificaton_seq;
 
-create sequence adsmanager.system_prefeence_seq;
+create sequence adsmanager.system_preferences_seq;
 
 create sequence adsmanager.user_seq;
 
@@ -294,7 +294,7 @@ drop table if exists adsmanager.impression cascade;
 
 drop table if exists adsmanager.notificaton cascade;
 
-drop table if exists adsmanager.system_prefeence cascade;
+drop table if exists adsmanager.system_preferences cascade;
 
 drop table if exists adsmanager.user cascade;
 
@@ -330,7 +330,7 @@ drop sequence if exists adsmanager.impression_seq;
 
 drop sequence if exists adsmanager.notificaton_seq;
 
-drop sequence if exists adsmanager.system_prefeence_seq;
+drop sequence if exists adsmanager.system_preferences_seq;
 
 drop sequence if exists adsmanager.user_seq;
 

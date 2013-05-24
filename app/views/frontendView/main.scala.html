@@ -1,5 +1,5 @@
 
-@(title: String)(content: Html)
+@(title: String, namaUser:String="", role:String="")(content: Html)
 
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import be.objectify.deadbolt.java.views.html._
@@ -30,12 +30,15 @@
           <div class="span6" id="logo">
               <img src="@routes.Assets.at("images/logo_small.png")"/>
           </div>
-           @subjectPresent(){
-				<p>Adnan HP
-				Administrator
-				<a href="@controllers.frontend.routes.FrontEndController.logout()">Logout</a>	</p>			
-	         }
-          <div class="span8" id="menu">
+ 
+          <div class="span8" id="header-kanan">
+          @subjectPresent(){
+				<div class="menuProfile pull-right">
+					<span id="namaProfile">Login Sebagai : 
+					<a href="@controllers.backend.routes.DashboardController.index()"> @namaUser (@role)</a></span>
+				</div>
+			}
+			<div id="menu" class="row">
             <div class="navbar">
               <div class="navbar-inner">
               <a class="btn btn-navbar hidden-desktop hidden-tablet visible-phone" data-toggle="collapse" data-target=".nav-collapse">
@@ -54,6 +57,12 @@
 	                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
 	                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
 	                 }
+	                 
+	                @subjectPresent(){
+	           			<li title="Logout akun anda" ><a href="@controllers.frontend.routes.FrontEndController.logout()">Logout</a></li>         	
+	           			<li data-toggle="tooltip" title="Ke halaman dashboard" ><a href="@controllers.backend.routes.DashboardController.index()">Dashboard</a></li>         	
+	           			
+	                }
               </ul>
               </div>
               <div class="nav-collapse hidden-desktop hidden-tablet visible-phone">
@@ -64,15 +73,23 @@
                     <ul class="nav"> 
 
                     <li class="@("active".when(title=="Bantuan"))"><a href="help">Bantuan</a></li>
-                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
-                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
-
+					@subjectNotPresent() {
+	                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
+	                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
+	                 }
+	                 
+	                @subjectPresent(){
+	           			<li title="Logout akun anda" ><a href="@controllers.frontend.routes.FrontEndController.logout()">Logout</a></li>         	
+	           			<li data-toggle="tooltip" title="Ke halaman dashboard" ><a href="@controllers.backend.routes.DashboardController.index()">Dashboard</a></li>         	
+	           			
+	                }
                   </ul>
               </div>
              </div>
             </div><!-- /.navbar -->
-
+			
           </div> <!--id menu -->
+          </div> <!-- Span 8 -->
       </div> <!--span12 -->
     </div> <!-- header -->
       <!-- konten -->

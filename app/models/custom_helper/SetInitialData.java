@@ -69,7 +69,7 @@ public class SetInitialData {
 		user2.save();
 		
 		//Data 3
-		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", new UserRole(RoleEnum.MANAGEMENT));
+		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", new UserRole(RoleEnum.MANAGER));
 		user3.setCity("Jakakerto");
 		user3.setCountry("Indonesia");
 		user3.setCompany("Teknimo");
