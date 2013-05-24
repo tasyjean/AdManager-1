@@ -32,25 +32,10 @@
       <a class="brand" href="#"><img src="@routes.Assets.at("dashboard/images/logo_small.png")" /></a>
 
       <div class="main-menu" id="main-menu">
-        <div class="auth auth-view pull-right">
-          <div class="btn-menu-auth dropdown">
-             <a class="btn-link btn dropdown-toggle">
-              <img class="avatar" src="@routes.Assets.at("images/littke.png")">        
-              <div class="blok-nama">
-                  <span class="name">Adnan Hidayat</span><br/>
-                  <span class="jabatan">Administrator</span>
-                </div>           
-                <span class="icon-chevron-down" style="margin:12px 10px; 0px 0px;"></span>
-             </a>
-             <ul class="dropdown-menu menu-auth" role="menu">
-               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-wrench icon-white"></span>Pengaturan</a> </li>
-               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-envelope icon-white"></span>Notifikasi</a> </li>
-               <li class="divider"></li>
-               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-share icon-white "></span>Logout</a> </li>
-             </ul>
-           </div>
-        </div>
+          @profile
       </div> 
+
+
     </div>
   </div>
 </div>
@@ -195,7 +180,7 @@
                       </div>
                   </form>
                 </section>
-               @content @menu @profile
+              
             </div>
             <div class="footer-text">
              <p>Teknimo Ads Manager. Hak Cipta 2013 Teknimo</p> 

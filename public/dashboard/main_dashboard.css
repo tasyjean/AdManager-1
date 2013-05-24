@@ -246,3 +246,20 @@ body>.container {
 	font-weight: normal;
 	line-height: 26px;
 }
+/*Tombol notifikasi */
+.notif-button{
+	width: 20px;
+	height: 20px;
+	margin-left: 5px;
+	padding:2px 8px 2px 8px;
+	display: inline;
+	background-color:#EF643E;
+	font-size: 12px;
+	color:#ffffff;
+}
+.notif-button:hover{
+	background-color:#ffffff;
+	color: #EF643E;
+	border-radius: 2px;
+}
+

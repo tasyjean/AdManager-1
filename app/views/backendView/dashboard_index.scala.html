@@ -1,16 +1,18 @@
-@(message: String)
+@(data: TemplateData)
 
+@import views.html.ui_component._
 @import helper._
 
 @main("Tentang Kami"){
-	
-	@message
+
+
 } {
   
   @* Untuk bagian Menu *@
-  @message
+  
 } {
   
-  @* Untuk bagian profile *@
-  @message
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
 }

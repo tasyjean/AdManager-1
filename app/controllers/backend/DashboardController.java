@@ -23,8 +23,9 @@ public class DashboardController extends CompressController {
 	private static Authentificator auth=new Authentificator();
 	@SubjectPresent
 	public static Result index(){
-
-		return ok(dashboard_index.render(""));
+		TemplateData data=new TemplateData(Http.Context.current());
+		data.setUserData();
+		return ok(dashboard_index.render(data));
 	}
 
 }

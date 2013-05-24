@@ -24,6 +24,7 @@ public class TemplateData {
 	private String lastName="";
 	private String role=""; 
 	private String email="";
+	private String notifCount="";
 	
 	Authentificator auth = new Authentificator();
 	
@@ -39,6 +40,9 @@ public class TemplateData {
 			this.lastName=user.getLast_name();
 			this.email=user.getEmail();
 			this.role=user.getRole().getName();
+			//simulasi
+			this.notifCount="3";
+			
 		}
 	}
 	public String getFrontName(){
@@ -47,11 +51,19 @@ public class TemplateData {
 	public String getLastName(){
 		return lastName;
 	}
+	public String getName(){
+		return frontName+" "+lastName;
+	}
 	public String getRole(){
 		return role;
 	}
 	public String getEmail(){
 		return email;
 	}
+	public String getNotifCount() {
+		return notifCount;
+	}
+
+	
 	
 }
