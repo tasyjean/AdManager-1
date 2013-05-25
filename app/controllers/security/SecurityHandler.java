@@ -14,16 +14,14 @@ public class SecurityHandler extends AbstractDeadboltHandler {
 
 	Authentificator auth = new Authentificator();
 	@Override
-	public Result beforeAuthCheck(Context contect) {
+	public Result beforeAuthCheck(Context context) {
 	
 		return null;
 	}
-	
 	public Subject getSubject(Context context){
 		
 		return auth.getUserLogin(context.session());
 	}
-	
 	public DynamicResourceHandler getDynamicResourceHandler(Http.Context context){
 		
 		return new DynamicHandler();
@@ -32,7 +30,6 @@ public class SecurityHandler extends AbstractDeadboltHandler {
 	public Result onAuthFailure(Context context, String content){
 		String source=context.request().getHeader(Http.HeaderNames.REFERER);
 		return forbidden(error404.render(source));
-		
 	}
 
 }

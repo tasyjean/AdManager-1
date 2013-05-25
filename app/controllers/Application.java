@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import play.*;
 import play.mvc.*;
+import play.mvc.Http.RequestBody;
 import play.mvc.Http.RequestHeader;
 import controllers.frontend.*;
 import views.html.*;
@@ -42,9 +43,11 @@ public class Application extends CompressController {
     	data.add(uri);
     	data.add(source);
     	data.add(agent);
+    	RequestBody body = request().body();
+    	return ok("Got json: " + body.asText());
     	
     	
-    	return ok(testView.render(data));
+//    	return ok(testView.render(data));
     	
     }
     

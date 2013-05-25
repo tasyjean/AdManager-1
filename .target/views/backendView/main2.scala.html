@@ -32,17 +32,54 @@
       <a class="brand" href="#"><img src="@routes.Assets.at("dashboard/images/logo_small.png")" /></a>
 
       <div class="main-menu" id="main-menu">
-          @profile
+        <div class="auth auth-view pull-right">
+          <div class="btn-menu-auth dropdown">
+             <a class="btn-link btn dropdown-toggle">
+              <img class="avatar" src="@routes.Assets.at("images/littke.png")">        
+              <div class="blok-nama">
+                  <span class="name">Adnan Hidayat</span><br/>
+                  <span class="jabatan">Administrator</span>
+                </div>           
+                <span class="icon-chevron-down" style="margin:12px 10px; 0px 0px;"></span>
+             </a>
+             <ul class="dropdown-menu menu-auth" role="menu">
+               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-wrench icon-white"></span>Pengaturan</a> </li>
+               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-envelope icon-white"></span>Notifikasi</a> </li>
+               <li class="divider"></li>
+               <li><a role="menuitem" tabindex="-1" href=""><span class="space icon-share icon-white "></span>Logout</a> </li>
+             </ul>
+           </div>
+        </div>
       </div> 
-
-
     </div>
   </div>
 </div>
 
 <div class="container">
     <div class="row-fluid">
-      @menu
+        <div class="span3">
+            <aside>
+                <nav>
+                    <ul class="nav">
+                      <li class="selected">
+                        <a href=""><i class="icon-play icon-white tengahkan_icon_menu"></i> Home</a>
+                      </li>
+                      <li>
+                        <a href=""><i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Iklan Dan Kampanye</a>
+                      </li>
+                      <li>
+                        <a href=""><i class="icon-font tengahkan_icon_menu icon-white"></i>Laporan</a>
+                      </li>
+                      <li>
+                        <a href=""><i class="icon-user tengahkan_icon_menu icon-white"></i>Keuangan</a>
+                      </li>
+                      <li>
+                        <a href=""><i class="icon-retweet tengahkan_icon_menu icon-white"></i>Zona</a>
+                      </li>
+                    </ul>
+                </nav>
+            </aside>
+        </div>
         <div class="span9" id="content-wrapper">
             <div id="content">
                 <!-- navbar -->
@@ -158,7 +195,7 @@
                       </div>
                   </form>
                 </section>
-              
+               @content @menu @profile
             </div>
             <div class="footer-text">
              <p>Teknimo Ads Manager. Hak Cipta 2013 Teknimo</p> 

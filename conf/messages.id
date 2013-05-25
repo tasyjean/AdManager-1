@@ -1,0 +1,6 @@
+constraint.login_salah=Email atau password salah
+constraint.required=Form harus di isi
+constraint.email=format email salah
+validation.required=Isi Form Harus Di Isi
+validation.email=format email salah
+success.forgetPassword=Permintaan diterima, silahkan cek email untuk lanjut ke proses selanjutnya

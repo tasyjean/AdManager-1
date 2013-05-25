@@ -8,12 +8,15 @@ GET     /home                           controllers.frontend.FrontEndController.
 
 GET     /contact                   		controllers.frontend.FrontEndController.contact()
 GET     /registration        			controllers.frontend.FrontEndController.registration()
+POST 	/registration					controllers.frontend.FrontEndController.registrar()
 GET     /help                    		controllers.frontend.FrontEndController.help()
 GET     /about		        			controllers.frontend.FrontEndController.about()
 GET     /login                   		controllers.frontend.FrontEndController.login()
 POST 	/login							controllers.frontend.FrontEndController.authenticate()
 GET 	/dashboard						controllers.backend.DashboardController.index()
 GET 	/logout							controllers.frontend.FrontEndController.logout()
+GET 	/forget_password 				controllers.frontend.FrontEndController.forgetPassword()
+POST 	/forget_password				controllers.frontend.FrontEndController.forgetProcess()
 
 #untuk kepentingan testing
 GET 	/testRequest					controllers.Application.testRequest()					

@@ -5,7 +5,7 @@
  * Kelas ini untuk data parameter yang umum dilewatkan ke template
  */
 
-package models.custom_helper;
+package models.dataWrapper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,0 +1,34 @@
+@(data: TemplateData)
+
+@* Menggenerate Menu *@
+        <div class="auth auth-view pull-right">
+          <div class="btn-menu-auth dropdown">
+             <a class="btn-link btn dropdown-toggle">
+              <img class="avatar" src="@routes.Assets.at("images/littke.png")">        
+              <div class="blok-nama">
+                  <span class="name">@data.getName</span><br/>
+                  <span class="jabatan">@data.getRole</span>
+                </div>           
+                <span class="icon-chevron-down @("icon-white".when(data.getNotifCount!="")) " style="margin:12px 10px; 0px 0px;"></span>
+             </a>
+             <ul class="dropdown-menu menu-auth" role="menu">
+               <li>
+               		<a role="menuitem" tabindex="-1" href=""><span class="space icon-user icon-white"></span>Profile</a> 
+               </li>               
+               <li>
+               		<a role="menuitem" tabindex="-1" href=""><span class="space icon-wrench icon-white"></span>Pengaturan</a> 
+               </li>
+                <li>
+               		<a role="menuitem" tabindex="-1" href=""><span class="space icon-envelope icon-white"></span>Notifikasi<span class="notif-button">@data.getNotifCount<span></a> 
+               </li>
+
+               <li class="divider"></li>
+               
+               <li>
+               		<a role="menuitem" tabindex="-1" href="logout">
+               			<span class="space icon-share icon-white "></span>Logout
+               		</a> 
+               </li>
+             </ul>
+           </div>
+        </div>

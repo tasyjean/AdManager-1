@@ -1,4 +1,5 @@
 constraint.login_salah=Email atau password salah
 constraint.required=Isi Form Harus Di Isi
 constraint.email=format email salah
-
+validation.required=Isi Form Harus Di Isi
+validation.email=format email salah

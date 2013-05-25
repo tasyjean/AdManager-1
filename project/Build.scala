@@ -13,12 +13,18 @@ object ApplicationBuild extends Build {
     javaJdbc,
     javaEbean,
     "postgresql" % "postgresql" % "9.1-901.jdbc4",
-    "be.objectify" %% "deadbolt-java" % "2.1-RC2"
+    "be.objectify" %% "deadbolt-java" % "2.1-RC2",
+    "com.typesafe" %% "play-plugins-mailer" % "2.1.0"
+
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here   
-    templatesImport += "models.custom_helper.TemplateData",
+    templatesImport += "models.dataWrapper._",
+    templatesImport += "models.form.frontendForm.LoginForm",
+    templatesImport += "models.form.frontendForm._",
+    templatesImport += "models.form.frontendForm.ForgetPassForm",
+
        
     //Deadbolt
     resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),

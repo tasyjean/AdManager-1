@@ -2,7 +2,7 @@ package models.service;
 
 import models.custom_helper.MD5;
 import models.data.User;
-import models.form.LoginForm;
+import models.form.frontendForm.LoginForm;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Http.Context;
@@ -39,5 +39,6 @@ public class Authentificator {
 			return true;
 		}else return false;
 	}
+
 
 }

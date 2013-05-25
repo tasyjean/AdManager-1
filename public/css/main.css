@@ -207,6 +207,14 @@ body {
    border-radius: 5px;  
   margin-bottom: 50px;
 }
+.form-forget-password{
+  width: 300px;
+  padding: 4px 10px 0px 0px;
+  -webkit-border-radius: 5px;
+   border-radius: 5px;  
+  margin-bottom: 50px;
+}
+
 .form-login h3{
   margin-top: 4px;
 }

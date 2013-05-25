@@ -1,8 +1,8 @@
-@(loginForm: Form[form.LoginForm],templateData: models.custom_helper.TemplateData)
+@(loginForm: Form[LoginForm])
 
 @import helper._
 
-@main("Masuk",templateData.getFrontName,templateData.getRole) {
+@main("Masuk","","") {
     
     <div class="artikel">
       <ul class="breadcrumb">
@@ -28,11 +28,11 @@
             }          
          	<input class=input-block-level type="email" name="email" placeholder="Alamat Email" value="@loginForm("email").value">
         	<input type="password" name="password" class="input-block-level" placeholder="Password">
-          	<label class="checkbox">
+          	<!--  <label class="checkbox">
             <input type="checkbox" name="rememberMe" value="true">Ingat Saya
-          	</label>
+          	</label> -->
           	<button style="text-align:right" class="btn btn-primary" type="submit">Masuk</button>
-          	<p style="text-align:right"><a  href="#">Lupa Password?</a></p>            
+          	<p style="text-align:right"><a  href="/forget_password">Lupa Password?</a></p>            
       }
 
 }
