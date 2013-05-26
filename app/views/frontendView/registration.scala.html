@@ -1,60 +1,123 @@
-@(templateData: TemplateData)
+@(regisform: Form[RegistrationForm])
 
 @import helper._
 
-@main("Registrasi",templateData.getFrontName,templateData.getRole) {
-    
+@main("Registrasi") {
+    	
+    	 <script type="text/javascript">
+ 			var RecaptchaOptions = {
+    			theme : 'clean'
+ 			};
+ 		</script>
        <div class="artikel">
           <ul class="breadcrumb">
             <li><a href="/">Home</a><span class="divider">/<span><li>
             <li><a href="registration">Registrasi</a><li>
-          </ul>
+          </ul>        
           <h1><a href="registration">Registrasi</a></h1><br>
           <p> Untuk memulai proses registrasi, langkah pertama, masukan data yang dibutuhkan di form berikut :</p>
-          <form class="form-horizontal form-registrasi">
-            <div class="control-group">
-              <label class="control-label" for="inputNamaDepan">Nama Depan</label>
-              <div class="controls">
-                <input type="text" id="inputNamaDepan" placeholder="isi nama depan">
-              </div>
-            </div>
+          
+	      @helper.form(action=frontend.routes.FrontEndController.registrar,'class-> "form-horizontal form-registrasi") {
+             <div class="control-group @if(regisform.error("frontName")!=null){error}">
+              <label class="control-label" for="front_name">Nama Depan *</label>
+               <div class="controls">
+                <input type="text" name="front_name" id="front_name"  value="@regisform("front_name").value" placeholder="isi nama depan">
+               		@if(regisform.error("frontName")!=null){
+               			<span class="help-inline">
+               			@regisform.error("frontName").message()
+               			</span>
+               		}
+               </div> 
+              </div> 
+                       
              <div class="control-group">
-              <label class="control-label" for="inputNamaBelakang">Nama Belakang</label>
+              <label class="control-label" for="last_name">Nama Belakang</label>
               <div class="controls">
-                <input type="text" id="inputNamaBelakang" placeholder="isi nama belakang">
+                <input type="text" name="last_name" value="@regisform("last_name").value" id="last_name" placeholder="isi nama belakang">
               </div>
             </div>  
-            <div class="control-group error">
-              <label class="control-label" for="inputEmail">Email</label>
+            
+            <div class="control-group @if(regisform.error("email")!=null){error}
+            						  @if(regisform.error("email_valid")!=null){error}">
+              <label class="control-label" for="email">Email *</label>
               <div class="controls">
-                <input type="text" id="inputEmail" placeholder="isi email">
-                    <span class="help-inline">Sekedar test Error</span>
-
+                <input type="text" name="email"  value="@regisform("email").value" id="email" placeholder="isi email">
+               		@if(regisform.error("email")!=null){
+               			<span class="help-inline">
+               			@regisform.error("email").message()
+               			</span>
+               		}
+               		@if(regisform.error("email_valid")!=null){
+               			<span class="help-inline">
+               			@regisform.error("email_valid").message()
+               			</span>
+               		}               		 
               </div>
             </div>
-            <div class="control-group">
-              <label class="control-label" for="inputPassword">Password</label>
+            
+            
+            <div class="control-group @if(regisform.error("password_sama")!=null){error}
+            						  @if(regisform.error("password")!=null){error}">
+              <label class="control-label" for="password">Password *</label>
               <div class="controls">
-                <input type="password" id="inputPassword" placeholder="password">
+                <input type="password" name=password id="password" placeholder="password">
+               		@if(regisform.error("password_sama")!=null){
+               		    <span class="help-inline">
+               			@regisform.error("password_sama").message()
+               			</span>
+               		}
+               		@if(regisform.error("password")!=null){
+               			<span class="help-inline">               			
+               			@regisform.error("password").message()
+               			</span>
+               		}               		
               </div>
             </div>
-            <div class="control-group">
-              <label class="control-label" for="inputPassword2">Ulangi Password</label>
+            
+            
+            <div class="control-group @if(regisform.error("password_sama")!=null){error}">
+              <label class="control-label"  for="password_repeat">Ulangi Password *</label>
               <div class="controls">
-                <input type="password" id="inputPassword2" placeholder="ulang password">
+                <input type="password" name="password_repeat" id="password_repeat" placeholder="ulang password">
+               		@if(regisform.error("password_sama")!=null){
+               		   <span class="help-inline">
+               			@regisform.error("password_sama").message()
+               			</span>
+               		}
               </div>
             </div>            
-            <div class="control-group">
-              <label class="control-label" for="inputCapctha">Input Captcha</label>
-              <div class="controls">
-                <input type="text" id="inputCaptcha" placeholder="captcha">
+            
+            <div class="control-group @if(regisform.error("captcha")!=null){error}">
+              <label class="control-label" for="capctha">Input Captcha *</label>
+            </div>
+             <div class="control-group @if(regisform.error("captcha")!=null){error}">
+              <div class="captcha">
+                <script type="text/javascript"
+                   src="http://www.google.com/recaptcha/api/challenge?k=6LcznOESAAAAAF6dVj8SavGjdjbNlUUP-UBmj1y0">
+                </script>
+                <noscript>
+                   <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LcznOESAAAAAF6dVj8SavGjdjbNlUUP-UBmj1y0"
+                       height="300" width="500" frameborder="0"></iframe><br>
+                   <textarea name="recaptcha_challenge_field" rows="3" cols="30">
+                   </textarea>
+                   <input type="hidden" name="recaptcha_response_field"
+                       value="manual_challenge">
+                </noscript>
+                	 @if(regisform.error("captcha")!=null){
+               			<span class="help-inline">
+               			@regisform.error("captcha").message()
+               			</span>
+               		}
               </div>
             </div>
+            
             <div class="control-group">
               <div class="controls" style="float:right;">
-                <button type="submit" class="btn btn-success btn-large">Daftar</button>
+                <button type="submit" class="btn btn-success">Daftar</button>
               </div>
             </div>
-          </form>
+            *) Wajib
+            
+          }
         </div>
 }

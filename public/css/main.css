@@ -225,7 +225,7 @@ body {
   padding: 20px 20px 20px 20px;
   -webkit-border-radius: 5px;
    border-radius: 5px;  
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 .form-registrasi h3{
   margin-top: 4px;
@@ -233,6 +233,9 @@ body {
 .form-registrasi .control-label {
   text-align: left;
 
+}
+form-registrasi .captcha{
+		
 }
 /* Untuk isi artikel ------------------------------*/
 

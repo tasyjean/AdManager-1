@@ -8,7 +8,7 @@ public class SendMail  {
 	private String subject;
 	private String recipient;
 	private String content;
-	private String sender;
+	private String sender="komputok@gmail.com";
 	
 	private  MailerAPI mail = play.Play.application()
 			.plugin(MailerPlugin.class).email();

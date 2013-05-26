@@ -1,0 +1,26 @@
+@(status: String)
+
+@import helper._
+
+@main("Tentang Kami") {
+    
+         <div class="artikel">
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a><span class="divider">/<span><li>
+            <li><a href="@controllers.frontend.routes.FrontEndController.registration">Registrasi</a><li><span class="divider">/<span><li>
+         	<li><a href="/">Aktivasi</a>
+          </ul>
+          
+   			@if(status=="success"){
+   				<h1>Aktivasi berhasil</h1>
+   				<p>Lanjutkan dengan melakukan proses <a href="/login">login</a> untuk masuk ke aplikasi
+   				   Jangan lupa untuk melengkapi informasi identitas setelah log in.
+   				</p>
+   			}else{
+   				<h1>Aktivasi Gagal</h1>
+   				<p>Ada kesalahan pada kode aktivasi </p>
+   				
+   			}
+   			
+         </div>
+}

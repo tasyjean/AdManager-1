@@ -17,7 +17,7 @@ GET 	/dashboard						controllers.backend.DashboardController.index()
 GET 	/logout							controllers.frontend.FrontEndController.logout()
 GET 	/forget_password 				controllers.frontend.FrontEndController.forgetPassword()
 POST 	/forget_password				controllers.frontend.FrontEndController.forgetProcess()
-
+GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(email:String, key:String)
 #untuk kepentingan testing
 GET 	/testRequest					controllers.Application.testRequest()					
 

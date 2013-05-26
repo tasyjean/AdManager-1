@@ -34,11 +34,10 @@ public class Authentificator {
 				.eq("email", email)
 				.eq("password", MD5.get().md5(password))
 				.findUnique();
-		
 		if(user!=null){
-			return true;
-		}else return false;
+			return (user.isActive()) ? true: false; //harus aktif dulu
+		}else{
+			return false;
+		}
 	}
-
-
 }

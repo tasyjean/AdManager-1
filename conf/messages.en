@@ -4,7 +4,8 @@ constraint.email=format email salah
 validation.required=Isian harap tidak kosong
 validation.email=format email salah
 #registrasi
-validation.email_ada=Alamat email sudah terdaftar sebelumnya
+validation.email_exist=Alamat email sudah terdaftar sebelumnya
+validation.password=Password tidak sama
 #Default
 
 # --- Constraints

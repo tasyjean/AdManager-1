@@ -48,15 +48,26 @@
             
               <div class="hidden-phone visible-tablet visible-desktop">
               <ul class="nav">
-                    <li class="@("active".when(title==""))"><a href="/">Beranda</a></li>
-                    <li class="@("active".when(title =="Tentang Kami"))"><a href="about">Tentang</a></li>
-                    <li style="min-width:140px" class="@("active".when(title=="Hubungi Kami"))"><a href="contact">Hubungi Kami</a></li>
-                    <li class="@("active".when(title=="Bantuan"))"><a href="help">Bantuan</a></li>
+                    <li class="@("active".when(title==""))">
+                    	<a href="/">Beranda</a>
+                    </li>
+                    <li class="@("active".when(title =="Tentang Kami"))">
+                    	<a href="@controllers.frontend.routes.FrontEndController.about()">Tentang</a>
+                    </li>
+                    <li style="min-width:140px" class="@("active".when(title=="Hubungi Kami"))">
+                    	<a href="@controllers.frontend.routes.FrontEndController.contact">Hubungi Kami</a>
+                    </li>
+                    <li class="@("active".when(title=="Bantuan"))">
+                    	<a href="@controllers.frontend.routes.FrontEndController.help()">Bantuan</a>
+                    </li>
 					@subjectNotPresent() {
-	                    <li class="@("active".when(title=="Masuk"))"><a href="login">Masuk</a></li>
-	                    <li class="@("active".when(title=="Registrasi"))"><a href="registration">Registrasi</a></li>
+	                    <li class="@("active".when(title=="Masuk"))">
+	                    	<a href="@controllers.frontend.routes.FrontEndController.login()">Masuk</a>
+	                    </li>
+	                    <li class="@("active".when(title=="Registrasi"))">
+	                    	<a href="@controllers.frontend.routes.FrontEndController.registration()">Registrasi</a>
+	                    </li>
 	                 }
-	                 
 	                @subjectPresent(){
 	           			<li title="Logout akun anda" ><a href="@controllers.frontend.routes.FrontEndController.logout()">Logout</a></li>         	
 	           			<li data-toggle="tooltip" title="Ke halaman dashboard" ><a href="@controllers.backend.routes.DashboardController.index()">Dashboard</a></li>         	

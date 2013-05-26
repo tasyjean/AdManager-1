@@ -44,10 +44,10 @@ public class Application extends CompressController {
     	data.add(source);
     	data.add(agent);
     	RequestBody body = request().body();
-    	return ok("Got json: " + body.asText());
+//    	return ok("Got json: " + body.asText());
     	
     	
-//    	return ok(testView.render(data));
+    	return ok(testView.render(data));
     	
     }
     

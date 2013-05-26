@@ -29,5 +29,4 @@ public class DashboardController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		return ok(dashboard_index.render(data));
 	}
-
 }

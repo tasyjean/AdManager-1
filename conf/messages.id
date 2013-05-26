@@ -1,6 +1,41 @@
 constraint.login_salah=Email atau password salah
 constraint.required=Form harus di isi
 constraint.email=format email salah
-validation.required=Isi Form Harus Di Isi
+validation.required=Form harus di isi
 validation.email=format email salah
+validation.email_exist=Alamat email sudah terdaftar
+validation.password=Password tidak sama
+validattion.email_not_exist=Alamat email {0} tidak terdaftar
+validation.captcha = Captcha tidak tepat
 success.forgetPassword=Permintaan diterima, silahkan cek email untuk lanjut ke proses selanjutnya
+
+#Default
+
+# --- Constraints
+constraint.min=Minimum value: {0}
+constraint.max=Maximum value: {0}
+constraint.minLength=Minimum length: {0}
+constraint.maxLength=Maximum length: {0}
+constraint.email=Email
+
+# --- Formats
+format.date=Date (''{0}'')
+format.numeric=Numeric
+format.real=Real
+
+# --- Errors
+error.email=Format email salah
+error.invalid=Invalid value
+error.invalid.java.util.Date=Invalid date value
+error.required=This field is required
+error.number=Numeric value expected
+error.real=Real number value expected
+error.real.precision=Real number value with no more than {0} digit(s) including {1} decimal(s) expected
+error.min=Must be greater or equal to {0}
+error.min.strict=Must be strictly greater than {0}
+error.max=Must be less or equal to {0}
+error.max.strict=Must be strictly less than {0}
+error.minLength=Minimum length is {0}
+error.maxLength=Maximum length is {0}
+error.email=Valid email required
+error.pattern=Must satisfy {0}

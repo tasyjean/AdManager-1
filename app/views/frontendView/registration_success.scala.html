@@ -1,0 +1,20 @@
+@(email : String="", name : String="")
+
+@import helper._
+
+@main("Registrasi") {
+    
+       <div class="artikel">
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a><span class="divider">/<span><li>
+            <li><a href="registration">Registrasi</a><li>
+          </ul>        
+          <h1><a href="registration">Registrasi</a></h1><br>
+          
+          <div class="alert alert-success">Selamat @name <br> Registrasi berhasil
+         	<p> Email yang berisi link untuk aktivasi telah dikirim ke email @email <br>
+         		Buka email dan klik link aktivasi untuk mengaktifkan akun
+         	</p>
+         </div>
+          
+}
