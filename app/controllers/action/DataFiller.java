@@ -17,5 +17,4 @@ public class DataFiller extends Action.Simple {
 		
 		return delegate.call(context);
 	}
-
 }

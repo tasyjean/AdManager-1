@@ -59,7 +59,6 @@ public class FrontEndController extends CompressController {
 	public static Result registrar(){
 		Form<RegistrationForm> form = Form.form(RegistrationForm.class).bindFromRequest();
 		if(form.hasErrors()){
-			form.errorsAsJson();
 			return badRequest(registration.render(form));
 		}else{
 			//verifikasi recapcha
@@ -69,7 +68,7 @@ public class FrontEndController extends CompressController {
 				form.errors().put("captcha", list);
 				return badRequest(registration.render(form));
 			}
-			String key=registrar.register(form, request().getHeader("HOST"));
+			String key=registrar.register(form, request().getHeader("HOST")); 
 			return ok(registration_success.render(key, form.get().front_name));
 		}
 	}

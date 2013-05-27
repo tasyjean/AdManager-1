@@ -1,4 +1,9 @@
 package controllers.backend;
+/*
+ * @Author Xenovon
+ * digunakan untuk menangani request berkaitan dengan 
+ * halaman dashboard utama dan halaman setting
+ */
 
 import java.util.HashMap;
 
@@ -14,7 +19,6 @@ import controllers.action.DataFiller;
 import views.html.*;
 import views.html.frontendView.*;
 import views.html.backendView.*;
-
 /*
  * 
  * Struktur utama dan menu utama halaman dahsboard, tapi non fungsionalitas
