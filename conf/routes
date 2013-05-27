@@ -18,6 +18,28 @@ GET 	/logout							controllers.frontend.FrontEndController.logout()
 GET 	/forget_password 				controllers.frontend.FrontEndController.forgetPassword()
 POST 	/forget_password				controllers.frontend.FrontEndController.forgetProcess()
 GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(email:String, key:String)
+
+
+#campaign
+GET   /dashboard/campaign				controllers.backend.CampaignController.index()
+
+#finance
+GET   /dashboard/finance				controllers.backend.FinanceController.index()
+
+#profile
+GET   /dashboard/profile				controllers.backend.ProfileController.index()
+
+#report
+GET   /dashboard/report					controllers.backend.ReportController.index()
+
+#user
+GET   /dashboard/user					controllers.backend.UserController.index()
+
+#zone
+GET   /dashboard/zone					controllers.backend.ZoneController.index()
+
+
+
 #untuk kepentingan testing
 GET 	/testRequest					controllers.Application.testRequest()					
 

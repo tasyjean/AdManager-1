@@ -1,0 +1,23 @@
+@(title:String,subtitle:String)(menu:Html)(content:Html)
+
+           <div id="content">
+                <!-- navbar -->
+                <section id="stats">
+                  <header>
+                    <h1>@title</h1>
+                  </header>
+
+                  <div class="row-fluid">
+  					@menu
+                  </div>
+                </section>
+
+                <!-- section 2-->
+                 <section id="forms">
+                  <div class="sub-header">
+                    <h2>@subtitle</h2>
+                  </div>
+                  @content
+                </section>
+              
+            </div>

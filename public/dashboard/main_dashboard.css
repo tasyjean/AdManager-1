@@ -183,6 +183,13 @@ body>.container {
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	background-color: #ef643e;
 }
+.menu:hover {
+	color: #000000;
+	width: 100%;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #ef643e;
+	z-index:100000;
+}
 /*Warna */
 .container aside nav ul li a {
 	font-family: Arial;

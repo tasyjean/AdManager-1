@@ -1,37 +1,64 @@
-@(data: TemplateData, activeMenu : String ="")
+@(activeMenu : String ="")
+
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @* Menggenerate Menu dashboard 
 	Daftar menu
-	-> Dashboard Home
+	-> Dashboard Home  code="dashboard"
 	   Statistik
+	-> Manajemen Pengguna= ="user"
+	-> Iklan Dan Kampanye ="campaign"	
+	-> Laporan	="report"
+	-> Keuangan 	="finance"
+	-> Zona Dan Channel ="zone"
+	-> Pengaturan Aplikasi ="setting"
 
-	-> Halaman Depan
-	-> Manajemen Pengguna
-	-> Iklan Dan Kampanye
-	-> Laporan
-	-> Keuangan
-	-> Zona Dan Channel
-	-> Pengaturan Aplikasi
 *@
         <div class="span3">
             <aside>
                 <nav>
                     <ul class="nav">
-                      <li class="selected">
-                        <a href=""><i class="icon-play icon-white tengahkan_icon_menu"></i> Home</a>
+                      <li class="@("selected".when(activeMenu=="dashboard"))">
+                        <a href="@controllers.backend.routes.DashboardController.index()">
+                        	<i class="icon-play icon-white tengahkan_icon_menu"></i>Dashboard
+
+                        </a>
                       </li>
-                      <li>
-                        <a href=""><i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Iklan Dan Kampanye</a>
+                      <li class="@("selected".when(activeMenu=="campaign"))">
+                        <a href="@controllers.backend.routes.CampaignController.index()">
+                        	<i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Iklan Dan Kampanye
+                        </a>
                       </li>
-                      <li>
-                        <a href=""><i class="icon-font tengahkan_icon_menu icon-white"></i>Laporan</a>
+                       @restrict(la(as("administrator","manager"))){                     
+	                      <li class="@("selected".when(activeMenu=="user"))">
+	                        <a href="@controllers.backend.routes.UserController.index()">
+	                        	<i class="icon-user tengahkan_icon_menu icon-white"></i>Manajemen Pengguna
+	                        </a>
+	                      </li>  
+	                   }                    
+                      <li class="@("selected".when(activeMenu=="report"))">
+                        <a href="@controllers.backend.routes.ReportController.index()">
+                        	<i class="icon-font tengahkan_icon_menu icon-white"></i>Laporan
+                        </a>
                       </li>
-                      <li>
-                        <a href=""><i class="icon-user tengahkan_icon_menu icon-white"></i>Keuangan</a>
+                      <li class="@("selected".when(activeMenu=="finance"))">
+                        <a href="@controllers.backend.routes.FinanceController.index()">
+                        	<i class="icon-folder-open tengahkan_icon_menu icon-white"></i>Keuangan
+                        </a>
                       </li>
-                      <li>
-                        <a href=""><i class="icon-retweet tengahkan_icon_menu icon-white"></i>Zona</a>
+                      <li class="@("selected".when(activeMenu=="zone"))">
+                        <a href="@controllers.backend.routes.ZoneController.index()">
+                        	<i class="icon-retweet tengahkan_icon_menu icon-white"></i>Zona
+                        </a>
                       </li>
+                      @restrict(la(as("administrator"))){
+	                      <li class="@("selected".when(activeMenu=="setting"))">
+	                        <a href="@controllers.backend.routes.DashboardController.index()">
+	                        	<i class="icon-retweet tengahkan_icon_menu icon-white"></i>Pengaturan
+	                        </a>
+	                      </li> 
+                      }                     
                     </ul>
                 </nav>
             </aside>
