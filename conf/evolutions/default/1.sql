@@ -12,7 +12,7 @@ create table ads (
   description               TEXT,
   title                     varchar(255),
   content_text              varchar(255),
-  content_link              varchar(400),
+  content_link_id           integer,
   target                    varchar(400),
   alt_text                  varchar(400),
   weight                    integer,
@@ -22,7 +22,6 @@ create table ads (
   hide_count                integer,
   is_active                 boolean,
   is_deleted                boolean,
-  is_ganteng                boolean,
   constraint pk_ads primary key (id_ads))
 ;
 
@@ -106,6 +105,13 @@ create table deposito (
   constraint pk_deposito primary key (id_deposito))
 ;
 
+create table file_upload (
+  id                        integer not null,
+  path                      varchar(255),
+  name                      varchar(255),
+  constraint pk_file_upload primary key (id))
+;
+
 create table impression (
   id_impression             bigint not null,
   timestamp                 timestamp,
@@ -142,7 +148,7 @@ create table user_data (
   join_date                 timestamp,
   current_balance           integer,
   is_active                 boolean,
-  profile_photo             varchar(255),
+  profile_photo_id          integer,
   city                      varchar(255),
   country                   varchar(255),
   validation_key            varchar(255),
@@ -215,6 +221,8 @@ create sequence campaign_seq;
 
 create sequence deposito_seq;
 
+create sequence file_upload_seq;
+
 create sequence impression_seq;
 
 create sequence notificaton_seq;
@@ -239,32 +247,36 @@ alter table ads add constraint fk_ads_adsSize_2 foreign key (ads_size_id_ads_siz
 create index ix_ads_adsSize_2 on ads (ads_size_id_ads_size);
 alter table ads add constraint fk_ads_adsType_3 foreign key (ads_type_id_ad_type) references ads_type (id_ad_type);
 create index ix_ads_adsType_3 on ads (ads_type_id_ad_type);
-alter table ads_action add constraint fk_ads_action_impression_4 foreign key (impression_id_impression) references impression (id_impression);
-create index ix_ads_action_impression_4 on ads_action (impression_id_impression);
-alter table ads_placement add constraint fk_ads_placement_ads_5 foreign key (ads_id_ads) references ads (id_ads);
-create index ix_ads_placement_ads_5 on ads_placement (ads_id_ads);
-alter table ads_placement add constraint fk_ads_placement_zone_6 foreign key (zone_id_zone) references zone (id_zone);
-create index ix_ads_placement_zone_6 on ads_placement (zone_id_zone);
-alter table ads_transaction add constraint fk_ads_transaction_ads_7 foreign key (ads_id_ads) references ads (id_ads);
-create index ix_ads_transaction_ads_7 on ads_transaction (ads_id_ads);
-alter table campaign add constraint fk_campaign_id_user_8 foreign key (id_user_id_user) references user_data (id_user);
-create index ix_campaign_id_user_8 on campaign (id_user_id_user);
-alter table deposito add constraint fk_deposito_user_9 foreign key (user_id_user) references user_data (id_user);
-create index ix_deposito_user_9 on deposito (user_id_user);
-alter table deposito add constraint fk_deposito_user_validator_10 foreign key (user_validator_id_user) references user_data (id_user);
-create index ix_deposito_user_validator_10 on deposito (user_validator_id_user);
-alter table impression add constraint fk_impression_adsPlacement_11 foreign key (ads_placement_id_ads_placement) references ads_placement (id_ads_placement);
-create index ix_impression_adsPlacement_11 on impression (ads_placement_id_ads_placement);
-alter table notificaton add constraint fk_notificaton_user_12 foreign key (user_id_user) references user_data (id_user);
-create index ix_notificaton_user_12 on notificaton (user_id_user);
-alter table user_data add constraint fk_user_data_role_13 foreign key (role_id_role) references user_role (id_role);
-create index ix_user_data_role_13 on user_data (role_id_role);
-alter table user_contact add constraint fk_user_contact_user_14 foreign key (user_id_user) references user_data (id_user);
-create index ix_user_contact_user_14 on user_contact (user_id_user);
-alter table zone add constraint fk_zone_zone_channel_15 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
-create index ix_zone_zone_channel_15 on zone (zone_channel_id_zone_channel);
-alter table zone add constraint fk_zone_ads_size_16 foreign key (ads_size_id_ads_size) references ads_size (id_ads_size);
-create index ix_zone_ads_size_16 on zone (ads_size_id_ads_size);
+alter table ads add constraint fk_ads_content_link_4 foreign key (content_link_id) references file_upload (id);
+create index ix_ads_content_link_4 on ads (content_link_id);
+alter table ads_action add constraint fk_ads_action_impression_5 foreign key (impression_id_impression) references impression (id_impression);
+create index ix_ads_action_impression_5 on ads_action (impression_id_impression);
+alter table ads_placement add constraint fk_ads_placement_ads_6 foreign key (ads_id_ads) references ads (id_ads);
+create index ix_ads_placement_ads_6 on ads_placement (ads_id_ads);
+alter table ads_placement add constraint fk_ads_placement_zone_7 foreign key (zone_id_zone) references zone (id_zone);
+create index ix_ads_placement_zone_7 on ads_placement (zone_id_zone);
+alter table ads_transaction add constraint fk_ads_transaction_ads_8 foreign key (ads_id_ads) references ads (id_ads);
+create index ix_ads_transaction_ads_8 on ads_transaction (ads_id_ads);
+alter table campaign add constraint fk_campaign_id_user_9 foreign key (id_user_id_user) references user_data (id_user);
+create index ix_campaign_id_user_9 on campaign (id_user_id_user);
+alter table deposito add constraint fk_deposito_user_10 foreign key (user_id_user) references user_data (id_user);
+create index ix_deposito_user_10 on deposito (user_id_user);
+alter table deposito add constraint fk_deposito_user_validator_11 foreign key (user_validator_id_user) references user_data (id_user);
+create index ix_deposito_user_validator_11 on deposito (user_validator_id_user);
+alter table impression add constraint fk_impression_adsPlacement_12 foreign key (ads_placement_id_ads_placement) references ads_placement (id_ads_placement);
+create index ix_impression_adsPlacement_12 on impression (ads_placement_id_ads_placement);
+alter table notificaton add constraint fk_notificaton_user_13 foreign key (user_id_user) references user_data (id_user);
+create index ix_notificaton_user_13 on notificaton (user_id_user);
+alter table user_data add constraint fk_user_data_role_14 foreign key (role_id_role) references user_role (id_role);
+create index ix_user_data_role_14 on user_data (role_id_role);
+alter table user_data add constraint fk_user_data_profile_photo_15 foreign key (profile_photo_id) references file_upload (id);
+create index ix_user_data_profile_photo_15 on user_data (profile_photo_id);
+alter table user_contact add constraint fk_user_contact_user_16 foreign key (user_id_user) references user_data (id_user);
+create index ix_user_contact_user_16 on user_contact (user_id_user);
+alter table zone add constraint fk_zone_zone_channel_17 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
+create index ix_zone_zone_channel_17 on zone (zone_channel_id_zone_channel);
+alter table zone add constraint fk_zone_ads_size_18 foreign key (ads_size_id_ads_size) references ads_size (id_ads_size);
+create index ix_zone_ads_size_18 on zone (ads_size_id_ads_size);
 
 
 
@@ -289,6 +301,8 @@ drop table if exists ads_type cascade;
 drop table if exists campaign cascade;
 
 drop table if exists deposito cascade;
+
+drop table if exists file_upload cascade;
 
 drop table if exists impression cascade;
 
@@ -325,6 +339,8 @@ drop sequence if exists ads_type_seq;
 drop sequence if exists campaign_seq;
 
 drop sequence if exists deposito_seq;
+
+drop sequence if exists file_upload_seq;
 
 drop sequence if exists impression_seq;
 
