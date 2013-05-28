@@ -12,7 +12,7 @@ import models.data.enumeration.DefaultViewEnum;
 import models.data.enumeration.ZoneTypeEnum;
 
 @Entity
-@Table(name="zone",schema="adsmanager")
+@Table(name="zone")
 public class Zone extends Model {
 	
 	@Id

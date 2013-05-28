@@ -16,7 +16,7 @@ import play.db.ebean.Model;
 import be.objectify.deadbolt.core.models.Permission;
 
 @Entity
-@Table(name="user_permission", schema = "adsmanager")
+@Table(name="user_permission")
 public class UserPermission extends Model implements Permission {
 
 	@Id

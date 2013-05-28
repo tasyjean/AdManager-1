@@ -10,7 +10,7 @@ import javax.validation.constraints.Max;
 import play.db.ebean.Model;
 
 @Entity
-@Table(schema="adsmanager",name="ads_size")
+@Table(name="ads_size")
 public class AdsSize extends Model {
 	/**
 	 * 

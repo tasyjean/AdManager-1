@@ -10,7 +10,7 @@ import play.db.ebean.Model;
 import be.objectify.deadbolt.core.models.Role;
 
 @Entity
-@Table(name="user_role", schema="adsmanager")
+@Table(name="user_role")
 public class UserRole extends Model implements Role {
 
 	@Id

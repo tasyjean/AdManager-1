@@ -13,7 +13,8 @@
              </a>
              <ul class="dropdown-menu menu-auth" role="menu">
                <li>
-               		<a role="menuitem" tabindex="-1" href=""><span class="space icon-user icon-white"></span>Profile</a> 
+               		<a role="menuitem" tabindex="-1" href="@controllers.backend.routes.ProfileController.index()">
+                      <span class="space icon-user icon-white"></span>Profile</a> 
                </li>               
                <li>
                		<a role="menuitem" tabindex="-1" href=""><span class="space icon-wrench icon-white"></span>Pengaturan</a> 
@@ -25,7 +26,7 @@
                <li class="divider"></li>
                
                <li>
-               		<a role="menuitem" tabindex="-1" href="logout">
+               		<a role="menuitem" tabindex="-1" href="@controllers.frontend.routes.FrontEndController.logout()">
                			<span class="space icon-share icon-white "></span>Logout
                		</a> 
                </li>

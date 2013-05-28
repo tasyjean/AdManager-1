@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="impression", schema = "adsmanager")
+@Table(name="impression")
 public class Impression extends Model {
 
 	@Id

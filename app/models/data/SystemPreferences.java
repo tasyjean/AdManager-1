@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="system_preferences", schema="adsmanager")
+@Table(name="system_preferences")
 public class SystemPreferences extends Model{
 
 	@Id

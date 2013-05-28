@@ -9,7 +9,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-@Table(schema="adsmanager",name="ads_type")
+@Table(name="ads_type")
 public class AdsType extends Model {
 
 	@Id

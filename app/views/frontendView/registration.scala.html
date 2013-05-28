@@ -92,10 +92,10 @@
              <div class="control-group @if(regisform.error("captcha")!=null){error}">
               <div class="captcha">
                 <script type="text/javascript"
-                   src="http://www.google.com/recaptcha/api/challenge?k=6LcznOESAAAAAF6dVj8SavGjdjbNlUUP-UBmj1y0">
+                   src="http://www.google.com/recaptcha/api/challenge?k=@play.Play.application().configuration().getString("captcha.public_key")">
                 </script>
                 <noscript>
-                   <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LcznOESAAAAAF6dVj8SavGjdjbNlUUP-UBmj1y0"
+                   <iframe src="http://www.google.com/recaptcha/api/noscript?k=@play.Play.application().configuration().getString("captcha.public_key")"
                        height="300" width="500" frameborder="0"></iframe><br>
                    <textarea name="recaptcha_challenge_field" rows="3" cols="30">
                    </textarea>

@@ -25,7 +25,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-@Table(schema="adsmanager",name="campaign")
+@Table(name="campaign")
 public class Campaign extends Model{
 
 	@Id

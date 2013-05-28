@@ -4,20 +4,16 @@
 @import views.html.backendView.main
 @import helper._
 
-@main("Profil Pengguna"){
+@main("Manajemen Pengguna"){
 	
-		@dashboard_content("Profil Pengguna","Data Profile"){
+		@dashboard_content("Manajemen Pengguna","Daftar Pengguna"){
      	<div class="span2">
-            <div class="kpi">Profil Pengguna</div>
-             <div><small>Lihat Profil</small></div>
+            <div class="kpi">Daftar Pengguna</div>
+             <div><small>Lihat Semua Pengguna/small></div>
         </div>		
        	<div class="span2">
-            <div class="kpi">Notifikasi</div>
-             <div><small>Lihat daftar Notifikasi</small></div>
-        </div>
-        <div class="span2">
-            <div class="kpi">Rubah Profil</div>
-             <div><small>Rubah data profil</small></div>
+            <div class="kpi">Tambah Pengguna</div>
+             <div><small>Tambahkan Pengguna</small></div>
         </div>
 
 	}{
@@ -31,15 +27,17 @@
         </div>
     }
 
-} {
-  
-  	@* Untuk bagian Menu *@
-  
-  	@menu_dashboard()
+
 
 } {
   
- 	 @* Untuk bagian menu profile *@
- 	 @menu_profile(data)
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
 
 }

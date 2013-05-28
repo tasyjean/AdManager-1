@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="notificaton",schema = "adsmanager")
+@Table(name="notificaton")
 public class Notification extends Model{
 	
 	@Id

@@ -31,7 +31,7 @@ public class SetInitialData {
 		//Clean Data dulu
 		deleteUserData();
 		try {
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE adsmanager.user_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_seq RESTART WITH 1;");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

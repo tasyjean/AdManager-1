@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads",schema="adsmanager")
+@Table(name="ads")
 public class Ads extends Model {
 
 	@Id
@@ -29,8 +29,8 @@ public class Ads extends Model {
 	private String description;
 	private String title;
 	private String content_text;
-	@Column(length=400)
-	private String content_link; 	//konten kaya flash, gambar dll
+	@ManyToOne
+	private FileUpload content_link; 	//konten kaya flash, gambar dll
 	@Column(length=400)	
 	private String target;
 	@Column(length=400)
@@ -43,7 +43,6 @@ public class Ads extends Model {
 	private int hide_count;
 	private boolean isActive;
 	private boolean isDeleted;
-	private boolean isGanteng;
 	
 	public static Model.Finder<Integer,Ads> find = new Model.Finder(Integer.class, Ads.class);
 
@@ -95,10 +94,10 @@ public class Ads extends Model {
 	public void setContent_text(String content_text) {
 		this.content_text = content_text;
 	}
-	public String getContent_link() {
+	public FileUpload getContent_link() {
 		return content_link;
 	}
-	public void setContent_link(String content_link) {
+	public void setContent_link(FileUpload content_link) {
 		this.content_link = content_link;
 	}
 	public String getTarget() {

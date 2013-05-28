@@ -1,5 +1,6 @@
 @(activeMenu : String ="")
 
+@import scala._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import be.objectify.deadbolt.java.views.html._
 
@@ -30,7 +31,7 @@
                         	<i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Iklan Dan Kampanye
                         </a>
                       </li>
-                       @restrict(la(as("administrator","manager"))){                     
+                       @restrict(List(as("administrator"), as("manager"))){                     
 	                      <li class="@("selected".when(activeMenu=="user"))">
 	                        <a href="@controllers.backend.routes.UserController.index()">
 	                        	<i class="icon-user tengahkan_icon_menu icon-white"></i>Manajemen Pengguna
@@ -60,6 +61,9 @@
 	                      </li> 
                       }                     
                     </ul>
+                    	<a class="btn btn-back" title="Ke Halaman Depan" href="@controllers.frontend.routes.FrontEndController.home()">
+							<span class="icon icon-arrow-left icon-white"></span>
+                    	</a>
                 </nav>
             </aside>
         </div>

@@ -183,6 +183,10 @@ body>.container {
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	background-color: #ef643e;
 }
+.container aside nav ul li a:hover{
+	background-color:#373D40 !important;
+	color:#ffffff;}
+
 .menu:hover {
 	color: #000000;
 	width: 100%;
@@ -268,5 +272,18 @@ body>.container {
 	background-color:#ffffff;
 	color: #EF643E;
 	border-radius: 2px;
+}
+
+.btn-back{
+	margin:12px;
+	background:#2f3335;
+	width:35px;
+	border:2px solid #787d7f;
+}
+.btn-back:hover{
+	margin:12px;
+	background:#5f696e;
+	width:35px;
+	
 }
 

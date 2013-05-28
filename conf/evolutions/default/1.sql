@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-create table adsmanager.ads (
+create table ads (
   id_ads                    integer not null,
   campaign_id_campaign      integer,
   ads_size_id_ads_size      integer,
@@ -26,7 +26,7 @@ create table adsmanager.ads (
   constraint pk_ads primary key (id_ads))
 ;
 
-create table adsmanager.ads_action (
+create table ads_action (
   id_ads_action             bigint not null,
   impression_id_impression  bigint,
   action_type               varchar(5),
@@ -35,14 +35,14 @@ create table adsmanager.ads_action (
   constraint pk_ads_action primary key (id_ads_action))
 ;
 
-create table adsmanager.ads_placement (
+create table ads_placement (
   id_ads_placement          integer not null,
   ads_id_ads                integer,
   zone_id_zone              integer,
   constraint pk_ads_placement primary key (id_ads_placement))
 ;
 
-create table adsmanager.ads_size (
+create table ads_size (
   id_ads_size               integer not null,
   name                      varchar(255),
   width                     integer,
@@ -51,7 +51,7 @@ create table adsmanager.ads_size (
   constraint pk_ads_size primary key (id_ads_size))
 ;
 
-create table adsmanager.ads_transaction (
+create table ads_transaction (
   id_ads_transaction        integer not null,
   ads_id_ads                integer,
   transaction_type          varchar(4),
@@ -63,7 +63,7 @@ create table adsmanager.ads_transaction (
   constraint pk_ads_transaction primary key (id_ads_transaction))
 ;
 
-create table adsmanager.ads_type (
+create table ads_type (
   id_ad_type                integer not null,
   name                      varchar(255),
   description               TEXT,
@@ -71,7 +71,7 @@ create table adsmanager.ads_type (
   constraint pk_ads_type primary key (id_ad_type))
 ;
 
-create table adsmanager.campaign (
+create table campaign (
   id_campaign               integer not null,
   id_user_id_user           integer,
   campaign_type             varchar(9),
@@ -91,7 +91,7 @@ create table adsmanager.campaign (
   constraint pk_campaign primary key (id_campaign))
 ;
 
-create table adsmanager.deposito (
+create table deposito (
   id_deposito               integer not null,
   user_id_user              integer,
   user_validator_id_user    integer,
@@ -106,7 +106,7 @@ create table adsmanager.deposito (
   constraint pk_deposito primary key (id_deposito))
 ;
 
-create table adsmanager.impression (
+create table impression (
   id_impression             bigint not null,
   timestamp                 timestamp,
   ads_placement_id_ads_placement integer,
@@ -115,7 +115,7 @@ create table adsmanager.impression (
   constraint pk_impression primary key (id_impression))
 ;
 
-create table adsmanager.notificaton (
+create table notificaton (
   id_notification           integer not null,
   user_id_user              integer,
   notification_type         varchar(255),
@@ -124,14 +124,14 @@ create table adsmanager.notificaton (
   constraint pk_notificaton primary key (id_notification))
 ;
 
-create table adsmanager.system_preferences (
+create table system_preferences (
   id_system_preferences     integer not null,
   key                       varchar(255),
   value                     varchar(255),
   constraint pk_system_preferences primary key (id_system_preferences))
 ;
 
-create table adsmanager.user (
+create table user_data (
   id_user                   integer not null,
   email                     varchar(255),
   password                  varchar(255),
@@ -146,10 +146,10 @@ create table adsmanager.user (
   city                      varchar(255),
   country                   varchar(255),
   validation_key            varchar(255),
-  constraint pk_user primary key (id_user))
+  constraint pk_user_data primary key (id_user))
 ;
 
-create table adsmanager.user_contact (
+create table user_contact (
   id_user_contact           integer not null,
   user_id_user              integer,
   contact_value             varchar(255),
@@ -159,20 +159,20 @@ create table adsmanager.user_contact (
   constraint pk_user_contact primary key (id_user_contact))
 ;
 
-create table adsmanager.user_permission (
+create table user_permission (
   id_permission             integer not null,
   permission_value          varchar(255),
   constraint pk_user_permission primary key (id_permission))
 ;
 
-create table adsmanager.user_role (
+create table user_role (
   id_role                   integer not null,
   name                      varchar(13),
   constraint ck_user_role_name check (name in ('advertiser','manager','administrator')),
   constraint pk_user_role primary key (id_role))
 ;
 
-create table adsmanager.zone (
+create table zone (
   id_zone                   integer not null,
   zone_channel_id_zone_channel integer,
   ads_size_id_ads_size      integer,
@@ -185,7 +185,7 @@ create table adsmanager.zone (
   constraint pk_zone primary key (id_zone))
 ;
 
-create table adsmanager.zone_channel (
+create table zone_channel (
   id_zone_channel           integer not null,
   channel_name              varchar(255),
   channel_description       TEXT,
@@ -194,153 +194,153 @@ create table adsmanager.zone_channel (
 ;
 
 
-create table adsmanager.user_user_permission (
-  user_id_user                   integer not null,
+create table user_data_user_permission (
+  user_data_id_user              integer not null,
   user_permission_id_permission  integer not null,
-  constraint pk_adsmanager.user_user_permission primary key (user_id_user, user_permission_id_permission))
+  constraint pk_user_data_user_permission primary key (user_data_id_user, user_permission_id_permission))
 ;
-create sequence adsmanager.ads_seq;
+create sequence ads_seq;
 
-create sequence adsmanager.ads_action_seq;
+create sequence ads_action_seq;
 
-create sequence adsmanager.ads_placement_seq;
+create sequence ads_placement_seq;
 
-create sequence adsmanager.ads_size_seq;
+create sequence ads_size_seq;
 
-create sequence adsmanager.ads_transaction_seq;
+create sequence ads_transaction_seq;
 
-create sequence adsmanager.ads_type_seq;
+create sequence ads_type_seq;
 
-create sequence adsmanager.campaign_seq;
+create sequence campaign_seq;
 
-create sequence adsmanager.deposito_seq;
+create sequence deposito_seq;
 
-create sequence adsmanager.impression_seq;
+create sequence impression_seq;
 
-create sequence adsmanager.notificaton_seq;
+create sequence notificaton_seq;
 
-create sequence adsmanager.system_preferences_seq;
+create sequence system_preferences_seq;
 
-create sequence adsmanager.user_seq;
+create sequence user_data_seq;
 
-create sequence adsmanager.user_contact_seq;
+create sequence user_contact_seq;
 
-create sequence adsmanager.user_permission_seq;
+create sequence user_permission_seq;
 
-create sequence adsmanager.user_role_seq;
+create sequence user_role_seq;
 
-create sequence adsmanager.zone_seq;
+create sequence zone_seq;
 
-create sequence adsmanager.zone_channel_seq;
+create sequence zone_channel_seq;
 
-alter table adsmanager.ads add constraint fk_adsmanager.ads_campaign_1 foreign key (campaign_id_campaign) references adsmanager.campaign (id_campaign);
-create index ix_adsmanager.ads_campaign_1 on adsmanager.ads (campaign_id_campaign);
-alter table adsmanager.ads add constraint fk_adsmanager.ads_adsSize_2 foreign key (ads_size_id_ads_size) references adsmanager.ads_size (id_ads_size);
-create index ix_adsmanager.ads_adsSize_2 on adsmanager.ads (ads_size_id_ads_size);
-alter table adsmanager.ads add constraint fk_adsmanager.ads_adsType_3 foreign key (ads_type_id_ad_type) references adsmanager.ads_type (id_ad_type);
-create index ix_adsmanager.ads_adsType_3 on adsmanager.ads (ads_type_id_ad_type);
-alter table adsmanager.ads_action add constraint fk_adsmanager.ads_action_impre_4 foreign key (impression_id_impression) references adsmanager.impression (id_impression);
-create index ix_adsmanager.ads_action_impre_4 on adsmanager.ads_action (impression_id_impression);
-alter table adsmanager.ads_placement add constraint fk_adsmanager.ads_placement_ad_5 foreign key (ads_id_ads) references adsmanager.ads (id_ads);
-create index ix_adsmanager.ads_placement_ad_5 on adsmanager.ads_placement (ads_id_ads);
-alter table adsmanager.ads_placement add constraint fk_adsmanager.ads_placement_zo_6 foreign key (zone_id_zone) references adsmanager.zone (id_zone);
-create index ix_adsmanager.ads_placement_zo_6 on adsmanager.ads_placement (zone_id_zone);
-alter table adsmanager.ads_transaction add constraint fk_adsmanager.ads_transaction__7 foreign key (ads_id_ads) references adsmanager.ads (id_ads);
-create index ix_adsmanager.ads_transaction__7 on adsmanager.ads_transaction (ads_id_ads);
-alter table adsmanager.campaign add constraint fk_adsmanager.campaign_id_user_8 foreign key (id_user_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.campaign_id_user_8 on adsmanager.campaign (id_user_id_user);
-alter table adsmanager.deposito add constraint fk_adsmanager.deposito_user_9 foreign key (user_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.deposito_user_9 on adsmanager.deposito (user_id_user);
-alter table adsmanager.deposito add constraint fk_adsmanager.deposito_user_v_10 foreign key (user_validator_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.deposito_user_v_10 on adsmanager.deposito (user_validator_id_user);
-alter table adsmanager.impression add constraint fk_adsmanager.impression_adsP_11 foreign key (ads_placement_id_ads_placement) references adsmanager.ads_placement (id_ads_placement);
-create index ix_adsmanager.impression_adsP_11 on adsmanager.impression (ads_placement_id_ads_placement);
-alter table adsmanager.notificaton add constraint fk_adsmanager.notificaton_use_12 foreign key (user_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.notificaton_use_12 on adsmanager.notificaton (user_id_user);
-alter table adsmanager.user add constraint fk_adsmanager.user_role_13 foreign key (role_id_role) references adsmanager.user_role (id_role);
-create index ix_adsmanager.user_role_13 on adsmanager.user (role_id_role);
-alter table adsmanager.user_contact add constraint fk_adsmanager.user_contact_us_14 foreign key (user_id_user) references adsmanager.user (id_user);
-create index ix_adsmanager.user_contact_us_14 on adsmanager.user_contact (user_id_user);
-alter table adsmanager.zone add constraint fk_adsmanager.zone_zone_chann_15 foreign key (zone_channel_id_zone_channel) references adsmanager.zone_channel (id_zone_channel);
-create index ix_adsmanager.zone_zone_chann_15 on adsmanager.zone (zone_channel_id_zone_channel);
-alter table adsmanager.zone add constraint fk_adsmanager.zone_ads_size_16 foreign key (ads_size_id_ads_size) references adsmanager.ads_size (id_ads_size);
-create index ix_adsmanager.zone_ads_size_16 on adsmanager.zone (ads_size_id_ads_size);
+alter table ads add constraint fk_ads_campaign_1 foreign key (campaign_id_campaign) references campaign (id_campaign);
+create index ix_ads_campaign_1 on ads (campaign_id_campaign);
+alter table ads add constraint fk_ads_adsSize_2 foreign key (ads_size_id_ads_size) references ads_size (id_ads_size);
+create index ix_ads_adsSize_2 on ads (ads_size_id_ads_size);
+alter table ads add constraint fk_ads_adsType_3 foreign key (ads_type_id_ad_type) references ads_type (id_ad_type);
+create index ix_ads_adsType_3 on ads (ads_type_id_ad_type);
+alter table ads_action add constraint fk_ads_action_impression_4 foreign key (impression_id_impression) references impression (id_impression);
+create index ix_ads_action_impression_4 on ads_action (impression_id_impression);
+alter table ads_placement add constraint fk_ads_placement_ads_5 foreign key (ads_id_ads) references ads (id_ads);
+create index ix_ads_placement_ads_5 on ads_placement (ads_id_ads);
+alter table ads_placement add constraint fk_ads_placement_zone_6 foreign key (zone_id_zone) references zone (id_zone);
+create index ix_ads_placement_zone_6 on ads_placement (zone_id_zone);
+alter table ads_transaction add constraint fk_ads_transaction_ads_7 foreign key (ads_id_ads) references ads (id_ads);
+create index ix_ads_transaction_ads_7 on ads_transaction (ads_id_ads);
+alter table campaign add constraint fk_campaign_id_user_8 foreign key (id_user_id_user) references user_data (id_user);
+create index ix_campaign_id_user_8 on campaign (id_user_id_user);
+alter table deposito add constraint fk_deposito_user_9 foreign key (user_id_user) references user_data (id_user);
+create index ix_deposito_user_9 on deposito (user_id_user);
+alter table deposito add constraint fk_deposito_user_validator_10 foreign key (user_validator_id_user) references user_data (id_user);
+create index ix_deposito_user_validator_10 on deposito (user_validator_id_user);
+alter table impression add constraint fk_impression_adsPlacement_11 foreign key (ads_placement_id_ads_placement) references ads_placement (id_ads_placement);
+create index ix_impression_adsPlacement_11 on impression (ads_placement_id_ads_placement);
+alter table notificaton add constraint fk_notificaton_user_12 foreign key (user_id_user) references user_data (id_user);
+create index ix_notificaton_user_12 on notificaton (user_id_user);
+alter table user_data add constraint fk_user_data_role_13 foreign key (role_id_role) references user_role (id_role);
+create index ix_user_data_role_13 on user_data (role_id_role);
+alter table user_contact add constraint fk_user_contact_user_14 foreign key (user_id_user) references user_data (id_user);
+create index ix_user_contact_user_14 on user_contact (user_id_user);
+alter table zone add constraint fk_zone_zone_channel_15 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
+create index ix_zone_zone_channel_15 on zone (zone_channel_id_zone_channel);
+alter table zone add constraint fk_zone_ads_size_16 foreign key (ads_size_id_ads_size) references ads_size (id_ads_size);
+create index ix_zone_ads_size_16 on zone (ads_size_id_ads_size);
 
 
 
-alter table adsmanager.user_user_permission add constraint fk_adsmanager.user_user_permi_01 foreign key (user_id_user) references adsmanager.user (id_user);
+alter table user_data_user_permission add constraint fk_user_data_user_permission__01 foreign key (user_data_id_user) references user_data (id_user);
 
-alter table adsmanager.user_user_permission add constraint fk_adsmanager.user_user_permi_02 foreign key (user_permission_id_permission) references adsmanager.user_permission (id_permission);
+alter table user_data_user_permission add constraint fk_user_data_user_permission__02 foreign key (user_permission_id_permission) references user_permission (id_permission);
 
 # --- !Downs
 
-drop table if exists adsmanager.ads cascade;
+drop table if exists ads cascade;
 
-drop table if exists adsmanager.ads_action cascade;
+drop table if exists ads_action cascade;
 
-drop table if exists adsmanager.ads_placement cascade;
+drop table if exists ads_placement cascade;
 
-drop table if exists adsmanager.ads_size cascade;
+drop table if exists ads_size cascade;
 
-drop table if exists adsmanager.ads_transaction cascade;
+drop table if exists ads_transaction cascade;
 
-drop table if exists adsmanager.ads_type cascade;
+drop table if exists ads_type cascade;
 
-drop table if exists adsmanager.campaign cascade;
+drop table if exists campaign cascade;
 
-drop table if exists adsmanager.deposito cascade;
+drop table if exists deposito cascade;
 
-drop table if exists adsmanager.impression cascade;
+drop table if exists impression cascade;
 
-drop table if exists adsmanager.notificaton cascade;
+drop table if exists notificaton cascade;
 
-drop table if exists adsmanager.system_preferences cascade;
+drop table if exists system_preferences cascade;
 
-drop table if exists adsmanager.user cascade;
+drop table if exists user_data cascade;
 
-drop table if exists adsmanager.user_user_permission cascade;
+drop table if exists user_data_user_permission cascade;
 
-drop table if exists adsmanager.user_contact cascade;
+drop table if exists user_contact cascade;
 
-drop table if exists adsmanager.user_permission cascade;
+drop table if exists user_permission cascade;
 
-drop table if exists adsmanager.user_role cascade;
+drop table if exists user_role cascade;
 
-drop table if exists adsmanager.zone cascade;
+drop table if exists zone cascade;
 
-drop table if exists adsmanager.zone_channel cascade;
+drop table if exists zone_channel cascade;
 
-drop sequence if exists adsmanager.ads_seq;
+drop sequence if exists ads_seq;
 
-drop sequence if exists adsmanager.ads_action_seq;
+drop sequence if exists ads_action_seq;
 
-drop sequence if exists adsmanager.ads_placement_seq;
+drop sequence if exists ads_placement_seq;
 
-drop sequence if exists adsmanager.ads_size_seq;
+drop sequence if exists ads_size_seq;
 
-drop sequence if exists adsmanager.ads_transaction_seq;
+drop sequence if exists ads_transaction_seq;
 
-drop sequence if exists adsmanager.ads_type_seq;
+drop sequence if exists ads_type_seq;
 
-drop sequence if exists adsmanager.campaign_seq;
+drop sequence if exists campaign_seq;
 
-drop sequence if exists adsmanager.deposito_seq;
+drop sequence if exists deposito_seq;
 
-drop sequence if exists adsmanager.impression_seq;
+drop sequence if exists impression_seq;
 
-drop sequence if exists adsmanager.notificaton_seq;
+drop sequence if exists notificaton_seq;
 
-drop sequence if exists adsmanager.system_preferences_seq;
+drop sequence if exists system_preferences_seq;
 
-drop sequence if exists adsmanager.user_seq;
+drop sequence if exists user_data_seq;
 
-drop sequence if exists adsmanager.user_contact_seq;
+drop sequence if exists user_contact_seq;
 
-drop sequence if exists adsmanager.user_permission_seq;
+drop sequence if exists user_permission_seq;
 
-drop sequence if exists adsmanager.user_role_seq;
+drop sequence if exists user_role_seq;
 
-drop sequence if exists adsmanager.zone_seq;
+drop sequence if exists zone_seq;
 
-drop sequence if exists adsmanager.zone_channel_seq;
+drop sequence if exists zone_channel_seq;
 

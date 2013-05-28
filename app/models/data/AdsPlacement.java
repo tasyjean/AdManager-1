@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads_placement",schema="adsmanager")
+@Table(name="ads_placement")
 public class AdsPlacement extends Model {
 
 	@Id

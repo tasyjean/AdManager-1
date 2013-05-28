@@ -48,9 +48,19 @@ public class RegistrationForm {
 		}
 		if(isError) return error; else return null;
 	}
-	//Tested
+	//Jika email sudah ada, tapi belum aktif, maka dihapus
 	private boolean isDuplicate(){
 		User user= User.find.where().eq("email",email).findUnique();
-		if(user!=null) return true; else return false;
+		
+		try{
+			if(user.isActive()){
+				return true;
+			}else{
+				user.delete();
+				return false;
+			}			
+		}catch(NullPointerException e){
+			return false;
+		}
 	}
 }

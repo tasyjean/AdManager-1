@@ -22,7 +22,7 @@ import be.objectify.deadbolt.core.models.Subject;
 import com.avaje.ebean.*;
 
 @Entity
-@Table(schema="adsmanager",name="user")
+@Table(name="user_data")
 public class User extends Model implements Subject {
 	
 	//identifikasi field
@@ -42,10 +42,10 @@ public class User extends Model implements Subject {
 	
 	@Temporal(TemporalType.DATE)
 	private Date join_date;
-
 	private int current_balance;
 	private boolean isActive;
-	private String profile_photo;
+	@ManyToOne
+	private FileUpload profile_photo;
 	private String city;
 	private String country;
 	private String validation_key;
@@ -193,11 +193,11 @@ public class User extends Model implements Subject {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-	public String getProfile_photo() {
+	public FileUpload getProfile_photo() {
 		return profile_photo;
 	}
 
-	public void setProfile_photo(String profile_photo) {
+	public void setProfile_photo(FileUpload profile_photo) {
 		this.profile_photo = profile_photo;
 	}
 

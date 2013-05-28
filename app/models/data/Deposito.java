@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="deposito",schema="adsmanager")
+@Table(name="deposito")
 
 public class Deposito extends Model {
 

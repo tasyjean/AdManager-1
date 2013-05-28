@@ -12,7 +12,7 @@ import play.db.ebean.Model;
 import models.data.enumeration.ContactTypeEnum;
 
 @Entity
-@Table(schema="adsmanager",name="user_contact")
+@Table(name="user_contact")
 public class UserContact extends Model {
 
 	@Id

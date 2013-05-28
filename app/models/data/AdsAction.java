@@ -14,7 +14,7 @@ import play.db.ebean.Model;
 import models.data.enumeration.ActionTypeEnum;
 
 @Entity
-@Table(name="ads_action", schema ="adsmanager")
+@Table(name="ads_action")
 public class AdsAction extends Model {
 
 	@Id

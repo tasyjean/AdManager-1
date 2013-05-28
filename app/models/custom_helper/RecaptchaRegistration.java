@@ -20,7 +20,7 @@ public class RecaptchaRegistration {
 	public boolean validate(Form<RegistrationForm> form, String source){
 		
 		try{
-			reCapthca.setPrivateKey("6LcznOESAAAAABdNQTcGoUQy9kzGkT3fUkO03UOT");
+			reCapthca.setPrivateKey(play.Play.application().configuration().getString("capctha.private_key"));
 			String challenge=form.get().recaptcha_challenge_field;
 			String response=form.get().recaptcha_response_field;
 			ReCaptchaResponse result = reCapthca.checkAnswer(source, challenge, response);

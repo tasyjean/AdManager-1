@@ -14,7 +14,7 @@ import models.data.enumeration.PricingModelEnum;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads_transaction",schema="adsmanager")
+@Table(name="ads_transaction")
 public class AdsTransaction extends Model {
 
 	@Id
