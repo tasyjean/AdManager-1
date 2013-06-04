@@ -68,6 +68,8 @@ public class ZoneController extends CompressController {
 	@With(DataFiller.class)
 	@Restrict(@Group("administrator"))
 	public static Result createZone(){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
 		
 		return ok(create_zone.render(data,loginForm));
 		
@@ -78,6 +80,7 @@ public class ZoneController extends CompressController {
 	public static Result saveChannel(){
 		return ok();
 	}
+	
 	@With(DataFiller.class)	
 	public static Result createChannel(){
 		return ok();
