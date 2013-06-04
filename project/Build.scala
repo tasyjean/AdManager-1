@@ -26,7 +26,7 @@ object ApplicationBuild extends Build {
     templatesImport += "models.form.frontendForm.LoginForm",
     templatesImport += "models.form.frontendForm._",
     templatesImport += "models.form.frontendForm.ForgetPassForm",
-	
+	templatesImport +="models.form.backendForm.zoneForm._",
        
     //Deadbolt
     resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),

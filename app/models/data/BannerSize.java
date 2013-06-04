@@ -10,15 +10,15 @@ import javax.validation.constraints.Max;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads_size")
-public class AdsSize extends Model {
+@Table(name="banner_size")
+public class BannerSize extends Model {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private int id_ads_size;
+	private int id_banner_size;
 	
 	private String name;
 	
@@ -29,9 +29,9 @@ public class AdsSize extends Model {
 	@Column(columnDefinition="TEXT")
 	private String description;
 	
-	public static Model.Finder<Integer,AdsSize> find = new Model.Finder(Integer.class, AdsSize.class);
+	public static Model.Finder<Integer,BannerSize> find = new Model.Finder(Integer.class, BannerSize.class);
 
-	public AdsSize(String name, int width, int height, String description) {
+	public BannerSize(String name, int width, int height, String description) {
 		super();
 		this.name = name;
 		this.width = width;
@@ -40,12 +40,12 @@ public class AdsSize extends Model {
 	}
 
 	
-	public int getId_ads_size() {
-		return id_ads_size;
+	public int getId_banner_size() {
+		return id_banner_size;
 	}
 
-	public void setId_ads_size(int id_ads_size) {
-		this.id_ads_size = id_ads_size;
+	public void setId_banner_size(int id_banner_size) {
+		this.id_banner_size = id_banner_size;
 	}
 
 	public String getName() {

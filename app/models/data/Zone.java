@@ -1,5 +1,8 @@
 package models.data;
 
+import java.util.Calendar;
+import java.util.Random;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +11,7 @@ import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
+import models.custom_helper.MD5;
 import models.data.enumeration.DefaultViewEnum;
 import models.data.enumeration.ZoneTypeEnum;
 
@@ -20,7 +24,7 @@ public class Zone extends Model {
 	@ManyToOne
 	private ZoneChannel zone_channel;
 	@ManyToOne
-	private AdsSize ads_size;
+	private BannerSize ads_size;
 	private ZoneTypeEnum zone_type;
 	private DefaultViewEnum zone_default_view;
 	@Column(columnDefinition="TEXT")
@@ -29,6 +33,11 @@ public class Zone extends Model {
 	
 	public static Model.Finder<Integer, Zone> find = new Model.Finder(Integer.class, Zone.class);
 	
+	@Override
+	public void save(){
+		isDeleted=false;
+		super.save();
+	}
 	public int getId_zone() {
 		return id_zone;
 	}
@@ -41,10 +50,10 @@ public class Zone extends Model {
 	public void setZone_channel(ZoneChannel zone_channel) {
 		this.zone_channel = zone_channel;
 	}
-	public AdsSize getAds_size() {
+	public BannerSize getAds_size() {
 		return ads_size;
 	}
-	public void setAds_size(AdsSize ads_size) {
+	public void setAds_size(BannerSize ads_size) {
 		this.ads_size = ads_size;
 	}
 	public ZoneTypeEnum getZone_type() {

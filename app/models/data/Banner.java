@@ -9,20 +9,20 @@ import javax.persistence.Table;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads")
-public class Ads extends Model {
+@Table(name="banner")
+public class Banner extends Model {
 
 	@Id
-	private int id_ads;
+	private int id_banner;
 	
 	@ManyToOne
 	private Campaign campaign;
 	
 	@ManyToOne
-	private AdsSize adsSize;
+	private BannerSize bannerSize;
 	
 	@ManyToOne
-	private AdsType adsType;
+	private BannerType bannerType;
 	
 	private String name;
 	@Column(columnDefinition="TEXT")
@@ -44,13 +44,13 @@ public class Ads extends Model {
 	private boolean isActive;
 	private boolean isDeleted;
 	
-	public static Model.Finder<Integer,Ads> find = new Model.Finder(Integer.class, Ads.class);
+	public static Model.Finder<Integer,Banner> find = new Model.Finder(Integer.class, Banner.class);
 
-	public int getId_ads() {
-		return id_ads;
+	public int getId_banner() {
+		return id_banner;
 	}
-	public void setId_ads(int id_ads) {
-		this.id_ads = id_ads;
+	public void setId_banner(int id_banner) {
+		this.id_banner = id_banner;
 	}
 	public Campaign getCampaign() {
 		return campaign;
@@ -58,17 +58,17 @@ public class Ads extends Model {
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign;
 	}
-	public AdsSize getAdsSize() {
-		return adsSize;
+	public BannerSize getAdsSize() {
+		return bannerSize;
 	}
-	public void setAdsSize(AdsSize adsSize) {
-		this.adsSize = adsSize;
+	public void setAdsSize(BannerSize bannerSize) {
+		this.bannerSize = bannerSize;
 	}
-	public AdsType getAdsType() {
-		return adsType;
+	public BannerType getAdsType() {
+		return bannerType;
 	}
-	public void setAdsType(AdsType adsType) {
-		this.adsType = adsType;
+	public void setAdsType(BannerType bannerType) {
+		this.bannerType = bannerType;
 	}
 	public String getName() {
 		return name;

@@ -26,11 +26,13 @@ public class TemplateData {
 	private String email="";
 	private String notifCount="";
 	
+	//pilihan tampilan (untuk dashboard)
+	private String viewChoice="";
+
 	Authentificator auth = new Authentificator();
 	
 	public TemplateData(Context ctx) {
 		this.ctx = ctx;
-		
 	}
 	public void setUserData()
 	{
@@ -42,7 +44,6 @@ public class TemplateData {
 			this.role=user.getRole().getName();
 			//simulasi
 			this.notifCount="3";
-			
 		}
 	}
 	public String getFrontName(){
@@ -63,7 +64,12 @@ public class TemplateData {
 	public String getNotifCount() {
 		return notifCount;
 	}
-
+	public String getViewChoice() {
+		return viewChoice;
+	}
+	public void setViewChoice(String viewChoice) {
+		this.viewChoice = viewChoice;
+	}
 	
 	
 }

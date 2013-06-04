@@ -19,6 +19,7 @@ GET 	/forget_password 				controllers.frontend.FrontEndController.forgetPassword
 POST 	/forget_password				controllers.frontend.FrontEndController.forgetProcess()
 GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(email:String, key:String)
 
+GET    /adsdelivery/:zone					controllers.backend.AdsDeliveryController.banner(zone:Integer)
 
 #campaign
 GET   /dashboard/campaign				controllers.backend.CampaignController.index()

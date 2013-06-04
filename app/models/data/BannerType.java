@@ -9,11 +9,11 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name="ads_type")
-public class AdsType extends Model {
+@Table(name="banner_type")
+public class BannerType extends Model {
 
 	@Id
-	private int id_ad_type;
+	private int id_banner_type;
 	@Required
 	private String name;
 
@@ -23,15 +23,15 @@ public class AdsType extends Model {
 	@Column(columnDefinition="TEXT")	
 	private String code;
 
-	public static Model.Finder<Integer,AdsType> find = new Model.Finder(Integer.class, AdsType.class);
+	public static Model.Finder<Integer,BannerType> find = new Model.Finder(Integer.class, BannerType.class);
 
 	
-	public int getId_ad_type() {
-		return id_ad_type;
+	public int getId_banner_type() {
+		return id_banner_type;
 	}
 
-	public void setId_ad_type(int id_ad_type) {
-		this.id_ad_type = id_ad_type;
+	public void setId_banner_type(int id_banner_type) {
+		this.id_banner_type = id_banner_type;
 	}
 
 	public String getName() {
@@ -58,12 +58,12 @@ public class AdsType extends Model {
 		this.code = code;
 	}
 
-	public static Model.Finder<Integer, AdsType> getFind() {
+	public static Model.Finder<Integer, BannerType> getFind() {
 		return find;
 	}
 
-	public static void setFind(Model.Finder<Integer, AdsType> find) {
-		AdsType.find = find;
+	public static void setFind(Model.Finder<Integer, BannerType> find) {
+		BannerType.find = find;
 	}
 
 	

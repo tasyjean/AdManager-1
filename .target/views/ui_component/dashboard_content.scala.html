@@ -1,4 +1,4 @@
-@(title:String,subtitle:String)(menu:Html)(content:Html)
+@(title:String,subtitle:String,activeMenu:String="")(content:Html)
 
            <div id="content">
                 <!-- navbar -->
@@ -8,7 +8,9 @@
                   </header>
 
                   <div class="row-fluid">
-  					@menu
+                  @if(title=="Zona"){
+                  	@zoneMenu()
+                  }  					
                   </div>
                 </section>
 
@@ -17,7 +19,78 @@
                   <div class="sub-header">
                     <h2>@subtitle</h2>
                   </div>
-                  @content
+					@content
                 </section>
               
             </div>
+            
+            
+@zoneMenu(activeMenu:String="")={
+
+     	<div class="span2">
+            <div class="kpi">Daftar Zona</div>
+             <div><small>Lihat Semua Zona</small></div>
+        </div>		
+       	<div class="span2">
+            <div class="kpi">Daftar Channel</div>
+             <div><small>Daftar Semua channel</small></div>
+        </div>	
+}
+@campaignMenu(activeMenu:String="")={
+  	<div class="span2">
+            <div class="kpi">Daftar Iklan</div>
+             <div><small>Lihat Semua Iklan/small></div>
+        </div>		
+       	<div class="span2">
+            <div class="kpi">Tambah Iklan</div>
+             <div><small>Tambahkan Iklan</small></div>
+        </div>
+}
+@financeMenu(activeMenu:String="")={
+     	<div class="span2">
+            <div class="kpi">Daftar Transaksi</div>
+             <div><small>Daftar Transaksi</small></div>
+        </div>		
+
+}
+@profileMenu(activeMenu:String="")={
+     	<div class="span2">
+            <div class="kpi">Profil Pengguna</div>
+             <div><small>Lihat Profil</small></div>
+        </div>		
+       	<div class="span2">
+            <div class="kpi">Notifikasi</div>
+             <div><small>Lihat daftar Notifikasi</small></div>
+        </div>
+        <div class="span2">
+            <div class="kpi">Rubah Profil</div>
+             <div><small>Rubah data profil</small></div>
+        </div>
+
+}
+@reportMenu(activeMenu:String="")={
+     	<div class="span2">
+            <div class="kpi">Semua Laporan</div>
+             <div><small>Lihat Semua Laporan</small></div>
+        </div>		
+
+}
+@userMenu(activeMenu:String="")={
+     	<div class="span2">
+            <div class="kpi">Daftar Pengguna</div>
+             <div><small>Lihat Semua Pengguna/small></div>
+        </div>		
+       	<div class="span2">
+            <div class="kpi">Tambah Pengguna</div>
+             <div><small>Tambahkan Pengguna</small></div>
+        </div>
+
+	}
+	
+@dashboardMenu(activeMenu:String="")={
+
+     	<div class="span2">
+            <div class="kpi">Menu</div>
+             <div><small>Testing</small></div>
+        </div>		
+	}

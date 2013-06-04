@@ -2,12 +2,14 @@ package models.custom_helper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import play.db.DB;
 
 import com.avaje.ebean.Ebean;
 
+import models.data.BannerSize;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
@@ -50,7 +52,7 @@ public class SetInitialData {
 		contact1.add(kontak_item1);
 		contact1.add(kontak_item2);
 		user1.setUserContact(contact1);	
-		
+
 		user1.save();
 		
 		//Data 2
@@ -84,6 +86,21 @@ public class SetInitialData {
 		user3.save();
 	}
 	
+	public void setBannerSize(){
+
+		//Data 1
+		BannerSize banner1=new BannerSize("Medium Rectangle", 300, 250, "Ini ukuran Sedang");
+		BannerSize banner2=new BannerSize("Rectangle", 180, 150, "Ini ukuran kecil");
+		BannerSize banner3=new BannerSize("LeaderBoard", 728, 90, "Ini ukuran panjang");
+		BannerSize banner4=new BannerSize("Wide Skyscrapper", 160, 600, "Ini ukuran tinggi");
+//		BannerSize banner5=new BannerSize("Medium Rectangle", 300, 250, "Ini ukuran Sedang");
+		
+		banner1.save();
+		banner2.save();
+		banner3.save();
+		banner4.save();
+		
+	}
 	public void deleteUserData(){
 		
 		List<User> data=User.find.all();

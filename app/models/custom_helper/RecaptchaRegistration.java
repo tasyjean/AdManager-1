@@ -29,6 +29,5 @@ public class RecaptchaRegistration {
 			e.printStackTrace();
 			return true;
 		}
-		
 	}
 }

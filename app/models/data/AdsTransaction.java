@@ -20,7 +20,7 @@ public class AdsTransaction extends Model {
 	@Id
 	private int id_ads_transaction;
 	@ManyToOne
-	private Ads ads;
+	private Banner banner;
 	private PricingModelEnum transaction_type;
 	private int amount;
 	private int current_balance;
@@ -40,12 +40,12 @@ public class AdsTransaction extends Model {
 		this.id_ads_transaction = id_ads_transaction;
 	}
 
-	public Ads getAds() {
-		return ads;
+	public Banner getBanner() {
+		return banner;
 	}
 
-	public void setAds(Ads ads) {
-		this.ads = ads;
+	public void setBanner(Banner banner) {
+		this.banner = banner;
 	}
 
 	public PricingModelEnum getTransaction_type() {

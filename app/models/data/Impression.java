@@ -21,7 +21,7 @@ public class Impression extends Model {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 	@ManyToOne
-	private AdsPlacement adsPlacement;
+	private BannerPlacement bannerPlacement;
 	private String viewer_ip;
 	private String viewer_source;
 	
@@ -57,11 +57,11 @@ public class Impression extends Model {
 		this.viewer_source = viewer_source;
 	}
 
-	public AdsPlacement getAdsPlacement() {
-		return adsPlacement;
+	public BannerPlacement getAdsPlacement() {
+		return bannerPlacement;
 	}
 
-	public void setAdsPlacement(AdsPlacement adsPlacement) {
-		this.adsPlacement = adsPlacement;
+	public void setAdsPlacement(BannerPlacement bannerPlacement) {
+		this.bannerPlacement = bannerPlacement;
 	}
 }

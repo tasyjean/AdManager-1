@@ -5,7 +5,7 @@ import junit.runner.BaseTestRunner;
 
 import org.junit.Before;
 import models.*;
-import models.data.AdsSize;
+import models.data.BannerSize;
 import models.data.User;
 import models.data.enumeration.RoleEnum;
 
@@ -23,10 +23,10 @@ public class ModelTest {
 
 			@Override
 			public void run() {
-				AdsSize size=new AdsSize("anu2", 335, 1113, "Untuk ukuran ngasal sumpah");
+				BannerSize size=new BannerSize("anu2", 335, 1113, "Untuk ukuran ngasal sumpah");
 				
 				size.save();
-				AdsSize biob=AdsSize.find.where().eq("name", "anu2").findUnique();
+				BannerSize biob=BannerSize.find.where().eq("name", "anu2").findUnique();
 				
 		        assertThat(biob.getName()).isEqualTo("anu2");
 		        				

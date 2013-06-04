@@ -24,6 +24,7 @@ public class Deposito extends Model {
 	@ManyToOne
 	private User user_validator;
 	private int current_balance;
+	private int amount;
 	@Column(columnDefinition="TEXT")
 	private String description;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -103,6 +104,12 @@ public class Deposito extends Model {
 	}
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 	
 	

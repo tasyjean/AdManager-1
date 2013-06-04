@@ -7,7 +7,7 @@ import static play.test.Helpers.running;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.data.AdsSize;
+import models.data.BannerSize;
 import models.data.Campaign;
 import models.data.User;
 import models.data.UserContact;

@@ -14,25 +14,25 @@ import play.db.ebean.Model;
 import models.data.enumeration.ActionTypeEnum;
 
 @Entity
-@Table(name="ads_action")
-public class AdsAction extends Model {
+@Table(name="banner_action")
+public class BannerAction extends Model {
 
 	@Id
-	private Long id_ads_action;
+	private Long id_banner_action;
 	@ManyToOne
 	private Impression impression;
 	private ActionTypeEnum action_type;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 	
-	public static Model.Finder<Integer,AdsAction> find = new Model.Finder(Integer.class, AdsAction.class);
+	public static Model.Finder<Integer,BannerAction> find = new Model.Finder(Integer.class, BannerAction.class);
 
-	public Long getId_ads_action() {
-		return id_ads_action;
+	public Long getId_banner_action() {
+		return id_banner_action;
 	}
 
-	public void setId_ads_action(Long id_ads_action) {
-		this.id_ads_action = id_ads_action;
+	public void setId_banner_action(Long id_banner_action) {
+		this.id_banner_action = id_banner_action;
 	}
 
 	public Impression getImpression() {

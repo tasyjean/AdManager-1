@@ -1,0 +1,25 @@
+@(data: TemplateData,form:Form[ZoneForm])
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona","Tambah Zona"){
+  		
+		
+    }
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

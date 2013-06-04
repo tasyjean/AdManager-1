@@ -50,7 +50,7 @@ public class Campaign extends Model{
 	private int budget;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	private List<Ads> ads;
+	private List<Banner> banner;
 	
 	
 	public static Model.Finder<Integer,Campaign> find = new Model.Finder(Integer.class, Campaign.class);
@@ -61,24 +61,24 @@ public class Campaign extends Model{
 
 		super.save();
 	}
-	public void setAds(Collection<Ads> ads){
-        final List<Ads> clone = new ArrayList<Ads>(this.ads);
+	public void setAds(Collection<Banner> banner){
+        final List<Banner> clone = new ArrayList<Banner>(this.banner);
         //delete yang udah ada
-        for(Ads x:clone){
-        	getAds().remove(x);
+        for(Banner x:clone){
+        	getBanner().remove(x);
         	x.setCampaign(null);
         }
-        for(Ads x:ads){
-        	getAds().add(x);
+        for(Banner x:banner){
+        	getBanner().add(x);
         	x.setCampaign(this);
         }
 	}
 	//Mendapatkan daftar kontak user
-	public List<Ads> getAds(){
-	    if (ads == null) {
-            ads = new ArrayList<Ads>();
+	public List<Banner> getBanner(){
+	    if (banner == null) {
+            banner = new ArrayList<Banner>();
         }
-        return ads;
+        return banner;
     }
 	
 	public int getId_campaign() {
