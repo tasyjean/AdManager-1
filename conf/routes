@@ -37,8 +37,15 @@ GET   /dashboard/report					controllers.backend.ReportController.index()
 GET   /dashboard/user					controllers.backend.UserController.index()
 
 #zone
-GET   /dashboard/zone					controllers.backend.ZoneController.index()
+GET   /dashboard/zone					controllers.backend.ZoneController.showZone()
+GET   /dashboard/channel				controllers.backend.ZoneController.showChannel()
+GET   /dashboard/zone/new				controllers.backend.ZoneController.createZone()
+GET   /dashboard/channel/new			controllers.backend.ZoneController.createChannel()
+POST  /dashboard/zone/new				controllers.backend.ZoneController.saveZone()
+POST  /dashboard/channel/new			controllers.backend.ZoneController.saveChannel()
 
+GET   /dashboard/channel/:channel		controllers.backend.ZoneController.showSingleChannel(channel:Integer)
+GET   /dashboard/zone/:zone				controllers.backend.ZoneController.showSingleChannel(zone:Integer)
 
 
 #untuk kepentingan testing

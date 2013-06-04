@@ -7,9 +7,9 @@
                     <h1>@title</h1>
                   </header>
 
-                  <div class="row-fluid">
+                  <div class="row-fluid bar-sub-menu">
                   @if(title=="Zona"){
-                  	@zoneMenu()
+                  	@zoneMenu(activeMenu)
                   }  					
                   </div>
                 </section>
@@ -25,62 +25,93 @@
             </div>
             
             
-@zoneMenu(activeMenu:String="")={
+@zoneMenu(activeMenu:String)={
 
-     	<div class="span2">
+      <a  class="span2 sub-menu @("active".when(activeMenu=="daftar zona"))"
+          href="@controllers.backend.routes.ZoneController.showZone()">
+          <div class="icon"></div>
+
+         <div class="content" >
             <div class="kpi">Daftar Zona</div>
-             <div><small>Lihat Semua Zona</small></div>
-        </div>		
-       	<div class="span2">
+            <div class="small">Lihat Semua Zona</div>
+         </div>
+        </a>
+
+      <a class="span2 sub-menu @("active".when(activeMenu=="daftar channel"))"
+          href="@controllers.backend.routes.ZoneController.showChannel()"  >
+          <div class="icon"></div>
+
+         <div class="content">
             <div class="kpi">Daftar Channel</div>
-             <div><small>Daftar Semua channel</small></div>
-        </div>	
+            <div class="small">Lihat Semua Zona</div>
+         </div>
+        </a>    
+
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah zona"))"
+            href="@controllers.backend.routes.ZoneController.createZone()">
+            <div class="icon"></div>
+
+         <div class="content">
+            <div class="kpi">Tambah Zona</div>
+            <div class="small">Lihat Semua Zona</div>
+         </div>
+        </a>    
+
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah channel"))"
+          href="@controllers.backend.routes.ZoneController.createChannel()">
+            <div class="icon"></div>
+
+         <div class="content">
+            <div class="kpi">Tambah Channel</div>
+            <div class="small">Lihat Semua Zona</div>
+         </div>
+      </a>    
 }
 @campaignMenu(activeMenu:String="")={
-  	<div class="span2">
+      	<div class="span2 sub-menu">
             <div class="kpi">Daftar Iklan</div>
-             <div><small>Lihat Semua Iklan/small></div>
+             <div><small>Lihat Semua Iklan</small></div>
         </div>		
-       	<div class="span2">
+       	<div class="span2 sub-menu">
             <div class="kpi">Tambah Iklan</div>
              <div><small>Tambahkan Iklan</small></div>
         </div>
 }
 @financeMenu(activeMenu:String="")={
-     	<div class="span2">
+     	<div class="span2 sub-menu">
             <div class="kpi">Daftar Transaksi</div>
              <div><small>Daftar Transaksi</small></div>
         </div>		
 
 }
 @profileMenu(activeMenu:String="")={
-     	<div class="span2">
+     	<div class="span2 sub-menu">
             <div class="kpi">Profil Pengguna</div>
              <div><small>Lihat Profil</small></div>
         </div>		
-       	<div class="span2">
+       	<div class="span2 sub-menu">
             <div class="kpi">Notifikasi</div>
              <div><small>Lihat daftar Notifikasi</small></div>
         </div>
-        <div class="span2">
+        <div class="span2 sub-menu">
             <div class="kpi">Rubah Profil</div>
              <div><small>Rubah data profil</small></div>
         </div>
 
 }
 @reportMenu(activeMenu:String="")={
-     	<div class="span2">
+     	<div class="span2 sub-menu">
             <div class="kpi">Semua Laporan</div>
              <div><small>Lihat Semua Laporan</small></div>
         </div>		
 
 }
 @userMenu(activeMenu:String="")={
-     	<div class="span2">
+     	<div class="span2 sub-menu">
             <div class="kpi">Daftar Pengguna</div>
              <div><small>Lihat Semua Pengguna/small></div>
         </div>		
-       	<div class="span2">
+       	<div class="span2 sub-menu">
             <div class="kpi">Tambah Pengguna</div>
              <div><small>Tambahkan Pengguna</small></div>
         </div>
@@ -89,7 +120,7 @@
 	
 @dashboardMenu(activeMenu:String="")={
 
-     	<div class="span2">
+     	<div class="span2 sub-menu">
             <div class="kpi">Menu</div>
              <div><small>Testing</small></div>
         </div>		
