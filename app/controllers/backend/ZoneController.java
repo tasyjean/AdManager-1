@@ -10,10 +10,13 @@ import java.util.HashMap;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import models.data.ZoneChannel;
 import models.dataWrapper.TemplateData;
 import models.form.backendForm.zoneForm.ChannelForm;
 import models.form.backendForm.zoneForm.ZoneForm;
 import models.form.frontendForm.LoginForm;
+import models.service.Authentificator;
+import models.service.zone.ChannelProcessor;
 import play.data.Form;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -21,38 +24,22 @@ import play.mvc.With;
 import controllers.CompressController;
 import controllers.action.DataFiller;
 import views.html.backendView.zone_view.*;
+import views.html.frontendView.login;
 
 public class ZoneController extends CompressController {
 
 	final static Form<ZoneForm> zoneForm = Form.form(ZoneForm.class);
     final static Form<ChannelForm> channelForm = Form.form(ChannelForm.class);
 	
-    /*  final static String create_zone="create_zone";
-    final static String create_channel="create_channel";
-    final static String view_single_channel="view_single_channel";
-    final static String view_single_zone="view_single_zone";
-    final static String view_list="view_list";
-    final static String view_banner_size_list="view_banner_size_list";
-    
-    
-   
-     * View Choice data
-     * create_zone
-     * create_channel
-     * view_single_channel
-     * view_single_zone
-     * view_list
-     * view_banner_size
-     * 
-     */
-    
+    static ChannelProcessor cp = new ChannelProcessor();
+
 
 	@With(DataFiller.class)	
 	@SubjectPresent
 	public static Result showZone(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-
+		
 		return ok(zone_index.render(data));
 	}
 
@@ -62,7 +49,7 @@ public class ZoneController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(channel_index.render(data));
+		return ok(channel_index.render(data, cp.getChannel()));
 	}
 	@With(DataFiller.class)	
 	@SubjectPresent
@@ -79,8 +66,9 @@ public class ZoneController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(channel_index.render(data));
+		return ok();
 	}
+	
 	@With(DataFiller.class)
 	@Restrict(@Group("administrator"))
 	public static Result createZone(){
@@ -90,6 +78,7 @@ public class ZoneController extends CompressController {
 		return ok(create_zone.render(data,zoneForm));
 		
 	}
+	
 	@With(DataFiller.class)
 	@Restrict(@Group("administrator"))	
 	public static Result createChannel(){
@@ -103,8 +92,19 @@ public class ZoneController extends CompressController {
 	public static Result saveZone(){
 		return ok();
 	}
+	@Restrict(@Group("administrator"))
+	@With(DataFiller.class)
 	public static Result saveChannel(){
-		return ok();
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		
+		Form<ChannelForm>  channelForm = Form.form(ChannelForm.class).bindFromRequest();
+		if(channelForm.hasErrors()) {
+			return ok(create_channel.render(data, channelForm));
+        } else {
+        	ZoneChannel zoneChannel = cp.saveForm(channelForm);
+    		return ok(create_channel_success.render(data, zoneChannel));
+        }		
 	}
 
 	@With(DataFiller.class)		

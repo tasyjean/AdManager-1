@@ -27,5 +27,7 @@ public class CampaignController extends CompressController {
 		
 		return ok(campaign_index.render(data));
 	}
+	
+	
 
 }

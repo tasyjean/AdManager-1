@@ -1,5 +1,9 @@
 @(title:String,subtitle:String,activeMenu:String="")(content:Html)
 
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+
            <div id="content">
                 <!-- navbar -->
                 <section id="stats">
@@ -8,9 +12,12 @@
                   </header>
 
                   <div class="row-fluid bar-sub-menu">
-                  @if(title=="Zona"){
+                  @if(title=="Zona dan Channel"){
                   	@zoneMenu(activeMenu)
-                  }  					
+                  }
+                  @if(title=="Manajemen Pengguna"){
+                    @userMenu(activeMenu)
+                 }  					
                   </div>
                 </section>
 
@@ -19,7 +26,9 @@
                   <div class="sub-header">
                     <h2>@subtitle</h2>
                   </div>
-					@content
+	              	  <div class="content">
+						    @content
+					  </div>
                 </section>
               
             </div>
@@ -27,41 +36,47 @@
             
 @zoneMenu(activeMenu:String)={
 
-      <div class="span2 sub-menu @("active".when(activeMenu=="daftar zona"))">
+      <a  class="span2 sub-menu @("active".when(activeMenu=="daftar zona"))"
+          href="@controllers.backend.routes.ZoneController.showZone()">
           <div class="icon"></div>
 
-         <a class="content" href="#">
+         <div class="content" >
             <div class="kpi">Daftar Zona</div>
             <div class="small">Lihat Semua Zona</div>
-         </a>
-        </div>
+         </div>
+        </a>
 
-      <div class="span2 sub-menu @("active".when(activeMenu=="daftar channel"))">
+      <a class="span2 sub-menu @("active".when(activeMenu=="daftar channel"))"
+          href="@controllers.backend.routes.ZoneController.showChannel()"  >
           <div class="icon"></div>
 
-         <a class="content" href="#">
+         <div class="content">
             <div class="kpi">Daftar Channel</div>
-            <div class="small">Lihat Semua Zona</div>
-         </a>
-        </div>    
-
-      <div class="span2 sub-menu @("active".when(activeMenu=="tambah zona"))">
+            <div class="small">Lihat Semua Channel</div>
+         </div>
+        </a>    
+    @restrict(List(as("administrator"))){ 
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah zona"))"
+            href="@controllers.backend.routes.ZoneController.createZone()">
             <div class="icon"></div>
 
-         <a class="content" href="#">
+         <div class="content">
             <div class="kpi">Tambah Zona</div>
-            <div class="small">Lihat Semua Zona</div>
-         </a>
-        </div>    
-
-      <div class="span2 sub-menu @("active".when(activeMenu=="tambah channel"))">
+            <div class="small">Tambahkan Zona Baru</div>
+         </div>
+        </a>    
+     }
+    @restrict(la(as("administrator"))){
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah channel"))"
+          href="@controllers.backend.routes.ZoneController.createChannel()">
             <div class="icon"></div>
 
-         <a class="content" href="#">
+         <div class="content">
             <div class="kpi">Tambah Channel</div>
-            <div class="small">Lihat Semua Zona</div>
-         </a>
-        </div>    
+            <div class="small">Tambahkan Channel Baru</div>
+         </div>
+      </a>    
+    }
 }
 @campaignMenu(activeMenu:String="")={
       	<div class="span2 sub-menu">
@@ -103,16 +118,32 @@
 
 }
 @userMenu(activeMenu:String="")={
-     	<div class="span2 sub-menu">
-            <div class="kpi">Daftar Pengguna</div>
-             <div><small>Lihat Semua Pengguna/small></div>
-        </div>		
-       	<div class="span2 sub-menu">
-            <div class="kpi">Tambah Pengguna</div>
-             <div><small>Tambahkan Pengguna</small></div>
-        </div>
+  
+  @restrict(la(as("administrator"), as("manager"))){                     
+      <a class="span2 sub-menu @("active".when(activeMenu=="daftar pengguna"))"
+          href="@controllers.backend.routes.UserController.showUser()">
+            <div class="icon"></div>
 
-	}
+         <div class="content">
+            <div class="kpi">Daftar Pengguna</div>
+            <div class="small">Tampilkan Pengguna</div>
+         </div>
+      </a>    
+    }
+
+  @restrict(la(as("administrator"))){                     
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah pengguna"))"
+          href="@controllers.backend.routes.UserController.createUser()">
+            <div class="icon"></div>
+
+         <div class="content">
+            <div class="kpi">Tambah Pengguna</div>
+            <div class="small">Tambah pengguna baru</div>
+         </div>
+      </a>    
+    }
+
+}
 	
 @dashboardMenu(activeMenu:String="")={
 

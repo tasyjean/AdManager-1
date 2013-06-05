@@ -1,4 +1,4 @@
-@(data: TemplateData,zone_form:Form[ChannelForm])
+@(data: TemplateData,channelForm:Form[ChannelForm])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -6,10 +6,40 @@
 
 @main("Zona"){
 	
-		@dashboard_content("Zona","Tambah Channel", "tambah channel"){
-  		<h1>Tambah Channel </h1>
-		@lorem()
-    }
+		@dashboard_content("Zona dan Channel","Tambah Channel", "tambah channel"){
+			<h6>Untuk membuat channel, masukan nama dan deskripsi untuk channel</h6>
+			
+			@helper.form(action=backend.routes.ZoneController.saveChannel,'class-> "form-horizontal") {
+				<div class="control-group @("error".when(channelForm.hasGlobalErrors))">
+
+					<label class="control-label" for="channel_name">Nama Channel*</label>
+					<div class="controls">
+						<input type="text" class="input-large" name="channel_name" id="channel_name">
+						@if(channelForm.hasGlobalErrors){
+			              <span class="help-inline" for="channel_name">			
+			              		@channelForm.globalError.message     	  	 	
+						  </span>
+						 }	                    
+					 <p class="help-block">Nama dari channel, isi dengan singkat dan padat</p>					
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="channel_description">Deskripsi</label>
+					<div class="controls">
+						<textarea  class="input-large" rows="5" name="channel_description" id="channel_description"></textarea>
+	                    <p class="help-block">Deskripsi dari channel, isi dengan lengkap dan jelas</p>
+						
+					</div>
+				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>	
+				</div>
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Simpan</button>
+	    	     <button type="reset" class="btn">Reset</button>
+	        </div>			
+			
+	    	} @*End Form *@
+	    } @*End Dashboard content *@
 
 } {
   

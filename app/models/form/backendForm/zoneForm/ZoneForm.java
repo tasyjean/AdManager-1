@@ -6,19 +6,24 @@ import play.data.validation.ValidationError;
 
 public class ZoneForm {
 
-	private int zone_channel;
+	public int zone_channel;
+	
+	public String name;
+	
+	public String description;
 
-	private int ads_size;
+	public String ads_size;
 	
-	private String zone_type;
+	public String zone_type;
 	
-	private String zone_default_view;
+	public String zone_default_view;
 	
-	private String zone_default_code;
+	public String zone_default_code;
 		
 	public List<ValidationError> validate(){
 		
 		return null;
 	}
+	
 
 }

@@ -3,6 +3,7 @@ package models.data;
 import java.util.Calendar;
 import java.util.Random;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,7 +22,11 @@ public class Zone extends Model {
 	
 	@Id
 	private int id_zone;
-	@ManyToOne
+	private String zone_name;
+	
+	@Column(columnDefinition="TEXT")	
+	private String description;
+	@ManyToOne(cascade=CascadeType.ALL)
 	private ZoneChannel zone_channel;
 	@ManyToOne
 	private BannerSize ads_size;
@@ -79,6 +84,18 @@ public class Zone extends Model {
 	}
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public String getZone_name() {
+		return zone_name;
+	}
+	public void setZone_name(String zone_name) {
+		this.zone_name = zone_name;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

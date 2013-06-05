@@ -33,7 +33,7 @@
                       </li>
                        @restrict(List(as("administrator"), as("manager"))){                     
 	                      <li class="@("selected".when(activeMenu=="user"))">
-	                        <a href="@controllers.backend.routes.UserController.index()">
+	                        <a href="@controllers.backend.routes.UserController.showUser()">
 	                        	<i class="icon-user tengahkan_icon_menu icon-white"></i>Manajemen Pengguna
 	                        </a>
 	                      </li>  
@@ -49,7 +49,7 @@
                         </a>
                       </li>
                       <li class="@("selected".when(activeMenu=="zone"))">
-                        <a href="@controllers.backend.routes.ZoneController.index()">
+                        <a href="@controllers.backend.routes.ZoneController.showZone()">
                         	<i class="icon-retweet tengahkan_icon_menu icon-white"></i>Zona
                         </a>
                       </li>

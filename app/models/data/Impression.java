@@ -24,7 +24,6 @@ public class Impression extends Model {
 	private BannerPlacement bannerPlacement;
 	private String viewer_ip;
 	private String viewer_source;
-	
 	public static Model.Finder<Long,Impression> find = new Model.Finder(Long.class, Impression.class);
 
 	public Long getId_impression() {

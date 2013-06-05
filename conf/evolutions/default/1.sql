@@ -181,6 +181,8 @@ create table user_role (
 
 create table zone (
   id_zone                   integer not null,
+  zone_name                 varchar(255),
+  description               TEXT,
   zone_channel_id_zone_channel integer,
   ads_size_id_banner_size   integer,
   zone_type                 varchar(6),

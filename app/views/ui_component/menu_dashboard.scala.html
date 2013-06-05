@@ -33,7 +33,7 @@
                       </li>
                        @restrict(List(as("administrator"), as("manager"))){                     
 	                      <li class="@("selected".when(activeMenu=="user"))">
-	                        <a href="@controllers.backend.routes.UserController.index()">
+	                        <a href="@controllers.backend.routes.UserController.showUser()">
 	                        	<i class="icon-user tengahkan_icon_menu icon-white"></i>Manajemen Pengguna
 	                        </a>
 	                      </li>  

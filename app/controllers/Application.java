@@ -3,6 +3,8 @@ package controllers;
 
 import java.util.ArrayList;
 
+import models.data.ZoneChannel;
+
 import play.*;
 import play.mvc.*;
 import play.mvc.Http.RequestBody;
@@ -48,6 +50,18 @@ public class Application extends CompressController {
     	
     	
     	return ok(testView.render(data));
+    	
+    }
+    
+    public static Result testWrite(){
+    	
+    	ZoneChannel channel=new ZoneChannel();
+    	channel.setChannel_name("Channel 1");
+    	channel.setChannel_description("Channel Name");
+    	
+    	channel.save();
+    	
+    	return ok();
     	
     }
     

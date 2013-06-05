@@ -1,4 +1,4 @@
-@(data: TemplateData)
+@(data: TemplateData, channel_list: List[ZoneChannel])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -6,14 +6,18 @@
 
 @main("Zona"){
 	
-		@dashboard_content("Zona","Daftar Channel","daftar channel"){
+		@dashboard_content("Zona dan Channel","Daftar Channel","daftar channel"){
   		
-  		<h4> Daftar Channel</h4>
-		  @lorem()
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
-        </div>
+	  		<h4> Daftar Channel</h4>
+				
+			 @for( list<-channel_list){
+			 	@list.getChannel_name <br>
+			 	@list.getChannel_description<br><br>
+			 }
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Save changes</button>
+	    	     <button type="reset" class="btn">Cancel</button>
+	        </div>
     }
 
 } {

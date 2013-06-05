@@ -1,0 +1,35 @@
+@(data: TemplateData, channel:ZoneChannel)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Tambah Channel", "tambah channel"){
+			  
+		  		<div class="alert alert-info">
+					Channel sukses ditambahkan :D<br><br>
+					<b>Nama Channel	  :</b> @channel.getChannel_name <br>
+					<b>Deskripsi Channel :</b> @channel.getChannel_description
+				</div>
+	  		
+	  		<form action="@controllers.backend.routes.ZoneController.showChannel()">
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Kembali Ke Daftar Channel</button>
+	        </div>			
+			
+	    } @*End Dashboard content *@
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

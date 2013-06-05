@@ -224,6 +224,8 @@ body>.container {
 }
 #content .sub-header {
 	padding-left: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	color: #ffffff;
 	font-size: 13px;
 	text-shadow: 0 0px 0 rgba(0, 0, 0, 0.25);
@@ -252,11 +254,17 @@ body>.container {
 }
 
 #content .sub-header h2, #content .sub-header h3 {
-	font-size: 15px;
+	font-size: 19px;
 	margin: 0;
-	font-family: "Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-weight: normal;
+	font-family: Arial,sans-serif;
+	font-weight:700;
 	line-height: 26px;
+
+}
+/*konten untuk bagian tengah */
+#content .content{
+	padding:10px;
+	
 }
 /*Tombol notifikasi */
 .notif-button{
@@ -334,7 +342,7 @@ body>.container {
 	background-color: #DBE3E8;
 }
 #content .kpi {
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: 600;
 	font-family: Arial;
 }

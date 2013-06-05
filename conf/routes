@@ -33,8 +33,14 @@ GET   /dashboard/profile				controllers.backend.ProfileController.index()
 #report
 GET   /dashboard/report					controllers.backend.ReportController.index()
 
-#user
-GET   /dashboard/user					controllers.backend.UserController.index()
+#user management
+GET   /dashboard/user					controllers.backend.UserController.showUser()
+GET   /dashboard/user/new				controllers.backend.UserController.createUser()
+POST  /dashboard/user/new				controllers.backend.UserController.saveUser()
+GET   /dashboard/user/:user_id			controllers.backend.UserController.showSingleUser(user_id:Integer)
+GET   /dashboard/user/:user_id/edit		controllers.backend.UserController.editUser(user_id:Integer)
+POST  /dashboard/user/edit				controllers.backend.UserController.saveEditUser()
+
 
 #zone
 GET   /dashboard/zone					controllers.backend.ZoneController.showZone()
@@ -50,6 +56,7 @@ GET   /dashboard/zone/:zone				controllers.backend.ZoneController.showSingleChan
 
 #untuk kepentingan testing
 GET 	/testRequest					controllers.Application.testRequest()					
+GET 	/testChannel					controllers.Application.testWrite()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
