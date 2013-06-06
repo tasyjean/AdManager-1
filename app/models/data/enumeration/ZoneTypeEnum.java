@@ -6,8 +6,6 @@ public enum ZoneTypeEnum {
 
 	@EnumValue("text")
 	TEXT,
-	@EnumValue("object")
-	OBJECT,  //flash, dll
-	@EnumValue("image")
-	IMAGE
+	@EnumValue("banner")
+	BANNER
 }

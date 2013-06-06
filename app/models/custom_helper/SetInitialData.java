@@ -88,17 +88,20 @@ public class SetInitialData {
 	
 	public void setBannerSize(){
 
-		//Data 1
-		BannerSize banner1=new BannerSize("Medium Rectangle", 300, 250, "Ini ukuran Sedang");
-		BannerSize banner2=new BannerSize("Rectangle", 180, 150, "Ini ukuran kecil");
-		BannerSize banner3=new BannerSize("LeaderBoard", 728, 90, "Ini ukuran panjang");
-		BannerSize banner4=new BannerSize("Wide Skyscrapper", 160, 600, "Ini ukuran tinggi");
-//		BannerSize banner5=new BannerSize("Medium Rectangle", 300, 250, "Ini ukuran Sedang");
+		//udah ada apa ngga dulu
+		List<BannerSize> data=BannerSize.find.all();
 		
-		banner1.save();
-		banner2.save();
-		banner3.save();
-		banner4.save();
+		if(data.size()==0){
+			data.add(new BannerSize("Medium Rectangle", 300, 250, "Ini ukuran Sedang"));
+			data.add(new BannerSize("Rectangle", 180, 150, "Ini ukuran kecil"));
+			data.add(new BannerSize("LeaderBoard", 728, 90, "Ini ukuran panjang"));
+			data.add(new BannerSize("Wide Skyscrapper", 160, 600, "Ini ukuran tinggi"));
+			
+			Ebean.save(data);			
+		}
+		
+		//Data 1
+
 		
 	}
 	public void deleteUserData(){

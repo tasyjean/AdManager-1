@@ -21,8 +21,10 @@ object ApplicationBuild extends Build {
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here   
+    // Add your own project settings here 
+    //template import  
     templatesImport += "models.dataWrapper._",
+    templatesImport += "models.dataWrapper.zone._",    
     templatesImport += "models.data._",
     templatesImport += "models.form.frontendForm.LoginForm",
     templatesImport += "models.form.frontendForm._",

@@ -1,4 +1,4 @@
-@(data: TemplateData,zone_form:Form[ZoneForm])
+@(data: TemplateData,zone_form:Form[ZoneForm], zone_data:ZoneFormData, anu:String="")
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -7,10 +7,109 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Tambah Zona","tambah zona"){
+			@anu
+			<h6>Untuk membuat zona, masukan nama dan deskripsi untuk channel</h6>
+			@if(zone_form.hasGlobalErrors){
+				<div class="alert alert-error">
+              		@zone_form.globalError.message     	  	 	
+				</div>
+      	  	}
+			@if(zone_form.hasErrors){
+				<div class="alert alert-error">
+				Ada Form yang belum di isi<br><br>
+				Silahkan di isi lagi ...terima kasih :)
+				</div>
+      	  	}      	  	
+			@helper.form(action=backend.routes.ZoneController.saveZone,'class-> "form-horizontal") {
+				<div class="control-group">
+					<label class="control-label" for="channel_name">Nama Zona *</label>
+					<div class="controls">
+						<input type="text" class="input-large" value="@zone_form("name").value" name="name" id="name">	                    
+					 <p class="help-block">Nama dari zona, isi dengan singkat dan padat</p>					
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="description">Deskripsi</label>
+					<div class="controls">
+						<textarea value="@zone_form("description").value"  class="input-large" rows="5" name="description" id="description"></textarea>
+	                    <p class="help-block">Deskripsi dari Zona, isi dengan lengkap dan jelas</p>
+					</div>
+				</div>
 
-  		@lorem()
-		
-    }
+				<div class="control-group">
+					<label class="control-label" for="banner_size">Pilih Ukuran *</label>
+					<div class="controls">	
+						<select name="banner_size">
+							@for(banner_size<-zone_data.getBannerSize){
+							<option value="@banner_size.getId_banner_size()">
+								@banner_size.getName() -- (@banner_size.getWidth() x @banner_size.getHeight())
+							</option>
+						}
+						</select>
+	                    <p class="help-block">Pilih salah satu ukuran zona (<a href="">Tampilkan contoh</a>)</p>
+					</div>
+				</div>				
+				<div class="control-group">
+					<label class="control-label" for="zone_channel">Pilih Channel *</label>
+					<div class="controls">	
+						<select name="zone_channel">
+							@for(channel<-zone_data.getChannel){
+							<option label="@channel.getChannel_description" value="@channel.getId_zone_channel">
+								@channel.getChannel_name
+							</option>
+						}
+						</select>
+	                    <p class="help-block">Pilih channel untuk zona</p>
+					</div>
+				</div>	
+				<div class="control-group">
+					<label class="control-label" for="channel_description">Tipe Zona *</label>
+					<div class="controls">
+						@for(zone_type<-zone_data.getZoneType){
+							<span class="radio-style">
+								<input type="radio"  name="zone_type" @zone_type(2) value="@zone_type(0)">
+								<span>@zone_type(1)</span>
+							</span>
+							<br/>
+						}
+	                    <p class="help-block">Pilih salah tipe zona</p>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="zone_default_view">Tampilan Default *</label>
+					<div class="controls">
+						@for(default<-zone_data.getDefaultView){
+							<span class="radio-style">
+								<input type="radio"  name="zone_default_view" @default(2) value="@default(0)">
+								<span>@default(1)</span>
+							</span>
+							<br/>
+						}
+	                    <p class="help-block">Yang Ditampilkan jika iklan tidak tersedia</p>
+					</div>
+				</div>
+			<div class="control-group">
+					<label class="control-label" for="zone_default_code">Kode Default</label>
+					<div class="controls">
+						<textarea value="@zone_form("zone_default_code").value"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code"></textarea>
+	                    <p class="help-block">Kode html untuk tampilan default, mendukung semua tag html</p>
+					</div>
+				</div>
+
+				
+		   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>	
+			
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Simpan</button>
+	    	     <button type="reset" class="btn">Reset</button>
+	        </div>			
+			
+	    	} @*End Form *@
+
+				
+ 	   }
 
 } {
   

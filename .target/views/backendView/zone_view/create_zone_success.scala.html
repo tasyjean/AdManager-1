@@ -1,0 +1,41 @@
+@(data: TemplateData, zone:Zone)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Tambah Zona", "tambah zona"){
+			  
+		  	<div class="alert alert-info">
+					Zona sukses ditambahkan :D<br><br>
+					<h3>Ringkasan</h3>
+					Nama zona   : @zone.getZone_name <br>
+					Deskripsi   : @zone.getDescription <br>
+					Ukuran 	    : @zone.getBanner_size.getName (@zone.getBanner_size.getWidth x @zone.getBanner_size.getHeight px) <br>
+					Tipe 	    : @zone.getZone_type.toString<br/>
+					Default view: @zone.getZone_default_view.toString<br/>
+					Channel 	: @zone.getZone_channel.getChannel_name<br/>
+					
+				</div>
+	  		
+	  		<form action="@controllers.backend.routes.ZoneController.showZone()">
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Kembali Ke Daftar Zona</button>
+	        </div>			
+			
+	    } @*End Dashboard content *@
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

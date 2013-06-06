@@ -8,7 +8,6 @@ public enum ActionTypeEnum {
 	CLICK,
 	@EnumValue("hide")
 	HIDE,
-	
 	@EnumValue("like")
 	LIKE
 }

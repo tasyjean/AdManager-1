@@ -10,6 +10,7 @@ import java.util.HashMap;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import models.data.Zone;
 import models.data.ZoneChannel;
 import models.dataWrapper.TemplateData;
 import models.form.backendForm.zoneForm.ChannelForm;
@@ -17,6 +18,7 @@ import models.form.backendForm.zoneForm.ZoneForm;
 import models.form.frontendForm.LoginForm;
 import models.service.Authentificator;
 import models.service.zone.ChannelProcessor;
+import models.service.zone.ZoneProcessor;
 import play.data.Form;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -32,6 +34,7 @@ public class ZoneController extends CompressController {
     final static Form<ChannelForm> channelForm = Form.form(ChannelForm.class);
 	
     static ChannelProcessor cp = new ChannelProcessor();
+    static ZoneProcessor zp = new ZoneProcessor();
 
 
 	@With(DataFiller.class)	
@@ -75,7 +78,7 @@ public class ZoneController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(create_zone.render(data,zoneForm));
+		return ok(create_zone.render(data,zoneForm,zp.getZoneFormData(),""));
 		
 	}
 	
@@ -87,10 +90,20 @@ public class ZoneController extends CompressController {
 		
 		return ok(create_channel.render(data, channelForm));
 	}
-
-
+	@Restrict(@Group("administrator"))
+	@With(DataFiller.class)
 	public static Result saveZone(){
-		return ok();
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Form<ZoneForm> filledForm=Form.form(ZoneForm.class).bindFromRequest();
+		if(filledForm.hasErrors()){
+			
+			return ok(create_zone.render(data,filledForm, zp.getZoneFormData(), "a"));
+		}else{
+			Zone zona=zp.saveForm(filledForm);
+			return ok(create_zone_success.render(data,zona));
+			
+		}
 	}
 	@Restrict(@Group("administrator"))
 	@With(DataFiller.class)

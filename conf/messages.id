@@ -1,3 +1,5 @@
+#ID adalah default aplikasi yang dipake
+
 constraint.login_salah=Email atau password salah
 constraint.required=Form harus di isi
 constraint.email=format email salah
@@ -39,3 +41,12 @@ error.minLength=Minimum length is {0}
 error.maxLength=Maximum length is {0}
 error.email=Valid email required
 error.pattern=Must satisfy {0}
+
+
+#form
+#----------form zona
+zone.zoneType.banner=Tipe Gambar dan Objek
+zone.zoneType.text=Tipe Teks
+zone.default_view.empty=Kosong
+zone.default_view.default_code=Kode Sendiri
+zone.default_view.default_ads=Iklan Umum

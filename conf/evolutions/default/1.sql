@@ -189,7 +189,7 @@ create table zone (
   zone_default_view         varchar(12),
   zone_default_code         TEXT,
   is_deleted                boolean,
-  constraint ck_zone_zone_type check (zone_type in ('text','object','image')),
+  constraint ck_zone_zone_type check (zone_type in ('banner','text')),
   constraint ck_zone_zone_default_view check (zone_default_view in ('DEFAULT_ADS','DEFAULT_CODE','empty')),
   constraint pk_zone primary key (id_zone))
 ;

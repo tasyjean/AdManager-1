@@ -55,10 +55,10 @@ public class Zone extends Model {
 	public void setZone_channel(ZoneChannel zone_channel) {
 		this.zone_channel = zone_channel;
 	}
-	public BannerSize getAds_size() {
+	public BannerSize getBanner_size() {
 		return ads_size;
 	}
-	public void setAds_size(BannerSize ads_size) {
+	public void setBanner_size(BannerSize ads_size) {
 		this.ads_size = ads_size;
 	}
 	public ZoneTypeEnum getZone_type() {

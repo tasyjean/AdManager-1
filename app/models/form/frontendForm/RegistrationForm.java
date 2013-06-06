@@ -21,6 +21,7 @@ public class RegistrationForm {
 	public String capctha="";
 	public String recaptcha_challenge_field="";
 	public String recaptcha_response_field="";
+	
 	public List<ValidationError> validate(){
 		//Validasi front name last name email
 		boolean isError=false;
@@ -48,7 +49,7 @@ public class RegistrationForm {
 		}
 		if(isError) return error; else return null;
 	}
-	//Jika email sudah ada, tapi belum aktif, maka dihapus
+	//BEHAVIOUR: Jika email sudah ada, tapi belum aktif, maka data sebelumnya dihapus
 	private boolean isDuplicate(){
 		User user= User.find.where().eq("email",email).findUnique();
 		
