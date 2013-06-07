@@ -57,6 +57,7 @@ public class ZoneFormData {
 		default_view.add(default_ads);	
 		this.defaultView = default_view;
 	}
+	
 	//mengisi isi data berdasarkan isi form zona
 	public void bindFormData(Form<ZoneForm> form){
 

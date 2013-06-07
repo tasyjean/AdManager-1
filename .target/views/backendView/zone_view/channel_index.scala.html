@@ -1,4 +1,4 @@
-@(data: TemplateData, channel_list: List[ZoneChannel])
+@(data: TemplateData, channel_list: Page[ZoneChannel])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -8,18 +8,68 @@
 	
 		@dashboard_content("Zona dan Channel","Daftar Channel","daftar channel"){
   		
-	  		<h4> Daftar Channel</h4>
-				
-			 @for( list<-channel_list){
-			 	@list.getChannel_name <br>
-			 	@list.getChannel_description<br><br>
-			 }
-	        <div class="form-actions">
-		         <button type="submit" class="btn btn-primary">Save changes</button>
-	    	     <button type="reset" class="btn">Cancel</button>
-	        </div>
-    }
-
+			<div class="content-padding">
+			<p>Channel adalah pengelompokan zona di area tertentu</p>
+			@if(channel_list.getTotalRowCount== 0 ){
+				<h5>Tidak ada Channel</h5> 
+				<h4>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createChannel()">"Tambah Channel"</a> untuk membuat channel baru</h4>
+			}else{
+				<strong>Menampilkan Channel @channel_list.getDisplayXtoYofZ(" sampai "," dari ")</strong><br><br>
+				@for(zone <- channel_list.getList) {
+					<div class="zone-list">
+						<table>
+							<tr>
+								<td>Nama Channel</td>
+								<td>:</td>
+								<td>@zone.getChannel_name</td>
+							</tr>
+							<tr>
+								<td>Deskripsi</td>
+								<td>:</td>
+								<td>@zone.getChannel_description</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="padding-top:10px;padding-bottom:5px;">
+									<form action="" style="display:inline;">
+										<button class="btn btn-small">Ubah</button>
+									</form>
+									<form action="" style="display:inline;">
+										<button class="btn btn-small btn-danger">Hapus</button>
+									</form>
+								</td>
+							</tr>
+						</table>
+						<br><br>
+					</div> 		@*zone list end *@
+				}  @* end for *@
+		        <div id="pagination" class="pagination">
+		            <ul>
+		                @if(channel_list.hasPrev) {
+		                    <li class="prev">
+		                        <a href="@controllers.backend.routes.ZoneController.showChannelPage(channel_list.getPageIndex - 1)">&larr; Previous</a>
+		                    </li>
+		                } else {
+		                    <li class="prev disabled">
+		                        <a>&larr; Previous</a>
+		                    </li>
+		                }
+		                <li class="current">
+		                    <a href="@controllers.backend.routes.ZoneController.showChannel()">--- @channel_list.getPageIndex ---</a>
+		                </li>
+		                @if(channel_list.hasNext) {
+		                    <li class="next">
+		                        <a href="@controllers.backend.routes.ZoneController.showChannelPage(channel_list.getPageIndex + 1)">Next &rarr;</a>
+		                    </li>
+		                } else {
+		                    <li class="next disabled">
+		                        <a>Next &rarr;</a>
+		                    </li>
+		                }
+		            </ul>
+		        </div>
+        </div>
+    	}
+ }
 } {
   
   @* Untuk bagian Menu *@

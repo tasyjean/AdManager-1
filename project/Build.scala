@@ -22,7 +22,8 @@ object ApplicationBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here 
-    //template import  
+    //template import 
+    templatesImport +="com.avaje.ebean._", 
     templatesImport += "models.dataWrapper._",
     templatesImport += "models.dataWrapper.zone._",    
     templatesImport += "models.data._",

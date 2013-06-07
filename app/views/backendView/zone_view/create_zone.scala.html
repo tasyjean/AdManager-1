@@ -1,4 +1,4 @@
-@(data: TemplateData,zone_form:Form[ZoneForm], zone_data:ZoneFormData, anu:String="")
+@(data: TemplateData,zone_form:Form[ZoneForm], zone_data:ZoneFormData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -7,8 +7,8 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Tambah Zona","tambah zona"){
-			@anu
-			<h6>Untuk membuat zona, masukan nama dan deskripsi untuk channel</h6>
+
+			<h5>Untuk membuat zona, lengkapi form berikut dengan lengkap</h5>
 			@if(zone_form.hasGlobalErrors){
 				<div class="alert alert-error">
               		@zone_form.globalError.message     	  	 	
@@ -47,7 +47,9 @@
 							</option>
 						}
 						</select>
-	                    <p class="help-block">Pilih salah satu ukuran zona (<a href="">Tampilkan contoh</a>)</p>
+	                    <p class="help-block">Pilih salah satu ukuran zona 
+	                    	(<a href="#banner_modal" role="button" data-toggle="modal">Tampilkan contoh</a>)
+	                    </p>
 					</div>
 				</div>				
 				<div class="control-group">
@@ -91,15 +93,15 @@
 					</div>
 				</div>
 			<div class="control-group">
-					<label class="control-label" for="zone_default_code">Kode Default</label>
+					<label class="control-label" for="zone_default_code">Kode Sendiri</label>
 					<div class="controls">
 						<textarea value="@zone_form("zone_default_code").value"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code"></textarea>
 	                    <p class="help-block">Kode html untuk tampilan default, mendukung semua tag html</p>
 					</div>
+				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>				
 				</div>
 
 				
-		   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>	
 			
 	        <div class="form-actions">
 		         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -107,8 +109,34 @@
 	        </div>			
 			
 	    	} @*End Form *@
-
+			
+			@**********Modal*********@
+			<div id="banner_modal" style="width:auto;margin-left:-350px;float:left;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h4 id="label">Contoh Ukuran Banner</h4>
+		  		</div>
+				 <div class="modal-body">
+    				@ad_sample(zone_data.getBannerSize)
+  				</div>
+  				<div class="modal-footer">
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Tutup</button>
+				</div>
 				
+			</div>
+			
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$('#banner_modal').modal({
+  					keyboard: true,
+  					backdrop:true,
+  					show:false
+				});
+
+
+			});
+			
+			</script>
  	   }
 
 } {

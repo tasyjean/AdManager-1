@@ -1,0 +1,12 @@
+@(adsize:List[BannerSize])
+
+
+	@for(ad<-adsize){
+	  <div style="padding:14px;display:block">	
+		<h4>@ad.getName (@ad.getWidth x @ad.getHeight pixel)</h4>
+		<p style="font-size:17px;">@ad.getDescription</p><br>
+		 <div style="background-color:#F8FAF2;min-width:@(ad.getWidth)px;min-height:@(ad.getHeight)px;max-width:@(ad.getWidth)px;max-height:@(ad.getHeight)px;margin:0 auto;border:1px solid black">
+		 	<h5 style="margin:0 auto;text-align:center;">Contoh Iklan @ad.getName</h5>
+		 </div>
+	  </div>
+	}

@@ -3,6 +3,9 @@ package models.service.zone;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.h2.store.PageOutputStream;
+
+import com.avaje.ebean.Page;
 import com.avaje.ebean.annotation.EnumValue;
 
 import models.data.BannerSize;
@@ -44,6 +47,16 @@ public class ZoneProcessor {
 	public ZoneFormData getZoneFormData(){
 		return new ZoneFormData();
 	}
+	public Page<Zone> getZone(int page, int pageSize, String sortBy, String order, String filter){
+        return 
+                Zone.find.where()
+                    .ilike("zone_name", "%" + filter + "%")
+                    .orderBy(sortBy + " " + order)
+                    .fetch("zone_channel")
+                    .findPagingList(pageSize)
+                    .getPage(page);		
+	}
+
 
 
 }

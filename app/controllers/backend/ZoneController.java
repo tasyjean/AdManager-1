@@ -7,6 +7,8 @@ package controllers.backend;
  */
 import java.util.HashMap;
 
+import com.avaje.ebean.Page;
+
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
@@ -39,28 +41,43 @@ public class ZoneController extends CompressController {
 
 	@With(DataFiller.class)	
 	@SubjectPresent
+	public static Result showZonePage(int page){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Page<Zone> zone_data=zp.getZone(page, 10, "", "", "");
+		return ok(zone_index.render(data, zone_data));
+	}
+	@With(DataFiller.class)	
+	@SubjectPresent	
 	public static Result showZone(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok(zone_index.render(data));
+		Page<Zone> zone_data=zp.getZone(0, 10, "", "", "");
+		return ok(zone_index.render(data, zone_data));
 	}
-
 	@With(DataFiller.class)	
 	@SubjectPresent
 	public static Result showChannel(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok(channel_index.render(data, cp.getChannel()));
+		Page<ZoneChannel> channel_data=cp.getChannel(0, 10, "", "", "");
+		return ok(channel_index.render(data, channel_data));
 	}
+	@With(DataFiller.class)	
+	@SubjectPresent
+	public static Result showChannelPage(int page){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Page<ZoneChannel> channel_data=cp.getChannel(page, 10, "", "", "");		
+		return ok(channel_index.render(data, channel_data));
+	}	
 	@With(DataFiller.class)	
 	@SubjectPresent
 	public static Result showSingleZone(int zone){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
-		return ok(zone_index.render(data));
+		return ok(show_single_zone.render(data));
 	}
 
 	@With(DataFiller.class)	
@@ -78,7 +95,7 @@ public class ZoneController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(create_zone.render(data,zoneForm,zp.getZoneFormData(),""));
+		return ok(create_zone.render(data,zoneForm,zp.getZoneFormData()));
 		
 	}
 	
@@ -90,6 +107,7 @@ public class ZoneController extends CompressController {
 		
 		return ok(create_channel.render(data, channelForm));
 	}
+	
 	@Restrict(@Group("administrator"))
 	@With(DataFiller.class)
 	public static Result saveZone(){
@@ -98,13 +116,14 @@ public class ZoneController extends CompressController {
 		Form<ZoneForm> filledForm=Form.form(ZoneForm.class).bindFromRequest();
 		if(filledForm.hasErrors()){
 			
-			return ok(create_zone.render(data,filledForm, zp.getZoneFormData(), "a"));
+			return ok(create_zone.render(data,filledForm, zp.getZoneFormData()));
 		}else{
 			Zone zona=zp.saveForm(filledForm);
 			return ok(create_zone_success.render(data,zona));
 			
 		}
 	}
+	
 	@Restrict(@Group("administrator"))
 	@With(DataFiller.class)
 	public static Result saveChannel(){
