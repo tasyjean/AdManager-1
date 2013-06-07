@@ -7,6 +7,7 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Tambah Zona","tambah zona"){
+		<div class="content-padding">
 
 			<h5>Untuk membuat zona, lengkapi form berikut dengan lengkap</h5>
 			@if(zone_form.hasGlobalErrors){
@@ -57,7 +58,7 @@
 					<div class="controls">	
 						<select name="zone_channel">
 							@for(channel<-zone_data.getChannel){
-							<option label="@channel.getChannel_description" value="@channel.getId_zone_channel">
+							<option  value="@channel.getId_zone_channel">
 								@channel.getChannel_name
 							</option>
 						}
@@ -137,6 +138,7 @@
 			});
 			
 			</script>
+		</div>
  	   }
 
 } {

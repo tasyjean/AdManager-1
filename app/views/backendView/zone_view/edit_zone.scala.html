@@ -1,0 +1,163 @@
+@(data: TemplateData,zone_form:Form[ZoneForm], zone_data:ZoneFormData, current_data: Zone)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Ubah Zona","tambah zona"){
+		<div class="content-padding">
+		
+			<h5>Mengubah Zona</h5>
+			@if(zone_form.hasGlobalErrors){
+				<div class="alert alert-error">
+              		@zone_form.globalError.message     	  	 	
+				</div>
+      	  	}
+			@if(zone_form.hasErrors){
+				<div class="alert alert-error">
+				Ada Form yang kosong<br><br>
+				Silahkan di isi lagi ...terima kasih :)
+				</div>
+      	  	}      	  	
+			@helper.form(action=backend.routes.ZoneController.saveEditZone,'class-> "form-horizontal") {
+				<div class="control-group">
+					<label class="control-label" for="channel_name">Nama Zona *</label>
+					<div class="controls">
+						<input type="text" class="input-large" value="@current_data.getZone_name" name="name" id="name">	                    
+					 <p class="help-block">Nama dari zona, isi dengan singkat dan padat</p>					
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="description">Deskripsi</label>
+					<div class="controls">
+						<textarea value="@current_data.getDescription"  class="input-large" rows="5" name="description" id="description"></textarea>
+	                    <p class="help-block">Deskripsi dari Zona, isi dengan lengkap dan jelas</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="banner_size">Pilih Ukuran *</label>
+					<div class="controls">	
+						<select name="banner_size">
+							@for(banner_size<-zone_data.getBannerSize){
+							<option value="@banner_size.getId_banner_size()" 
+									@("selected".when(current_data.getBanner_size.getId_banner_size==@banner_size.getId_banner_size()))>
+								@banner_size.getName() -- (@banner_size.getWidth() x @banner_size.getHeight())
+							</option>
+						}
+						</select>
+	                    <p class="help-block">Pilih salah satu ukuran zona 
+	                    	(<a href="#banner_modal" role="button" data-toggle="modal">Tampilkan contoh</a>)
+	                    </p>
+					</div>
+				</div>				
+				<div class="control-group">
+					<label class="control-label" for="zone_channel">Pilih Channel *</label>
+					<div class="controls">	
+						<select name="zone_channel">
+							@for(channel<-zone_data.getChannel){
+								<option  value="@channel.getId_zone_channel"
+								@("selected".when(current_data.getZone_channel.getId_zone_channel==@channel.getId_zone_channel()))>
+							
+								@channel.getChannel_name
+								</option>
+						}
+						</select>
+	                    <p class="help-block">Pilih channel untuk zona</p>
+					</div>
+				</div>	
+				<div class="control-group">
+					<label class="control-label" for="channel_description">Tipe Zona *</label>
+					<div class="controls">
+						@for(zone_type<-zone_data.getZoneType){
+							<span class="radio-style">
+								<input type="radio"  name="zone_type"
+								 @("checked".when(current_data.getZone_type==zone_type(0))) value="@zone_type(0)">
+								<span>@zone_type(1)</span>
+							</span>
+							<br/>
+						}
+	                    <p class="help-block">Pilih salah tipe zona</p>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="zone_default_view">Tampilan Default *</label>
+					<div class="controls">
+						@for(default<-zone_data.getDefaultView){
+							<span class="radio-style">
+								<input type="radio"  name="zone_default_view" 
+									@("checked".when(current_data.getZone_default_code==default(0))) value="@default(0)">
+								<span>@default(1)</span>
+							</span>
+							<br/>
+						}
+	                    <p class="help-block">Yang Ditampilkan jika iklan tidak tersedia</p>
+					</div>
+				</div>
+			<div class="control-group">
+					<label class="control-label" for="zone_default_code">Kode Sendiri</label>
+					<div class="controls">
+						<textarea value="@current_data.getZone_default_code"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code"></textarea>
+	                    <p class="help-block">Kode html untuk tampilan default, mendukung semua tag html</p>
+					</div>
+				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>				
+				</div>
+
+				
+			
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Simpan</button>
+	    	     <button type="reset" class="btn">Reset</button>
+	    	     <form action="">
+	    	     	<button type="submit" class="btn">Batal</button>
+	    	     </form>
+	        </div>			
+			
+	    	} @*End Form *@
+			
+			@**********Modal*********@
+			<div id="banner_modal" style="width:auto;margin-left:-350px;float:left;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h4 id="label">Contoh Ukuran Banner</h4>
+		  		</div>
+				 <div class="modal-body">
+    				@ad_sample(zone_data.getBannerSize)
+  				</div>
+  				<div class="modal-footer">
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Tutup</button>
+				</div>
+				
+			</div>
+			
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$('#banner_modal').modal({
+  					keyboard: true,
+  					backdrop:true,
+  					show:false
+				});
+
+
+			});
+			
+			</script>
+		</div>
+ 	}   
+	
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

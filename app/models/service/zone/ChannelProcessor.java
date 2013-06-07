@@ -28,5 +28,7 @@ public class ChannelProcessor {
                     .findPagingList(pageSize)
                     .getPage(page);		
 	}
+	
+	
 
 }

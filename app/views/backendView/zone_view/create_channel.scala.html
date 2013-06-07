@@ -7,6 +7,7 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Tambah Channel", "tambah channel"){
+		<div class="content-padding">
 			<h6>Untuk membuat channel, masukan nama dan deskripsi untuk channel</h6>
 			
 			@helper.form(action=backend.routes.ZoneController.saveChannel,'class-> "form-horizontal") {
@@ -39,6 +40,7 @@
 	        </div>			
 			
 	    	} @*End Form *@
+	    </div>
 	    } @*End Dashboard content *@
 
 } {

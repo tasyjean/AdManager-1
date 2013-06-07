@@ -37,9 +37,13 @@ public class ZoneProcessor {
 		return zone;
 	}
 	public Zone getSingleZone(int id){
-		return null;
+		Zone zone=Zone.find.byId(id);
+		return (zone.isDeleted()) ? null: zone; //pastikan tidak sedang dihapus
 	}
-	
+	public ZoneChannel getSingleChannel(int id){
+		ZoneChannel channel=ZoneChannel.find.byId(id);
+		return (channel.isDeleted()) ? null:channel;//sama, pastikan tidak sedang dihapus
+	}
 	public boolean delete(int id){
 		return true;
 	}
@@ -51,8 +55,10 @@ public class ZoneProcessor {
         return 
                 Zone.find.where()
                     .ilike("zone_name", "%" + filter + "%")
+                    .where()
+                    .eq("t0.is_deleted", false) //tidak sedang dihapus (t0 representasi tabel zona)
                     .orderBy(sortBy + " " + order)
-                    .fetch("zone_channel")
+                    .fetch("zone_channel") 
                     .findPagingList(pageSize)
                     .getPage(page);		
 	}

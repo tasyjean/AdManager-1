@@ -73,11 +73,11 @@ public class ZoneController extends CompressController {
 	}	
 	@With(DataFiller.class)	
 	@SubjectPresent
-	public static Result showSingleZone(int zone){
+	public static Result showSingleZone(int id_zone){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-
-		return ok(show_single_zone.render(data));
+		
+		return ok(show_single_zone.render(data,zp.getSingleZone(id_zone)));
 	}
 
 	@With(DataFiller.class)	
@@ -140,10 +140,28 @@ public class ZoneController extends CompressController {
 	}
 
 	@With(DataFiller.class)		
-	public static Result editZone(){
-		return ok();
+	public static Result editZone(int id_zone){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		session("id_edit_zone", Integer.toString(id_zone)); //untuk menyimpan zona mana yang diedit
+		return ok(edit_zone.render(data, zoneForm, zp.getZoneFormData(),zp.getSingleZone(id_zone)));
 	}
-
+	
+	@With(DataFiller.class)		
+	public static Result saveEditZone(){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Form<ZoneForm> filledForm=Form.form(ZoneForm.class).bindFromRequest();
+		int id_zone = Integer.parseInt(session("id_edit_zone"));
+		
+		if(filledForm.hasErrors()){
+			return badRequest(edit_zone.render(data, zoneForm, zp.getZoneFormData(), zp.getSingleZone(id_zone)));
+		}else{
+			//TODO eksekusi ke model berdasar id zone
+			flash("success","Zona Berhasil di edit");
+			return ok(show_single_zone.render(data,zp.getSingleZone(id_zone)));
+		}
+	}
 	@With(DataFiller.class)		
 	public static Result editChannel(){
 		return ok();

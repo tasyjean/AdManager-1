@@ -44,6 +44,7 @@ POST  /dashboard/user/edit				controllers.backend.UserController.saveEditUser()
 
 #zone
 GET   /dashboard/zone					controllers.backend.ZoneController.showZone()
+GET   /dashboard/zone/show/:id_zone		controllers.backend.ZoneController.showSingleZone(id_zone:Integer)
 GET   /dashboard/zone/page/:page		controllers.backend.ZoneController.showZonePage(page:Integer)
 GET   /dashboard/channel				controllers.backend.ZoneController.showChannel()
 GET   /dashboard/channel/page/:page		controllers.backend.ZoneController.showChannelPage(page:Integer)

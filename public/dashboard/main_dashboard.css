@@ -269,9 +269,7 @@ body>.container {
 .control-group {
 	padding-left: 15px;
 }
-.content h1,h2,h3,h4,h5,h6{
-	padding-left:15px;
-}
+
 .content-padding{
 	padding:10px 15px 15px 15px; 
 }
@@ -385,18 +383,17 @@ body>.container {
 	line-height: 23px;
 }
 .zone-list table{
-	max-width: 500px;
+	width: 500px;
+	table-layout: fixed;
 	padding-bottom:14px;
 	border-bottom: 2px solid #DBE3E8;
 }
-.zone-list table tr td:first-child{
-	max-width: 150px !important;
-	min-width: 149px;
+.zone-list table td:first-child{
+	width: 170px !important;
 	padding-left: 4px;
 }
-.zone-list table tr td:nth-child(2){
-	max-width: 10px;
-	min-width: 10px;
+.zone-list table td:nth-child(2){
+	width: 10px;
 }
 
 .zone-list table > tbody > tr:first-child{
@@ -404,4 +401,34 @@ body>.container {
 	color:#000000;
 	-webkit-border-radius: 3px 3px 0px 0px;
 	border-radius: 3px 3px 0px 0px;
+}
+/* ---------------Style Text area */
+textarea[readonly="readonly"]
+{
+    background-color:white;
+    cursor: text;
+}
+/* ---------------Style tabel show zona dll*/
+.single-view{
+	line-height: 25px;
+	font-size: 14px;
+	text-align: left;
+	table-layout: fixed;
+
+}
+.single-view td:first-child {
+	vertical-align: top;	
+	width: 150px;
+}
+.single-view td:nth-child(2) {
+	vertical-align: top;	
+	width: 15px;
+}
+.code{
+font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
+
+}
+/* untuk konten menu utama memperbaiki bug jika konten kosong */
+#content {
+	min-height: 400px;
 }

@@ -1,4 +1,4 @@
-@(data: TemplateData, zona:Zone)
+@(data: TemplateData, zone:Zone)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -7,15 +7,64 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Detail Zona","daftar zona"){
-  		
-  		<h4></h4>
-        
-	
-		
-		<div class="form-actions">
-	         <form action=""><button type="submit" class="btn btn-primary">Ubah Zona</button></form>
-        </div>
-    }
+  	
+		    <div class="content-padding">
+		      <a class="btn" href="@controllers.backend.routes.ZoneController.showZone()">&larr; Kembali Ke Daftar Zona</a>
+		      <br/><br/>
+		       @* jika selesai edit, maka akan dialihkan kesini *@
+		       @if(flash.contains("success")) {
+		           	<div class="alert alert-info">
+						  @flash.get("success")
+		            </p>
+		       }      
+		      <h4>Detail Untuk Zona @zone.getZone_name</h4>
+		      <table class="single-view">
+		        <tr>
+		          <td>Nama zona</td><td>:</td>
+		          <td>@zone.getZone_name</td>
+		        </tr>
+		         <tr>
+		          <td>Ukuran</td><td>:</td>
+		          <td>@zone.getBanner_size.getName (@zone.getBanner_size.getWidth x @zone.getBanner_size.getHeight )</td>
+		        </tr>
+		        <tr>
+		          <td>Channel</td><td>:</td>
+		          <td>@zone.getZone_channel.getChannel_name</td>
+		        </tr>
+		        <tr>
+		          <td>Tampilan Default</td><td>:</td>
+		          <td>@zone.getZone_default_view</td>
+		        </tr>
+		        <tr>
+		          <td>Deskripsi</td><td>:</td>
+		          <td>@zone.getDescription</td>
+		        </tr>
+		        <tr>
+		          <td>Tipe Zona</td><td>:</td>
+		          <td>@zone.getZone_type</td>
+		        </tr>     
+		        <tr>
+		          <td>Default Code</td><td>:</td>
+		          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
+		        </tr>
+		        <tr>
+		          <td>Kode Pemasangan</td><td>:</td>
+		          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
+		        </tr>  
+		      </table>
+		      </div>
+		     <div class="form-actions">
+		        <form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline">
+		    	       <button type="submit" class="btn btn-primary">Ubah Zona</button>
+		        </form>
+		        <form action="" style="display:inline">
+		             <button class="btn btn-danger" type="submit">Hapus Zona</button>    
+		      </form>   
+		    </div>
+ 	
+ 		
+ 	}
+
 
 } {
   

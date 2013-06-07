@@ -10,8 +10,8 @@
 		@dashboard_content("Zona dan Channel","Daftar Zona","daftar zona"){
 			<div class="content-padding"> 
 			@if(zone_list.getTotalRowCount== 0 ){
-				<h5>Tidak ada zona</h5> 
-				<h4>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createZone()">"Tambah Zona"</a> untuk membuat zona baru</h4>
+				<h5 style="color:red">Tidak ada zona</h5> 
+				<h5>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createZone()">Tambah Zona</a> untuk membuat zona baru</h5>
 			}else{
 				<strong>Menampilkan Zona @zone_list.getDisplayXtoYofZ(" sampai "," dari ")</strong><br><br>
 				@for(zone <- zone_list.getList) {
@@ -43,14 +43,11 @@
 							</tr>
 							<tr >
 								<td colspan="3" style="padding-top:10px;padding-bottom:5px;">
-									<form action="" style="display:inline;">
+									<form action="@controllers.backend.routes.ZoneController.showSingleZone(zone.getId_zone)" style="display:inline;">
 										<button class="btn btn-small">Lebih Lengkap</button>
 									</form>
 									<form action="" style="display:inline;">
-										<button class="btn btn-small">Ubah</button>
-									</form>
-									<form action="" style="display:inline;">
-										<button class="btn btn-small btn-danger">Hapus</button>
+										<button class="btn btn-small btn-info">Ubah</button>
 									</form>
 								</td>
 							</tr>
