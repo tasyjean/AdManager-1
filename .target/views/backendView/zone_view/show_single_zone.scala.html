@@ -7,61 +7,87 @@
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Detail Zona","daftar zona"){
-  	
+  			
 		    <div class="content-padding">
-		      <a class="btn" href="@controllers.backend.routes.ZoneController.showZone()">&larr; Kembali Ke Daftar Zona</a>
+		      <a class="btn" href="@controllers.backend.routes.ZoneController.showZone()">&larr; Ke Daftar Zona</a>
+		      <a class="btn" href="@controllers.backend.routes.ZoneController.showChannel()">Ke Daftar Channel &rarr;</a>
+		      
 		      <br/><br/>
-		       @* jika selesai edit, maka akan dialihkan kesini *@
-		       @if(flash.contains("success")) {
-		           	<div class="alert alert-info">
-						  @flash.get("success")
-		            </p>
-		       }      
-		      <h4>Detail Untuk Zona @zone.getZone_name</h4>
-		      <table class="single-view">
-		        <tr>
-		          <td>Nama zona</td><td>:</td>
-		          <td>@zone.getZone_name</td>
-		        </tr>
-		         <tr>
-		          <td>Ukuran</td><td>:</td>
-		          <td>@zone.getBanner_size.getName (@zone.getBanner_size.getWidth x @zone.getBanner_size.getHeight )</td>
-		        </tr>
-		        <tr>
-		          <td>Channel</td><td>:</td>
-		          <td>@zone.getZone_channel.getChannel_name</td>
-		        </tr>
-		        <tr>
-		          <td>Tampilan Default</td><td>:</td>
-		          <td>@zone.getZone_default_view</td>
-		        </tr>
-		        <tr>
-		          <td>Deskripsi</td><td>:</td>
-		          <td>@zone.getDescription</td>
-		        </tr>
-		        <tr>
-		          <td>Tipe Zona</td><td>:</td>
-		          <td>@zone.getZone_type</td>
-		        </tr>     
-		        <tr>
-		          <td>Default Code</td><td>:</td>
-		          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
-		        </tr>
-		        <tr>
-		          <td>Kode Pemasangan</td><td>:</td>
-		          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
-		        </tr>  
-		      </table>
-		      </div>
-		     <div class="form-actions">
-		        <form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline">
-		    	       <button type="submit" class="btn btn-primary">Ubah Zona</button>
-		        </form>
-		        <form action="" style="display:inline">
-		             <button class="btn btn-danger" type="submit">Hapus Zona</button>    
-		      </form>   
-		    </div>
- 	
+		       @if(zone==null){
+		       	<h5>Maaf, zona tidak ditemukan</h5>
+		       }else{
+			       @* jika selesai edit, maka akan dialihkan kesini *@
+			       @if(flash.contains("success")) {
+			           	<div class="alert alert-info">
+							  @flash.get("success")
+			            </div>
+			       }      
+			      <h4>Detail Untuk Zona @zone.getZone_name</h4>
+			      <table class="single-view">
+			        <tr>
+			          <td>Nama zona</td><td>:</td>
+			          <td>@zone.getZone_name</td>
+			        </tr>
+			         <tr>
+			          <td>Ukuran</td><td>:</td>
+			          <td>@zone.getBanner_size.getName (@zone.getBanner_size.getWidth x @zone.getBanner_size.getHeight )</td>
+			        </tr>
+			        <tr>
+			          <td>Channel</td><td>:</td>
+			          <td>@zone.getZone_channel.getChannel_name</td>
+			        </tr>
+			        <tr>
+			          <td>Tampilan Default</td><td>:</td>
+			          <td>@zone.getZone_default_view</td>
+			        </tr>
+			        <tr>
+			          <td>Deskripsi</td><td>:</td>
+			          <td>@zone.getDescription</td>
+			        </tr>
+			        <tr>
+			          <td>Tipe Zona</td><td>:</td>
+			          <td>@zone.getZone_type</td>
+			        </tr>     
+			        <tr>
+			          <td>Default Code</td><td>:</td>
+			          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
+			        </tr>
+			        <tr>
+			          <td>Kode Pemasangan</td><td>:</td>
+			          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
+			        </tr>  
+			      </table>
+			      </div>
+			     <div class="form-actions">
+			        <form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline">
+			    	       <button type="submit" class="btn btn-primary">Ubah Zona</button>
+			        </form>
+			        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
+			             class="btn btn-danger" type="submit"> Hapus Zona 
+			     	</a>   
+			    </div>
+			    
+			@**********Modal Delete*********@
+			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Hapus Zona</h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau menghapus zona @zone.getZone_name ?</h4>
+					<p class="alert alert-warning" style="color:#000">Sebelum menghapus, pastikan zona ini tidak terkait dengan data lainnya</p>
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.ZoneController.deleteZone(zone.getId_zone)">
+				   		Hapus
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+				
+			</div>			    
+			    
+ 		} @*end if *@
  		
  	}
 

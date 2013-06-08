@@ -15,26 +15,27 @@
 				<h4>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createChannel()">"Tambah Channel"</a> untuk membuat channel baru</h4>
 			}else{
 				<strong>Menampilkan Channel @channel_list.getDisplayXtoYofZ(" sampai "," dari ")</strong><br><br>
-				@for(zone <- channel_list.getList) {
+				@for(channel <- channel_list.getList) {
 					<div class="zone-list">
 						<table>
 							<tr>
 								<td>Nama Channel</td>
 								<td>:</td>
-								<td>@zone.getChannel_name</td>
+								<td>@channel.getChannel_name</td>
 							</tr>
 							<tr>
 								<td>Deskripsi</td>
 								<td>:</td>
-								<td>@zone.getChannel_description</td>
+								<td>@channel.getChannel_description</td>
 							</tr>
 							<tr>
 								<td colspan="3" style="padding-top:10px;padding-bottom:5px;">
-									<form action="" style="display:inline;">
-										<button class="btn btn-small">Ubah</button>
-									</form>
-									<form action="" style="display:inline;">
-										<button class="btn btn-small btn-danger">Hapus</button>
+									<form action="@controllers.backend.routes.ZoneController.showSingleChannel(channel.getId_zone_channel)" 
+										  style="display:inline;">
+										<button class="btn btn-small">Lebih Lengkap</button>
+									</form>									
+									<form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline;">
+										<button class="btn btn-small btn-info">Ubah</button>
 									</form>
 								</td>
 							</tr>

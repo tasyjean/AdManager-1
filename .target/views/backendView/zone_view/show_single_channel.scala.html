@@ -1,0 +1,94 @@
+@(data: TemplateData, channel:ZoneChannel, zone_list:List[Zone])
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Detail Zona","daftar zona"){
+  			
+		    <div class="content-padding">
+		      <a class="btn" href="@controllers.backend.routes.ZoneController.showChannel">&larr; Kembali Ke Daftar Channel</a>
+		      <br/><br/>
+		       @if(channel==null){
+		       	<h5>Maaf, channel tidak ditemukan</h5>
+		       }else{
+			       @* jika selesai edit, maka akan dialihkan kesini *@
+			       @if(flash.contains("success")) {
+			           	<div class="alert alert-info">
+							  @flash.get("success")
+			            </div>
+			       }      
+			      <h4>Detail Untuk Channel "@channel.getChannel_name"</h4>
+			      <table class="single-view">
+			        <tr>
+			          <td>Nama Channel</td><td>:</td>
+			          <td>@channel.getChannel_name</td>
+			        </tr>
+			         <tr>
+			          <td>Deskripsi</td><td>:</td>
+			          <td>@channel.getChannel_description</td>
+			        </tr>
+			         <tr>
+			          <td>Daftar Zona</td><td>:</td>
+			          <td>@zone_list.size zona Dengan Channel Ini : </td>
+			        </tr>			        
+		        	@for(zone<-zone_list){			       
+				        <tr>	        	
+			        		<td></td><td></td><td>
+			        			<a href="@controllers.backend.routes.ZoneController.showSingleZone(zone.getId_zone)">
+			        			 @zone.getZone_name
+			        			</a>
+			        		</td>
+			        	</tr>
+			        }
+			      </table>
+			      </div>
+			     <div class="form-actions">
+			        <form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline">
+			    	       <button type="submit" class="btn btn-primary">Ubah Channel</button>
+			        </form>
+			        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
+			             class="btn btn-danger" type="submit"> Hapus Channel 
+			     	</a>     
+			    </div>
+			    
+			@**********Modal Delete*********@
+			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Hapus Channel</h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau menghapus Channel @channel.getChannel_name ?</h4>
+					<p class="alert alert-warning" style="color:#000">Sebelum menghapus, pastikan channel ini tidak terkait dengan data lainnya</p>
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.ZoneController.deleteChannel(channel.getId_zone_channel)">
+				   		Hapus
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+				
+			</div>				    
+			    
+			    
+ 		} @*end if *@
+ 		
+ 	}
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

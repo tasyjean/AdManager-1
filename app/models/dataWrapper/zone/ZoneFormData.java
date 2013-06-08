@@ -58,15 +58,11 @@ public class ZoneFormData {
 		this.defaultView = default_view;
 	}
 	
-	//mengisi isi data berdasarkan isi form zona
-	public void bindFormData(Form<ZoneForm> form){
-
-	}
 	public List<ZoneChannel> getChannel() {
 		return channel;
 	}
 	private void setChannel() {
-		this.channel = ZoneChannel.find.all();
+		this.channel = ZoneChannel.find.where().eq("is_deleted", false).findList();
 
 	}
 	

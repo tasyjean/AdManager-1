@@ -6,13 +6,13 @@
 
 @main("Zona"){
 	
-		@dashboard_content("Zona dan Channel","Ubah Zona","tambah zona"){
+		@dashboard_content("Zona dan Channel","Ubah Zona","daftar zona"){
 		<div class="content-padding">
 		
-			<h5>Mengubah Zona</h5>
+			<h5>Mengubah Zona @current_data.getZone_name</h5>
 			@if(zone_form.hasGlobalErrors){
 				<div class="alert alert-error">
-              		@zone_form.globalError.message     	  	 	
+              		@zone_form.globalError.message
 				</div>
       	  	}
 			@if(zone_form.hasErrors){
@@ -20,7 +20,12 @@
 				Ada Form yang kosong<br><br>
 				Silahkan di isi lagi ...terima kasih :)
 				</div>
-      	  	}      	  	
+      	  	}
+		    @if(flash.contains("success")) {
+		         <div class="alert alert-danger">
+				  @flash.get("success")
+		         </div>
+		    }         	  	      	  	
 			@helper.form(action=backend.routes.ZoneController.saveEditZone,'class-> "form-horizontal") {
 				<div class="control-group">
 					<label class="control-label" for="channel_name">Nama Zona *</label>
@@ -33,7 +38,7 @@
 				<div class="control-group">
 					<label class="control-label" for="description">Deskripsi</label>
 					<div class="controls">
-						<textarea value="@current_data.getDescription"  class="input-large" rows="5" name="description" id="description"></textarea>
+						<textarea  class="input-large" rows="5" name="description" id="description">@current_data.getDescription</textarea>
 	                    <p class="help-block">Deskripsi dari Zona, isi dengan lengkap dan jelas</p>
 					</div>
 				</div>
@@ -44,7 +49,7 @@
 						<select name="banner_size">
 							@for(banner_size<-zone_data.getBannerSize){
 							<option value="@banner_size.getId_banner_size()" 
-									@("selected".when(current_data.getBanner_size.getId_banner_size==@banner_size.getId_banner_size()))>
+									@("selected".when(current_data.getBanner_size.getId_banner_size==banner_size.getId_banner_size()))>
 								@banner_size.getName() -- (@banner_size.getWidth() x @banner_size.getHeight())
 							</option>
 						}
@@ -60,7 +65,7 @@
 						<select name="zone_channel">
 							@for(channel<-zone_data.getChannel){
 								<option  value="@channel.getId_zone_channel"
-								@("selected".when(current_data.getZone_channel.getId_zone_channel==@channel.getId_zone_channel()))>
+								@("selected".when(current_data.getZone_channel.getId_zone_channel==channel.getId_zone_channel()))>
 							
 								@channel.getChannel_name
 								</option>
@@ -75,7 +80,7 @@
 						@for(zone_type<-zone_data.getZoneType){
 							<span class="radio-style">
 								<input type="radio"  name="zone_type"
-								 @("checked".when(current_data.getZone_type==zone_type(0))) value="@zone_type(0)">
+								 @("checked".when(current_data.getZone_type.toString==zone_type(0))) value="@zone_type(0)">
 								<span>@zone_type(1)</span>
 							</span>
 							<br/>
@@ -90,7 +95,7 @@
 						@for(default<-zone_data.getDefaultView){
 							<span class="radio-style">
 								<input type="radio"  name="zone_default_view" 
-									@("checked".when(current_data.getZone_default_code==default(0))) value="@default(0)">
+									@("checked".when(current_data.getZone_default_view.toString==default(0))) value="@default(0)">
 								<span>@default(1)</span>
 							</span>
 							<br/>
@@ -101,7 +106,7 @@
 			<div class="control-group">
 					<label class="control-label" for="zone_default_code">Kode Sendiri</label>
 					<div class="controls">
-						<textarea value="@current_data.getZone_default_code"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code"></textarea>
+						<textarea class="code" value="@current_data.getZone_default_code"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code"></textarea>
 	                    <p class="help-block">Kode html untuk tampilan default, mendukung semua tag html</p>
 					</div>
 				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>				
@@ -112,9 +117,9 @@
 	        <div class="form-actions">
 		         <button type="submit" class="btn btn-primary">Simpan</button>
 	    	     <button type="reset" class="btn">Reset</button>
-	    	     <form action="">
-	    	     	<button type="submit" class="btn">Batal</button>
-	    	     </form>
+	    	     <a class="btn btn-danger" href="@controllers.backend.routes.ZoneController.showSingleZone(current_data.getId_zone)">
+	    	     	Batal
+	    	     </a>
 	        </div>			
 			
 	    	} @*End Form *@

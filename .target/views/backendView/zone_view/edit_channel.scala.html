@@ -1,0 +1,64 @@
+@(data: TemplateData,channelForm:Form[ChannelForm], current_data: ZoneChannel)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Ubah Channel", "tambah channel"){
+		<div class="content-padding">
+			<h5>Mengubah Channel</h5>
+
+			@helper.form(action=backend.routes.ZoneController.saveEditChannel,'class-> "form-horizontal") {
+				<div class="control-group @("error".when(channelForm.hasGlobalErrors))">
+
+					<label class="control-label" for="channel_name">Nama Channel*</label>
+					<div class="controls">
+						<input type="text" class="input-large" name="channel_name" id="channel_name"
+						value="@current_data.getChannel_name"
+						>
+						@if(channelForm.hasGlobalErrors){
+			              <span class="help-inline" for="channel_name">			
+			              		@channelForm.globalError.message     	  	 	
+						  </span>
+						 }	                    
+					 <p class="help-block">Nama dari channel, isi dengan singkat dan padat</p>					
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="channel_description">Deskripsi</label>
+					<div class="controls">
+						<textarea  class="input-large" rows="5" name="channel_description" id="channel_description">
+							@current_data.getChannel_description
+						</textarea>
+	                    <p class="help-block">Deskripsi dari channel, isi dengan lengkap dan jelas</p>
+						
+					</div>
+				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>	
+				</div>
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Simpan</button>
+	    	     <button type="reset" class="btn">Reset</button>
+	    	     <a class="btn btn-danger" href="@controllers.backend.routes.ZoneController.showSingleChannel(current_data.getId_zone_channel)">
+	    	     	Batal
+	    	     </a> 
+	        </div>			
+			
+	    	} @*End Form *@
+	    </div>
+	    } @*End Dashboard content *@
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

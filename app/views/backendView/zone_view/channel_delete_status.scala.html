@@ -1,0 +1,42 @@
+@(data: TemplateData, back:String)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Zona"){
+	
+		@dashboard_content("Zona dan Channel","Hapus Channel", "daftar channel"){
+		<div class="content-padding">
+	 		<br>
+			@if(flash.contains("success")) {
+			      <div class="alert alert-info">
+			      	 <h4>Data Di Hapus</h4>
+					 @flash.get("success")
+			      </div>
+			}  		  	
+			@if(flash.contains("error")) {
+			      <div class="alert alert-error">
+			      	 <h4>Penghapusan Gagal</h4>					
+					 @flash.get("error")
+			      </div>
+			}  	<br><br>		  		
+		      <a class="btn" 
+		      	 href="@controllers.backend.routes.ZoneController.showChannel()">
+		      	 Ke Halaman Daftar Channel &rarr;
+		      </a>		
+		 </div>	
+	    } @*End Dashboard content *@
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("zone")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

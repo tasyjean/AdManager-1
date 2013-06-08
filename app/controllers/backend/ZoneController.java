@@ -7,6 +7,7 @@ package controllers.backend;
  */
 import java.util.HashMap;
 
+import com.amazonaws.services.simpleemail.model.Message;
 import com.avaje.ebean.Page;
 
 import be.objectify.deadbolt.java.actions.Group;
@@ -20,8 +21,11 @@ import models.form.backendForm.zoneForm.ZoneForm;
 import models.form.frontendForm.LoginForm;
 import models.service.Authentificator;
 import models.service.zone.ChannelProcessor;
+import models.service.zone.ErrorEnum;
 import models.service.zone.ZoneProcessor;
 import play.data.Form;
+import play.data.validation.ValidationError;
+import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
@@ -82,11 +86,13 @@ public class ZoneController extends CompressController {
 
 	@With(DataFiller.class)	
 	@SubjectPresent
-	public static Result showSingleChannel(int channel){	
+	public static Result showSingleChannel(int id_channel){	
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok();
+		return ok(show_single_channel.render(data, 
+											 cp.getSingleChannel(id_channel), 
+											 cp.getChannelZone(id_channel)));
 	}
 	
 	@With(DataFiller.class)
@@ -118,8 +124,14 @@ public class ZoneController extends CompressController {
 			
 			return ok(create_zone.render(data,filledForm, zp.getZoneFormData()));
 		}else{
-			Zone zona=zp.saveForm(filledForm);
-			return ok(create_zone_success.render(data,zona));
+			try {
+				Zone zona=zp.saveForm(filledForm);
+				return ok(create_zone_success.render(data,zona));
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				filledForm.globalErrors().add(new ValidationError("error_update", Messages.get("validation.error_update")));
+				return ok(create_zone.render(data,filledForm, zp.getZoneFormData()));
+			}
 			
 		}
 	}
@@ -155,24 +167,80 @@ public class ZoneController extends CompressController {
 		int id_zone = Integer.parseInt(session("id_edit_zone"));
 		
 		if(filledForm.hasErrors()){
-			return badRequest(edit_zone.render(data, zoneForm, zp.getZoneFormData(), zp.getSingleZone(id_zone)));
+			return badRequest(edit_zone.render(data, filledForm, zp.getZoneFormData(), zp.getSingleZone(id_zone)));
 		}else{
-			//TODO eksekusi ke model berdasar id zone
-			flash("success","Zona Berhasil di edit");
-			return ok(show_single_zone.render(data,zp.getSingleZone(id_zone)));
+			boolean sukses=zp.saveFormEdit(filledForm, id_zone);
+			if(sukses){
+				flash("success","Zona Berhasil di ubah");
+				return redirect(controllers.backend.routes.ZoneController.showSingleZone(id_zone));
+			}else{
+				filledForm.globalErrors().add(new ValidationError("error_update", Messages.get("validation.error_update")));
+				flash("success",Messages.get("validation.error_update"));
+				return badRequest(edit_zone.render(data, filledForm, zp.getZoneFormData(), zp.getSingleZone(id_zone)));
+			}
 		}
 	}
 	@With(DataFiller.class)		
-	public static Result editChannel(){
-		return ok();
+	public static Result editChannel(int id_channel){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		session("id_edit_channel", Integer.toString(id_channel));
+		return ok(edit_channel.render(data,channelForm, cp.getSingleChannel(id_channel)));
 	}
-
-	public static Result deleteChannel(){
-		return ok();
+	@With(DataFiller.class)		
+	public static Result saveEditChannel(){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Form<ChannelForm> filledForm=Form.form(ChannelForm.class).bindFromRequest();
+		
+		int id_channel = Integer.parseInt(session("id_edit_channel"));
+		if(filledForm.hasErrors()){
+			return badRequest(edit_channel.render(data, filledForm,  cp.getSingleChannel(id_channel)));
+		}else{
+			boolean sukses=cp.updateChannel(filledForm, id_channel);
+			if(sukses){
+				flash("success","Channel Berhasil di ubah");
+				return redirect(controllers.backend.routes.ZoneController.showSingleChannel(id_channel));
+			}else{
+				filledForm.globalErrors().add(new ValidationError("error_update", Messages.get("validation.error_update")));
+				flash("success",Messages.get("validation.error_update"));
+				return badRequest(edit_channel.render(data, filledForm, cp.getSingleChannel(id_channel)));
+			}	
+		}
+		
 	}
 	
-	public static Result deleteZone(){
-		return ok();
+
+	@With(DataFiller.class)		
+	public static Result deleteChannel(int id_channel){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		ErrorEnum errorEnum=cp.softDelete(id_channel);
+		if(errorEnum.equals(ErrorEnum.INTEGRITY_PROBLEM)){
+			flash("error",Messages.get("error.delete.integrity"));
+		}else if(errorEnum.equals(ErrorEnum.JUST_PLAIN_FAILED)){
+			flash("error",Messages.get("error.delete.plain"));
+		}else{
+			flash("success",Messages.get("error.delete.success"));			
+		}
+		
+		return ok(channel_delete_status.render(data,request().getHeader(REFERER)));
+	}
+	
+	@With(DataFiller.class)		
+	public static Result deleteZone(int id_zone){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		ErrorEnum errorEnum=zp.softDelete(id_zone);
+		if(errorEnum.equals(ErrorEnum.INTEGRITY_PROBLEM)){
+			flash("error",Messages.get("error.delete.integrity"));
+		}else if(errorEnum.equals(ErrorEnum.JUST_PLAIN_FAILED)){
+			flash("error",Messages.get("error.delete.plain"));
+		}else{
+			flash("success",Messages.get("error.delete.success"));			
+		}
+		
+		return ok(zone_delete_status.render(data, request().getHeader(REFERER)));
 	}
 	
 

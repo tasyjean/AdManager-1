@@ -10,6 +10,7 @@ validation.password=Password tidak sama
 validattion.email_not_exist=Alamat email {0} tidak terdaftar
 validation.captcha = Captcha tidak tepat
 success.forgetPassword=Permintaan diterima, silahkan cek email untuk lanjut ke proses selanjutnya
+validation.error_update=Ada kesalahan menyimpan data, data gagal disimpan
 
 #Default
 
@@ -41,7 +42,9 @@ error.minLength=Minimum length is {0}
 error.maxLength=Maximum length is {0}
 error.email=Valid email required
 error.pattern=Must satisfy {0}
-
+error.delete.integrity=Data ini masih terkait dengan data lainnya, hapus data lain terlebih dahulu
+error.delete.plain =  Ada error tertentu selama proses penghapusan
+error.delete.success=Data sukses dihapus
 
 #form
 #----------form zona

@@ -18,7 +18,7 @@ public class BannerPlacement extends Model {
 	@ManyToOne
 	private Zone zone;
 	
-	public static Model.Finder<Integer,BannerPlacement> find = new Model.Finder(BannerPlacement.class, User.class);
+	public static Model.Finder<Integer,BannerPlacement> find = new Model.Finder(Integer.class, BannerPlacement.class);
 
 	public int getId_banner_placement() {
 		return id_banner_placement;
