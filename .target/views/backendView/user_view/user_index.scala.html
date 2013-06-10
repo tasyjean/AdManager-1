@@ -3,44 +3,112 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+@import scala._
 
 @main("Manajemen Pengguna"){
 	
 		@* Tambahkan java script dan css *@
 		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
-		<link href="@routes.Assets.at("css/bootstrap_mod.css")" rel="stylesheet">
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
 		
 		@dashboard_content("Manajemen Pengguna","Daftar Pengguna","daftar pengguna"){
-		<div class="content-padding">
+			<div class="content-padding">
 			<h4>Daftar Semua Pengguna</h4>
-			<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_user" width="100%">
-				<thead>
-					<tr>
-						<th>Nama</th>
-						<th>Email</th>
-						<th>Posisi</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="odd gradeX">
-						<td>Trident</td>
-						<td>Internet
-							 Explorer 4.0</td>
-						<td>Win 95+</td>
-					</tr>
-					<tr class="even gradeC">
-						<td>Trident</td>
-						<td>Internet
-							 Explorer 5.0</td>
-						<td>Win 95+</td>
-					</tr>
-				</tbody>
-			</table>
-					
-        </div>
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_user">
+					<thead>
+						<tr>
+							<th>Nama</th>
+							<th>Email Utama</th>
+							<th>Posisi</th>
+   							@restrict(List(as("administrator"))){ 									
+							<th></th>
+							}
+						</tr>
+					</thead>
+					<tbody>
+					@for(user <- user_list.getList) {
+						 <tr>
+							<td>@user.getFront_name @user.getLast_name</td>
+							<td>@user.getEmail</td>
+							<td>@user.getRole.getName</td>
+   						@restrict(List(as("administrator"))){ 										
+							<td>
+								<ul  id="icons" class="ui-widget ui-helper-clearfix">
+									<li class="ui-state-default ui-corner-all" title="Edit  @user.getFront_name">
+										<span class="ui-icon ui-icon-pencil"></span>
+									</li>
+									<li class="ui-state-default ui-corner-all" title="Tampilkan Data Lengkap @user.getFront_name">
+										<span class="ui-icon ui-icon-extlink"></span>
+									</li>
+								</ul>
+							</td>
+						}
+						</tr>
+					}
+					</tbody>
+				</table>
+			<script type="text/javascript">
+				$(document).ready(function() {
+				    $('#table_user').dataTable({
+				    	"bPaginate" : false,
+				    	"bLengthChange":false,
+				        "oLanguage": {
+				            "sLengthMenu": "Display _MENU_ records per page",
+				            "sZeroRecords": "Maaf Data tidak ditemukan",
+				            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+				            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+				            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+				            "sPrevious": "Sebelumnya",
+				            "sNext": "Selanjutnya",
+				            "sSearch": "Filter  :"
+				        }
+				    });
+				    
+					// Hover states on the static widgets
+					$( "#dialog-link, #icons li" ).hover(
+						function() {
+							$( this ).addClass( "ui-state-hover" );
+						},
+						function() {
+							$( this ).removeClass( "ui-state-hover" );
+						}
+					); 
+				} );
+			</script>
+			
+					<div id="pagination" class="pagination pagination-user">
+		            <ul>
+		                @if(user_list.hasPrev) {
+		                    <li class="prev">
+		                        <a href="@controllers.backend.routes.UserController.showUserPage(user_list.getPageIndex - 1)">&larr; Previous</a>
+		                    </li>
+		                } else {
+		                    <li class="prev disabled">
+		                        <a>&larr; Sebelumnya</a>
+		                    </li>
+		                }
+		                <li class="current">
+		                    <a href="@controllers.backend.routes.UserController.showUser()">--- @user_list.getPageIndex ---</a>
+		                </li>
+		                @if(user_list.hasNext) {
+		                    <li class="next">
+		                        <a href="@controllers.backend.routes.UserController.showUserPage(user_list.getPageIndex + 1)">Next &rarr;</a>
+		                    </li>
+		                } else {
+		                    <li class="next disabled">
+		                        <a>Selanjutnya &rarr;</a>
+		                    </li>
+		                }
+		            </ul>
+		        </div>			
+	        </div>
+	        
+	        
     }
-
-
 
 } {
   

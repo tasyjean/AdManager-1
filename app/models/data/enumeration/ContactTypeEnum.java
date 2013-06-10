@@ -19,7 +19,9 @@ public enum ContactTypeEnum {
 	@EnumValue("company_website")
 	COMPANY_WEBSITE,
 	@EnumValue("personal_website")
-	PERSONAL_WEBSITE,	
+	PERSONAL_WEBSITE,
+	@EnumValue("bank_account")
+	BANK_ACCOUNT,
 	@EnumValue("other")
 	OTHER
 }

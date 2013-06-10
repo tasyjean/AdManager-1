@@ -44,13 +44,16 @@ public class User extends Model implements Subject {
 	private Date join_date;
 	private int current_balance;
 	private boolean isActive;
+	private String user_description;
 	@ManyToOne
 	private FileUpload profile_photo;
 	private String validation_key;
+	private String city;
+	private String country;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<UserContact> userContact; 
     @ManyToMany(cascade=CascadeType.ALL)
-	public List<UserPermission> permissions;
+	private List<UserPermission> permissions;
 
 	//Blok untuk parameter subyek ---------------------
 	
@@ -198,26 +201,29 @@ public class User extends Model implements Subject {
 	public void setProfile_photo(FileUpload profile_photo) {
 		this.profile_photo = profile_photo;
 	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
 	public String getValidation_key() {
 		return validation_key;
 	}
 	public void setValidation_key(String validation_key) {
 		this.validation_key = validation_key;
+	}
+	public String getUser_description() {
+		return user_description;
+	}
+	public void setUser_description(String user_description) {
+		this.user_description = user_description;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	

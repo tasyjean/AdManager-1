@@ -35,6 +35,7 @@ GET   /dashboard/report					controllers.backend.ReportController.index()
 
 #user management
 GET   /dashboard/user					controllers.backend.UserController.showUser()
+GET	  /dashboard/user/page/:page		controllers.backend.UserController.showUserPage(page:Integer)
 GET   /dashboard/user/new				controllers.backend.UserController.createUser()
 POST  /dashboard/user/new				controllers.backend.UserController.saveUser()
 GET   /dashboard/user/:user_id			controllers.backend.UserController.showSingleUser(user_id:Integer)

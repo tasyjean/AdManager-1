@@ -10,10 +10,9 @@ public class UserFetch {
 	public User getSingleUser(int id_user){
 		return User.find.byId(id_user);
 	}
-	public Page<User> getUser(int page, int pageSize, String sortBy, String order, String filter){
+	public Page<User> getUser(int page, int pageSize, String sortBy, String order){
         return 
                 User.find.where()
-                    .ilike("first_name", "%" + filter + "%")
                     .orderBy(sortBy + " " + order)
                     .findPagingList(pageSize)
                     .getPage(page);		

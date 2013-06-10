@@ -44,10 +44,18 @@ public class UserController extends CompressController {
 	public static Result showUser(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		Page<User> page=fetch.getUser(0,100, "", "", "");
+		Page<User> page=fetch.getUser(0,40, "", "");
 		return ok(user_index.render(data, page));
 	}
 	
+	@Restrict({@Group("administrator"), @Group("manager")})
+	@With(DataFiller.class)
+	public static Result showUserPage(int page_number){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Page<User> page=fetch.getUser(page_number,40, "", "");
+		return ok(user_index.render(data, page));
+	}	
 	public static Result showSingleUser(int user_id){
 		return ok();
 	}
@@ -67,8 +75,8 @@ public class UserController extends CompressController {
 		if (picture != null) {
 			int id=manager.saveNew(picture, SaveToEnum.PROFILE_PICTURE);
 			if(id!=0){
-				manager.delete(21);
-				return ok(test_upload.render(manager.getFileUrl(id),manager.getFilePath(id)));			
+				manager.saveThumbnail(id);
+				return ok(test_upload.render(manager.getThumbnailURL(id),manager.getFilePath(id)));			
 			}else{
 				
 				return badRequest("upload gagal");

@@ -1,22 +1,40 @@
 package models.custom_helper.file_manager;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import net.coobird.thumbnailator.Thumbnails;
 import play.Logger;
 import play.Play;
 import play.mvc.Http.MultipartFormData.FilePart;
+import scala.collection.parallel.ParIterableLike.Find;
 import models.data.FileUpload;
 
 public class FileManager {
 
-	private final String BASE_PATH="/public/upload/";
-	private final String BASE_URL_PATH="/assets/upload/";
+	private final String BASE_PATH="/public/upload/"; //path sebenernya
+	private final String BASE_URL_PATH="/assets/upload/"; //path buat request
 	private final String PROFILE="profile/";
 	private final String ADS="ads/";
 	private final String TRANSFER="transfer/";
 	private final String OTHER ="other/";
 	
+	private final String THUMBNAIL="profile/thumbnail/";
+	private final String THUMBNAIL_PREFIX="thumb";
+	
+	/*
+	 * 
+	 * Informasi penting
+	 * Nama file disimpan dengan format id+nama asli,
+	 * Nama yang disimpan didatabase adalah nama asli
+	 * jadi ketika akses file asli melalui database, maka ditambahkan id didepannya...
+	 * 
+	 * Untuk thumbnail, ditambahkan thumb didepan
+	 * 
+	 * XENOVON
+	 */
 	public int saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
@@ -43,11 +61,10 @@ public class FileManager {
 		}
 		
 	}
-
 	public boolean delete(int id){
 		try {
 			FileUpload upload=FileUpload.find.byId(id);
-			File file= getFile(id);
+			File file= getFile(upload);
 			
 			upload.delete();
 			file.delete();
@@ -60,18 +77,86 @@ public class FileManager {
 	public FileUpload getData(int id){
 		return FileUpload.find.byId(id);
 	}
-	public File getFile(int id){
+	public String getThumbnailURL(FileUpload file){
+		return BASE_URL_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
+			   	
+	}
+	public String getThumbnailURL(int id){
+		FileUpload file=FileUpload.find.byId(id);		
+		return BASE_URL_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
+			   	
+	}	
+	public String getThumbnailFullPath(FileUpload file){
+		return Play.application().path()+
+			   BASE_URL_PATH+
+			   THUMBNAIL+
+			   THUMBNAIL_PREFIX+
+			   file.getId()+
+			   file.getName();
+			   	
+	}	
+	public String getThumbnailFullPath(int id){
+		FileUpload file=FileUpload.find.byId(id);		
+		
+		return Play.application().path()+
+			   BASE_URL_PATH+
+			   THUMBNAIL+
+			   THUMBNAIL_PREFIX+
+			   file.getId()+
+			   file.getName();
+			   	
+	}		
+	//save thumbnail untuk kontent tipe gambar
+	public boolean saveThumbnail(int id){
 		FileUpload file=FileUpload.find.byId(id);
-    	return new File(Play.application().path()
+		
+		File imageFile = new File(this.getFilePath(file));
+		File output = new File(Play.application().path()+
+							   BASE_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName());
+		if(!output.exists()){
+			try {
+				Thumbnails.of(imageFile).width(60).height(60).toFile(output);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+				
+			}
+		}
+		
+		return true;
+	}	
+	public File getFile(FileUpload file){
+		
+		return new File(Play.application().path()
     					+file.getPath()
     					+file.getId()
     					+file.getName());
 	}
-	
-	public String getFilePath(int id){
-		FileUpload file=FileUpload.find.byId(id);		
+	public File getFile(int id){
+		FileUpload file=FileUpload.find.byId(id);
+		return new File(Play.application().path()
+    					+file.getPath()
+    					+file.getId()
+    					+file.getName());
+	}
+	public String getFilePath(FileUpload file){
+		
 		return Play.application().path()
 				+file.getPath()
+				+file.getId()
+				+file.getName();
+	}
+	public String getFilePath(int id){
+		FileUpload file=FileUpload.find.byId(id);
+		
+		return Play.application().path()
+				+file.getPath()
+				+file.getId()
+				+file.getName();
+	}	
+	public String getFileUrl(FileUpload file){
+		
+		return file.getUrl_path()
 				+file.getId()
 				+file.getName();
 	}
@@ -81,7 +166,7 @@ public class FileManager {
 		return file.getUrl_path()
 				+file.getId()
 				+file.getName();
-	}
+	}	
 	private String getSavePath(SaveToEnum enume){
 		switch (enume) {
 		case ADS_FILE		   : return BASE_PATH+ADS;
@@ -102,6 +187,8 @@ public class FileManager {
 			return BASE_URL_PATH+"MISC";
 		}
 	}
+
+	
 
 
 }

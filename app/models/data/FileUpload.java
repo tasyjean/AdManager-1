@@ -29,15 +29,17 @@ public class FileUpload extends Model {
     private String path;
     private String url_path;
     private String name;
-
 	public static Model.Finder<Integer,FileUpload> find = new Model.Finder(Integer.class, FileUpload.class);
 	static FileManager manager=new FileManager();
 
     
-	public String getUrlPath(){
-		return manager.getFileUrl(this.id);
+	public String getFileURL(){
+		return manager.getFileUrl(this.find.byId(this.id));
 	}
 	
+	public String getThumbnailPath(){
+		return manager.getThumbnailURL(this.find.byId(this.id));
+	}
 	public int getId() {
 		return id;
 	}

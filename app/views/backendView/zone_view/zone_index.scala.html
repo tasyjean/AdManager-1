@@ -3,7 +3,8 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
-
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @main("Zona"){
 	
@@ -46,9 +47,11 @@
 									<form action="@controllers.backend.routes.ZoneController.showSingleZone(zone.getId_zone)" style="display:inline;">
 										<button class="btn btn-small">Lebih Lengkap</button>
 									</form>
+							    @restrict(la(as("administrator"))){      
 									<form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline;">
 										<button class="btn btn-small btn-info">Ubah</button>
 									</form>
+								}
 								</td>
 							</tr>
 						</table>
@@ -63,7 +66,7 @@
 		                    </li>
 		                } else {
 		                    <li class="prev disabled">
-		                        <a>&larr; Previous</a>
+		                        <a>&larr; Sebelumnya</a>
 		                    </li>
 		                }
 		                <li class="current">
@@ -75,7 +78,7 @@
 		                    </li>
 		                } else {
 		                    <li class="next disabled">
-		                        <a>Next &rarr;</a>
+		                        <a>Seanjutnya &rarr;</a>
 		                    </li>
 		                }
 		            </ul>

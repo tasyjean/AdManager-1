@@ -150,10 +150,11 @@ create table user_data (
   join_date                 timestamp,
   current_balance           integer,
   is_active                 boolean,
+  user_description          varchar(255),
   profile_photo_id          integer,
+  validation_key            varchar(255),
   city                      varchar(255),
   country                   varchar(255),
-  validation_key            varchar(255),
   constraint pk_user_data primary key (id_user))
 ;
 
@@ -163,7 +164,7 @@ create table user_contact (
   contact_value             varchar(255),
   contact_type              varchar(17),
   contact_description       TEXT,
-  constraint ck_user_contact_contact_type check (contact_type in ('personal_website','social_profile','other','address','private_phone','email','company_website','alternative_phone','home_phone')),
+  constraint ck_user_contact_contact_type check (contact_type in ('bank_account','personal_website','social_profile','other','address','private_phone','email','company_website','alternative_phone','home_phone')),
   constraint pk_user_contact primary key (id_user_contact))
 ;
 
