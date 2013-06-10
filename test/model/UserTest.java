@@ -26,16 +26,7 @@ public class UserTest {
 
 			@Override
 			public void run() {
-				User user=new User("ganteng@amu.com","fffahasddfhanu","Affdasdnfffan","Hffsadfidayat P",RoleEnum.ADVERTISER);
-				ArrayList<UserContact> contacts=new ArrayList<UserContact>();
-				UserContact kontak1=new UserContact("08009dsdasafsffhf011", ContactTypeEnum.HOME_PHONE, "Tilpusdsf jisdfdfhdfhfdhdsfka ganteng");
-				UserContact kontak2=new UserContact("Jalan dshffsdAnusdf Nomor 2", ContactTypeEnum.ADDRESS, "Ruhdsfsdf asfbanget Ganteng");
-				contacts.add(kontak2);
-				contacts.add(kontak1);
-				user.setUserContact(contacts);	
-				user.save();	
 				
-				Campaign campaign=new Campaign();
 				
 				
 //				kontak1.save();

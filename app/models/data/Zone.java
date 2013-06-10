@@ -38,6 +38,21 @@ public class Zone extends Model {
 	
 	public static Model.Finder<Integer, Zone> find = new Model.Finder(Integer.class, Zone.class);
 	
+	public Zone(String zone_name, String description, ZoneChannel zone_channel,
+			BannerSize ads_size, ZoneTypeEnum zone_type,
+			DefaultViewEnum zone_default_view, String zone_default_code) {
+		super();
+		this.zone_name = zone_name;
+		this.description = description;
+		this.zone_channel = zone_channel;
+		this.ads_size = ads_size;
+		this.zone_type = zone_type;
+		this.zone_default_view = zone_default_view;
+		this.zone_default_code = zone_default_code;
+	}
+	public Zone() {
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public void save(){
 		isDeleted=false;

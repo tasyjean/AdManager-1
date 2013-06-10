@@ -2,15 +2,20 @@ package controllers;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import models.data.ZoneChannel;
 
 import play.*;
+import play.data.DynamicForm;
+import play.data.DynamicForm.Dynamic;
+import play.data.Form;
 import play.mvc.*;
 import play.mvc.Http.RequestBody;
 import play.mvc.Http.RequestHeader;
 import controllers.frontend.*;
 import views.html.*;
+import views.html.test.*;
 import views.html.frontendView.*;
 import controllers.frontend.FrontEndController;
 
@@ -65,4 +70,16 @@ public class Application extends CompressController {
     	
     }
     
+    public static Result testSession(){
+    	
+    	String date=new Date().toString().replace(" ", "");
+    	flash("date",date);
+    	session("session_date"+date,"132");
+    	return ok(test1.render());
+    }
+    public static Result testSession2(){
+    	DynamicForm form=Form.form().bindFromRequest();
+    	form.get("id");
+    	return ok();
+    }
 }

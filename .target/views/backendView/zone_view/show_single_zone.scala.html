@@ -3,7 +3,9 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
-
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 @main("Zona"){
 	
 		@dashboard_content("Zona dan Channel","Detail Zona","daftar zona"){
@@ -58,15 +60,16 @@
 			        </tr>  
 			      </table>
 			      </div>
-			     <div class="form-actions">
-			        <form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline">
-			    	       <button type="submit" class="btn btn-primary">Ubah Zona</button>
-			        </form>
-			        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
-			             class="btn btn-danger" type="submit"> Hapus Zona 
-			     	</a>   
-			    </div>
-			    
+			    @restrict(la(as("administrator"))){      
+				     <div class="form-actions">
+				        <form action="@controllers.backend.routes.ZoneController.editZone(zone.getId_zone)" style="display:inline">
+				    	       <button type="submit" class="btn btn-primary">Ubah Zona</button>
+				        </form>
+				        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
+				             class="btn btn-danger" type="submit"> Hapus Zona 
+				     	</a>   
+				    </div>
+				 }
 			@**********Modal Delete*********@
 			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
 				<div class="modal-header">

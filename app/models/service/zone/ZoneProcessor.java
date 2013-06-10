@@ -71,8 +71,13 @@ public class ZoneProcessor {
 		return (zone.isDeleted()) ? null: zone; //pastikan tidak sedang dihapus
 	}
 	public ZoneChannel getSingleChannel(int id){
-		ZoneChannel channel=ZoneChannel.find.byId(id);
-		return (channel.isDeleted()) ? null:channel;//sama, pastikan tidak sedang dihapus
+		try {
+			ZoneChannel channel=ZoneChannel.find.byId(id);
+			return (channel.isDeleted()) ? null:channel;//sama, pastikan tidak sedang dihapus
+			
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 	public boolean delete(int id){
 		return true;
@@ -120,7 +125,19 @@ public class ZoneProcessor {
 			return ErrorEnum.JUST_PLAIN_FAILED;
 		}
 	}
-	
+	//delete all
+	public ErrorEnum hardDelete(){
+		try {
+			List<Zone> zones=Zone.find.where().eq("is_deleted", true).findList();
+			for(Zone zone:zones){
+				zone.delete();
+			}
+			return ErrorEnum.SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ErrorEnum.JUST_PLAIN_FAILED;
+		}
+	}
 	public List<Zone> getListDeleted(){
 		return Zone.find.where().eq("is_deleted", true).findList();
 	}
@@ -134,6 +151,7 @@ public class ZoneProcessor {
 			return false;
 		}
 	}
+	//restore All
 	public boolean restore(){
 		try {
 			List<Zone> zone=Zone.find.where().eq("is_deleted", true).findList();
@@ -146,5 +164,6 @@ public class ZoneProcessor {
 			return false;
 		}
 	}
+	
 
 }

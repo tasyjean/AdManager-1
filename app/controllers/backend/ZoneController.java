@@ -5,6 +5,7 @@ package controllers.backend;
  * Kelas ZoneController digunakan untuk menangani request berkaitan dengan 
  * manajemen iklan dan campaign
  */
+import java.util.Date;
 import java.util.HashMap;
 
 import com.amazonaws.services.simpleemail.model.Message;
@@ -150,7 +151,7 @@ public class ZoneController extends CompressController {
     		return ok(create_channel_success.render(data, zoneChannel));
         }		
 	}
-
+	@Restrict(@Group("administrator"))
 	@With(DataFiller.class)		
 	public static Result editZone(int id_zone){
 		TemplateData data = (TemplateData) 
@@ -160,6 +161,7 @@ public class ZoneController extends CompressController {
 	}
 	
 	@With(DataFiller.class)		
+	@Restrict(@Group("administrator"))	
 	public static Result saveEditZone(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
@@ -181,13 +183,15 @@ public class ZoneController extends CompressController {
 		}
 	}
 	@With(DataFiller.class)		
+	@Restrict(@Group("administrator"))
 	public static Result editChannel(int id_channel){
 		TemplateData data = (TemplateData) 
-				Http.Context.current().args.get("templateData");	
+				Http.Context.current().args.get("templateData");
 		session("id_edit_channel", Integer.toString(id_channel));
 		return ok(edit_channel.render(data,channelForm, cp.getSingleChannel(id_channel)));
 	}
 	@With(DataFiller.class)		
+	@Restrict(@Group("administrator"))
 	public static Result saveEditChannel(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
@@ -212,6 +216,7 @@ public class ZoneController extends CompressController {
 	
 
 	@With(DataFiller.class)		
+	@Restrict(@Group("administrator"))
 	public static Result deleteChannel(int id_channel){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
@@ -228,6 +233,7 @@ public class ZoneController extends CompressController {
 	}
 	
 	@With(DataFiller.class)		
+	@Restrict(@Group("administrator"))
 	public static Result deleteZone(int id_zone){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	

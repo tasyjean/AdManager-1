@@ -1,4 +1,4 @@
-@(data: TemplateData)
+@(data: TemplateData, user_list: Page[User])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -6,14 +6,37 @@
 
 @main("Manajemen Pengguna"){
 	
-		@dashboard_content("Manajemen Pengguna","Daftar Pengguna","daftar pengguna"){
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/bootstrap_mod.css")" rel="stylesheet">
 		
-      @lorem()
-
-
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
+		@dashboard_content("Manajemen Pengguna","Daftar Pengguna","daftar pengguna"){
+		<div class="content-padding">
+			<h4>Daftar Semua Pengguna</h4>
+			<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_user" width="100%">
+				<thead>
+					<tr>
+						<th>Nama</th>
+						<th>Email</th>
+						<th>Posisi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="odd gradeX">
+						<td>Trident</td>
+						<td>Internet
+							 Explorer 4.0</td>
+						<td>Win 95+</td>
+					</tr>
+					<tr class="even gradeC">
+						<td>Trident</td>
+						<td>Internet
+							 Explorer 5.0</td>
+						<td>Win 95+</td>
+					</tr>
+				</tbody>
+			</table>
+					
         </div>
     }
 

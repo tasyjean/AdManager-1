@@ -17,7 +17,8 @@ public class ChannelForm {
 	public String channel_name="";
 	
 	public String channel_description="";
-
+	//digunakan untuk key session pada saat edit
+	public String session_key="";
 	public String validate(){
 		if(channel_name.equals("")){
 			return Messages.get("constraint.required");

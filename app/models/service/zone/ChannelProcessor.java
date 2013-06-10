@@ -56,7 +56,7 @@ public class ChannelProcessor {
 	public ErrorEnum softDelete(int id_channel){
 		try {
 			ZoneChannel zone_channel= ZoneChannel.find.byId(id_channel);
-			List<Zone> zone = Zone.find.where().eq("zone_channel", zone_channel).findList();
+			List<Zone> zone = Zone.find.where().eq("zone_channel", zone_channel).eq("is_deleted", false).findList();
 			if(zone.size()!=0){
 				return ErrorEnum.INTEGRITY_PROBLEM;
 			}else{

@@ -19,7 +19,7 @@ public class ZoneForm {
 	@Required
 	public String zone_default_view="";
 	public String zone_default_code="";
-
+	public String session_key="";
 	
 	public List<ValidationError> validate(){
 		

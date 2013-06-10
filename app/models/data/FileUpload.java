@@ -6,7 +6,9 @@ import play.db.ebean.Model;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import play.Logger;
+import play.Play;
 import models.custom_helper.S3Manager;
+import models.custom_helper.file_manager.FileManager;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,50 +24,50 @@ import java.util.UUID;
 public class FileUpload extends Model {
 
     @Id
-    public int id;
+    private int id;
 
     private String path;
+    private String url_path;
+    private String name;
 
-    public String name;
+	public static Model.Finder<Integer,FileUpload> find = new Model.Finder(Integer.class, FileUpload.class);
+	static FileManager manager=new FileManager();
 
-    @Transient
-    public File file;
+    
+	public String getUrlPath(){
+		return manager.getFileUrl(this.id);
+	}
+	
+	public int getId() {
+		return id;
+	}
 
-    public URL getUrl() throws MalformedURLException {
-        String url=play.Play.application().configuration().getString("file_save_url");
-    	return new URL(url + path + "/" + getActualFileName());
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    private String getActualFileName() {
-        return id + "/" + name;
-    }
+	public String getPath() {
+		return path;
+	}
 
-    @Override
-    public void save() {
-        if (S3Manager.amazonS3 == null) {
-            Logger.error("Could not save because amazonS3 was null");
-            throw new RuntimeException("Could not save");
-        }
-        else {
-            this.path = S3Manager.s3Bucket;
-            
-            super.save(); // assigns an id
+	public void setPath(String path) {
+		this.path = path;
+	}
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(path, getActualFileName(), file);
-            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
-            S3Manager.amazonS3.putObject(putObjectRequest); // upload file
-        }
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public void delete() {
-        if (S3Manager.amazonS3 == null) {
-            Logger.error("Could not delete because amazonS3 was null");
-            throw new RuntimeException("Could not delete");
-        }
-        else {
-            S3Manager.amazonS3.deleteObject(path, getActualFileName());
-            super.delete();
-        }
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUrl_path() {
+		return url_path;
+	}
+
+	public void setUrl_path(String url_path) {
+		this.url_path = url_path;
+	}
+
 }

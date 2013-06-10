@@ -10,7 +10,14 @@
 
 		  @lorem()
 
-
+		@form(action =controllers.backend.routes.UserController.saveUser(), 'enctype -> "multipart/form-data") {
+	    
+				    <input type="file" name="picture">
+				    
+				    <p>
+				        <input type="submit">
+				    </p>
+			}
     <div class="form-actions">
 	       <button type="submit" class="btn btn-primary">Save changes</button>
          <button type="reset" class="btn">Cancel</button>

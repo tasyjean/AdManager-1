@@ -57,7 +57,7 @@
 					<label class="control-label" for="zone_channel">Pilih Channel *</label>
 					<div class="controls">	
 						<select name="zone_channel">
-							@for(channel<-zone_data.getChannel){
+						@for(channel<-zone_data.getChannel){
 							<option  value="@channel.getId_zone_channel">
 								@channel.getChannel_name
 							</option>

@@ -42,6 +42,16 @@ public class ZoneChannel extends Model{
 		super.save();
 	}
 	
+	public ZoneChannel(String channel_name, String channel_description) {
+		super();
+		this.channel_name = channel_name;
+		this.channel_description = channel_description;
+	}
+
+	public ZoneChannel() {
+		// TODO Auto-generated constructor stub
+	}
+
 	//Getter Setter
 	public void setZone(Collection<Zone> zone){
         final List<Zone> clone = new ArrayList<Zone>(this.zone);

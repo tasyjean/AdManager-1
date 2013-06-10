@@ -109,6 +109,7 @@ create table deposito (
 create table file_upload (
   id                        integer not null,
   path                      varchar(255),
+  url_path                  varchar(255),
   name                      varchar(255),
   constraint pk_file_upload primary key (id))
 ;

@@ -6,11 +6,12 @@
 
 @main("Zona"){
 	
-		@dashboard_content("Zona dan Channel","Ubah Channel", "tambah channel"){
+		@dashboard_content("Zona dan Channel","Ubah Channel", "daftar channel"){
 		<div class="content-padding">
 			<h5>Mengubah Channel</h5>
 
 			@helper.form(action=backend.routes.ZoneController.saveEditChannel,'class-> "form-horizontal") {
+							
 				<div class="control-group @("error".when(channelForm.hasGlobalErrors))">
 
 					<label class="control-label" for="channel_name">Nama Channel*</label>
@@ -26,12 +27,12 @@
 					 <p class="help-block">Nama dari channel, isi dengan singkat dan padat</p>					
 					</div>
 				</div>
-				
+				 	
+				 	
 				<div class="control-group">
 					<label class="control-label" for="channel_description">Deskripsi</label>
 					<div class="controls">
-						<textarea  class="input-large" rows="5" name="channel_description" id="channel_description">
-							@current_data.getChannel_description
+						<textarea  class="input-large" rows="5" name="channel_description" id="channel_description">@current_data.getChannel_description
 						</textarea>
 	                    <p class="help-block">Deskripsi dari channel, isi dengan lengkap dan jelas</p>
 						

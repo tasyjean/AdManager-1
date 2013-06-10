@@ -14,6 +14,7 @@ public class Global extends GlobalSettings {
 		SetInitialData data=new SetInitialData();
 		data.setDataUser();
 		data.setBannerSize();
+		data.setZoneChannel();
 		
 	}
 }

@@ -13,8 +13,12 @@ import models.data.BannerSize;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
+import models.data.Zone;
+import models.data.ZoneChannel;
 import models.data.enumeration.ContactTypeEnum;
+import models.data.enumeration.DefaultViewEnum;
 import models.data.enumeration.RoleEnum;
+import models.data.enumeration.ZoneTypeEnum;
 
 /*Set Initial Data, 
  * 
@@ -104,11 +108,112 @@ public class SetInitialData {
 
 		
 	}
+	public void setZoneChannel(){
+		List<ZoneChannel> channels = ZoneChannel.find.all();
+		List<Zone> zones=Zone.find.all();
+		if(channels.size()==0){
+		//		deleteZoneChannel();
+				
+				ZoneChannel channel1=new ZoneChannel("General", "Diperuntukan untuk zona yang memiliki tema general");
+				ZoneChannel channel2=new ZoneChannel("Gadget", "Diperuntukan untuk zona yang memiliki tema gadget");
+				ZoneChannel channel3=new ZoneChannel("Software", "Diperuntukan untuk zona yang memiliki tema software");
+				ZoneChannel channel4=new ZoneChannel("Internet", "Diperuntukan untuk zona yang memiliki tema internet");
+				
+				channel1.save();
+				channel2.save();
+				channel3.save();
+				
+				List<BannerSize> banners=BannerSize.find.all();
+				Zone zone1=new Zone("Header Wide", 
+									"Banner Untuk ditampilkan di area header", 
+									channel1, 
+									banners.get(3), 
+									ZoneTypeEnum.BANNER, 
+									DefaultViewEnum.EMPTY, 
+									"Kosong");
+				zone1.save();
+				Zone zone2=new Zone("Sidebar Kecil", 
+						"Banner kecil Untuk ditampilkan di sidebar kanan", 
+						channel1, 
+						banners.get(1), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.DEFAULT_CODE, 
+						"Kosong");
+				zone2.save();
+				Zone zone3=new Zone("Sidebar Medium", 
+						"Banner Medium Rectangle Untuk ditampilkan di sidebar kanan", 
+						channel1, 
+						banners.get(0), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.DEFAULT_CODE, 
+						"<h1>ups tidak ada iklan </h1>");
+				zone3.save();
+				
+				Zone zone4=new Zone("Sidebar medium gadget", 
+						"Banner Untuk ditampilkan di sidebar kanan dengan channel gadget", 
+						channel2, 
+						banners.get(0), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.DEFAULT_ADS, 
+						"Kosong");
+				zone4.save();
+				
+				Zone zone5=new Zone("Banner Konten", 
+						"Banner kecil Untuk ditampilkan di area konten", 
+						channel2, 
+						banners.get(1), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.DEFAULT_CODE, 
+						"<h1>Kosong</h1>");
+				zone5.save();
+				Zone zone6=new Zone("Leader Board teks", 
+						"Banner Untuk ukuran besar berisi teksr", 
+						channel1, 
+						banners.get(2), 
+						ZoneTypeEnum.TEXT, 
+						DefaultViewEnum.EMPTY, 
+						"Kosong");
+				zone6.save();
+				Zone zone7=new Zone("Banner Medium Software", 
+						"Banner untuk ukuran medium untuk tema software", 
+						channel3, 
+						banners.get(0), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.DEFAULT_ADS, 
+						"Kosong");
+				zone7.save();
+				Zone zone8=new Zone("Banner kecil untuk tema internet", 
+						"Banner kecil untuk tema internet", 
+						channel4, 
+						banners.get(1), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.EMPTY, 
+						"Kosong");
+				zone8.save();
+				
+		}
+		
+
+	}
 	public void deleteUserData(){
 		
 		List<User> data=User.find.all();
 		Ebean.delete(data);
 		System.out.println("Delete data");
 	}
+	public void deleteZoneChannel(){
+		List<ZoneChannel> channels = ZoneChannel.find.all();
+		List<Zone> zones=Zone.find.all();
+
+		for(Zone zone:zones){
+			zone.delete();
+		}
+		
+		for(ZoneChannel channel:channels){
+			channel.delete();
+		}
+	}
+	
+	
 
 }

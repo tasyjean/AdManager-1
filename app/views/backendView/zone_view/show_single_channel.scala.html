@@ -3,10 +3,13 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @main("Zona"){
 	
-		@dashboard_content("Zona dan Channel","Detail Zona","daftar zona"){
+		@dashboard_content("Zona dan Channel","Detail Channel","daftar channel"){
   			
 		    <div class="content-padding">
 		      <a class="btn" href="@controllers.backend.routes.ZoneController.showChannel">&larr; Kembali Ke Daftar Channel</a>
@@ -45,15 +48,17 @@
 			        }
 			      </table>
 			      </div>
-			     <div class="form-actions">
-			        <form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline">
-			    	       <button type="submit" class="btn btn-primary">Ubah Channel</button>
-			        </form>
-			        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
-			             class="btn btn-danger" type="submit"> Hapus Channel 
-			     	</a>     
-			    </div>
-			    
+				  @restrict(List(as("administrator"))){ 
+			      
+				     <div class="form-actions">
+				        <form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline">
+				    	       <button type="submit" class="btn btn-primary">Ubah Channel</button>
+				        </form>
+				        <a href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
+				             class="btn btn-danger" type="submit"> Hapus Channel 
+				     	</a>     
+				    </div>
+			    }
 			@**********Modal Delete*********@
 			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
 				<div class="modal-header">

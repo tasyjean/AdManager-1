@@ -3,6 +3,9 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @main("Zona"){
 	
@@ -11,8 +14,8 @@
 			<div class="content-padding">
 			<p>Channel adalah pengelompokan zona di area tertentu</p>
 			@if(channel_list.getTotalRowCount== 0 ){
-				<h5>Tidak ada Channel</h5> 
-				<h4>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createChannel()">"Tambah Channel"</a> untuk membuat channel baru</h4>
+				<h4 style="color:red">Tidak ada Channel</h4> 
+				<h5>Masuk ke menu <a href="@controllers.backend.routes.ZoneController.createChannel()">"Tambah Channel"</a> untuk membuat channel baru</h5>
 			}else{
 				<strong>Menampilkan Channel @channel_list.getDisplayXtoYofZ(" sampai "," dari ")</strong><br><br>
 				@for(channel <- channel_list.getList) {
@@ -34,9 +37,11 @@
 										  style="display:inline;">
 										<button class="btn btn-small">Lebih Lengkap</button>
 									</form>									
-									<form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline;">
-										<button class="btn btn-small btn-info">Ubah</button>
-									</form>
+   									@restrict(List(as("administrator"))){ 									
+										<form action="@controllers.backend.routes.ZoneController.editChannel(channel.getId_zone_channel)" style="display:inline;">
+											<button class="btn btn-small btn-info">Ubah</button>
+										</form>
+									}
 								</td>
 							</tr>
 						</table>

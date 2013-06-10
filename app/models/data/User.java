@@ -46,8 +46,6 @@ public class User extends Model implements Subject {
 	private boolean isActive;
 	@ManyToOne
 	private FileUpload profile_photo;
-	private String city;
-	private String country;
 	private String validation_key;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<UserContact> userContact; 
