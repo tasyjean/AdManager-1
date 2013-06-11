@@ -1,5 +1,7 @@
 package models.custom_helper;
 
+import play.i18n.Messages;
+
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
 
@@ -8,8 +10,7 @@ public class SendMail  {
 	private String subject;
 	private String recipient;
 	private String content;
-	private String sender="komputok@gmail.com";
-	
+	private String sender=Messages.get("email.sender");
 	private  MailerAPI mail = play.Play.application()
 			.plugin(MailerPlugin.class).email();
 	
@@ -49,6 +50,15 @@ public class SendMail  {
 	}
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	public void setBbc(String bbc) {
+		mail.addBcc(bbc);
+
+	}
+	public void setCc(String cc) {
+		mail.addCc(cc);
+		
 	}
 
 }

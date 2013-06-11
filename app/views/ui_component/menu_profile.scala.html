@@ -4,7 +4,12 @@
         <div class="auth auth-view pull-right">
           <div class="btn-menu-auth dropdown">
              <a class="btn-link btn dropdown-toggle">
-              <img class="avatar" src="@routes.Assets.at("images/littke.png")">        
+			    @if(data.getThumbnailURL!=""){
+			 		 <img class="avatar" src="@data.getThumbnailURL" width="40px" height="40px"></img>			     		 
+			    }else{
+			     	@default_profile_pic("avatar")
+			    }
+
               <div class="blok-nama">
                   <span class="name">@data.getName</span><br/>
                   <span class="jabatan">@data.getRole</span>

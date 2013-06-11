@@ -53,3 +53,8 @@ zone.zoneType.text=Tipe Teks
 zone.default_view.empty=Kosong
 zone.default_view.default_code=Kode Sendiri
 zone.default_view.default_ads=Iklan Umum
+
+#EMAIL
+email.registered.content=Email anda baru saja didaftarkan pada manajemen iklan teknimo oleh staff kami sebagai {2}.<br> Anda dapat mulai login pada sistem melalui alamat {0}<br><br>Data login adalah sebagai berikut : <br> Email Login : Email anda <br> Password : {1} <br><br> Salam Sejahtera <br> Manajemen Teknimo Ads Manager
+email.registered.subject=Teknimo Ad Manager : Anda Telah Di Daftarkan
+email.sender=komputok@gmail.com

@@ -25,7 +25,7 @@ public class TemplateData {
 	private String role=""; 
 	private String email="";
 	private String notifCount="";
-	
+	private String thumbnailURL="";
 	//pilihan tampilan (untuk dashboard)
 	private String viewChoice="";
 
@@ -42,6 +42,13 @@ public class TemplateData {
 			this.lastName=user.getLast_name();
 			this.email=user.getEmail();
 			this.role=user.getRole().getName();
+			
+			try {
+				this.thumbnailURL=user.getProfile_photo().getThumbnailURL();
+			} catch (Exception e) {
+				this.thumbnailURL="";
+			}
+			
 			//simulasi
 			this.notifCount="3";
 		}
@@ -69,6 +76,12 @@ public class TemplateData {
 	}
 	public void setViewChoice(String viewChoice) {
 		this.viewChoice = viewChoice;
+	}
+	public String getThumbnailURL() {
+		return thumbnailURL;
+	}
+	public void setThumbnailURL(String thumbnailURL) {
+		this.thumbnailURL = thumbnailURL;
 	}
 	
 	

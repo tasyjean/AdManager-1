@@ -34,14 +34,19 @@ GET   /dashboard/profile				controllers.backend.ProfileController.index()
 GET   /dashboard/report					controllers.backend.ReportController.index()
 
 #user management
-GET   /dashboard/user					controllers.backend.UserController.showUser()
-GET	  /dashboard/user/page/:page		controllers.backend.UserController.showUserPage(page:Integer)
-GET   /dashboard/user/new				controllers.backend.UserController.createUser()
-POST  /dashboard/user/new				controllers.backend.UserController.saveUser()
-GET   /dashboard/user/:user_id			controllers.backend.UserController.showSingleUser(user_id:Integer)
+GET   /dashboard/user						controllers.backend.UserController.showUser()
+GET	  /dashboard/user/page/:page			controllers.backend.UserController.showUserPage(page:Integer)
+GET   /dashboard/user/new/:step/:id			controllers.backend.UserController.createUserStep(step:Integer,id:Integer)
+GET   /dashboard/user/new/					controllers.backend.UserController.createUser()
+POST  /dashboard/user/new					controllers.backend.UserController.saveUser()
+POST  /dashboard/user/contact/new/:id_user	controllers.backend.UserController.saveContact(id_user:Integer)
+POST  /dashboard/user/pic/new/:id_user		controllers.backend.UserController.saveUserPicture(id_user:Integer)
+
+
+GET   /dashboard/user/show/:user_id		controllers.backend.UserController.showSingleUser(user_id:Integer)
 GET   /dashboard/user/:user_id/edit		controllers.backend.UserController.editUser(user_id:Integer)
 POST  /dashboard/user/edit				controllers.backend.UserController.saveEditUser()
-
+GET	  /dashboard/user/:user_id/delete 	controllers.backend.UserController.deleteUser(user_id:Integer)
 
 #zone
 GET   /dashboard/zone					controllers.backend.ZoneController.showZone()

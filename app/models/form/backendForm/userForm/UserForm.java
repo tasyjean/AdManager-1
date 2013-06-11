@@ -1,4 +1,4 @@
-package models.form.backendForm.user;
+package models.form.backendForm.userForm;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,25 +17,26 @@ import play.i18n.Messages;
 public class UserForm {
 	
 	//identifikasi field
-	@Email(message="Format email salah")
+	public String id;
+	@Email(message="Format email salah")	
 	public String email;
 	public String password;
 	public String password_repeat;
 	public String front_name;
 	public String last_name;
 	public String company;
-	public int role;
-	public boolean isActive=true;
-	public int profile_photo;
+	public String role;
 	public String city;
-
+	public String country;
+	public boolean isActive=true;
 	public List<ValidationError> validate(){
+		
 		//Validasi front name last name email
 		boolean isError=false;
 		List<ValidationError> error= new ArrayList<ValidationError>();
 		if(front_name.equals("")){
 			isError=true;
-			error.add(new ValidationError("frontName", Messages.get("validation.required")));
+			error.add(new ValidationError("front_name", Messages.get("validation.required")));
 		}
 		//validasi email
 		if(email.equals("")){

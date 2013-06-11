@@ -1,0 +1,106 @@
+@(data: TemplateData,  id_user:Integer)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getPage() = {
+	@if(flash.contains("page")) {
+		@flash.get("page")
+	}else{
+		kosong
+	}        
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		@flash.get("success")
+	}else{
+		kosong
+	}
+}
+
+@main("Manajemen Pengguna"){
+
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+	
+		@dashboard_content("Manajemen Pengguna","Tambah Pengguna","tambah pengguna"){
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="#tabs-1">Informasi Dasar</a></li>
+				<li><a href="#tabs-2">Informasi Kontak</a></li>
+				<li><a href="#tabs-3">Foto Identitas</a></li>
+			</ul>
+			<div id="tabs-1">
+	
+			</div>@* End tab 1 *@
+			
+			<div id="tabs-2">
+						
+			</div> @* End tab 2 *@
+			
+			<div id="tabs-3">
+			
+			@if(flash.contains("error")) {
+    			<div class="content-padding">			     
+			      <div class="alert alert-error">
+			      	 <p style="font-weight: bold;">Kesalahan Saat Upload</p>
+					 <p>@flash.get("error");</p>
+			      </div>
+			     </div>
+			}  				
+				@form(action =controllers.backend.routes.UserController.saveUserPicture(id_user), 'enctype -> "multipart/form-data") {
+		    			<div class="content-padding">
+							<h4>Langkah 3</h4>    				
+		    				<h5>Tambahkan foto identitas disini</h5>
+		    				<p style="font-style: italic;font-size:11px;">
+		    					Anjuran : Gunakan format gambar standar dengan rasio 1:1
+		    				</p>
+		    				<input type="hidden" value="@(id_user)">
+						    <input type="file" id="picture" name="picture">					
+				 		</div>  @* End Content Padding *@  
+			     <div class="form-actions">
+				      <button type="submit" class="btn btn-primary">Upload</button>
+				      <button type="reset" class="btn">Reset</button>
+				 </div>		
+				 } @* End Form *@		 
+			</div>@* End tab 3 *@
+		</div>	
+			
+		
+    
+    <script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs( "option", "disabled", [ 0, 1 ] );
+	    	$("#input_tab").tabs({ active: 2 });
+
+	    	$('#picture').bind('change', function() {
+
+	    		  //this.files[0].size gets the size of your file.
+	    		  
+	    		  alert(this.files[0].size);
+
+	    	});
+		});
+	</script>
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

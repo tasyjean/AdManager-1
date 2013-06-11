@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
+import models.custom_helper.ToLink;
 import models.data.enumeration.ContactTypeEnum;
 
 @Entity
@@ -25,8 +26,7 @@ public class UserContact extends Model {
 	private String contact_description;
 	
 	public static Model.Finder<Integer,UserContact> find = new Model.Finder(Integer.class, UserContact.class);
-
-	
+		
 	public UserContact(String contact_value, ContactTypeEnum contact_type,
 			String contact_description) {
 		super();
@@ -63,5 +63,8 @@ public class UserContact extends Model {
 	}
 	public void setContact_description(String contact_description) {
 		this.contact_description = contact_description;
+	}
+	public String getContact_value_link(){
+		return ToLink.convert(contact_value);
 	}
 }

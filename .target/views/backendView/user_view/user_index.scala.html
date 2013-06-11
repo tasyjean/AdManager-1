@@ -16,7 +16,7 @@
 		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
 		
 		@dashboard_content("Manajemen Pengguna","Daftar Pengguna","daftar pengguna"){
-			<div class="content-padding">
+			<div class="content-padding" style="min-height: @(113+user_list.getList.size*32+76)px">
 			<h4>Daftar Semua Pengguna</h4>
 				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_user">
 					<thead>
@@ -39,10 +39,12 @@
 							<td>
 								<ul  id="icons" class="ui-widget ui-helper-clearfix">
 									<li class="ui-state-default ui-corner-all" title="Edit  @user.getFront_name">
-										<span class="ui-icon ui-icon-pencil"></span>
+										<a class="ui-icon ui-icon-pencil" 
+										   href="@controllers.backend.routes.UserController.editUser(user.getId_user)"></a>
 									</li>
 									<li class="ui-state-default ui-corner-all" title="Tampilkan Data Lengkap @user.getFront_name">
-										<span class="ui-icon ui-icon-extlink"></span>
+										<a class="ui-icon ui-icon-extlink"
+										   href="@controllers.backend.routes.UserController.showSingleUser(user.getId_user)"></a>
 									</li>
 								</ul>
 							</td>

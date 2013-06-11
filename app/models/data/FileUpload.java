@@ -37,9 +37,17 @@ public class FileUpload extends Model {
 		return manager.getFileUrl(this.find.byId(this.id));
 	}
 	
-	public String getThumbnailPath(){
+	public String getThumbnailURL(){
 		return manager.getThumbnailURL(this.find.byId(this.id));
 	}
+	@Override
+	public void delete() {
+		File file=manager.getFile(this);
+		file.delete();
+		File thumbnail=new File(manager.getThumbnailFullPath(this));
+		thumbnail.delete();
+		super.delete();
+	};
 	public int getId() {
 		return id;
 	}

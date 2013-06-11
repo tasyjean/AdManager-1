@@ -420,10 +420,12 @@ textarea[readonly="readonly"]
 .single-view td:first-child {
 	vertical-align: top;	
 	width: 150px;
+	table-layout: fixed;
 }
 .single-view td:nth-child(2) {
 	vertical-align: top;	
 	width: 15px;
+	max-width: 15px;
 }
 .code{
 font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
@@ -459,7 +461,7 @@ font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
 	#icons li {
 		margin: 2px;
 		position: relative;
-		padding: 4px 0;
+		padding: 0px 0;
 		cursor: pointer;
 		float: left;
 		list-style: none;
@@ -471,3 +473,7 @@ font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
 	.fakewindowcontain .ui-widget-overlay {
 		position: absolute;
 	}
+
+.ui-icon {
+	margin: 3px;
+}

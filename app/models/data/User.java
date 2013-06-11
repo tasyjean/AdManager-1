@@ -1,6 +1,7 @@
 package models.data;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.persistence.*;
@@ -176,9 +177,19 @@ public class User extends Model implements Subject {
 	public Date getJoin_date() {
 		return join_date;
 	}
+	public String getJoin_date_formatted(String format){
+	    SimpleDateFormat formatter = new SimpleDateFormat(format);
+	    return formatter.format(join_date);
+	}
+	public String getJoin_date_formatted(){
+	    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
+	    return formatter.format(join_date);
+	}
+	
 	public void setJoin_date(Date join_date) {
 		this.join_date = join_date;
 	}
+	
 	public int getCurrent_balance() {
 		return current_balance;
 	}
@@ -190,7 +201,7 @@ public class User extends Model implements Subject {
 	public boolean isActive() {
 		return isActive;
 	}
-
+	
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}

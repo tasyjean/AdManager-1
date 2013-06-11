@@ -1,0 +1,121 @@
+@(data: TemplateData, id_user:Integer)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getPage() = {
+	@if(flash.contains("page")) {
+		@flash.get("page")
+	}else{
+		kosong
+	}        
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		@flash.get("success")
+	}else{
+		kosong
+	}
+}
+
+@main("Manajemen Pengguna"){
+
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+	
+		@dashboard_content("Manajemen Pengguna","Tambah Pengguna","tambah pengguna"){
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="#tabs-1">Informasi Dasar</a></li>
+				<li><a href="#tabs-2">Informasi Kontak</a></li>
+				<li><a href="#tabs-3">Foto Identitas</a></li>
+			</ul>
+			<div id="tabs-1">
+
+			</div>@* End tab 1 *@
+			
+			<div id="tabs-2">
+				<div class="content-padding">
+				@if(flash.contains("success")) {
+				      <div class="alert alert-success">
+				      	 <p>Sukses!</p>
+				      	 <p>Informasi dasar telah disimpan</p>
+				      </div>
+				}
+				
+				@if(flash.contains("id")) {
+				      <div class="alert alert-success">
+				      	@flash.get("id")
+				      </div>
+				}  					
+					<h4>Informasi Pengguna Tambahan</h4>
+					<h5 style="font-style: italic;">Isi informasi Pengguna dengan lebih lengkap</h5>
+				</div>
+					@* form untuk informasi dasar *@
+					@form(action =controllers.backend.routes.UserController.saveContact(id_user), 'class-> "form-horizontal") {
+						<div class="content-padding">
+							
+						</div>
+					
+			     <div class="form-actions">
+				      <button type="submit" class="btn btn-primary">Simpan Dan Lanjut</button>
+				      <button type="reset" class="btn">Reset</button>
+				      <a href="#confirm_modal" role="button" data-toggle="modal">
+				      		<button type="button" class="btn btn-info">Lewati</button>
+				      </a>
+				 </div>		
+				} @*end form *@	
+			</div> @* End tab 2 *@
+			
+			<div id="tabs-3">
+
+			</div>@* End tab 3 *@
+		</div>	
+				@**********Modal Delete*********@
+			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Lewati Pengisian Form</h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Ingin Melewati Pengisian Form?</h4>
+					<p class="alert alert-warning" style="color:#000">
+						Data ini dapat di isi lagi melalui menu ubah pengguna, jika suatu saat ingin menambah data
+					</p>
+  				</div>
+  				<div class="modal-footer">
+				      <a href="@controllers.backend.routes.UserController.createUserStep(3, id_user)">
+				      		<button type="button" class="btn btn-info">Lewati</button>
+				      </a>					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+			</div>				
+    <script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs( "option", "disabled", [ 0, 2 ] );
+	    	$("#input_tab").tabs({ active: 1 });
+
+		});
+	</script>
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

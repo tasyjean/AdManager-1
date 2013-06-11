@@ -31,11 +31,11 @@ public class FileManager {
 	 * Nama yang disimpan didatabase adalah nama asli
 	 * jadi ketika akses file asli melalui database, maka ditambahkan id didepannya...
 	 * 
-	 * Untuk thumbnail, ditambahkan thumb didepan
+	 * Untuk thumbnail, ditambahkan thumb didepan dan ditaruh di folder
 	 * 
 	 * XENOVON
 	 */
-	public int saveNew(FilePart part, SaveToEnum saveTo){
+	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
 							  .replace(" ", "");		
@@ -55,9 +55,9 @@ public class FileManager {
 		file.renameTo(new File(fullPath+save_name));
 		
 		if(new File(fullPath+save_name).exists()){
-			return upload.getId();			
+			return upload;		
 		}else{
-			return 0; //kode untuk salah upload
+			return null; //kode untuk salah upload
 		}
 		
 	}
@@ -88,7 +88,7 @@ public class FileManager {
 	}	
 	public String getThumbnailFullPath(FileUpload file){
 		return Play.application().path()+
-			   BASE_URL_PATH+
+			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
 			   file.getId()+
@@ -99,7 +99,7 @@ public class FileManager {
 		FileUpload file=FileUpload.find.byId(id);		
 		
 		return Play.application().path()+
-			   BASE_URL_PATH+
+			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
 			   file.getId()+
