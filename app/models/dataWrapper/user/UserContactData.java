@@ -7,7 +7,7 @@ import models.data.enumeration.ContactTypeEnum;
 
 public class UserContactData {
 
-	List<String[]> data;
+	private List<String[]> data;
 	
 	public UserContactData() {
 		setData();
@@ -19,4 +19,11 @@ public class UserContactData {
 			data.add(data_string);
 		}
 	}
+	public List<String[]> getData() {
+		return data;
+	}
+	public void setData(List<String[]> data) {
+		this.data = data;
+	}
+	
 }

@@ -34,6 +34,9 @@ public class UserContact extends Model {
 		this.contact_type = contact_type;
 		this.contact_description = contact_description;
 	}
+	public UserContact() {
+		// TODO Auto-generated constructor stub
+	}
 	public int getId_user_contact() {
 		return (int) id_user_contact;
 	}

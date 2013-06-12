@@ -1,11 +1,11 @@
-@(data: TemplateData, id_user:Integer)
+@(data: TemplateData, id_user:Integer, form:Form[ContactForm]), contacts:List[UserContact])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
 
 @getPage() = {
-	@if(flash.contains("page")) {
+	@if(flash.contains("error")) {
 		@flash.get("page")
 	}else{
 		kosong
@@ -13,9 +13,10 @@
 } 	  	    
 @getSuccess()= {
  	@if(flash.contains("success")) {
-		@flash.get("success")
-	}else{
-		kosong
+		<div class="alert alert-success">
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
 	}
 }
 
@@ -32,7 +33,7 @@
 		<div id="input_tab">
 			<ul>
 				<li><a href="#tabs-1">Informasi Dasar</a></li>
-				<li><a href="#tabs-2">Informasi Kontak</a></li>
+				<li><a href="#tabs-2">Informasi Tambahan</a></li>
 				<li><a href="#tabs-3">Foto Identitas</a></li>
 			</ul>
 			<div id="tabs-1">
@@ -40,36 +41,94 @@
 			</div>@* End tab 1 *@
 			
 			<div id="tabs-2">
-				<div class="content-padding">
-				@if(flash.contains("success")) {
-				      <div class="alert alert-success">
-				      	 <p>Sukses!</p>
-				      	 <p>Informasi dasar telah disimpan</p>
-				      </div>
-				}
-				
-				@if(flash.contains("id")) {
-				      <div class="alert alert-success">
-				      	@flash.get("id")
-				      </div>
-				}  					
-					<h4>Informasi Pengguna Tambahan</h4>
-					<h5 style="font-style: italic;">Isi informasi Pengguna dengan lebih lengkap</h5>
-				</div>
-					@* form untuk informasi dasar *@
-					@form(action =controllers.backend.routes.UserController.saveContact(id_user), 'class-> "form-horizontal") {
-						<div class="content-padding">
+				<div class="row-fluid">
+				  <div class="span4" style="float:right;">
+				      @if(!(contacts==null)){
+				      	<h4>Informasi Tersimpan</h4>
+				      	<h5 style="font-style: italic;">Daftar Informasi user yang sudah disimpan</h5>
+				        @for(contact<-contacts){
+					       <table>
+						        <tr>
+						           <td>@contact.getContact_type.toString</td><td>:</td>
+						        	<td>@Html(contact.getContact_value_link)</td>		
+						        </tr>			          	
+						        <tr>
+						        	<td></td><td></td>
+						        	<td><span style="font-size:13px;font-style: italic;">@contact.getContact_description</span></td>
+						        </tr>	
+					        </table>	        
+				        }				      	
+				      	
+				      }
+						
+				  </div>
+				  
+				  <div class="span4" style="float:left">
+						  <div class="content-padding">
+								@getSuccess()
+								
+								@if(form.hasErrors){
+									<div class="alert alert-error">
+									<p>@form.error.message</p>
+									</div>
+					      	  	}  					
+								<h4>Informasi Pengguna Tambahan</h4>
+								<h5 style="font-style: italic;">Isi informasi Pengguna dengan lebih lengkap</h5>
+								
+							</div>
+							@* form untuk informasi dasar *@
+							@form(action =controllers.backend.routes.UserController.saveContact(id_user), 'class-> "form-horizontal") {
+								
+								<div class="content-padding">
+									<div class="single-contact">
+										<div class="control-group">
+											<label class="control-label" for="channel_name">Jenis Informasi</label>
+											<div class="controls">
+												<select>
+													@for(data<-contactData.getData){
+														<option value="@data(0)">@data(1)</option>
+													}
+												</select>
+											 	<p class="help-block">Jenis dari informasi</p>													 
+											</div>
+										</div>
+										
+										<div class="control-group">
+											<label class="control-label" for="channel_name">Isi Informasi : </label>
+											<div class="controls">
+												<textarea rows="3" placeholder="isi informasi"  name="value" id="value"></textarea>	                    								 
+											 	<p class="help-block">Isi informasi, tergantung jenisnya</p>													 
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label" for="channel_name">Deskripsi Informasi : </label>
+											<div class="controls">
+												<textarea rows="4" placeholder="Deskripsi informasi" class="input" value="" name="description" id="description"></textarea>	                    								 
+											 	<p class="help-block">Deskripsi dari informasi</p>													 
+											</div>
+										</div>																	
+									</div>
+															
+								</div>
 							
-						</div>
-					
-			     <div class="form-actions">
-				      <button type="submit" class="btn btn-primary">Simpan Dan Lanjut</button>
-				      <button type="reset" class="btn">Reset</button>
-				      <a href="#confirm_modal" role="button" data-toggle="modal">
-				      		<button type="button" class="btn btn-info">Lewati</button>
-				      </a>
-				 </div>		
-				} @*end form *@	
+					    	  <div class="form-actions">
+						      <button type="submit" class="btn btn-primary">Simpan Data</button>
+						      <button type="reset" class="btn">Reset</button>
+						      @if(contacts==null){
+							      <a title="Lewati pengisian form"  href="#confirm_modal" role="button" data-toggle="modal">
+							      		<button type="button" class="btn btn-info">Lewati</button>
+							      </a>
+							   }else{
+							      <a href="@controllers.backend.routes.UserController.createUserStep(3, id_user)" 
+							      	 role="button" data-toggle="modal" title="Selesai dan lanjut ke langkah selanjutnya" >
+							      		<button type="button" class="btn btn-info">Selesai</button>
+							      </a>							   
+							   }
+						 </div>		
+						} @*end form *@	
+				  </div> @* end span 4 *@
+				</div>			
+				
 			</div> @* End tab 2 *@
 			
 			<div id="tabs-3">

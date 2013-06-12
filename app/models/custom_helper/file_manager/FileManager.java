@@ -38,7 +38,11 @@ public class FileManager {
 	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
-							  .replace(" ", "");		
+							  .replace(" ", "")
+							  .replace("[", "")
+							  .replace("]", "")
+							  .replace("{", "")
+							  .replace("}", "");		
 		
 		FileUpload upload=new FileUpload();
 		upload.setName(fileName);

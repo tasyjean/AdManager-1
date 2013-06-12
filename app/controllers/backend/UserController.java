@@ -7,6 +7,7 @@ package controllers.backend;
  */
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.jws.soap.SOAPBinding.Use;
 
@@ -21,8 +22,10 @@ import models.custom_helper.SendMail;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.User;
+import models.data.UserContact;
 import models.data.Zone;
 import models.dataWrapper.TemplateData;
+import models.dataWrapper.user.UserContactData;
 import models.form.backendForm.userForm.ContactForm;
 import models.form.backendForm.userForm.UserForm;
 import models.form.backendForm.zoneForm.ZoneForm;
@@ -94,7 +97,14 @@ public class UserController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
 		if(step==2){
-			return ok(create_user2.render(data,id));
+			List<UserContact> user_contact=null;
+			try {
+				user_contact = User.find.byId(1).getUserContact();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			UserContactData contact_data=new UserContactData();
+			return ok(create_user2.render(data,id, contactForm, contact_data, user_contact));
 		}else {
 			return ok(create_user3.render(data, id));
 		}
@@ -137,7 +147,15 @@ public class UserController extends CompressController {
 				User user=creator.saveUser(filledForm);
 				
 				flash("success","true");
-				return ok(create_user2.render(data,user.getId_user()));
+				UserContactData contact_data=new UserContactData();
+				List<UserContact> user_contact=null;
+				try {
+					user_contact = User.find.byId(user.getId_user()).getUserContact();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return ok(create_user2.render(data,user.getId_user(),contactForm, contact_data, user_contact));
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 				filledForm.globalErrors().add(new ValidationError("error_update", 
@@ -152,9 +170,33 @@ public class UserController extends CompressController {
 	public static Result saveContact(int id){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
-		flash("success","true");
-		return ok(create_user3.render(data, id));
+		Form<ContactForm> filledForm=Form.form(ContactForm.class).bindFromRequest();
+		List<UserContact> user_contact=null;
+		UserContactData contact_data=new UserContactData();
+		
+		try {
+			user_contact = User.find.byId(id).getUserContact();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(filledForm.hasErrors()){
+		
+			return ok(create_user2.render(data, id, filledForm, contact_data, user_contact));			
+		}else{
+			boolean sukses=creator.saveContact(filledForm, id);
+			if(sukses){
+				flash("success","Data telah disimpan, lanjutkan pengisian data");
+				return ok(create_user2.render(data, id, contactForm, contact_data,  user_contact));			
+			}else{
+				flash("error","Kesalahan dalam menyimpan data");
+				return ok(create_user2.render(data, id, filledForm, contact_data,  user_contact));							
+			}
+		}
+
+
 	}
+	
 	
 	public static Result editUser(int user_id){
 		return ok();

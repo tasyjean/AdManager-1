@@ -86,6 +86,12 @@ public class User extends Model implements Subject {
 	}
 	//Getter Setter
 	//Set contact
+	public void addUserContact(UserContact contact){
+		
+	}
+	public void deleteUserContact(UserContact contact){
+		
+	}
 	public void setUserContact(Collection<UserContact> userContact){
         final List<UserContact> clone = new ArrayList<UserContact>(this.userContact);
         //delete yang udah ada
@@ -98,7 +104,6 @@ public class User extends Model implements Subject {
         	x.setId_user(this);
         }
 	}
-	
 	//Method untuk subject Deadbolt
 	@Override
 	public String getIdentifier() {

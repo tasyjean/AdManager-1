@@ -12,7 +12,9 @@ import models.data.FileUpload;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
+import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.RoleEnum;
+import models.form.backendForm.userForm.ContactForm;
 import models.form.backendForm.userForm.UserForm;
 
 public class UserCreator {
@@ -70,9 +72,20 @@ public class UserCreator {
 		}	
 	}
 	
-	public boolean saveContact(Form user){
-		
-		return false;
+	public boolean saveContact(Form<ContactForm> contact, int id_user){
+		try {
+			UserContact new_contact=new UserContact();
+			new_contact.setContact_value(contact.get().value);
+			new_contact.setContact_type(ContactTypeEnum.valueOf(contact.get().contact_type));
+			new_contact.setContact_description(contact.get().description);
+			new_contact.setId_user(User.find.byId(id_user));
+
+			new_contact.save();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 	}
 	//Kode Error : 
