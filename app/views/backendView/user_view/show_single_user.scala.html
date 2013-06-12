@@ -25,15 +25,24 @@
 			       }      
 			      <h4>Detail Untuk :  @user.getFront_name</h4>
 			      <table class="single-view">
+			        	<tr class="edit_basic">
+			        		<td></td>
+			        		<td colspan="2">
+				     		 	<a style="float:left;" class="btn btn-small" href="">Ubah Informasi Dasar</a> 				        		
+			        		</td>		
+			        	</tr>			        		        
 			        <tr>
-			          <td style="padding-right:12px;" rowspan="@(11+user.getUserContact.size*2)">
-			     		 @if(user.getProfile_photo!=null){
-			 	    		 <img src="@user.getProfile_photo.getFileURL" width="250px" height="250px"></img>			     		 
-			     		 }else{
-			     		 	@default_profile_pic()
-			     		 }
-			    		
-			          </td>
+			          <td id="td_profile" style="padding-right:12px;" rowspan="@(11+user.getUserContact.size*2)">
+			     		 <div style="display:block;">
+				     		 @if(user.getProfile_photo!=null){
+				 	    		 <img id="profile" src="@user.getProfile_photo.getFileURL" width="250px" height="250px"></img>			     		 
+				     		 }else{
+				     		 	@default_profile_pic()
+				     		 }
+				     		 <div class="edit_picture"><a class="btn btn-small" 
+				     		 							  href="@controllers.backend.routes.UserController.editUserPicture(@user.getId_user)">Ubah Gambar</a></div> 	
+			    		</div>
+			         </td>
 			          <td>Nama Lengkap </td><td>:</td>
 			          <td>@user.getFront_name @user.getLast_name</td>
 			        </tr>
@@ -71,6 +80,7 @@
 			          <td>Status Akun</td><td>:</td>
 			          <td>@("Aktif".when(user.isActive)) @("Tidak Aktif".when(!user.isActive))</td>
 			        </tr>
+
 			        @for(contact<-user.getUserContact){
 				        <tr>
 				           <td>@contact.getContact_type.toString</td><td>:</td>
@@ -79,15 +89,25 @@
 				        <tr>
 				        	<td></td><td></td>
 				        	<td><span style="font-size:13px;font-style: italic;">@contact.getContact_description</span></td>
-				        </tr>		        
+				        </tr>
+			        	<tr class="edit_contact">
+			        		<td colspan="3">
+				     		 	<a style="float:left;" class="btn btn-small" href="">Ubah Data @contact.getContact_type.toString</a> 				        		
+			        		</td>		
+			        	</tr>		        	
 			        }
+			        	<tr class="add_contact">
+			        		<td colspan="3">
+				     		 	<a style="float:right;margin-top:20px" class="btn btn-small btn-success" href="">Tambah Data</a> 				        		
+			        		</td>		
+			        	</tr>				        	
 			      </table>
 			      </div>
 			    @restrict(la(as("administrator"))){      
 				     <div class="form-actions">
-				        <form action="@controllers.backend.routes.UserController.editUser(user.getId_user)" style="display:inline">
-				    	       <button type="submit" class="btn btn-primary">Ubah Pengguna</button>
-				      </form>
+				        <form  style="display:inline">
+				    	       <button type="button" onclick="buttonClick()" id="ubah" class="btn btn-primary">Ubah Pengguna</button>
+				     	 </form>
 				        <a  href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
 				             class="btn btn-danger" type="submit"> Hapus Pengguna
 				     	</a>   
@@ -123,7 +143,69 @@
 				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
 				</div>
 				
-			</div>			    
+			</div>	
+			
+			<script type="text/javascript">
+
+			@("var state=0;".when(flash.get("edit")==null))
+			@("var state=1;".when(flash.get("edit")!=null))			
+			var duration=500;
+			var duration_hide=300;
+			function buttonClick(){
+				if(state==1){
+					showEdit();
+					state=0;
+					console.log("anu");
+				}else{
+					hideEdit();
+					state=1;
+					console.log("una"+state);
+					
+				}
+			}
+			var edit_picture=$(".edit_picture");
+			var edit_basic=$(".edit_basic");
+			var edit_contact=$(".edit_contact");
+			var picture = $("#profile");
+			var button = $("#ubah");
+			var table= $(".single-view");				
+			var td_profile=$("#td_profile");
+			var add_contact=$(".add_contact");
+			buttonClick();
+		
+			
+			function showEdit(){
+				edit_picture.show();
+				edit_basic.show(duration);
+				edit_contact.show(duration);
+				add_contact.show(duration);
+				picture.addClass("edit_picture_black");
+				table.addClass("edit_basic_black");
+				edit_picture.children().show(duration);
+				edit_basic.children().show(duration);
+				edit_contact.children().show(duration);
+				add_contact.children().show(duration);
+				button.html("Selesai Ubah");
+				td_profile.attr("rowspan","@(12+user.getUserContact.size*3)");
+				
+			}
+			function hideEdit(){
+				edit_picture.hide(duration_hide);
+				edit_basic.hide(duration_hide);
+				edit_contact.hide(duration_hide);
+				add_contact.hide(duration_hide);
+				picture.removeClass("edit_picture_black");
+				table.removeClass("edit_basic_black");
+				button.html("Ubah Pengguna");
+
+				edit_picture.children().hide(duration_hide);
+				edit_basic.children().hide(duration_hide);
+				edit_contact.children().hide(duration_hide);
+				add_contact.children().hide(duration_hide);
+				td_profile.attr("rowspan","@(12+user.getUserContact.size*2)");
+
+			}
+			</script>    
 			    
  		} @*end if *@
  		

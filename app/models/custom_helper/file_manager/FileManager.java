@@ -35,6 +35,11 @@ public class FileManager {
 	 * 
 	 * XENOVON
 	 */
+	
+	/*Untuk mengupload file baru dengan inputan bertipe FilePart dan lokasi penyimpanannya
+	 * 
+	 * @param part saveto
+	 */
 	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
@@ -96,8 +101,7 @@ public class FileManager {
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
 			   file.getId()+
-			   file.getName();
-			   	
+			   file.getName();		   	
 	}	
 	public String getThumbnailFullPath(int id){
 		FileUpload file=FileUpload.find.byId(id);		
@@ -157,7 +161,8 @@ public class FileManager {
 				+file.getPath()
 				+file.getId()
 				+file.getName();
-	}	
+	}
+	
 	public String getFileUrl(FileUpload file){
 		
 		return file.getUrl_path()

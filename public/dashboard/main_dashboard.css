@@ -414,7 +414,7 @@ textarea[readonly="readonly"]
 	font-size: 14px;
 	text-align: left;
 	table-layout: fixed;
-	
+	border-collapse: separate;
 
 }
 .single-view td:first-child {
@@ -426,6 +426,12 @@ textarea[readonly="readonly"]
 	vertical-align: top;	
 	width: 15px;
 	max-width: 15px;
+}
+.single-view td:last-child {
+	padding-right: 10px;
+}
+.single-view tr:last-child {
+	padding-bottom: 10px;
 }
 .code{
 font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
@@ -489,4 +495,20 @@ font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
 	width: 48%;
 	min-width: 300px;
 	margin-left: 3px !important;
+}
+
+/* untuk edit gambar */
+.edit_picture{
+	padding: 5px 0 0 0;
+
+}
+.edit_picture_black{
+	border: 1px solid black;
+	padding: 2px;
+}
+.edit_basic_black {
+	color: #646567;
+}
+.edit_contact{
+	border-top: 1px solid black;
 }

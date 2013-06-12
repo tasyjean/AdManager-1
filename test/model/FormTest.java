@@ -20,9 +20,7 @@ public class FormTest {
         		LoginForm login=new LoginForm();
         		login.email="komputok@gmail.com";
         		login.password="password";
-        		
 		        assertThat(login.validate()).isNotNull();
-
         	}
         });
 

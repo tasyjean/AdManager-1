@@ -145,7 +145,6 @@ public class UserController extends CompressController {
 		}else{
 			try {
 				User user=creator.saveUser(filledForm);
-				
 				flash("success","true");
 				UserContactData contact_data=new UserContactData();
 				List<UserContact> user_contact=null;
@@ -197,15 +196,81 @@ public class UserController extends CompressController {
 
 	}
 	
-	
-	public static Result editUser(int user_id){
-		return ok();
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result editUserPicture(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		User user=User.find.byId(id_user);
+		return ok(edit_user3.render(data, user));
 	}
 	
-	public static Result saveEditUser(){
-		
-		return ok();
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))		
+	public static Result updateUserPicture(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		MultipartFormData body = request().body().asMultipartFormData();
+		FilePart part = body.getFile("picture");
+		if (part!= null) {
+			
+			int result=creator.updateProfilePicture(part, id_user);
+			if(result==0){
+				flash("edit","sukses");
+				return ok(show_single_user.render(data, User.find.byId(id_user)));	 				
+			}else if(result==2){
+				flash("error","Hanya mendukung file jpg, png dan gif");
+			}else{
+				flash("error","Kesalahan saat upload");
+			}
+		} else {
+			flash("error", "File Kosong");
+		}
+		return badRequest(edit_user3.render(data, id_user));		
 	}
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result editUserBasic(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;	
+	}
+	
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result updateUserBasic(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;
+	}
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result editUserContact(int id_contact){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;
+	}	
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result updateUserContact(int id_contact){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;
+	}
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result addUserContact(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;
+	}	
+	@With(DataFiller.class)
+	@Restrict(@Group("administrator"))	
+	public static Result newUserContact(int id_user){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		return TODO;
+	}		
 	@With(DataFiller.class)
 	@Restrict(@Group("administrator"))
 	public static Result deleteUser(int id_user){

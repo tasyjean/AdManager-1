@@ -1,7 +1,7 @@
 @(thumb:String="")
 
 @if(thumb==""){
-	<img src="@routes.Assets.at("upload/profile/default_profile.jpg")" width="200px" height="200px"></img>
+	<img id="profile" src="@routes.Assets.at("upload/profile/default_profile.jpg")" width="200px" height="200px"></img>
 }else{
-	<img class="@(thumb)" src="@routes.Assets.at("upload/profile/thumb_default_profile.jpg")" width="40px" height="40px"></img>
+	<img id="profile_thumb" class="@(thumb)" src="@routes.Assets.at("upload/profile/thumb_default_profile.jpg")" width="40px" height="40px"></img>
 }
