@@ -38,7 +38,7 @@ public class User extends Model implements Subject {
 	private String front_name;
 	private String last_name;
 	private String company;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private UserRole role;
 	
 	@Temporal(TemporalType.DATE)
@@ -46,7 +46,7 @@ public class User extends Model implements Subject {
 	private int current_balance;
 	private boolean isActive;
 	private String user_description;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REMOVE)
 	private FileUpload profile_photo;
 	private String validation_key;
 	private String city;
@@ -76,7 +76,7 @@ public class User extends Model implements Subject {
 	//Override save
 	@Override
 	public void save(){
-		join_date = Calendar.getInstance().getTime();
+		this.join_date = Calendar.getInstance().getTime();
 		current_balance =0;
 		if(validation_key!=null){}else{
 			Random x=new Random(); 

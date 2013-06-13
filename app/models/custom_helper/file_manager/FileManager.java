@@ -67,8 +67,7 @@ public class FileManager {
 			return upload;		
 		}else{
 			return null; //kode untuk salah upload
-		}
-		
+		}	
 	}
 	public boolean delete(int id){
 		try {

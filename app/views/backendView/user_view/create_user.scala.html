@@ -47,7 +47,7 @@
 				 </div>
 				 
 					@* form untuk informasi dasar *@
-					@form(action =controllers.backend.routes.UserController.saveUser(), 'class-> "form-horizontal") {
+					@form(action=controllers.backend.routes.UserController.saveUser(), 'class-> "form-horizontal") {
 						@* NAMA DEPAN *@																			
 						<div class="content-padding @("error".when(user_form.error("front_name")!=null))">
 							<div class="control-group">
@@ -56,7 +56,7 @@
 									<input type="text" required="required" class="input-large" placeholder="nama depan" value="@user_form("front_name").value" name="front_name" id="front_name">	                    
 				               		@if(user_form.error("front_name")!=null){
 				               			<p class="help-block">
-				               			@user_form.error("frontName").message()
+				               			@user_form.error("front_name").message()
 				               			</p>
 				               		}else{
 				               		  <p class="help-block">Nama depan pengguna</p>
@@ -124,9 +124,9 @@
 								<label class="control-label" for="channel_name">Posisi</label>
 								<div class="controls">
 								<select name="role">
-									<option value="ADVERTISER" selected="selected">Advertiser</option>
-									<option value="ADMINISTRATOR">Administrator</option>
-									<option value="MANAGER">Manager</option>
+									<option value="ADVERTISER" @("selected".when(user_form("role").value=="ADVERTISER"))>Advertiser</option>
+									<option value="ADMINISTRATOR" @("selected".when(user_form("role").value=="ADMINISTRATOR"))>Administrator</option>
+									<option value="MANAGER" @("selected".when(user_form("role").value=="MANAGER"))>Manager</option>
 								</select>
 								 <p class="help-block">Posisi pada sistem</p>					
 								</div>

@@ -23,12 +23,20 @@
 							  @flash.get("success")
 			            </div>
 			       }      
+			       @if(flash.contains("error")) {
+			           	<div class="alert alert-info">
+							  @flash.get("error")
+			            </div>
+			       }   			       
 			      <h4>Detail Untuk :  @user.getFront_name</h4>
 			      <table class="single-view">
 			        	<tr class="edit_basic">
 			        		<td></td>
 			        		<td colspan="2">
-				     		 	<a style="float:left;" class="btn btn-small" href="">Ubah Informasi Dasar</a> 				        		
+				     		 	<a style="float:left;" class="btn btn-mini" 
+				     		 		href="@controllers.backend.routes.UserController.editUserBasic(user.getId_user)">
+				     		 		Ubah Informasi Dasar
+				     		 	</a> 				        		
 			        		</td>		
 			        	</tr>			        		        
 			        <tr>
@@ -39,8 +47,8 @@
 				     		 }else{
 				     		 	@default_profile_pic()
 				     		 }
-				     		 <div class="edit_picture"><a class="btn btn-small" 
-				     		 							  href="@controllers.backend.routes.UserController.editUserPicture(@user.getId_user)">Ubah Gambar</a></div> 	
+				     		 <div class="edit_picture"><a class="btn btn-mini" 
+				     		 							  href="@controllers.backend.routes.UserController.editUserPicture(user.getId_user)">Ubah Gambar</a></div> 	
 			    		</div>
 			         </td>
 			          <td>Nama Lengkap </td><td>:</td>
@@ -91,14 +99,42 @@
 				        	<td><span style="font-size:13px;font-style: italic;">@contact.getContact_description</span></td>
 				        </tr>
 			        	<tr class="edit_contact">
-			        		<td colspan="3">
-				     		 	<a style="float:left;" class="btn btn-small" href="">Ubah Data @contact.getContact_type.toString</a> 				        		
+			        		<td class="garis" colspan="3"><nobr>
+				     		 	<a style="display:inline;float:left;display: table" class="btn btn-mini" 
+				     		 	    href="@controllers.backend.routes.UserController.editUserContact(contact.getId_user_contact)">
+				     		 	    Ubah
+				     		 	 </a> 			 		        		
+				     		 	<a style="display:inline;float:left;margin:0 5px 10px 5px;" 
+				     		 	   class="btn btn-mini btn-danger" data-toggle="modal" type="submit"  role="button" 
+				     		 	   href="#confirm_modal@(contact.getId_user_contact)">
+				     		 	   Hapus
+				     		 	 </a> </nobr>				        		 				        		
+			        		
 			        		</td>		
-			        	</tr>		        	
-			        }
+			        	</tr>	
+						@**********Modal hapus item*********@
+						<div id="confirm_modal@(contact.getId_user_contact)" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+							<div class="modal-header">
+					    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					    		<h4 id="label">Hapus Informasi Pengguna</h4>
+					  		</div>
+							 <div class="modal-body">
+								<h5>Yakin Mau menghapus @(contact.getContact_type.toString)?</h5>
+			  				</div>
+			  				<div class="modal-footer">
+							   <a class="btn btn-warning" 
+							   		href="@controllers.backend.routes.UserController.deleteContact(contact.getId_user_contact)">
+							   		Hapus
+							   	</a>  					
+							   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+							</div>
+							
+						</div>			        			        	
+			        } @* end for *@
 			        	<tr class="add_contact">
 			        		<td colspan="3">
-				     		 	<a style="float:right;margin-top:20px" class="btn btn-small btn-success" href="">Tambah Data</a> 				        		
+				     		 	<a style="float:right;margin:20px 5px 0 5px" class="btn btn-mini btn-success" 
+				     		 	   href="@controllers.backend.routes.UserController.addUserContact(user.getId_user)">Tambah Data</a>
 			        		</td>		
 			        	</tr>				        	
 			      </table>
@@ -108,61 +144,117 @@
 				        <form  style="display:inline">
 				    	       <button type="button" onclick="buttonClick()" id="ubah" class="btn btn-primary">Ubah Pengguna</button>
 				     	 </form>
-				        <a  href="#confirm_modal" role="button" data-toggle="modal" style="display:inline"
+				        <a  href="#confirm_modal_hapus" role="button" data-toggle="modal" style="display:inline"
 				             class="btn btn-danger" type="submit"> Hapus Pengguna
 				     	</a>   
-				        <a href="#confirm_modal" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				        <a href="#confirm_modal_reset" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
 				             class="btn btn-info" type="submit"> Reset Password 
 				     	</a>
 				     	@if(user.isActive){
-				        	<a href="#confirm_modal" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				        	<a href="#confirm_modal_nonaktifkan" id="aktifkan" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
 				           		  class="btn btn-warning" type="submit"> Non Aktifkan
 				     		</a>
 				     	}else{
-					     	<a href="#confirm_modal" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+					     	<a href="#confirm_modal_nonaktifkan" id="aktifkan" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
 				           		  class="btn btn-warning" type="submit"> Aktifkan
 				     		</a>	
 				     	}			     	  				      
 				    </div>
 				 }
-			@**********Modal Delete*********@
-			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+			@**********Modal reset*********@
+			<div id="confirm_modal_reset"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
 				<div class="modal-header">
 		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		    		<h3 id="label">Hapus Zona</h3>
+		    		<h3 id="label">Reset Password</h3>
 		  		</div>
 				 <div class="modal-body">
-					<h4>Yakin Mau menghapus @user.getFront_name ?</h4>
-					<p class="alert alert-warning" style="color:#000">Sebelum menghapus, pastikan data pengguna ini tidak terkait dengan data lainnya</p>
+					<h4>Yakin Mau Mereset Password @user.getFront_name ?</h4>
+					<p class="alert alert-warning" style="color:#000">
+						Password baru akan di kirim melalui email pengguna dan email administrator
+					</p>
   				</div>
   				<div class="modal-footer">
 				   <a class="btn btn-warning" 
-				   		href="@controllers.backend.routes.UserController.deleteUser(user.getId_user)">
-				   		Hapus
+				   		href="@controllers.backend.routes.UserController.resetPassword(user.getId_user)">
+				   		Reset Password
 				   	</a>  					
 				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
 				</div>
 				
 			</div>	
-			
+			@**********Modal Delete*********@
+			<div id="confirm_modal_hapus"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label_hapus">Hapus Pengguna</h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau menghapus @user.getFront_name ?</h4>
+					<p class="alert alert-warning" style="color:#000">
+						Sebelum menghapus, pengguna tidak memiliki iklan, kampanye, laporan, riwayat dan data terkait lainnya<br>
+						Semua data pengguna, termasuk foto, saldo, riwayat, dan sebagainya akan terhapus tanpa bisa dikembalikan<br>
+						
+					</p>
+					
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.UserController.deleteUser(user.getId_user)">
+				   		Saya Mengerti Semua Resiko dan Hapus Saja
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Saya Takut, Batal Saja</button>
+				</div>
+				
+			</div>
+			@**********Modal Nonaktifkan*********@
+			<div id="confirm_modal_nonaktifkan"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label_nonaktifkan"></h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau Merubah Aktif Tidaknya @user.getFront_name ?</h4>
+					<p class="alert alert-warning" style="color:#000">Pengguna yang non aktif tidak bisa masuk ke sistem</p>
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.UserController.activate(user.getId_user)">
+				   		Ya, Saya Yakin
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batalkan Saja</button>
+				</div>			
+			</div>						
 			<script type="text/javascript">
 
 			@("var state=0;".when(flash.get("edit")==null))
 			@("var state=1;".when(flash.get("edit")!=null))			
 			var duration=500;
-			var duration_hide=300;
+			var duration_hide=0;
 			function buttonClick(){
 				if(state==1){
-					showEdit();
+					showEdit(duration);
 					state=0;
 					console.log("anu");
 				}else{
-					hideEdit();
+					hideEdit(duration);
 					state=1;
 					console.log("una"+state);
 					
 				}
 			}
+			function init(){
+				if(state==1){
+					showEdit(duration_hide);
+					state=0;
+					console.log("anu");
+				}else{
+					hideEdit(duration_hide);
+					state=1;
+					console.log("una"+state);
+				}
+				var konten=$("#aktifkan").value();
+				$("#label_nonaktifkan").html(konten);
+			}			
 			var edit_picture=$(".edit_picture");
 			var edit_basic=$(".edit_basic");
 			var edit_contact=$(".edit_contact");
@@ -171,10 +263,10 @@
 			var table= $(".single-view");				
 			var td_profile=$("#td_profile");
 			var add_contact=$(".add_contact");
-			buttonClick();
-		
+			init();
 			
-			function showEdit(){
+			
+			function showEdit(duration){
 				edit_picture.show();
 				edit_basic.show(duration);
 				edit_contact.show(duration);
@@ -189,19 +281,19 @@
 				td_profile.attr("rowspan","@(12+user.getUserContact.size*3)");
 				
 			}
-			function hideEdit(){
-				edit_picture.hide(duration_hide);
-				edit_basic.hide(duration_hide);
-				edit_contact.hide(duration_hide);
-				add_contact.hide(duration_hide);
+			function hideEdit(duration){
+				edit_picture.hide(duration);
+				edit_basic.hide(duration);
+				edit_contact.hide(duration);
+				add_contact.hide(duration);
 				picture.removeClass("edit_picture_black");
 				table.removeClass("edit_basic_black");
 				button.html("Ubah Pengguna");
 
-				edit_picture.children().hide(duration_hide);
-				edit_basic.children().hide(duration_hide);
-				edit_contact.children().hide(duration_hide);
-				add_contact.children().hide(duration_hide);
+				edit_picture.children().hide(duration);
+				edit_basic.children().hide(duration);
+				edit_contact.children().hide(duration);
+				add_contact.children().hide(duration);
 				td_profile.attr("rowspan","@(12+user.getUserContact.size*2)");
 
 			}

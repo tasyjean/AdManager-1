@@ -13,7 +13,7 @@ public class ToLink {
 		} catch (MalformedURLException e) {
 			return text;
 		}
-	}	
+	}
 	private static String surroundHREF(String text){
 		return "<a href='"+text+"'>"+text+"</a>";
 	}

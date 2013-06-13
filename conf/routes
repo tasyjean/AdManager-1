@@ -43,10 +43,26 @@ POST  /dashboard/user/contact/new/:id_user	controllers.backend.UserController.sa
 POST  /dashboard/user/pic/new/:id_user		controllers.backend.UserController.saveUserPicture(id_user:Integer)
 
 
-GET   /dashboard/user/show/:user_id		controllers.backend.UserController.showSingleUser(user_id:Integer)
-GET   /dashboard/user/:user_id/edit		controllers.backend.UserController.editUser(user_id:Integer)
-POST  /dashboard/user/edit				controllers.backend.UserController.saveEditUser()
-GET	  /dashboard/user/:user_id/delete 	controllers.backend.UserController.deleteUser(user_id:Integer)
+GET   /dashboard/user/show/:user_id			controllers.backend.UserController.showSingleUser(user_id:Integer)
+GET   /dashboard/user/:user_id/edit			controllers.backend.UserController.editUserBasic(user_id:Integer)
+POST  /dashboard/user/:user_id/edit			controllers.backend.UserController.updateUserBasic(user_id:Integer)
+
+GET   /dashboard/user/:user_id/editpic		controllers.backend.UserController.editUserPicture(user_id:Integer)
+POST  /dashboard/user/:user_id/editpic		controllers.backend.UserController.updateUserPicture(user_id:Integer)
+
+GET   /dashboard/user/:user_contact/editc	controllers.backend.UserController.editUserContact(user_contact:Integer)
+POST  /dashboard/user/:user_contact/editc	controllers.backend.UserController.updateUserContact(user_contact:Integer)
+
+GET   /dashboard/user/:user_id/newinfo		controllers.backend.UserController.addUserContact(user_id:Integer)
+POST  /dashboard/user/:user_id/newinfo		controllers.backend.UserController.newUserContact(user_id:Integer)
+GET   /dashboard/user/show/:user_id/edit	controllers.backend.UserController.editUser(user_id:Integer)
+
+GET	  /dashboard/user/:user_id/delete 			controllers.backend.UserController.deleteUser(user_id:Integer)
+GET	  /dashboard/user/info/:id_contact/delete 	controllers.backend.UserController.deleteContact(id_contact:Integer)
+#operasi user
+GET	  /dashboard/user/:id_user/activate	 	controllers.backend.UserController.activate(id_user:Integer)
+GET	  /dashboard/user/:id_user/reset	 	controllers.backend.UserController.resetPassword(id_user:Integer)
+
 
 #zone
 GET   /dashboard/zone					controllers.backend.ZoneController.showZone()

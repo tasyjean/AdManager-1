@@ -1,15 +1,15 @@
-@(data: TemplateData, user_form:Form[UserForm])
+@(data: TemplateData, user_form:Form[EditUserForm], user:User)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
 
-@getPage() = {
-	@if(flash.contains("page")) {
-		@flash.get("page")
-	}else{
-		kosong
-	}        
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			@flash.get("error")
+		</div>
+	}       
 } 	  	    
 @getSuccess()= {
  	@if(flash.contains("success")) {
@@ -27,36 +27,31 @@
 		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
 		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
 	
-		@dashboard_content("Manajemen Pengguna","Tambah Pengguna","tambah pengguna"){
+		@dashboard_content("Manajemen Pengguna","Ubah Pengguna","ubah pengguna"){
 		
-		<div id="input_tab">
-			<ul>
-				<li><a href="#tabs-1">Informasi Dasar</a></li>
-				<li><a href="#tabs-2">Informasi Tambahan</a></li>
-				<li><a href="#tabs-3">Foto Identitas</a></li>
-			</ul>
-			<div id="tabs-1">
 				<div class="content-padding">
-					<h4>Tambah Pengguna dengan 3 Langkah</h4>
-					<h5 style="font-style: italic;">Isi informasi pengguna dasar</h5>
+					<h4>Ubah Informasi Pengguna</h4>
+					<h5 style="font-style: italic;">Merubah data milik @user.getFront_name</h5>
 				@if(user_form.hasGlobalErrors){
 					<div class="alert alert-error">
 	              		@user_form.globalError.message     	  	 	
 					</div>
 	      	  	}
+	      	  	@getError
 				 </div>
 				 
 					@* form untuk informasi dasar *@
-					@form(action =controllers.backend.routes.UserController.saveUser(), 'class-> "form-horizontal") {
+					
+					@form(action =controllers.backend.routes.UserController.updateUserBasic(user.getId_user), 'class-> "form-horizontal") {
 						@* NAMA DEPAN *@																			
 						<div class="content-padding @("error".when(user_form.error("front_name")!=null))">
 							<div class="control-group">
 								<label class="control-label" for="channel_name">Nama Depan *</label>
 								<div class="controls">
-									<input type="text" required="required" class="input-large" placeholder="nama depan" value="@user_form("front_name").value" name="front_name" id="front_name">	                    
+									<input type="text" required="required" class="input-large" placeholder="nama depan" value="@user.getFront_name" name="front_name" id="front_name">	                    
 				               		@if(user_form.error("front_name")!=null){
 				               			<p class="help-block">
-				               			@user_form.error("frontName").message()
+				               			@user_form.error("front_name").message()
 				               			</p>
 				               		}else{
 				               		  <p class="help-block">Nama depan pengguna</p>
@@ -69,37 +64,17 @@
 							<div class="control-group">
 								<label class="control-label" for="channel_name">Nama Belakang</label>
 								<div class="controls">
-									<input type="text" placeholder="nama belakang" class="input-large" value="@user_form("last_name").value" name="last_name" id="last_name">	                    								 
+									<input type="text" placeholder="nama belakang" class="input-large" value="@user.getLast_name" name="last_name" id="last_name">	                    								 
 								 	<p class="help-block">Nama belakang pengguna</p>													 
 								</div>
 							</div>	
-								
-							@* EMAIL  *@																		
-							<div class="control-group @("error".when(user_form.error("email")!=null)) ">
-								<label class="control-label" for="channel_name">Email utama *</label>
-								<div class="controls">
-									<input type="text" required="required" placeholder="email utama" class="input-large" value="@user_form("email").value" name="email" id="email">	                    
-				               		@if(user_form.error("email")!=null){
-				               			<p class="help-block">
-				               			@user_form.error("email").message()
-				               			</p>
-				               		}else{
-				               			@if(user_form.error("email_valid")!=null){
-					               			<p class="help-block">
-					               				@user_form.error("email_valid").message()
-					               			</p>				               				
-				               			}else{
-				               			 <p class="help-block">Email yang digunakan untuk login pengguna</p>
-				               			}	
-				               		}				
-								</div>
-							</div>	
+									
 							
 							@* PERUSAHAAN *@
 							<div class="control-group">
 								<label class="control-label" for="channel_name">Perusahaan</label>
 								<div class="controls">
-									<textarea class="input-large" placeholder="perusahaan" name="company" id="company">@user_form("company").value</textarea>                    
+									<textarea class="input-large" placeholder="perusahaan" name="company" id="company">@user.getCompany</textarea>                    
 								 <p class="help-block">Nama Perusahaan Pengguna</p>					
 								</div>
 							</div>	
@@ -107,7 +82,7 @@
 							<div class="control-group">
 								<label class="control-label" for="channel_name">Kota Domisili</label>
 								<div class="controls">
-									<input type="text" placeholder="kota" class="input-large" value="@user_form("city").value" name="city" id="city">	                    
+									<input type="text" placeholder="kota" class="input-large" value="@user.getCity" name="city" id="city">	                    
 								 <p class="help-block">Kota tempat pengguna tinggal</p>					
 								</div>
 							</div>
@@ -115,7 +90,7 @@
 							<div class="control-group">
 								<label class="control-label" for="channel_name">Negara</label>
 								<div class="controls">
-									<input type="text" placeholder="negara" class="input-large" value="@user_form("country").value" name="country" id="country">	                    
+									<input type="text" placeholder="negara" class="input-large" value="@user.getCountry" name="country" id="country">	                    
 								 <p class="help-block">Negara tempat pengguna tinggal</p>					
 								</div>
 							</div>	
@@ -124,71 +99,29 @@
 								<label class="control-label" for="channel_name">Posisi</label>
 								<div class="controls">
 								<select name="role">
-									<option value="ADVERTISER" selected="selected">Advertiser</option>
-									<option value="ADMINISTRATOR">Administrator</option>
-									<option value="MANAGER">Manager</option>
+									<option value="ADVERTISER" @("selected".when(user.getRole.getName=="advertiser"))>Advertiser</option>
+									<option value="ADMINISTRATOR" @("selected".when(user.getRole.getName=="administrator"))>Administrator</option>
+									<option value="MANAGER" @("selected".when(user.getRole.getName=="manager"))>Manager</option>
 								</select>
-								 <p class="help-block">Posisi pada sistem</p>					
+								 <p class="help-block">Posisi pada aplikasi</p>					
 								</div>
-							</div>							
-							@* Password *@
-							<div class="control-group @("error".when(user_form.error("password")!=null)) 
-									@("error".when(user_form.error("password_sama")!=null)) ">
-								<label class="control-label" for="channel_name">Password *</label>
-								<div class="controls">
-									<input type="password" placeholder="password" required="required" class="input-large" name="password" id="password">	                    
-				               		@if(user_form.error("password")!=null){
-				               			<p class="help-block">
-				               			@user_form.error("password").message()
-				               			</p>
-				               		}else{
-					               		@if(user_form.error("password_sama")!=null){
-					               			<p class="help-block">
-					               			@user_form.error("password_sama").message()
-					               			</p>
-					               		}else{
-				               				 <p class="help-block">Password untuk autentifikasi login</p>
-					               		}					               			
-				               		}
-								</div>
-							</div>
-							@* Password REPEAT *@
-							<div class="control-group @("error".when(user_form.error("password_sama")!=null))">
-								<label class="control-label" for="channel_name">Password Lagi *</label>
-								<div class="controls">
-									<input type="password" required="required" placeholder="ulangi password" class="input-large" name="password_repeat" id="password_repeat">	                    
-				               		@if(user_form.error("password_sama")!=null){
-				               			<p class="help-block">
-				               			@user_form.error("password_sama").message()
-				               			</p>
-				               		}else{
-				               			 <p class="help-block">Ulangi masukan password</p>
-				               		}							
-				               </div>
-							</div>																																				
+							</div>																																										
 						</div>
 						
 			     <div class="form-actions">
-				      <button type="submit" class="btn btn-primary">Simpan Dan Lanjut</button>
+				      <button type="submit" class="btn btn-primary">Simpan</button>
 				      <button type="reset" class="btn">Reset</button>
+				      <a title="Batalkan pengisian form"  
+						   href="@controllers.backend.routes.UserController.editUser(user.getId_user())" 
+						   role="button" data-toggle="modal">
+						   	<button type="button" class="btn btn-info">Batal</button>
+					</a>
 				 </div>					
 				 } @* end form *@	
-			</div>@* End tab 1 *@
-			
-			<div id="tabs-2">
-						
-			</div> @* End tab 2 *@
-			
-			<div id="tabs-3">
-			</div>
-		</div>	
+				 
     <script type="text/javascript">
 		$(document).ready(function() {
-	    	$("#input_tab").tabs();
-	    	$("#input_tab").tabs( "option", "disabled", [ 1, 2 ] );
-	    	$("#input_tab").tabs({ active: 0 });
-			
-	    	
+
 	    	  $(function() {
 	    		    var negara = [
 	    		      "Indonesia",
