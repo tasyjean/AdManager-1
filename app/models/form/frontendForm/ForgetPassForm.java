@@ -1,7 +1,7 @@
 package models.form.frontendForm;
 
 import models.data.User;
-import models.service.Authentificator;
+import models.service.Authenticator;
 import play.data.validation.Constraints.Required;
 import play.i18n.Messages;
 

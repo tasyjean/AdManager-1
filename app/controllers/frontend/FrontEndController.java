@@ -8,13 +8,15 @@ import com.google.inject.Inject;
 
 import be.objectify.deadbolt.java.actions.SubjectNotPresent;
 
+import meesy.Meesy;
 import models.custom_helper.RecaptchaRegistration;
+import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.dataWrapper.TemplateData;
 import models.form.frontendForm.ForgetPassForm;
 import models.form.frontendForm.LoginForm;
 import models.form.frontendForm.RegistrationForm;
-import models.service.Authentificator;
+import models.service.Authenticator;
 import models.service.Registrar;
 import play.data.Form;
 import play.data.validation.ValidationError;
@@ -32,8 +34,12 @@ public class FrontEndController extends CompressController {
     final static Form<ForgetPassForm> forgetForm = Form.form(ForgetPassForm.class);
     final static Form<RegistrationForm> regisForm = Form.form(RegistrationForm.class);
 
-    static Registrar registrar = new Registrar();
-    static Authentificator auth=new Authentificator();
+    static SendMail mail=new SendMail();
+    static Meesy meesy=new Meesy();
+    static RoleFactory role=new RoleFactory();
+    
+    static Registrar registrar = new Registrar(mail,meesy,role);
+    static Authenticator auth=new Authenticator();
     
     
 	@With(DataFiller.class)

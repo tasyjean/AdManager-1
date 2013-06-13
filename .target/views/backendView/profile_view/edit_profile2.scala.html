@@ -1,0 +1,102 @@
+@(data: TemplateData, contact_form:Form[ContactForm], formData:UserContactData, contact:UserContact)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+ 		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+
+@main("Profil Pengguna"){
+	
+		@dashboard_content("Profil Pengguna","Ubah Data Profil","data profil"){
+		
+		@form(action =controllers.backend.routes.ProfileController.updateProfileContact(contact.getId_user_contact), 'class-> "form-horizontal") {
+						<div class="content-padding">  					
+							<h4>Ubah Data Profil</h4>
+							<h5 style="font-style: italic;">Ubah data @contact.getId_user.getFront_name  </h5>
+								@getSuccess()
+								@getError()	
+								@if(contact_form.hasErrors){
+									<div class="alert alert-error">
+									  <button type="button" class="close" data-dismiss="alert">&times;</button>
+										<p>Penyimpanan Gagal</p>
+										<p>Ada form yang belum di isi</p>
+									</div>
+						      	}									
+						</div>
+						
+						@* form untuk informasi dasar *@	
+						<div class="content-padding">
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Jenis Informasi</label>
+								<div class="controls">
+									<select name="contact_type">
+										@for(data<-formData.getData){
+											<option @("selected".when(data(1)==contact.getContact_type.toString))
+													value="@data(0)">@data(1)</option>
+										}
+									</select>
+									<p class="help-block">Jenis dari informasi</p>													 
+								</div>
+							</div>
+										
+							<div class="control-group">
+								<label class="control-label"  for="channel_name">Isi Informasi *</label>
+								<div class="controls">
+									<textarea rows="3"  placeholder="isi informasi" name="value" id="value">@contact.getContact_value</textarea>	                  
+									<p class="help-block">Isi informasi, tergantung jenisnya</p>													 
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Deskripsi Informasi  </label>
+								<div class="controls">
+									<textarea rows="4" placeholder="Deskripsi informasi" class="input"  name="description" id="description">@contact.getContact_description</textarea>	                    								 
+								 	<p class="help-block">Deskripsi dari informasi</p>													 
+								</div>
+							</div>																	
+						</div> @*end content padding *@
+					    	 
+				 <div class="form-actions">
+				    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+				    <button type="reset" class="btn">Reset</button>
+					<a title="Batalkan pengisian form"  
+					   href="@controllers.backend.routes.ProfileController.showProfile()" 
+					   role="button" data-toggle="modal">
+					   	<button type="button" class="btn btn-info">Batal</button>
+					</a>
+				</div> @*end form action *@					
+				</div>	} @*end form *@ 		
+		</div>					
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

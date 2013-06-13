@@ -17,7 +17,10 @@
                   }
                   @if(title=="Manajemen Pengguna"){
                     @userMenu(activeMenu)
-                 }  					
+                  }  
+                  @if(title=="Profil Pengguna"){
+                    @profileMenu(activeMenu)
+                  } 					
                   </div>
                 </section>
 
@@ -96,18 +99,25 @@
 
 }
 @profileMenu(activeMenu:String="")={
-     	<div class="span2 sub-menu">
+      <a  class="span2 sub-menu @("active".when(activeMenu=="data profil"))"
+          href="@controllers.backend.routes.ProfileController.showProfile()">
+          <div class="icon"></div>
+
+         <div class="content" >
             <div class="kpi">Profil Pengguna</div>
-             <div><small>Lihat Profil</small></div>
-        </div>		
-       	<div class="span2 sub-menu">
+            <div class="small">Lihat Data Profil</div>
+         </div>
+        </a>     
+        	
+       <a  class="span2 sub-menu @("active".when(activeMenu=="notifikasi"))"
+          href="@controllers.backend.routes.ProfileController.showNotification()">
+          <div class="icon"></div>
+
+         <div class="content" >
             <div class="kpi">Notifikasi</div>
-             <div><small>Lihat daftar Notifikasi</small></div>
-        </div>
-        <div class="span2 sub-menu">
-            <div class="kpi">Rubah Profil</div>
-             <div><small>Rubah data profil</small></div>
-        </div>
+            <div class="small">Lihat Daftar Notifikasi</div>
+         </div>
+        </a>    	
 
 }
 @reportMenu(activeMenu:String="")={
@@ -142,7 +152,6 @@
          </div>
       </a>    
     }
-
 }
 	
 @dashboardMenu(activeMenu:String="")={
@@ -151,4 +160,4 @@
             <div class="kpi">Menu</div>
              <div><small>Testing</small></div>
         </div>		
-	}
+}

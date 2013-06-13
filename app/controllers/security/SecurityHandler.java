@@ -1,6 +1,6 @@
 package controllers.security;
 
-import models.service.Authentificator;
+import models.service.Authenticator;
 import play.mvc.Http;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -12,7 +12,7 @@ import views.html.*;
 
 public class SecurityHandler extends AbstractDeadboltHandler {
 
-	Authentificator auth = new Authentificator();
+	Authenticator auth = new Authenticator();
 	@Override
 	public Result beforeAuthCheck(Context context) {
 	

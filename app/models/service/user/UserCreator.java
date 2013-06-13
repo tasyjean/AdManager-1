@@ -5,6 +5,8 @@ import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Http.MultipartFormData.FilePart;
 import models.custom_helper.DomainURL;
+import models.custom_helper.EmailSenderThread;
+import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.SaveToEnum;
@@ -22,16 +24,18 @@ public class UserCreator {
 
 	FileManager manager;
 	SendMail mailer;
-	public UserCreator(FileManager manager, SendMail mailer){
+	RoleFactory factory;
+	public UserCreator(FileManager manager, SendMail mailer, RoleFactory factory){
 		this.manager=manager;
 		this.mailer=mailer;
+		this.factory=factory;
 	}
 	
 	public User saveUser(Form<UserForm> form){
 		User user;
 		try {
 			user = new User();
-			UserRole role=new UserRole(RoleEnum.valueOf(form.get().role));
+			UserRole role=factory.getRole(form.get().role);
 			user.setActive(true);
 			user.setFront_name(form.get().front_name);
 			user.setLast_name(form.get().last_name);
@@ -53,8 +57,8 @@ public class UserCreator {
 		User user;
 		try {
 			user =User.find.byId(user_id);
-			UserRole role=new UserRole(RoleEnum.valueOf(form.get().role));
-			
+			UserRole role=factory.getRole(form.get().role);
+			System.out.println(RoleEnum.valueOf(form.get().role));
 			user.setFront_name(form.get().front_name);
 			user.setLast_name(form.get().last_name);
 			user.setCompany(form.get().company);
@@ -88,18 +92,18 @@ public class UserCreator {
 		}
 		
 	}
-	public boolean editContact(Form<ContactForm> contact, int id_contact){
+	public UserContact editContact(Form<ContactForm> contact, int id_contact){
 		try {
 			UserContact edit_contact=UserContact.find.byId(id_contact);
 			edit_contact.setContact_value(contact.get().value);
 			edit_contact.setContact_type(ContactTypeEnum.valueOf(contact.get().contact_type));
 			edit_contact.setContact_description(contact.get().description);
-
+			
 			edit_contact.update();
-			return true;
+			return edit_contact;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	
@@ -151,7 +155,8 @@ public class UserCreator {
 			mailer.setSubject(Messages.get("email.registered.subject"));
 			mailer.setCc(Messages.get("email.sender"));
 			
-			mailer.sendHTML();
+			EmailSenderThread sender = new EmailSenderThread(mailer);
+			new Thread(sender).start();
 			
 		} catch (Exception e) {
 

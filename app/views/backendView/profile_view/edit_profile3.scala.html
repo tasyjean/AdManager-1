@@ -1,0 +1,76 @@
+@(data: TemplateData)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+	   <div class="content-padding">			     
+			<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<p style="font-weight: bold;">@flash.get("error")</p>
+				<p>Proses upload tidak berhasil</p>
+			</div>
+	   </div>
+	}       
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		@flash.get("success")
+	}
+}
+
+@main("Profil Pengguna"){
+	
+		@dashboard_content("Profil Pengguna","Ubah Foto Profil","data profil"){
+					
+				@getError()
+				@form(action =controllers.backend.routes.ProfileController.updateProfilePicture(), 'enctype -> "multipart/form-data") {
+		    			<div class="content-padding">
+		    				<h5>Ubah Foto identitas disini</h5>
+		    				<p style="font-style: italic;font-size:11px;">
+		    					Anjuran : Gunakan format gambar standar dengan rasio 1:1
+		    				</p>
+		    				@getError()
+						    <input type="file" id="picture" name="picture">					
+				 		</div>  @* End Content Padding *@  
+				     <div class="form-actions">
+					      <button type="submit" class="btn btn-primary">Upload</button>
+					      <button type="reset" class="btn">Reset</button>
+						<a title="Batalkan pengisian form"  
+						   href="@controllers.backend.routes.ProfileController.showProfile()" 
+						   role="button" data-toggle="modal">
+						   	<button type="button" class="btn btn-info">Batal</button>
+						</a>				      
+					 </div>		
+				 } @* End Form *@		 
+			</div>@* End tab 3 *@
+		</div>	
+			
+		
+    
+    <script type="text/javascript">
+		$(document).ready(function() {
+
+
+	    	$('#picture').bind('change', function() {
+	    		  
+	    		 this.files[0].size;
+
+	    	});
+		});
+	</script>
+   }
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

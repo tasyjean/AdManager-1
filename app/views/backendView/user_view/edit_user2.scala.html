@@ -7,6 +7,7 @@
 @getError() = {
 	@if(flash.contains("error")) {
 		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<p>@flash.get("error")</p>
 		</div>
 	}
@@ -14,6 +15,7 @@
 @getSuccess()= {
  	@if(flash.contains("success")) {
 		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<p>Sukses!</p>
 		<p>@flash.get("success")</p>
 		</div>
@@ -24,7 +26,7 @@
 	
 		@dashboard_content("Manajemen Pengguna","Ubah Pengguna","daftar pengguna"){
 		
-		@form(action =controllers.backend.routes.UserController.updateUserContact(contact.getId_user().getId_user()), 'class-> "form-horizontal") {
+		@form(action =controllers.backend.routes.UserController.updateUserContact(contact.getId_user_contact), 'class-> "form-horizontal") {
 						<div class="content-padding">  					
 							<h4>Ubah Informasi Pengguna</h4>
 							<h5 style="font-style: italic;">Ubah data @contact.getId_user.getFront_name  </h5>
@@ -32,6 +34,7 @@
 								@getError()	
 								@if(contact_form.hasErrors){
 									<div class="alert alert-error">
+										<button type="button" class="close" data-dismiss="alert">&times;</button>
 										<p>Penyimpanan Gagal</p>
 										<p>Ada form yang belum di isi</p>
 									</div>

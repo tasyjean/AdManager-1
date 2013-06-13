@@ -10,6 +10,7 @@ import play.db.DB;
 import com.avaje.ebean.Ebean;
 
 import models.data.BannerSize;
+import models.data.FileUpload;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
@@ -35,16 +36,29 @@ public class SetInitialData {
 		
 		
 		//Clean Data dulu
-		deleteUserData();
+//		deleteUserData();
 		try {
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_contact_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_role_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_channel_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Insert data");
-
+		UserRole role1=new UserRole(RoleEnum.ADMINISTRATOR);
+		UserRole role2=new UserRole(RoleEnum.MANAGER);
+		UserRole role3=new UserRole(RoleEnum.ADVERTISER);
+		
+		role1.save();
+		role2.save();
+		role3.save();
+		
 		//Data 1
-		User user1=new User("komputok@gmail.com", "password", "Adnan", "Hidayat", new UserRole(RoleEnum.ADMINISTRATOR));
+		User user1=new User("komputok@gmail.com", "password", "Adnan", "Hidayat", role1);
 		user1.setCity("Bandung");
 		user1.setCountry("Indonesia");
 		user1.setCompany("Teknimo");
@@ -60,7 +74,7 @@ public class SetInitialData {
 		user1.save();
 		
 		//Data 2
-		User user2=new User("gunadarma@gmail.com", "password", "Sayuti", "Hidayat", new UserRole(RoleEnum.ADVERTISER));
+		User user2=new User("gunadarma@gmail.com", "password", "Sayuti", "Hidayat", role3);
 		user2.setCity("Jayapandang");
 		user2.setCountry("Indonesia");
 		user2.setCompany("Sunaya Basah Sejahtera");
@@ -75,7 +89,7 @@ public class SetInitialData {
 		user2.save();
 		
 		//Data 3
-		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", new UserRole(RoleEnum.MANAGER));
+		User user3=new User("sonata@gmail.com", "password", "Hutamala", "Hidayat", role2);
 		user3.setCity("Jakakerto");
 		user3.setCountry("Indonesia");
 		user3.setCompany("Teknimo");
@@ -112,7 +126,7 @@ public class SetInitialData {
 		List<ZoneChannel> channels = ZoneChannel.find.all();
 		List<Zone> zones=Zone.find.all();
 		if(channels.size()==0){
-		//		deleteZoneChannel();
+				deleteZoneChannel();
 				
 				ZoneChannel channel1=new ZoneChannel("General", "Diperuntukan untuk zona yang memiliki tema general");
 				ZoneChannel channel2=new ZoneChannel("Gadget", "Diperuntukan untuk zona yang memiliki tema gadget");
@@ -198,7 +212,11 @@ public class SetInitialData {
 	public void deleteUserData(){
 		
 		List<User> data=User.find.all();
+		List<UserRole> roles=UserRole.find.all();
+		List<FileUpload> uploads=FileUpload.find.all();
 		Ebean.delete(data);
+		Ebean.delete(roles);
+		
 		System.out.println("Delete data");
 	}
 	public void deleteZoneChannel(){

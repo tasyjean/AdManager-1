@@ -10,7 +10,7 @@ import java.util.HashMap;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.data.User;
 import models.dataWrapper.TemplateData;
-import models.service.Authentificator;
+import models.service.Authenticator;
 import play.*;
 import play.mvc.*;
 
@@ -25,7 +25,7 @@ import views.html.backendView.*;
  */
 public class DashboardController extends CompressController {
 
-	private static Authentificator auth=new Authentificator();
+	private static Authenticator auth=new Authenticator();
 	@SubjectPresent
 	@With(DataFiller.class)
 	public static Result index(){

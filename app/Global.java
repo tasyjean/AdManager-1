@@ -13,8 +13,8 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app){
 		SetInitialData data=new SetInitialData();
 //		data.setDataUser();
-		data.setBannerSize();
-		data.setZoneChannel();
+//		data.setBannerSize();
+//		data.setZoneChannel();
 		
 	}
 }

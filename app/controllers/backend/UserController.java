@@ -19,6 +19,7 @@ import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.custom_helper.PasswordGenerator;
+import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.SaveToEnum;
@@ -54,7 +55,9 @@ public class UserController extends CompressController {
 	public static FileManager manager=new FileManager();
 	public static UserFetch fetch=new UserFetch();
 	public static SendMail mailer=new SendMail();
-	public static UserCreator creator=new UserCreator(manager, mailer);
+	public static RoleFactory factory=new RoleFactory();
+	
+	public static UserCreator creator=new UserCreator(manager, mailer, factory);
 	public static PasswordGenerator password=new PasswordGenerator();
 	public static UserOperation  opt =new UserOperation(password,mailer);
 	public static UserContactData contact_data=new UserContactData();
@@ -62,6 +65,8 @@ public class UserController extends CompressController {
 	final static Form<EditUserForm> editUserForm = Form.form(EditUserForm.class);
 	final static Form<UserForm> userForm = Form.form(UserForm.class);
 	final static Form<ContactForm> contactForm = Form.form(ContactForm.class);
+	
+	
 	@Restrict({@Group("administrator"), @Group("manager")})
 	@With(DataFiller.class)
 	public static Result showUser(){
@@ -89,7 +94,7 @@ public class UserController extends CompressController {
 		return ok(show_single_user.render(data, user));
 	}
 	@With(DataFiller.class)
-	@Restrict({@Group("administrator"), @Group("manager")})
+	@Restrict(@Group("administrator"))
 	public static Result editUser(int id_user){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
@@ -158,7 +163,7 @@ public class UserController extends CompressController {
 		}else{
 			try {
 				User user=creator.saveUser(filledForm);
-				flash("success","true");
+				flash("success","Data berhasil disimpan");
 				List<UserContact> user_contact=null;
 				try {
 					user_contact = User.find.byId(user.getId_user()).getUserContact();
@@ -228,6 +233,7 @@ public class UserController extends CompressController {
 			int result=creator.saveProfilePicture(part, id_user);
 			if(result==0){
 				flash("edit","sukses");
+				flash("success","Foto pengguna dirubah");
 				return redirect(routes.UserController.showSingleUser(id_user));		 				
 			}else if(result==2){
 				flash("error","Hanya mendukung file jpg, png dan gif");
@@ -260,6 +266,7 @@ public class UserController extends CompressController {
 			try {
 				User user=creator.updateUser(filledForm, id_user);
 				flash("edit","Sukses Update Informasi pengguna dasar");
+				flash("success","Sukses merubah informasi pengguna");
 				return redirect(routes.UserController.showSingleUser(user.getId_user()));	
 			} catch (Exception e) {
 				flash("error","Gagal memperbaharui data pengguna");
@@ -284,15 +291,17 @@ public class UserController extends CompressController {
 		if(filledForm.hasErrors()){
 			return ok(edit_user2.render(data, filledForm, contact_data, UserContact.find.byId(id_contact)));
 		}else{
-			boolean sukses=creator.editContact(filledForm, id_contact);
-			User user=User.find.byId(UserContact.find.byId(id_contact).getId_user().getId_user());
-			if(sukses){
+			try {
+				UserContact sukses=creator.editContact(filledForm, id_contact);
+				int id_user=sukses.getId_user().getId_user();
 				flash("edit","Sukses memperbaharui data pengguna");
-				return redirect(routes.UserController.showSingleUser(user.getId_user()));	
-			}else{
+				flash("success","Sukses mengubah data pengguna");
+				return redirect(routes.UserController.showSingleUser(id_user));	
+			} catch (Exception e) {
 				flash("error","Gagal memperbaharui data pengguna");
-				return ok(edit_user2.render(data, filledForm, contact_data, UserContact.find.byId(id_contact)));				
-			}
+				e.printStackTrace();
+				return ok(edit_user2.render(data, filledForm, contact_data, UserContact.find.byId(id_contact)));
+			}				
 		}
 	}
 	@With(DataFiller.class)
@@ -318,6 +327,7 @@ public class UserController extends CompressController {
 			boolean sukses=creator.saveContact(filledForm, id_user);
 			if(sukses){
 				flash("edit","Sukses menambah data pengguna");
+				flash("success","Sukses menambah data pengguna");
 				return redirect(routes.UserController.showSingleUser(id_user));	
 			}else{
 				flash("error","Gagal memperbaharui data pengguna");

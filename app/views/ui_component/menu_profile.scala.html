@@ -18,14 +18,15 @@
              </a>
              <ul class="dropdown-menu menu-auth" role="menu">
                <li>
-               		<a role="menuitem" tabindex="-1" href="@controllers.backend.routes.ProfileController.index()">
+               		<a role="menuitem" tabindex="-1" href="@controllers.backend.routes.ProfileController.showProfile()">
                       <span class="space icon-user icon-white"></span>Profile</a> 
                </li>               
                <li>
                		<a role="menuitem" tabindex="-1" href=""><span class="space icon-wrench icon-white"></span>Pengaturan</a> 
                </li>
                 <li>
-               		<a role="menuitem" tabindex="-1" href=""><span class="space icon-envelope icon-white"></span>Notifikasi<span class="notif-button">@data.getNotifCount<span></a> 
+               		<a role="menuitem" tabindex="-1" href="@controllers.backend.routes.ProfileController.showNotification()">
+               			<span class="space icon-envelope icon-white"></span>Notifikasi<span class="notif-button">@data.getNotifCount<span></a> 
                </li>
 
                <li class="divider"></li>

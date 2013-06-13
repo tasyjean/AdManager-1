@@ -41,6 +41,7 @@
 					<h5 style="font-style: italic;">Isi informasi pengguna dasar</h5>
 				@if(user_form.hasGlobalErrors){
 					<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
 	              		@user_form.globalError.message     	  	 	
 					</div>
 	      	  	}

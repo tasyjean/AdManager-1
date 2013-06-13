@@ -20,7 +20,7 @@ import models.dataWrapper.TemplateData;
 import models.form.backendForm.zoneForm.ChannelForm;
 import models.form.backendForm.zoneForm.ZoneForm;
 import models.form.frontendForm.LoginForm;
-import models.service.Authentificator;
+import models.service.Authenticator;
 import models.service.zone.ChannelProcessor;
 import models.service.zone.ErrorEnum;
 import models.service.zone.ZoneProcessor;

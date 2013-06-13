@@ -429,7 +429,7 @@ textarea[readonly="readonly"]
 }
 .single-view td:last-child {
 	padding-right: 10px;
-	max-width: 300px;
+	max-width: 230px;
 }
 .single-view tr:last-child {
 	padding-bottom: 10px;
@@ -506,6 +506,8 @@ font-family: 'Courier New',Courier,Freemono,'Nimbus Mono L',monospace;
 .edit_picture_black{
 	border: 1px solid black;
 	padding: 2px;
+	background-color: #fff;
+	opacity: 5%
 }
 .edit_basic_black {
 	color: #8c8e90;

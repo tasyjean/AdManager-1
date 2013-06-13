@@ -2,6 +2,7 @@ package models.service.user;
 
 import play.i18n.Messages;
 import models.custom_helper.DomainURL;
+import models.custom_helper.EmailSenderThread;
 import models.custom_helper.PasswordGenerator;
 import models.custom_helper.SendMail;
 import models.data.User;
@@ -80,7 +81,8 @@ public class UserOperation {
 			mailer.setSubject(Messages.get("email.reset.subject"));
 			mailer.setCc(Messages.get("email.sender"));
 			
-			mailer.sendHTML();
+			EmailSenderThread sender = new EmailSenderThread(mailer);
+			new Thread(sender).start();
 			return true;
 		} catch (Exception e) {
 

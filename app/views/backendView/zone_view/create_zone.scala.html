@@ -12,11 +12,13 @@
 			<h5>Untuk membuat zona, lengkapi form berikut dengan lengkap</h5>
 			@if(zone_form.hasGlobalErrors){
 				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
               		@zone_form.globalError.message     	  	 	
 				</div>
       	  	}
 			@if(zone_form.hasErrors){
 				<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
 				Ada Form yang belum di isi<br><br>
 				Silahkan di isi lagi ...terima kasih :)
 				</div>

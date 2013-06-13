@@ -11,7 +11,7 @@
 		@dashboard_content("Manajemen Pengguna","Detail Pengguna","daftar pengguna"){
   			
 		    <div class="content-padding">
-		      <a class="btn" href="@controllers.backend.routes.UserController.showUser()">&larr; Ke Daftar User</a>		      
+		      <a class="btn" href="@controllers.backend.routes.UserController.showUser()">&larr; Ke Daftar Pengguna</a>		      
 		      <br/><br/>
 		       @if(user==null){
 		       	<h5>Maaf, data pengguna tidak ditemukan</h5>
@@ -20,6 +20,7 @@
 			       
 			       @if(flash.contains("success")) {
 			           	<div class="alert alert-info">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
 							  @flash.get("success")
 			            </div>
 			       }      
@@ -43,7 +44,7 @@
 			          <td id="td_profile" style="padding-right:12px;" rowspan="@(11+user.getUserContact.size*2)">
 			     		 <div style="display:block;">
 				     		 @if(user.getProfile_photo!=null){
-				 	    		 <img id="profile" src="@user.getProfile_photo.getFileURL" width="250px" height="250px"></img>			     		 
+				 	    		 <img id="profile" src="@user.getProfile_photo.getFileURL" style="width:200px;""></img>			     		 
 				     		 }else{
 				     		 	@default_profile_pic()
 				     		 }
@@ -98,45 +99,51 @@
 				        	<td></td><td></td>
 				        	<td><span style="font-size:13px;font-style: italic;">@contact.getContact_description</span></td>
 				        </tr>
-			        	<tr class="edit_contact">
-			        		<td class="garis" colspan="3"><nobr>
-				     		 	<a style="display:inline;float:left;display: table" class="btn btn-mini" 
-				     		 	    href="@controllers.backend.routes.UserController.editUserContact(contact.getId_user_contact)">
-				     		 	    Ubah
-				     		 	 </a> 			 		        		
-				     		 	<a style="display:inline;float:left;margin:0 5px 10px 5px;" 
-				     		 	   class="btn btn-mini btn-danger" data-toggle="modal" type="submit"  role="button" 
-				     		 	   href="#confirm_modal@(contact.getId_user_contact)">
-				     		 	   Hapus
-				     		 	 </a> </nobr>				        		 				        		
-			        		
-			        		</td>		
-			        	</tr>	
-						@**********Modal hapus item*********@
-						<div id="confirm_modal@(contact.getId_user_contact)" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
-							<div class="modal-header">
-					    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					    		<h4 id="label">Hapus Informasi Pengguna</h4>
-					  		</div>
-							 <div class="modal-body">
-								<h5>Yakin Mau menghapus @(contact.getContact_type.toString)?</h5>
-			  				</div>
-			  				<div class="modal-footer">
-							   <a class="btn btn-warning" 
-							   		href="@controllers.backend.routes.UserController.deleteContact(contact.getId_user_contact)">
-							   		Hapus
-							   	</a>  					
-							   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
-							</div>
-							
-						</div>			        			        	
+						@restrict(List(as("administrator"))){ 														        
+				        	<tr class="edit_contact">
+				        		<td class="garis" colspan="3"><nobr>
+					     		 	<a style="display:inline;float:right;margin:0 5px 10px 5px;" 
+					     		 	   class="btn btn-mini btn-danger" data-toggle="modal" type="submit"  role="button" 
+					     		 	   href="#confirm_modal@(contact.getId_user_contact)">
+					     		 	   Hapus
+					     		 	 </a>
+					     		 	 					     		 	<a style="display:inline;float:right;display: table" class="btn btn-mini" 
+					     		 	    href="@controllers.backend.routes.UserController.editUserContact(contact.getId_user_contact)">
+					     		 	    Ubah
+					     		 	 </a></nobr>				        		 				        		
+				        		
+				        		</td>		
+				        	</tr>
+				        	
+			        
+							@**********Modal hapus item*********@
+							<div id="confirm_modal@(contact.getId_user_contact)" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+								<div class="modal-header">
+						    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						    		<h4 id="label">Hapus Informasi Pengguna</h4>
+						  		</div>
+								 <div class="modal-body">
+									<h5>Yakin Mau menghapus @(contact.getContact_type.toString)?</h5>
+				  				</div>
+				  				<div class="modal-footer">
+								   <a class="btn btn-warning" 
+								   		href="@controllers.backend.routes.UserController.deleteContact(contact.getId_user_contact)">
+								   		Hapus
+								   	</a>  					
+								   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+								</div>
+								
+							</div>		
+						} @* end restrict *@		        			        	
 			        } @* end for *@
+					@restrict(List(as("administrator"))){ 														        			        	
 			        	<tr class="add_contact">
 			        		<td colspan="3">
 				     		 	<a style="float:right;margin:20px 5px 0 5px" class="btn btn-mini btn-success" 
 				     		 	   href="@controllers.backend.routes.UserController.addUserContact(user.getId_user)">Tambah Data</a>
 			        		</td>		
-			        	</tr>				        	
+			        	</tr>
+			        }					        	
 			      </table>
 			      </div>
 			    @restrict(la(as("administrator"))){      
@@ -144,10 +151,7 @@
 				        <form  style="display:inline">
 				    	       <button type="button" onclick="buttonClick()" id="ubah" class="btn btn-primary">Ubah Pengguna</button>
 				     	 </form>
-				        <a  href="#confirm_modal_hapus" role="button" data-toggle="modal" style="display:inline"
-				             class="btn btn-danger" type="submit"> Hapus Pengguna
-				     	</a>   
-				        <a href="#confirm_modal_reset" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				        <a href="#confirm_modal_reset" role="button" data-toggle="modal" style="display:inline"
 				             class="btn btn-info" type="submit"> Reset Password 
 				     	</a>
 				     	@if(user.isActive){
@@ -158,9 +162,14 @@
 					     	<a href="#confirm_modal_nonaktifkan" id="aktifkan" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
 				           		  class="btn btn-warning" type="submit"> Aktifkan
 				     		</a>	
-				     	}			     	  				      
+				     	}
+				        <a  href="#confirm_modal_hapus" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				             class="btn btn-danger" type="submit"> Hapus Pengguna
+				     	</a>   
+				     	
+				     				     	  				      
 				    </div>
-				 }
+				 
 			@**********Modal reset*********@
 			<div id="confirm_modal_reset"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
 				<div class="modal-header">
@@ -223,7 +232,9 @@
 				   	</a>  					
 				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batalkan Saja</button>
 				</div>			
-			</div>						
+			</div>		
+		} @* End restrict *@    
+							
 			<script type="text/javascript">
 
 			@("var state=0;".when(flash.get("edit")==null))
@@ -297,8 +308,8 @@
 				td_profile.attr("rowspan","@(12+user.getUserContact.size*2)");
 
 			}
-			</script>    
-			    
+			
+			 </script>    
  		} @*end if *@
  		
  	}

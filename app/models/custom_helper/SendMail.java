@@ -1,6 +1,10 @@
 package models.custom_helper;
 
+import java.util.concurrent.TimeUnit;
+
 import play.i18n.Messages;
+import play.libs.Akka;
+import scala.concurrent.duration.Duration;
 
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
@@ -14,11 +18,12 @@ public class SendMail  {
 	private  MailerAPI mail = play.Play.application()
 			.plugin(MailerPlugin.class).email();
 	
-	public void sendHTML(){
+	
+	public synchronized void sendHTML(){
 		setData();
 		mail.sendHtml(content);
 	}
-	public void sendText(){
+	public synchronized void sendText(){
 		setData();
 		mail.send(content);
 	}
@@ -60,5 +65,6 @@ public class SendMail  {
 		mail.addCc(cc);
 		
 	}
-
+		
+	
 }

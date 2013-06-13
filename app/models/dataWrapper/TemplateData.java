@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.data.User;
-import models.service.Authentificator;
+import models.service.Authenticator;
 
 import play.mvc.Http.Context;
 
@@ -29,7 +29,7 @@ public class TemplateData {
 	//pilihan tampilan (untuk dashboard)
 	private String viewChoice="";
 
-	Authentificator auth = new Authentificator();
+	Authenticator auth = new Authenticator();
 	
 	public TemplateData(Context ctx) {
 		this.ctx = ctx;

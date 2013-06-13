@@ -28,7 +28,21 @@ GET   /dashboard/campaign				controllers.backend.CampaignController.index()
 GET   /dashboard/finance				controllers.backend.FinanceController.index()
 
 #profile
-GET   /dashboard/profile				controllers.backend.ProfileController.index()
+GET   /dashboard/profile					controllers.backend.ProfileController.showProfile()
+GET   /dashboard/notification				controllers.backend.ProfileController.showNotification()
+GET	  /dashboard/profile/edit/1				controllers.backend.ProfileController.editProfileBasic()
+POST  /dashboard/profile/edit/1				controllers.backend.ProfileController.updateProfileBasic()
+GET	  /dashboard/profile/edit/3				controllers.backend.ProfileController.editProfilePicture()
+POST  /dashboard/profile/edit/3				controllers.backend.ProfileController.updateProfilePicture()
+GET	  /dashboard/profile/edit/2/:id_contact	controllers.backend.ProfileController.editProfileContact(id_contact:Integer)
+POST  /dashboard/profile/edit/2/:id_contact	controllers.backend.ProfileController.updateProfileContact(id_contact:Integer)
+GET   /dashboard/profile/edit/new 			controllers.backend.ProfileController.addUserContact()
+POST  /dashboard/profile/edit/new 			controllers.backend.ProfileController.newUserContact()
+GET	  /dashboard/profile/delete/:id_contact controllers.backend.ProfileController.deleteContact(id_contact:Integer)
+GET   /dashboard/profile/edit/4				controllers.backend.ProfileController.changePassword()
+POST  /dashboard/profile/edit/4				controllers.backend.ProfileController.savePassword()
+
+
 
 #report
 GET   /dashboard/report					controllers.backend.ReportController.index()

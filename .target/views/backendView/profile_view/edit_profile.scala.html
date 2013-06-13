@@ -1,0 +1,146 @@
+@(data: TemplateData, user_form:Form[EditUserForm], user:User)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			@flash.get("error")
+		</div>
+	}       
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		@flash.get("success")
+	}else{
+		kosong
+	}
+}
+
+@main("Profil Pengguna"){
+
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+	
+		@dashboard_content("Profil Pengguna","Ubah Data Profil Dasar","data profil"){
+		
+				<div class="content-padding">
+					<h4>Ubah Informasi Profil</h4>
+					<h5 style="font-style: italic;">Lakukan perubahan pada form berikut, dan tekan simpan jika sudah selesai</h5>
+				@if(user_form.hasGlobalErrors){
+					<div class="alert alert-error">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+	              		@user_form.globalError.message     	  	 	
+					</div>
+	      	  	}
+	      	  	@getError
+				 </div>
+				 
+					@* form untuk informasi dasar *@
+					
+					@form(action =controllers.backend.routes.ProfileController.updateProfileBasic(), 'class-> "form-horizontal") {
+						@* NAMA DEPAN *@																			
+						<div class="content-padding @("error".when(user_form.error("front_name")!=null))">
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Nama Depan *</label>
+								<div class="controls">
+									<input type="text" required="required" class="input-large" placeholder="nama depan" value="@user.getFront_name" name="front_name" id="front_name">	                    
+				               		@if(user_form.error("front_name")!=null){
+				               			<p class="help-block">
+				               			@user_form.error("front_name").message()
+				               			</p>
+				               		}else{
+				               		  <p class="help-block">Nama depan pengguna</p>
+				               		 }					
+								</div>
+							</div>
+						
+						@* NAMA BELAKANG *@																		
+							
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Nama Belakang</label>
+								<div class="controls">
+									<input type="text" placeholder="nama belakang" class="input-large" value="@user.getLast_name" name="last_name" id="last_name">	                    								 
+								 	<p class="help-block">Nama belakang pengguna</p>													 
+								</div>
+							</div>	
+									
+							
+							@* PERUSAHAAN *@
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Perusahaan</label>
+								<div class="controls">
+									<textarea class="input-large" placeholder="perusahaan" name="company" id="company">@user.getCompany</textarea>                    
+								 <p class="help-block">Nama Perusahaan Pengguna</p>					
+								</div>
+							</div>	
+							@* KOTA *@
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Kota Domisili</label>
+								<div class="controls">
+									<input type="text" placeholder="kota" class="input-large" value="@user.getCity" name="city" id="city">	                    
+								 <p class="help-block">Kota tempat pengguna tinggal</p>					
+								</div>
+							</div>
+							@* NEGARA*@
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Negara</label>
+								<div class="controls">
+									<input type="text" placeholder="negara" class="input-large" value="@user.getCountry" name="country" id="country">	                    
+								 <p class="help-block">Negara tempat pengguna tinggal</p>					
+								</div>
+							</div>	
+																																									
+						</div>
+						
+			     <div class="form-actions">
+				      <button type="submit" class="btn btn-primary">Simpan</button>
+				      <button type="reset" class="btn">Reset</button>
+				      <a title="Batalkan pengisian form"  
+						   href="@controllers.backend.routes.ProfileController.showProfile()" 
+						   role="button" data-toggle="modal">
+						   	<button type="button" class="btn btn-info">Batal</button>
+					</a>
+				 </div>					
+				 } @* end form *@	
+				 
+    <script type="text/javascript">
+		$(document).ready(function() {
+
+	    	  $(function() {
+	    		    var negara = [
+	    		      "Indonesia",
+	    		      "Malaysia",
+	    		      "Timor Leste",
+	    		      "Amerika Serikat",
+	    		      "Singapura",
+	    		      "Jepang",
+	    		    ];
+	    		    $( "#country" ).autocomplete({
+	    		      source: negara
+	    		    });
+	    		  });
+		});
+	</script>
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("user")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

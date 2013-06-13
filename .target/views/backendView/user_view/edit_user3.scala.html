@@ -11,13 +11,6 @@
 		kosong
 	}        
 } 	  	    
-@getSuccess()= {
- 	@if(flash.contains("success")) {
-		@flash.get("success")
-	}else{
-		kosong
-	}
-}
 
 @main("Manajemen Pengguna"){
 	
@@ -26,6 +19,7 @@
 			@if(flash.contains("error")) {
     			<div class="content-padding">			     
 			      <div class="alert alert-error">
+					  <button type="button" class="close" data-dismiss="alert">&times;</button>
 			      	 <p style="font-weight: bold;">@flash.get("error")</p>
 					 <p>Proses upload tidak berhasil</p>
 			      </div>

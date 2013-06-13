@@ -10,6 +10,7 @@
 @getSuccess()= {
  	@if(flash.contains("success")) {
 		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<p>Sukses!</p>
 		<p>@flash.get("success")</p>
 		</div>
@@ -34,9 +35,7 @@
 							<th>Nama</th>
 							<th>Email Utama</th>
 							<th>Posisi</th>
-   							@restrict(List(as("administrator"))){ 									
 							<th></th>
-							}
 						</tr>
 					</thead>
 					<tbody>
@@ -45,20 +44,21 @@
 							<td>@user.getFront_name @user.getLast_name</td>
 							<td>@user.getEmail</td>
 							<td>@user.getRole.getName</td>
-   						@restrict(List(as("administrator"))){ 										
-							<td>
+   							<td>
 								<ul  id="icons" class="ui-widget ui-helper-clearfix">
+									@restrict(List(as("administrator"))){ 										
 									<li class="ui-state-default ui-corner-all" title="Edit  @user.getFront_name">
 										<a class="ui-icon ui-icon-pencil" 
 										   href="@controllers.backend.routes.UserController.editUser(user.getId_user)"></a>
 									</li>
+									}
 									<li class="ui-state-default ui-corner-all" title="Tampilkan Data Lengkap @user.getFront_name">
 										<a class="ui-icon ui-icon-extlink"
 										   href="@controllers.backend.routes.UserController.showSingleUser(user.getId_user)"></a>
 									</li>
 								</ul>
 							</td>
-						}
+						
 						</tr>
 					}
 					</tbody>

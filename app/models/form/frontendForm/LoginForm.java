@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 
 import models.custom_helper.MD5;
 import models.data.User;
-import models.service.Authentificator;
+import models.service.Authenticator;
 
 import play.db.ebean.*;
 
@@ -29,7 +29,7 @@ public class LoginForm {
 	public boolean rememberMe = false;
 	
 	public String validate(){
-		boolean valid=new Authentificator().authenticate(email, password);
+		boolean valid=new Authenticator().authenticate(email, password);
 		if(isFilled()){
 			if(valid){
 				return null;

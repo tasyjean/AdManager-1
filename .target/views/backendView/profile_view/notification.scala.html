@@ -1,0 +1,26 @@
+@(data: TemplateData, user:User)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@main("Profil Pengguna"){
+	
+		@dashboard_content("Profil Pengguna","Notifikasi","notifikasi"){
+		 <div class="content-padding">
+		 	@user.getFront_name 
+		 </div>
+    	}
+
+} {
+  
+  	@* Untuk bagian Menu *@
+  
+  	@menu_dashboard()
+
+} {
+  
+ 	 @* Untuk bagian menu profile *@
+ 	 @menu_profile(data)
+
+}

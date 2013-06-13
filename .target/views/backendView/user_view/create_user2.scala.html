@@ -7,6 +7,7 @@
 @getError() = {
 	@if(flash.contains("error")) {
 		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<p>@flash.get("error")</p>
 		</div>
 	}
@@ -14,6 +15,7 @@
 @getSuccess()= {
  	@if(flash.contains("success")) {
 		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<p>Sukses!</p>
 		<p>@flash.get("success")</p>
 		</div>
@@ -46,6 +48,7 @@
 				  <div class="span5" style="min-width:400px; display:block;float:right;margin-right:10px;">
 				    <div class="content-padding">
 					@if((contacts.size>0)){
+						@getSuccess()
 				      	<h4>Informasi Tersimpan</h4>
 				      	<h5 style="font-style: italic;">Daftar Informasi user yang sudah disimpan</h5>
 					    <table style="line-height: 24px;width:100%;">				       
@@ -68,10 +71,11 @@
 				  </div> @*end span 5 *@
 				  <div class="span5" style="float:left;display:block;">
 						<div class="content-padding">  					
+							
 							<h4>Informasi Pengguna Tambahan</h4>
 							<h5 style="font-style: italic;">Isi informasi Pengguna dengan lebih lengkap</h5>
-								@getSuccess()
 								@getError()	
+
 								@if(contact_form.hasErrors){
 									<div class="alert alert-error">
 										<p>Penyimpanan Gagal</p>

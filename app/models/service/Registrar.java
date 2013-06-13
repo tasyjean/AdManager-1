@@ -4,6 +4,8 @@ import java.util.Date;
 
 import play.data.Form;
 import meesy.Meesy;
+import models.custom_helper.EmailSenderThread;
+import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.data.User;
 import models.data.UserRole;
@@ -15,10 +17,18 @@ import models.form.frontendForm.RegistrationForm;
  * Kelas untuk memproses pendaftaran
  */
 public class Registrar {
-	SendMail mailer=new SendMail();
-	String meesyKey="nanana";
-	Meesy meesy=new Meesy();
+	SendMail mailer;
+	final String MEESY_KEY="nanana";
+	Meesy meesy;
+	RoleFactory factory;
 	
+	public Registrar(SendMail mailer, Meesy meesy, RoleFactory factory) {
+		super();
+		this.mailer = mailer;
+		this.meesy = meesy;
+		this.factory = factory;
+	}
+
 	public String register(Form<RegistrationForm> form, String host){
 		User user=new User();
 		
@@ -39,7 +49,7 @@ public class Registrar {
 	//input dalam format UPPERCASE
 	public boolean activate(String input, String email){
 		//Decript email
-		String email_decrypt=meesy.decrypt(email, meesyKey, 0,0);
+		String email_decrypt=meesy.decrypt(email, MEESY_KEY, 0,0);
 		try{
 			User user=User.find.where().eq("email", email_decrypt).findUnique();
 			if(getActivationCode(user).equals(input)){
@@ -63,14 +73,16 @@ public class Registrar {
 		mailer.setContent(content);
 		mailer.setSubject("Teknimo Ad Manager : Registrasi Berhasil");
 		
-		mailer.sendHTML();
+		EmailSenderThread sender = new EmailSenderThread(mailer);
+		new Thread(sender).start();
+		
 		return user.getEmail();
 	}	
 	private String getActivationCode(User user){
 		return user.getValidation_key().toUpperCase();
 	}
 	private String generateLink(String key,String host, String email){
-		String emailCrypt=meesy.encrypt(email, meesyKey, 1, 2, 100);
+		String emailCrypt=meesy.encrypt(email, MEESY_KEY, 1, 2, 100);
 		
 		return "<a href=http://"+host+"/activate/"+emailCrypt+"/"+key+">Link Aktivasi</a>";
 	}
