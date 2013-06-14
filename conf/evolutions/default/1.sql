@@ -136,6 +136,7 @@ create table system_preferences (
   id_system_preferences     integer not null,
   key                       varchar(255),
   value                     varchar(255),
+  description               varchar(255),
   constraint pk_system_preferences primary key (id_system_preferences))
 ;
 

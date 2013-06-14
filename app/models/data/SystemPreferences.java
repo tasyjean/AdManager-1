@@ -14,7 +14,7 @@ public class SystemPreferences extends Model{
 	private int id_system_preferences;
 	private String key;
 	private String value;
-	
+	private String description;
 	public static Model.Finder<Integer,SystemPreferences> find = new Model.Finder(Integer.class, SystemPreferences.class);
 
 	
