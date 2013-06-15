@@ -22,6 +22,8 @@ import models.custom_helper.PasswordGenerator;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.User;
 import models.data.UserContact;
@@ -52,11 +54,11 @@ import views.html.backendView.zone_view.create_zone_success;
 
 public class UserController extends CompressController {
 
-	public static FileManager manager=new FileManager();
+	public static FileManagerInterface manager=new FileManagerFactory().getManager();
 	public static UserFetch fetch=new UserFetch();
 	public static SendMail mailer=new SendMail();
 	public static RoleFactory factory=new RoleFactory();
-	
+
 	public static UserCreator creator=new UserCreator(manager, mailer, factory);
 	public static PasswordGenerator password=new PasswordGenerator();
 	public static UserOperation  opt =new UserOperation(password,mailer);

@@ -3,6 +3,7 @@ package models.service.profile;
 import models.custom_helper.MD5;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.FileUpload;
 import models.data.User;
@@ -19,9 +20,9 @@ import play.mvc.Http.MultipartFormData.FilePart;
 public class ProfileModificator {
 
 	RoleFactory factory;
-	FileManager manager;
+	FileManagerInterface manager;
 	
-	public ProfileModificator(RoleFactory factory, FileManager  manager) {
+	public ProfileModificator(RoleFactory factory, FileManagerInterface  manager) {
 		this.factory=factory;
 		this.manager=manager;
 	}

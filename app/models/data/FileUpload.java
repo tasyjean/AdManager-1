@@ -9,6 +9,8 @@ import play.Logger;
 import play.Play;
 import models.custom_helper.S3Plugin;
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,22 +32,20 @@ public class FileUpload extends Model {
     private String url_path;
     private String name;
 	public static Model.Finder<Integer,FileUpload> find = new Model.Finder(Integer.class, FileUpload.class);
-	static FileManager manager=new FileManager();
+	static FileManagerInterface manager=new FileManagerFactory().getManager();
 
     
 	public String getFileURL(){
-		return manager.getFileUrl(this.find.byId(this.id));
+		return manager.getFileUrl(this.id);
 	}
 	
 	public String getThumbnailURL(){
-		return manager.getThumbnailURL(this.find.byId(this.id));
+		return manager.getThumbnailURL(this.id);
 	}
 	@Override
 	public void delete() {
-		File file=manager.getFile(this);
-		file.delete();
-		File thumbnail=new File(manager.getThumbnailFullPath(this));
-		thumbnail.delete();
+//		Fungsi delete digantikan sama yang ada di file manager
+		manager.delete(this.id);
 		super.delete();
 	};
 	public int getId() {

@@ -12,7 +12,7 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import scala.collection.parallel.ParIterableLike.Find;
 import models.data.FileUpload;
 
-public class FileManager {
+public class FileManager implements FileManagerInterface {
 
 	private final String BASE_PATH=Play.application().configuration().getString("upload.base_path"); //path sebenernya
 	private final String BASE_URL_PATH=Play.application().configuration().getString("upload.base_url_path"); //path buat request
@@ -52,16 +52,7 @@ public class FileManager {
 	 * 
 	 * @param part saveto
 	 */
-	public FileManager() {
-		if(Play.application().configuration().getBoolean("aws.mode")){
-			s3=new S3Manager(BASE_PATH, BASE_URL_PATH, 
-					 PROFILE, ADS, TRANSFER, 
-					 OTHER, THUMBNAIL, THUMBNAIL_PREFIX);
-			
-		}else{
-			
-		}
-	}
+
 	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
@@ -95,9 +86,11 @@ public class FileManager {
 		try {
 			FileUpload upload=FileUpload.find.byId(id);
 			File file= getFile(upload);
-			
-			upload.delete();
+			File thumbnail=new File(getThumbnailFullPath(upload));
+
 			file.delete();
+			thumbnail.delete();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -108,17 +101,17 @@ public class FileManager {
 		return FileUpload.find.byId(id);
 	}
 	public String getThumbnailURL(FileUpload file){
-		return BASE_URL_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
+		return file.getUrl_path()+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
 			   	
 	}
 	public String getThumbnailURL(int id){
 		FileUpload file=FileUpload.find.byId(id);		
-		return BASE_URL_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
+		return file.getUrl_path()+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName();
 			   	
 	}	
 	public String getThumbnailFullPath(FileUpload file){
 		return APP_PATH+
-			   BASE_PATH+
+			   file.getPath()+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
 			   file.getId()+
@@ -128,7 +121,7 @@ public class FileManager {
 		FileUpload file=FileUpload.find.byId(id);		
 		
 		return APP_PATH+
-			   BASE_PATH+
+			   file.getPath()+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
 			   file.getId()+
@@ -155,7 +148,7 @@ public class FileManager {
 		
 		File imageFile = new File(this.getFilePath(file));
 		File output = new File(APP_PATH+
-							   BASE_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName());
+							   file.getPath()+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName());
 		if(!output.exists()){
 			try {
 				Thumbnails.of(imageFile).width(60).height(60).toFile(output);

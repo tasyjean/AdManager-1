@@ -10,6 +10,8 @@ import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.data.User;
 import models.data.UserContact;
 import models.dataWrapper.TemplateData;
@@ -29,13 +31,12 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import controllers.CompressController;
 import controllers.action.DataFiller;
 import views.html.backendView.profile_view.*;
-import views.html.backendView.profile_view.new_contact;
 import views.html.helper.form;
 
 public class ProfileController extends CompressController {
 
 	public static RoleFactory factory=new RoleFactory();
-	public static FileManager manager=new FileManager();
+	public static FileManagerInterface manager=new FileManagerFactory().getManager();
 	
 	public static Authenticator auth=new Authenticator();
 	public static ProfileModificator prm=new ProfileModificator(factory, manager);

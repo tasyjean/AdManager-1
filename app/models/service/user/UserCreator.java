@@ -9,6 +9,8 @@ import models.custom_helper.EmailSenderThread;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.FileUpload;
 import models.data.User;
@@ -22,10 +24,10 @@ import models.form.backendForm.userForm.UserForm;
 
 public class UserCreator {
 
-	FileManager manager;
+	FileManagerInterface manager;
 	SendMail mailer;
 	RoleFactory factory;
-	public UserCreator(FileManager manager, SendMail mailer, RoleFactory factory){
+	public UserCreator(FileManagerInterface manager, SendMail mailer, RoleFactory factory){
 		this.manager=manager;
 		this.mailer=mailer;
 		this.factory=factory;
