@@ -23,7 +23,7 @@ public class FileManager {
 	
 	private final String THUMBNAIL=Play.application().configuration().getString("upload.thumbnail");
 	private final String THUMBNAIL_PREFIX="thumb";
-	
+	private String app_path;
 	
 	/*
 		private final String BASE_URL_PATH="/assets/upload/"; //path buat request
@@ -51,6 +51,13 @@ public class FileManager {
 	 * 
 	 * @param part saveto
 	 */
+	public FileManager() {
+		if(Play.application().configuration().getBoolean("heroku.mode")){
+			app_path="HOME";
+		}else{
+			app_path=Play.application().path().toString();			
+		}
+	}
 	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
 		String path = getSavePath(saveTo);
 		String fileName = part.getFilename()
@@ -69,7 +76,7 @@ public class FileManager {
 		String contentType = part.getContentType(); 
 		File file = part.getFile();
 		
-		String fullPath=Play.application().path()+path;
+		String fullPath=app_path+path;
 		String save_name=upload.getId()+fileName; //nama yang disave adalah id+nama file asli
 		
 		file.renameTo(new File(fullPath+save_name));
@@ -106,7 +113,7 @@ public class FileManager {
 			   	
 	}	
 	public String getThumbnailFullPath(FileUpload file){
-		return Play.application().path()+
+		return app_path+
 			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
@@ -116,7 +123,7 @@ public class FileManager {
 	public String getThumbnailFullPath(int id){
 		FileUpload file=FileUpload.find.byId(id);		
 		
-		return Play.application().path()+
+		return app_path+
 			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
@@ -129,7 +136,7 @@ public class FileManager {
 		FileUpload file=FileUpload.find.byId(id);
 		
 		File imageFile = new File(this.getFilePath(file));
-		File output = new File(Play.application().path()+
+		File output = new File(app_path+
 							   BASE_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName());
 		if(!output.exists()){
 			try {
@@ -145,21 +152,21 @@ public class FileManager {
 	}	
 	public File getFile(FileUpload file){
 		
-		return new File(Play.application().path()
+		return new File(app_path
     					+file.getPath()
     					+file.getId()
     					+file.getName());
 	}
 	public File getFile(int id){
 		FileUpload file=FileUpload.find.byId(id);
-		return new File(Play.application().path()
+		return new File(app_path
     					+file.getPath()
     					+file.getId()
     					+file.getName());
 	}
 	public String getFilePath(FileUpload file){
 		
-		return Play.application().path()
+		return app_path
 				+file.getPath()
 				+file.getId()
 				+file.getName();
@@ -167,7 +174,7 @@ public class FileManager {
 	public String getFilePath(int id){
 		FileUpload file=FileUpload.find.byId(id);
 		
-		return Play.application().path()
+		return app_path
 				+file.getPath()
 				+file.getId()
 				+file.getName();

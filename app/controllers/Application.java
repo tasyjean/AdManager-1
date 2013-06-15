@@ -1,6 +1,7 @@
 package controllers;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -39,7 +40,18 @@ public class Application extends CompressController {
     	String uri=request().uri();
     	String source=request().getHeader(REFERER);
     	String agent=request().getHeader(USER_AGENT);
-    	String play_path=Play.application().path().toString();
+    	String play_path=Play.application().path().getAbsolutePath();
+    	String play_path2 = "";
+    	try {
+			play_path2=Play.application().path().getCanonicalPath();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	String play_path3=Play.application().path().getName();
+    	String play_path4=Play.application().path().getPath();
+    	String play_path5=Play.application().path().toString();
+
     	
     	ArrayList<String> data=new ArrayList<String>();
     	data.add(host);
@@ -51,6 +63,10 @@ public class Application extends CompressController {
     	data.add(source);
     	data.add(agent);
     	data.add(play_path);
+    	data.add(play_path2);
+    	data.add(play_path3);
+    	data.add(play_path4);
+    	data.add(play_path5);
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	
