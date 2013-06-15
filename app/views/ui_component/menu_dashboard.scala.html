@@ -28,7 +28,7 @@
                       </li>
                       <li class="@("selected".when(activeMenu=="campaign"))">
                         <a href="@controllers.backend.routes.CampaignController.index()">
-                        	<i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Iklan Dan Kampanye
+                        	<i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Manajemen Iklan
                         </a>
                       </li>
                        @restrict(List(as("administrator"), as("manager"))){                     

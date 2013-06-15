@@ -82,14 +82,23 @@
     }
 }
 @campaignMenu(activeMenu:String="")={
-      	<div class="span2 sub-menu">
-            <div class="kpi">Daftar Iklan</div>
-             <div><small>Lihat Semua Iklan</small></div>
-        </div>		
-       	<div class="span2 sub-menu">
-            <div class="kpi">Tambah Iklan</div>
-             <div><small>Tambahkan Iklan</small></div>
-        </div>
+      <a  class="span2 sub-menu @("active".when(activeMenu=="daftar campaign"))"
+          href="@controllers.backend.routes.ZoneController.showZone()">
+          <div class="icon"></div>
+
+         <div class="content" >
+            <div class="kpi">Daftar Campaign</div>
+            <div class="small">Lihat Semua campaign</div>
+         </div>
+        </a>
+      <a  class="span2 sub-menu @("active".when(activeMenu=="tambah campaign"))"
+          href="@controllers.backend.routes.ZoneController.showZone()">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Campaign Baru</div>
+            <div class="small">Buat banner dan campaign baru</div>
+         </div>
+        </a>        
 }
 @financeMenu(activeMenu:String="")={
      	<div class="span2 sub-menu">
