@@ -78,18 +78,20 @@ public class S3Manager implements FileManagerInterface {
 	public boolean delete(int id) {
 		FileUpload upload=FileUpload.find.byId(id);
 		try {
+			String deletePath=upload.getPath().substring(1,upload.getPath().length());
             DeleteObjectRequest request=new DeleteObjectRequest(BUCKET, 
-            											  upload.getPath()+
+            											  deletePath+
             											  upload.getId()+
             											  upload.getName());
             DeleteObjectRequest requestThumbnail=new DeleteObjectRequest(BUCKET,  
-            											  upload.getPath()+THUMBNAIL+
+            											  deletePath
+            											  +THUMBNAIL+
             											  THUMBNAIL_PREFIX+
             											  upload.getId()+
             											  upload.getName());
             S3Plugin.amazonS3.deleteObject(requestThumbnail);
             S3Plugin.amazonS3.deleteObject(request);
-            
+            Logger.debug("Delete object "+ request.getKey());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
