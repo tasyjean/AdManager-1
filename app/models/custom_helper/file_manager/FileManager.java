@@ -53,7 +53,7 @@ public class FileManager {
 	 */
 	public FileManager() {
 		if(Play.application().configuration().getBoolean("heroku.mode")){
-			app_path="HOME";
+			app_path=System.getenv("PWD");
 		}else{
 			app_path=Play.application().path().toString();			
 		}

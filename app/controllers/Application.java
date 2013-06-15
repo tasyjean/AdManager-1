@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import models.custom_helper.file_manager.FileManager;
 import models.data.ZoneChannel;
 
 import play.*;
@@ -42,6 +43,8 @@ public class Application extends CompressController {
     	String agent=request().getHeader(USER_AGENT);
     	String play_path=Play.application().path().getAbsolutePath();
     	String play_path2 = "";
+    	FileManager manager=new FileManager();
+    	String pathfile=manager.getFilePath(11);
     	try {
 			play_path2=Play.application().path().getCanonicalPath();
 		} catch (IOException e) {
