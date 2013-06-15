@@ -65,16 +65,20 @@ public class Application extends CompressController {
     	String play_path5=Play.application().path().toString();
 
 		URL url = null;
-		File result=new File("resulaat.jpg");
+		File result=new File("/public/resulaat.jpg");
+		File result2=new File("public/resulaat2.jpg");
 		try {
 			url=new URL("http://www.blogcdn.com/www.engadget.com/media/2013/06/air-comparison-2012-11-14-619-3.jpg");
 			InputStream input=url.openStream();
 			OutputStream outputStream=new FileOutputStream(result);
+			OutputStream outputStream2=new FileOutputStream(result2);
+
 			int read = 0;
 			byte[] bytes = new byte[1024];
 	 
 			while ((read = input.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
+				outputStream2.write(bytes, 0, read);
 			}
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
