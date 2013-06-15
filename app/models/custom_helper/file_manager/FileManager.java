@@ -23,8 +23,9 @@ public class FileManager {
 	
 	private final String THUMBNAIL=Play.application().configuration().getString("upload.thumbnail");
 	private final String THUMBNAIL_PREFIX="thumb";
-	private String app_path;
+	private final String APP_PATH=Play.application().path().toString();
 	
+	private S3Manager s3;
 	/*
 		private final String BASE_URL_PATH="/assets/upload/"; //path buat request
 		private final String PROFILE="profile/";
@@ -52,10 +53,13 @@ public class FileManager {
 	 * @param part saveto
 	 */
 	public FileManager() {
-		if(Play.application().configuration().getBoolean("heroku.mode")){
-			app_path=System.getenv("PWD");
+		if(Play.application().configuration().getBoolean("aws.mode")){
+			s3=new S3Manager(BASE_PATH, BASE_URL_PATH, 
+					 PROFILE, ADS, TRANSFER, 
+					 OTHER, THUMBNAIL, THUMBNAIL_PREFIX);
+			
 		}else{
-			app_path=Play.application().path().toString();			
+			
 		}
 	}
 	public FileUpload saveNew(FilePart part, SaveToEnum saveTo){
@@ -76,7 +80,7 @@ public class FileManager {
 		String contentType = part.getContentType(); 
 		File file = part.getFile();
 		
-		String fullPath=app_path+path;
+		String fullPath=APP_PATH+path;
 		String save_name=upload.getId()+fileName; //nama yang disave adalah id+nama file asli
 		
 		file.renameTo(new File(fullPath+save_name));
@@ -113,7 +117,7 @@ public class FileManager {
 			   	
 	}	
 	public String getThumbnailFullPath(FileUpload file){
-		return app_path+
+		return APP_PATH+
 			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
@@ -123,7 +127,7 @@ public class FileManager {
 	public String getThumbnailFullPath(int id){
 		FileUpload file=FileUpload.find.byId(id);		
 		
-		return app_path+
+		return APP_PATH+
 			   BASE_PATH+
 			   THUMBNAIL+
 			   THUMBNAIL_PREFIX+
@@ -132,11 +136,25 @@ public class FileManager {
 			   	
 	}		
 	//save thumbnail untuk kontent tipe gambar
+	public boolean saveThumbnail2(File imageFile, String id_name){
+		File output = new File(APP_PATH+
+							   BASE_PATH+THUMBNAIL+THUMBNAIL_PREFIX+id_name);
+		if(!output.exists()){
+			try {
+				Thumbnails.of(imageFile).width(60).height(60).toFile(output);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}	
+		return true;
+	}	
+	//save thumbnail untuk kontent tipe gambar
 	public boolean saveThumbnail(int id){
 		FileUpload file=FileUpload.find.byId(id);
 		
 		File imageFile = new File(this.getFilePath(file));
-		File output = new File(app_path+
+		File output = new File(APP_PATH+
 							   BASE_PATH+THUMBNAIL+THUMBNAIL_PREFIX+file.getId()+file.getName());
 		if(!output.exists()){
 			try {
@@ -152,21 +170,21 @@ public class FileManager {
 	}	
 	public File getFile(FileUpload file){
 		
-		return new File(app_path
+		return new File(APP_PATH
     					+file.getPath()
     					+file.getId()
     					+file.getName());
 	}
 	public File getFile(int id){
 		FileUpload file=FileUpload.find.byId(id);
-		return new File(app_path
+		return new File(APP_PATH
     					+file.getPath()
     					+file.getId()
     					+file.getName());
 	}
 	public String getFilePath(FileUpload file){
 		
-		return app_path
+		return APP_PATH
 				+file.getPath()
 				+file.getId()
 				+file.getName();
@@ -174,7 +192,7 @@ public class FileManager {
 	public String getFilePath(int id){
 		FileUpload file=FileUpload.find.byId(id);
 		
-		return app_path
+		return APP_PATH
 				+file.getPath()
 				+file.getId()
 				+file.getName();

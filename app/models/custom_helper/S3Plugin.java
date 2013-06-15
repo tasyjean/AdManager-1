@@ -9,7 +9,7 @@ import play.Logger;
 import play.Plugin;
 
 //untuk mengelola penyimpanan AWS
-public class S3Manager extends Plugin {
+public class S3Plugin extends Plugin {
 
     public static final String AWS_S3_BUCKET = "aws.s3.bucket";
     public static final String AWS_ACCESS_KEY = "aws.access.key";
@@ -21,13 +21,13 @@ public class S3Manager extends Plugin {
 
     public static String s3Bucket;
 
-    public S3Manager(Application application) {
+    public S3Plugin(Application application) {
         this.application = application;
     }
 
     @Override
     public void onStart() {
-     /*   String accessKey = application.configuration().getString(AWS_ACCESS_KEY);
+        String accessKey = application.configuration().getString(AWS_ACCESS_KEY);
         String secretKey = application.configuration().getString(AWS_SECRET_KEY);
         s3Bucket = application.configuration().getString(AWS_S3_BUCKET);
 
@@ -37,15 +37,14 @@ public class S3Manager extends Plugin {
             amazonS3.setEndpoint(application.configuration().getString(AWS_ENDPOINT));            
             amazonS3.createBucket(s3Bucket);
             Logger.info("Using S3 Bucket: " + s3Bucket);
-        } */
+        } 
     }
 
     @Override
     public boolean enabled() {
-    	return false;
-        /*return (application.configuration().keys().contains(AWS_ACCESS_KEY) &&
+    	return (application.configuration().keys().contains(AWS_ACCESS_KEY) &&
                 application.configuration().keys().contains(AWS_SECRET_KEY) &&
-                application.configuration().keys().contains(AWS_S3_BUCKET)); */
+                application.configuration().keys().contains(AWS_S3_BUCKET)); 
     }
     
 }

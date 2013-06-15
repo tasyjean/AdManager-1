@@ -1,7 +1,13 @@
 package controllers;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -45,7 +51,7 @@ public class Application extends CompressController {
     	String play_path=Play.application().path().getAbsolutePath();
     	String play_path2 = "";
     	FileManager manager=new FileManager();
-    	String pathfile=manager.getFilePath(1);
+//    	String pathfile=manager.getFilePath(1);
     	String path=System.getenv("PWD");
     	Map<String, String> string=System.getenv();
     	try {
@@ -58,7 +64,24 @@ public class Application extends CompressController {
     	String play_path4=Play.application().path().getPath();
     	String play_path5=Play.application().path().toString();
 
-    	
+		URL url = null;
+		File result=new File("resulaat.jpg");
+		try {
+			url=new URL("http://www.blogcdn.com/www.engadget.com/media/2013/06/air-comparison-2012-11-14-619-3.jpg");
+			InputStream input=url.openStream();
+			OutputStream outputStream=new FileOutputStream(result);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+	 
+			while ((read = input.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		} catch(IOException io){
+			
+		}
+		String gambar=result.getAbsolutePath();
     	ArrayList<String> data=new ArrayList<String>();
     	data.add(host);
     	data.add(method);
@@ -73,9 +96,10 @@ public class Application extends CompressController {
     	data.add(play_path3);
     	data.add(play_path4);
     	data.add(play_path5);
-    	data.add(pathfile);
+//    	data.add(pathfile);
     	data.add(path);
     	data.add(string.toString());
+    	data.add(gambar);
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	

@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import play.Logger;
 import play.Play;
-import models.custom_helper.S3Manager;
+import models.custom_helper.S3Plugin;
 import models.custom_helper.file_manager.FileManager;
 
 import javax.persistence.Entity;
