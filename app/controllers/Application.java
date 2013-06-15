@@ -39,7 +39,7 @@ public class Application extends CompressController {
     	String uri=request().uri();
     	String source=request().getHeader(REFERER);
     	String agent=request().getHeader(USER_AGENT);
-    	
+    	String play_path=Play.application().path().toString();
     	
     	ArrayList<String> data=new ArrayList<String>();
     	data.add(host);
@@ -50,6 +50,7 @@ public class Application extends CompressController {
     	data.add(uri);
     	data.add(source);
     	data.add(agent);
+    	data.add(play_path);
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	

@@ -10,7 +10,7 @@
 			<div class="alert alert-error">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
 				<p style="font-weight: bold;">@flash.get("error")</p>
-				<p>Proses upload tidak berhasil</p>
+				<p>upload tidak berhasil</p>
 			</div>
 	   </div>
 	}       
@@ -25,7 +25,6 @@
 	
 		@dashboard_content("Profil Pengguna","Ubah Foto Profil","data profil"){
 					
-				@getError()
 				@form(action =controllers.backend.routes.ProfileController.updateProfilePicture(), 'enctype -> "multipart/form-data") {
 		    			<div class="content-padding">
 		    				<h5>Ubah Foto identitas disini</h5>

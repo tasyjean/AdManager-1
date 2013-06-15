@@ -14,18 +14,29 @@ import models.data.FileUpload;
 
 public class FileManager {
 
-	private final String BASE_PATH="/public/upload/"; //path sebenernya
-	private final String BASE_URL_PATH="/assets/upload/"; //path buat request
-	private final String PROFILE="profile/";
-	private final String ADS="ads/";
-	private final String TRANSFER="transfer/";
-	private final String OTHER ="other/";
+	private final String BASE_PATH=Play.application().configuration().getString("upload.base_path"); //path sebenernya
+	private final String BASE_URL_PATH=Play.application().configuration().getString("upload.base_url_path"); //path buat request
+	private final String PROFILE=Play.application().configuration().getString("upload.profile");
+	private final String ADS=Play.application().configuration().getString("upload.ads");
+	private final String TRANSFER=Play.application().configuration().getString("upload.transfer");
+	private final String OTHER =Play.application().configuration().getString("upload.other");
 	
-	private final String THUMBNAIL="profile/thumbnail/";
+	private final String THUMBNAIL=Play.application().configuration().getString("upload.thumbnail");
 	private final String THUMBNAIL_PREFIX="thumb";
 	
+	
 	/*
-	 * 
+		private final String BASE_URL_PATH="/assets/upload/"; //path buat request
+		private final String PROFILE="profile/";
+		private final String ADS="ads/";
+		private final String TRANSFER="transfer/";
+		private final String OTHER ="other/";
+		
+		private final String THUMBNAIL="profile/thumbnail/";
+		private final String THUMBNAIL_PREFIX="thumb";
+		
+		
+		
 	 * Informasi penting
 	 * Nama file disimpan dengan format id+nama asli,
 	 * Nama yang disimpan didatabase adalah nama asli
