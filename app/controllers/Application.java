@@ -4,6 +4,7 @@ package controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import models.custom_helper.file_manager.FileManager;
 import models.data.ZoneChannel;
@@ -44,7 +45,9 @@ public class Application extends CompressController {
     	String play_path=Play.application().path().getAbsolutePath();
     	String play_path2 = "";
     	FileManager manager=new FileManager();
-    	String pathfile=manager.getFilePath(11);
+    	String pathfile=manager.getFilePath(1);
+    	String path=System.getenv("PWD");
+    	Map<String, String> string=System.getenv();
     	try {
 			play_path2=Play.application().path().getCanonicalPath();
 		} catch (IOException e) {
@@ -70,6 +73,9 @@ public class Application extends CompressController {
     	data.add(play_path3);
     	data.add(play_path4);
     	data.add(play_path5);
+    	data.add(pathfile);
+    	data.add(path);
+    	data.add(string.toString());
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	
