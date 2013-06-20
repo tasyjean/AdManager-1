@@ -14,6 +14,11 @@ public class EmailSenderThread extends Thread{
 			System.out.println("Berhasil mengirim email dalam "+trial+" kali coba");
 		} catch (Exception e) {
 			System.out.println("Gagal mengirim, mencoba lagi untuk ke "+trial+" kali");
+			try {
+				this.sleep(20000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 			this.run();
 		}
 	}

@@ -1,0 +1,86 @@
+@(data: TemplateData, campaign_form:Form[CampaignForm])
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+ 		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+
+@main("Manajemen Iklan"){
+		
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		
+		
+		@dashboard_content("Manajemen Iklan","Iklan Baru", "tambah campaign") {
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="#tabs-1">1. Buat Campaign</a></li>
+				<li><a href="#tabs-2">2. Tambahkan Banner</a></li>
+				<li><a href="#tabs-3">3. Sambungkan Dengan Zona</a></li>
+			</ul>
+			<div id="tabs-1">				
+			</div>
+			<div id="tabs-2">
+			</div>
+			<div id="tabs-3">
+			</div>	
+								
+		</div>
+		
+		<div class="content-padding">
+			<h4>Buat Campaign Baru</h4>
+				<h5 style="font-style: italic;">Isi form berikut untuk membuat campaign baru</h5>
+				@if(campaign_form.hasGlobalErrors){
+					<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+	              		@campaign_form.globalError.message     	  	 	
+					</div>
+	      	  	}
+				 </div>
+				
+		</div>
+        <div class="form-actions">
+	         <button type="submit" class="btn btn-primary">Simpan dan Lanjutkan</button>
+    	     <button type="reset" class="btn">Batal</button>
+        </div>
+    }
+
+    <script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs( "option", "disabled", [ 1, 2 ] );
+	    	$("#input_tab").tabs({ active: 0 });
+		});
+	</script>
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("campaign")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

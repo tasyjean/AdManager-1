@@ -22,7 +22,8 @@ GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(em
 GET    /adsdelivery/:zone					controllers.backend.AdsDeliveryController.banner(zone:Integer)
 
 #campaign
-GET   /dashboard/campaign				controllers.backend.CampaignController.index()
+GET   /dashboard/campaign				controllers.backend.CampaignController.showCampaign()
+GET   /dashboard/campaign/new			controllers.backend.CampaignController.newCampaign()
 
 #finance
 GET   /dashboard/finance				controllers.backend.FinanceController.index()

@@ -36,7 +36,7 @@ public class SetInitialData {
 		
 		
 		//Clean Data dulu
-//		deleteUserData();
+		deleteUserData();
 		try {
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_seq RESTART WITH 1;");
@@ -49,6 +49,11 @@ public class SetInitialData {
 			e.printStackTrace();
 		}
 		System.out.println("Insert data");
+		
+		List<UserRole> roles=UserRole.find.all();
+		for(UserRole role:roles){
+			role.delete();
+		}
 		UserRole role1=new UserRole(RoleEnum.ADMINISTRATOR);
 		UserRole role2=new UserRole(RoleEnum.MANAGER);
 		UserRole role3=new UserRole(RoleEnum.ADVERTISER);

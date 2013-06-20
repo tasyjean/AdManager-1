@@ -58,6 +58,7 @@ create table banner_size (
   name                      varchar(255),
   width                     integer,
   height                    integer,
+  default_code              TEXT,
   description               TEXT,
   constraint pk_banner_size primary key (id_banner_size))
 ;
@@ -84,7 +85,7 @@ create table campaign (
   bid_price                 integer,
   is_activated              boolean,
   is_deleted                boolean,
-  budget                    integer,
+  description               TEXT,
   constraint ck_campaign_campaign_type check (campaign_type in ('contract','exclusive')),
   constraint ck_campaign_pricing_model check (pricing_model in ('cpm','cpa','flat')),
   constraint pk_campaign primary key (id_campaign))
@@ -136,6 +137,7 @@ create table system_preferences (
   id_system_preferences     integer not null,
   key                       varchar(255),
   value                     varchar(255),
+  name                      varchar(255),
   description               varchar(255),
   constraint pk_system_preferences primary key (id_system_preferences))
 ;

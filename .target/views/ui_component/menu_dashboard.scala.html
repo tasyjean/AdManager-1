@@ -23,10 +23,11 @@
                       <li class="@("selected".when(activeMenu=="dashboard"))">
                         <a href="@controllers.backend.routes.DashboardController.index()">
                         	<i class="icon-play icon-white tengahkan_icon_menu"></i>Dashboard
+
                         </a>
                       </li>
                       <li class="@("selected".when(activeMenu=="campaign"))">
-                        <a href="@controllers.backend.routes.CampaignController.index()">
+                        <a href="@controllers.backend.routes.CampaignController.showCampaign()">
                         	<i class="icon-th-list tengahkan_icon_menu  icon-white"></i>Manajemen Iklan
                         </a>
                       </li>

@@ -20,7 +20,11 @@
                   }  
                   @if(title=="Profil Pengguna"){
                     @profileMenu(activeMenu)
-                  } 					
+                  } 
+                  @if(title=="Manajemen Iklan"){
+                  	@campaignMenu(activeMenu)
+                  }
+               					
                   </div>
                 </section>
 
@@ -83,22 +87,24 @@
 }
 @campaignMenu(activeMenu:String="")={
       <a  class="span2 sub-menu @("active".when(activeMenu=="daftar campaign"))"
-          href="@controllers.backend.routes.ZoneController.showZone()">
+          href="@controllers.backend.routes.CampaignController.showCampaign()">
           <div class="icon"></div>
 
          <div class="content" >
-            <div class="kpi">Daftar Campaign</div>
-            <div class="small">Lihat Semua campaign</div>
+            <div class="kpi">Daftar Iklan</div>
+            <div class="small">Lihat Semua iklan</div>
          </div>
         </a>
-      <a  class="span2 sub-menu @("active".when(activeMenu=="tambah campaign"))"
-          href="@controllers.backend.routes.ZoneController.showZone()">
+  @restrict(la(as("administrator"), as("advertiser"))){                             
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah campaign"))"
+          href="@controllers.backend.routes.CampaignController.newCampaign()">
           <div class="icon"></div>
          <div class="content" >
-            <div class="kpi">Campaign Baru</div>
-            <div class="small">Buat banner dan campaign baru</div>
+            <div class="kpi">Buat Iklan Baru</div>
+            <div class="small">Buat sebuah iklan</div>
          </div>
-        </a>        
+        </a>    
+    }    
 }
 @financeMenu(activeMenu:String="")={
      	<div class="span2 sub-menu">

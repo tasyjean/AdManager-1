@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -47,7 +48,8 @@ public class Campaign extends Model{
 	private int bid_price;
 	private boolean isActivated;
 	private boolean isDeleted;
-	private int budget;
+	@Column(columnDefinition="TEXT")	
+	private String description;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Banner> banner;
@@ -159,11 +161,5 @@ public class Campaign extends Model{
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	public int getBudget() {
-		return budget;
-	}
 
-	public void setBudget(int budget) {
-		this.budget = budget;
-	}
 }

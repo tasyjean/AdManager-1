@@ -27,6 +27,10 @@ public class BannerSize extends Model {
 	private int height;
 	
 	@Column(columnDefinition="TEXT")
+	private String default_code;
+	
+	
+	@Column(columnDefinition="TEXT")
 	private String description;
 	
 	public static Model.Finder<Integer,BannerSize> find = new Model.Finder(Integer.class, BannerSize.class);
@@ -78,6 +82,16 @@ public class BannerSize extends Model {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+
+	public String getDefault_code() {
+		return default_code;
+	}
+
+
+	public void setDefault_code(String default_code) {
+		this.default_code = default_code;
 	}
 
 
