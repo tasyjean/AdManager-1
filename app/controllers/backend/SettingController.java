@@ -88,7 +88,7 @@ public class SettingController extends CompressController {
 	@Restrict(@Group("administrator"))
 	public static Result saveDefault(){
 		settingEditor.setDefault();
-		flash("success","Berhasil Mengembalika Ke Settingan Awal");
+		flash("success","Berhasil Mengembalikan Ke Settingan Awal");
 		return redirect(controllers.backend.routes.SettingController.showSetting(1));
 
 	}
