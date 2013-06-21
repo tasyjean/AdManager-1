@@ -44,7 +44,10 @@ GET   /dashboard/profile/edit/4				controllers.backend.ProfileController.changeP
 POST  /dashboard/profile/edit/4				controllers.backend.ProfileController.savePassword()
 
 
-
+#setting
+GET   /dashboard/setting/:page				controllers.backend.SettingController.showSetting(page:Integer)
+POST  /dashboard/setting/save/:page			controllers.backend.SettingController.saveSetting(page:Integer)
+GET   /dashboard/setting/set/default		controllers.backend.SettingController.saveDefault()
 #report
 GET   /dashboard/report					controllers.backend.ReportController.index()
 

@@ -55,7 +55,7 @@
                       </li>
                       @restrict(la(as("administrator"))){
 	                      <li class="@("selected".when(activeMenu=="setting"))">
-	                        <a href="@controllers.backend.routes.DashboardController.index()">
+	                        <a href="@controllers.backend.routes.SettingController.showSetting(1)">
 	                        	<i class="icon-retweet tengahkan_icon_menu icon-white"></i>Pengaturan
 	                        </a>
 	                      </li> 

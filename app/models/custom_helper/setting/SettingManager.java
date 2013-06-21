@@ -54,6 +54,19 @@ public class SettingManager {
 			return null;
 		}
 	}
+	public boolean editPref(KeyEnum key, String value) throws Exception{ 
+		try {
+			SystemPreferences pref=getPref(key);
+			pref.setValue(value);
+			pref.update();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		
+	}
 	public List<SystemPreferences> getAll(){
 		return SystemPreferences.find.all();
 	}

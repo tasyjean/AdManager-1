@@ -24,6 +24,9 @@
                   @if(title=="Manajemen Iklan"){
                   	@campaignMenu(activeMenu)
                   }
+                  @if(title=="Pengaturan"){
+                  	@settingMenu(activeMenu)
+                  }				                  
                					
                   </div>
                 </section>
@@ -102,6 +105,27 @@
          <div class="content" >
             <div class="kpi">Buat Iklan Baru</div>
             <div class="small">Buat sebuah iklan</div>
+         </div>
+        </a>    
+    }    
+}
+@settingMenu(activeMenu:String="")={
+  	@restrict(la(as("administrator"))){                     
+      <a  class="span2 sub-menu @("active".when(activeMenu=="pengaturan biaya"))"
+          href="@controllers.backend.routes.SettingController.showSetting(1)">
+          <div class="icon"></div>
+
+         <div class="content" >
+            <div class="kpi">Pengaturan Biaya</div>
+            <div class="small">Mengatur Biaya Iklan</div>
+         </div>
+        </a>
+      <a class="span2 sub-menu @("active".when(activeMenu=="pengaturan iklan"))"
+          href="@controllers.backend.routes.SettingController.showSetting(2)">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Pengaturan Iklan</div>
+            <div class="small">Mengatur tampilan iklan</div>
          </div>
         </a>    
     }    
