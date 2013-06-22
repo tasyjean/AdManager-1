@@ -28,6 +28,7 @@ object ApplicationBuild extends Build {
     templatesImport += "models.dataWrapper.zone._",    
     templatesImport += "models.dataWrapper.user._",    
     templatesImport += "models.dataWrapper.setting._",    
+    templatesImport += "models.dataWrapper.campaign._",    
     templatesImport += "models.data._",
     templatesImport += "models.form.frontendForm.LoginForm",
     templatesImport += "models.form.frontendForm._",

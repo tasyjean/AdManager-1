@@ -24,6 +24,7 @@ GET    /adsdelivery/:zone					controllers.backend.AdsDeliveryController.banner(z
 #campaign
 GET   /dashboard/campaign				controllers.backend.CampaignController.showCampaign()
 GET   /dashboard/campaign/new			controllers.backend.CampaignController.newCampaign()
+POST  /dashboard/campaign/save			controllers.backend.CampaignController.saveNewCampaign()
 
 #finance
 GET   /dashboard/finance				controllers.backend.FinanceController.index()

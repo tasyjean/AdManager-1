@@ -74,6 +74,7 @@ create table banner_type (
 create table campaign (
   id_campaign               integer not null,
   id_user_id_user           integer,
+  campaign_name             varchar(255),
   campaign_type             varchar(9),
   start_date                timestamp,
   end_date                  timestamp,

@@ -1,8 +1,10 @@
-@(data: TemplateData, campaign_form:Form[CampaignForm])
+@(data: TemplateData, campaign_form:Form[CampaignForm], campaignData:CampaignFormData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @getError() = {
 	@if(flash.contains("error")) {
@@ -31,37 +33,166 @@
 		
 		@dashboard_content("Manajemen Iklan","Iklan Baru", "tambah campaign") {
 		
-		<div id="input_tab">
-			<ul>
-				<li><a href="#tabs-1">1. Buat Campaign</a></li>
-				<li><a href="#tabs-2">2. Tambahkan Banner</a></li>
-				<li><a href="#tabs-3">3. Sambungkan Dengan Zona</a></li>
-			</ul>
-			<div id="tabs-1">				
+			<div id="input_tab">
+				<ul>
+					<li><a href="#tabs-1">1. Buat Campaign</a></li>
+					<li><a href="#tabs-2">2. Tambahkan Banner</a></li>
+					<li><a href="#tabs-3">3. Sambungkan Dengan Zona</a></li>
+				</ul>
+				<div id="tabs-1">				
+				</div>
+				<div id="tabs-2">
+				</div>
+				<div id="tabs-3">
+				</div>	
+									
 			</div>
-			<div id="tabs-2">
-			</div>
-			<div id="tabs-3">
-			</div>	
-								
-		</div>
+			@form(action =controllers.backend.routes.CampaignController.saveNewCampaign(), 'class-> "form-horizontal") {		
+			<div class="content-padding">
+				<h4>Buat Campaign Baru</h4>
+					<h5 style="font-style: italic;">Isi form berikut untuk membuat campaign baru</h5>
+					@if(campaign_form.hasGlobalErrors){
+						<div class="alert alert-error">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+		              		@campaign_form.globalError.message     	  	 	
+						</div>
+		      	  	}   @* Form *@
+	                      
+	                    @* Pilih advertiser untuk administrator *@
+	                    
+	                    @restrict(la(as("administrator"))){	      	  	
+								@if(campaignData.getUserList.size==0){
+									<div class="alert alert-error">
+										<h5>Tidak ada pengiklan</h5>
+										<p>Tambahkan pengiklan terlebih dahulu pada menu manajemen pengguna</p>
+									</div>
+								}else{							
+										<div class="control-group">
+										<label class="control-label"  for="channel_name">Pilih Advertiser</label>
+										<div class="controls">
+										<select name="idUser" id="idUser">
 		
-		<div class="content-padding">
-			<h4>Buat Campaign Baru</h4>
-				<h5 style="font-style: italic;">Isi form berikut untuk membuat campaign baru</h5>
-				@if(campaign_form.hasGlobalErrors){
-					<div class="alert alert-error">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-	              		@campaign_form.globalError.message     	  	 	
-					</div>
-	      	  	}
-				 </div>
-				
-		</div>
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Simpan dan Lanjutkan</button>
-    	     <button type="reset" class="btn">Batal</button>
-        </div>
+											@for(user<-campaignData.getUserList){
+												<option value="@user.getId_user" @("selected".when(campaign_form("idUser").value==user.getId_user))>
+														@user.getFront_name | @user.getEmail
+												</option>
+												
+											}
+											</select>
+											 <p class="help-block">Campaign Ditujukan untuk advertiser yang mana</p>					
+										
+										</div>
+									</div>
+								}		
+						}
+	                    @* Sudah ditentukan jika advertiser *@
+						
+		                @restrict(la(as("advertiser"))){	      	  	
+							<input type="hidden" name="idUser" value="@data.getId">
+						}
+	                    @* Nama Campaign *@
+						
+						<div class="control-group">
+							<label class="control-label"  for="channel_name">Nama Campaign</label>
+							<div class="controls">
+								<input type="text" placeholder="Nama Campaign"
+									class="input-large" value="@campaign_form("campaignName").value" name="campaignName" id="campaignName">	                    
+							 <p class="help-block">Nama dari campaign</p>					
+					
+							</div>
+						</div>						
+	                    @* Tipe Campaign *@
+						
+						<div class="control-group">
+							<label class="control-label"  for="channel_name">Tipe Campaign</label>
+							<div class="controls">
+							@for(campaignType<-campaignData.getCampaignType){
+								<input type="radio" @("checked".when(campaign_form("campaignType").value==campaignType(0)))
+									   placeholder="Tipe Campaign" id="@campaignType(0)" name="campaignType" value="@campaignType(0)">
+										@campaignType(1)<br><div class="radio-description">@campaignType(2)</div>
+							}
+							</div>
+						</div>
+						<div id="date-block">
+						@* Start Date*@
+						<div class="control-group" id="startDate-block">
+							<label class="control-label" for="channel_name">Mulai Campaign</label>
+							<div class="controls">
+								<input type="text" placeholder="DD/MM/YYYY" 
+									class="input-large" value="@campaign_form("startDate").value" name="startDate" id="startDate">	                    
+							 <p class="help-block">Kapan campaign mulai berjalan, format : DD/MM/YYYY</p>					
+							</div>
+						</div>		
+						@* End Date*@					
+						<div class="control-group" id="endDate-block">
+							<label class="control-label" for="channel_name">Selesai Campaign</label>
+							<div class="controls">
+								<input type="text"  placeholder="DD/MM/YYYY" 
+									class="input-large" value="@campaign_form("endDate").value" name="endDate" id="endDate">	                    
+							 <p class="help-block">Kapan campaign berakhir, format : DD/MM/YYYY</p>					
+							</div>
+						</div>
+						</div>
+	                    @* Pricing Model *@
+						<div class="control-group" id="pricingModel-block">
+							<label class="control-label"  for="channel_name">Model Perhitungan Biaya</label>
+							<div class="controls">
+							@for(pricingModel<-campaignData.getPricingModel){
+								<input type="radio" @("checked".when(campaign_form("pricingModel").value==pricingModel(0)))
+									   placeholder="pricing model"  name="pricingModel" value="@pricingModel(0)" id="@pricingModel(0)">
+										@pricingModel(1)<br><div class="radio-description">@pricingModel(2)</div>
+							}
+							</div>
+						</div>
+						<div id="contract-mode">															
+						@* Impression Limit*@					
+						<div class="control-group" id="impressionLimit-block">
+							<label class="control-label" for="channel_name">Jumlah Impresi</label>
+							<div class="controls">
+								<input type="number" placeholder="Jumlah Impresi" class="input-large" value="@campaign_form("impressionLimit").value" name="impressionLimit" id="impressionLimit">	                    
+							 <p class="help-block">Jumlah Impresi yang ingin didapatkan</p>					
+							</div>
+						</div>
+						@* Click Limit*@					
+						<div class="control-group" id="clickLimit-block">
+							<label class="control-label" for="channel_name">Jumlah Klik </label>
+							<div class="controls">
+								<input type="number" placeholder="Jumlah Click" class="input-large" 
+										value="@campaign_form("clickLimit").value" name="clickLimit" id="clickLimit">	                    
+							 <p class="help-block">Jumlah klik iklan yang ingin didapatkan</p>					
+							</div>
+						</div>				
+						</div> @* end contract mode *@
+						@*Bid Price*@					
+						<div class="control-group" id="bidPrice-block">
+							<label class="control-label" for="channel_name">Kesediaan Membayar</label>
+							<div class="controls">
+								<input type="number" placeholder="Kesediaan Membayar" class="input-large" 
+										value="@campaign_form("bidPrice").value" name="bidPrice" id="bidPrice">	  
+							 <p class="help-block" id="bidPrice-help">Jumlah yang harus dibayar setiap satuan hitungan iklan (dalam rupiah)</p>					
+							 <input style="" type="checkbox" id="default-check"> Biarkan Minimal ( IDR <span id="defaultPrice">@campaignData.getClickPrice tiap 1 klik</span>)             
+							</div>
+						</div>
+											
+						@*Deskripsi campaign*@					
+						<div class="control-group" id="bidPrice-block">
+							<label class="control-label" for="channel_name">Deskripsi</label>
+							<div class="controls">
+								<textarea rows="5" placeholder="Deskripsi Campaign" class="input-large" 
+										name="description" id="description">	
+										@campaign_form("description").value
+								</textarea>  
+								            
+							 <p class="help-block">Deskripsi dari campaign</p>					
+							</div>
+						</div>													      	  		     
+			 </div>
+					
+	
+	        <div class="form-actions">
+		         <button type="submit" class="btn btn-primary">Simpan dan Lanjutkan</button>
+	    	     <button type="reset" class="btn">Batal</button>
+	        </div>
     }
 
     <script type="text/javascript">
@@ -69,8 +200,231 @@
 	    	$("#input_tab").tabs();
 	    	$("#input_tab").tabs( "option", "disabled", [ 1, 2 ] );
 	    	$("#input_tab").tabs({ active: 0 });
+			
+	    	//Date picker
+			   $( "#startDate" ).datepicker({
+			      defaultDate: "+1w",
+			      changeMonth: true,
+			      numberOfMonths: 1,
+			      onClose: function( selectedDate ) {
+			        $( "#endDate" ).datepicker( "option", "minDate", selectedDate );
+			      }
+			    });
+			    $( "#endDate" ).datepicker({
+			      defaultDate: "+1w",
+			      changeMonth: true,
+			      numberOfMonths: 1,
+			      onClose: function( selectedDate ) {
+				        $( "#startDate" ).datepicker( "option", "maxDate", selectedDate );
+
+			      }
+			    });
+	    	 	//format date
+			    $( "#endDate" ).datepicker("option","dateFormat","dd/mm/yy");
+			    $( "#startDate" ).datepicker("option","dateFormat","dd/mm/yy");
+		        $( "#startDate" ).datepicker( "option", "minDate", 0 );
+
+		        function dateDiff(date1,date2,interval) {
+		            var second=1000, minute=second*60, hour=minute*60, day=hour*24, week=day*7;
+		            date1 = new Date(date1);
+		            date2 = new Date(date2);
+		            var timediff = date2 - date1;
+		            if (isNaN(timediff)) return NaN;
+		            switch (interval) {
+		                case "years": return date2.getFullYear() - date1.getFullYear();
+		                case "months": return (
+		                    ( date2.getFullYear() * 12 + date2.getMonth() )
+		                    -
+		                    ( date1.getFullYear() * 12 + date1.getMonth() )
+		                );
+		                case "weeks"  : return Math.floor(timediff / week);
+		                case "days"   : return Math.floor(timediff / day); 
+		                case "hours"  : return Math.floor(timediff / hour); 
+		                case "minutes": return Math.floor(timediff / minute);
+		                case "seconds": return Math.floor(timediff / second);
+		                default: return undefined;
+		            }
+		        }
+	    		var campaignContract=$("#CONTRACT");
+	    		var campaignExclusive=$("#EXCLUSIVE");
+	    		
+    			var dateBlock=$("#date-block");
+    			var pricingModel=$("#pricingModel-block");
+				var contractMode=$("#contract-mode");
+				var pilihanFlat=$("#FLAT");
+				var pilihanCPM=$("#CPM");
+				var pilihanCPA=$("#CPA");
+
+				
+				campaignContract.change(function(){
+					contractShow();
+					console.log("contract show");
+				});
+				campaignExclusive.change(function(){
+					exclusiveShow();
+					console.log("exclusive show");
+				});				
+				var campaignSelected="@campaign_form("campaignType").value";
+
+
+	    		function contractShow(){
+	    			contractMode.show();
+	    			dateBlock.hide();
+	    			
+	    			pilihanCPM.removeAttr("disabled");
+	    			pilihanCPA.removeAttr("disabled");
+	    			pilihanCPA.attr("checked","checked");
+	    			
+	    			pilihanFlat.prop("disabled","true");
+	    			pilihanFlat.removeAttr("checked");
+	    			
+	    			clickMode();
+	    		}
+				function exclusiveShow(){
+	    			contractMode.hide();
+	    			dateBlock.show();
+	    			pilihanCPA.prop("disabled","true");
+	    			pilihanCPM.prop("disabled","true");
+	    			pilihanCPA.removeAttr("checked");
+	    			pilihanFlat.removeAttr("disabled");
+	    			pilihanFlat.attr("checked","checked");
+	    			
+	    			flatMode();
+	    		}
+				
+				//fungsi untuk bagian default angka				
+				var priceCPA=@(campaignData.getClickPrice);
+				var priceCPM=@(campaignData.getImpressionPrice);
+				var priceFlat=@(campaignData.getDailyPrice);
+				var discountFactor=@(campaignData.getDiscountFactor);
+				var bidPriceDefault;
+				
+				var clickLimit=$("#clickLimit");
+				var impressionLimit=$("#impressionLimit");
+				var bidPrice=$("#bidPrice");
+				var defaultText=$("#defaultPrice");
+				var bidPriceHelp=$("#bidPrice-help");
+				var activeMode;
+				function impressionMode(){
+					bidPriceDefault=priceCPM;
+					$("#clickLimit").prop("disabled","true");
+					$("#clickLimit").val(0);
+					$("#impressionLimit").removeAttr("disabled");
+					$("#bidPrice").val(bidPriceDefault);
+					$("#defaultPrice").html(bidPriceDefault+" Per 1000 Impressi");
+					activeMode="CPM";
+				}
+				function clickMode(){
+					bidPriceDefault=priceCPA;
+					$("#impressionLimit").prop("disabled","true");
+					$("#clickLimit").removeAttr("disabled");					
+					$("#defaultPrice").html(bidPriceDefault+" Per 1 klik");
+					$("#bidPrice").val(bidPriceDefault);
+					$("#impressionLimit").val(0);
+
+					activeMode="CPA";
+				}
+				function flatMode(){
+					bidPriceDefault=priceFlat;
+					$("#defaultPrice").html(bidPriceDefault+" Per hari + diskon");
+					$("#bidPrice").val(bidPriceDefault);
+
+					activeMode="FLAT";
+				}
+				
+
+				
+				function hitungBiaya(){
+					if(activeMode="CPM"){
+						var bayar=$("#impressionLimit").val()*$("#bidPrice").val();
+						$("#bidPrice-help").html("Total Biaya = IDR " + bayar);
+						console.log($("#impressionLimit").val() +" * "+$("#bidPrice").val()+"="+bayar);
+					}else if(activeMode="CPA"){
+						var bayar=$("#clickLimit").val()*$("#bidPrice").val();
+						$("#bidPrice-help").html("Total Biaya = IDR " +bayar);				
+						console.log(bayar);
+					
+					}else if(activeMode="FLAT"){
+						var date1=$("#startDate").val();
+						var date2=$("#endDate").val();
+						var days=dateDiff(date1,date2,"days");
+						var bayar=days*$("#bidPrice").val();
+						$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "(belum termasuk diskon)");						
+						console.log(bayar);
+
+					}
+				};
+				
+				bidPrice.keyup(function(){
+					hitungBiaya();
+					console.log("bid price berubaaah");
+				});
+				$("#impressionLimit").keyup(function(){
+					hitungBiaya();
+					console.log("impresion berubaaah");
+				});
+				$("#clickLimit").keyup(function(){
+					hitungBiaya();
+					console.log("click berubaaah");
+				});	
+				$("#startDate").keyup(function(){
+					hitungBiaya();
+					console.log("start berubaaah");
+				});	
+				$("#endDate").keyup(function(){
+					hitungBiaya();
+					console.log("end berubaaah");
+				});					
+				$("#default-check").click(function(){
+					if($(this).is(":checked")){
+						bidPrice.val(bidPriceDefault);
+						hitungBiaya();
+						bidPrice.prop("disabled","disabled");
+					}else{
+						bidPrice.val(bidPriceDefault);
+						hitungBiaya();
+						bidPrice.removeAttr("disabled");						
+					}
+				});
+				$("input:radio[name=pricingModel]").click(function() {
+				    var value = $("input:radio[name=pricingModel]:checked").val();
+				    if(value=="CPM"){
+				    	impressionMode();
+				    }else if(value=="CPA"){
+				    	clickMode();
+				    }else if(value=="FLAT"){
+				    	flatMode();
+				    }
+				});
+				
+				//default ketika pertama dijalankan
+				function startPoint(){
+					if(campaignSelected=="" || campaignSelected=="CONTRACT" ){
+						contractShow();
+						campaignContract.attr("checked","checked");
+					}else if(campainSelected=="EXCLUSIVE"){
+							exclusiveShow();
+							campaignExclusive.attr("checked","checked");
+					}
+					
+				    var value = $("input:radio[name=pricingModel]:checked").val();
+				    if(value=="CPM"){
+				    	impressionMode();
+				    }else if(value=="CPA"){
+				    	clickMode();
+				    }else if(value=="FLAT"){
+				    	flatMode();
+				    }
+					hitungBiaya();
+
+				
+				}
+				startPoint();
+				
 		});
 	</script>
+	
+	}
 
 } {
   

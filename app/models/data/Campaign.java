@@ -35,7 +35,7 @@ public class Campaign extends Model{
 	@Required
 	@ManyToOne
 	private User id_user;	
-
+	private String campaignName;
 	private CampaignTypeEnum campaign_type;
 	
 	private Date start_date;
@@ -161,5 +161,12 @@ public class Campaign extends Model{
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	public String getCampaignName() {
+		return campaignName;
+	}
+	public void setCampaignName(String campaignName) {
+		this.campaignName = campaignName;
+	}
+ 
 
 }

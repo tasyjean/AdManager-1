@@ -3,18 +3,53 @@
 @import views.html.ui_component._
 @import helper._
 @import views.html.backendView.main
-
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
 @main("Pengaturan"){
 	
 	@dashboard_content("Pengaturan","Pengaturan Iklan","pengaturan iklan"){
-  			<div style="padding:12px;font-size:16px; line-height:20px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-		"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. exercitationepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." </div>
-
+		
+		@form(action=controllers.backend.routes.SettingController.saveSetting(2), 'class-> "form-horizontal") {
+		<div class="content-padding">
+			<h4>Pengaturan Iklan</h4>
+			<h5 style="font-style: italic;">Kode Tampilan Dasar</h5>
+			<p>Isi kode untuk tampilan dasar setiap ukuran zona</p>
+			
+			@getError
+			@getSuccess
+			
+			@for(setting<-settingData.settingBanner){
+				<div class="control-group">
+					<label class="control-label" for="channel_name">Kode Untuk @setting.getName</label>
+					<div class="controls">
+						<textarea  rows="5" type="text" placeholder="@setting.getName" class="input-large" name="@setting.getName" id="@setting.getName">@setting.getDefault_code</textarea>	                    								 
+				 		<p class="help-block">@setting.getDescription</p>													 
+					</div>
+				</div>
+			} @*end for *@
+			
+		</div>
         <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
+	         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    	     <button type="reset" class="btn">Reset</button>
         </div>
-           }
+        }
+     }
 
 } {
   

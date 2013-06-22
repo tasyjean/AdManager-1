@@ -7,7 +7,9 @@ package controllers.backend;
  */
 import java.util.Date;
 
+import models.custom_helper.setting.SettingManager;
 import models.dataWrapper.TemplateData;
+import models.dataWrapper.campaign.CampaignFormData;
 import models.form.backendForm.campaignForm.CampaignForm;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
@@ -20,8 +22,11 @@ import controllers.action.DataFiller;
 import views.html.backendView.campaign_view.*;
 
 public class CampaignController extends CompressController {
-	
+
+	public static SettingManager manager=new SettingManager();
+	public static CampaignFormData campaignData;
 	public static Form<CampaignForm> campaignForm=Form.form(CampaignForm.class);
+	
 	@SubjectPresent
 	@With(DataFiller.class)
 	public static Result showCampaign(){
@@ -35,15 +40,29 @@ public class CampaignController extends CompressController {
 	public static Result newCampaign(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		return ok(create_campaign.render(data, campaignForm));
+		campaignData=new CampaignFormData(manager);
+		
+		return ok(create_campaign.render(data, campaignForm, campaignData));
 	}
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result saveNewCampaign(){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Form<CampaignForm> filledForm=Form.form(CampaignForm.class).bindFromRequest();
+		campaignData=new CampaignFormData(manager);
+		
+		return ok(create_campaign.render(data, filledForm, campaignData));
+	}
+		
+	
 	@SubjectPresent
 	@With(DataFiller.class)
 	public static Result newBanner(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(create_campaign.render(data, campaignForm));
+		return ok();
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -51,7 +70,7 @@ public class CampaignController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(create_campaign.render(data, campaignForm));
+		return ok();
 	}
 	
 }

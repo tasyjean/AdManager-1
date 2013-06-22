@@ -21,6 +21,7 @@ public class TemplateData {
 	Context ctx;
 	//Data User
 	private String frontName="";
+	private int id;
 	private String lastName="";
 	private String role=""; 
 	private String email="";
@@ -42,7 +43,7 @@ public class TemplateData {
 			this.lastName=user.getLast_name();
 			this.email=user.getEmail();
 			this.role=user.getRole().getName();
-			
+			this.id=user.getId_user();
 			try {
 				this.thumbnailURL=user.getProfile_photo().getThumbnailURL();
 			} catch (Exception e) {
@@ -82,6 +83,9 @@ public class TemplateData {
 	}
 	public void setThumbnailURL(String thumbnailURL) {
 		this.thumbnailURL = thumbnailURL;
+	}
+	public int getId(){
+		return id;
 	}
 	
 	

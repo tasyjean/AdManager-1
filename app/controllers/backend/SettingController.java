@@ -83,8 +83,7 @@ public class SettingController extends CompressController {
 			}
 		}
 		return redirect(controllers.backend.routes.SettingController.showSetting(1));
-
-		}
+	}
 	@Restrict(@Group("administrator"))
 	public static Result saveDefault(){
 		settingEditor.setDefault();

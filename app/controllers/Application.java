@@ -10,10 +10,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import models.custom_helper.file_manager.FileManager;
+import models.data.User;
+import models.data.UserRole;
 import models.data.ZoneChannel;
+import models.data.enumeration.RoleEnum;
 
 import play.*;
 import play.data.DynamicForm;
@@ -85,6 +89,11 @@ public class Application extends CompressController {
 		} catch(IOException io){
 			
 		}
+		
+		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER).findUnique();
+		List<User> userList=User.find.where().eq("role", advertiser_role).findList();
+
+		
 		String gambar=result.getAbsolutePath();
     	ArrayList<String> data=new ArrayList<String>();
     	data.add(host);
@@ -104,6 +113,7 @@ public class Application extends CompressController {
     	data.add(path);
     	data.add(string.toString());
     	data.add(gambar);
+    	data.add(Integer.toString(userList.size()));
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	
