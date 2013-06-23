@@ -23,7 +23,69 @@
 		</div>
 	}
 }
+@generateError()={
+	@if(campaign_form.hasErrors){
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<ul>
+			@if(campaign_form.error("bidPrice")!=null){
+				<li>
+				@campaign_form.error("bidPrice").message()
+				</li>
+			}					
+			@if(campaign_form.error("clickLimit")!=null){
+				<li>
+				@campaign_form.error("clickLimit").message()
+				</li>
+			}	
+			@if(campaign_form.error("impressionLimit")!=null){
+				<li>
+				@campaign_form.error("impressionLimit").message()
+				</li>
+			}	
+			@if(campaign_form.error("wrong")!=null){
+				<li>
+				@campaign_form.error("wrong").message()
+				</li>
+			}	
+			@if(campaign_form.error("endDateRequired")!=null){
+				<li>
+				@campaign_form.error("endDateRequired").message()
+				</li>
+			}	
+			@if(campaign_form.error("startDateRequired")!=null){
+				<li>
+				@campaign_form.error("startDateRequired").message()
+				</li>
+			}	
+			@if(campaign_form.error("dateFormat")!=null){
+				<li>
+				@campaign_form.error("dateFormat").message()
+				</li>
+			}	
+			@if(campaign_form.error("startDate")!=null){
+				<li>
+				@campaign_form.error("startDate").message()
+				</li>
+			}	
+			@if(campaign_form.error("endDate")!=null){
+				<li>
+				@campaign_form.error("endDate").message()
+				</li>
+			}	
+			@if(campaign_form.error("bug")!=null){
+				<li>
+				@campaign_form.error("bug").message()
+				</li>
+			}																																																														
+			</ul>
 
+		</div>
+		
+	}
+
+	
+}
 @main("Manajemen Iklan"){
 		
 		@* Tambahkan java script dan css *@
@@ -33,20 +95,6 @@
 		
 		@dashboard_content("Manajemen Iklan","Iklan Baru", "tambah campaign") {
 		
-			<div id="input_tab">
-				<ul>
-					<li><a href="#tabs-1">1. Buat Campaign</a></li>
-					<li><a href="#tabs-2">2. Tambahkan Banner</a></li>
-					<li><a href="#tabs-3">3. Sambungkan Dengan Zona</a></li>
-				</ul>
-				<div id="tabs-1">				
-				</div>
-				<div id="tabs-2">
-				</div>
-				<div id="tabs-3">
-				</div>	
-									
-			</div>
 			@form(action =controllers.backend.routes.CampaignController.saveNewCampaign(), 'class-> "form-horizontal") {		
 			<div class="content-padding">
 				<h4>Buat Campaign Baru</h4>
@@ -56,7 +104,13 @@
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 		              		@campaign_form.globalError.message     	  	 	
 						</div>
-		      	  	}   @* Form *@
+		      	  	}					
+					@generateError
+		      	  	
+		      	  	@getSuccess
+		      	  	@getError   
+		      	  	
+		      	  	@* Form *@
 	                      
 	                    @* Pilih advertiser untuk administrator *@
 	                    
@@ -149,7 +203,10 @@
 						<div class="control-group" id="impressionLimit-block">
 							<label class="control-label" for="channel_name">Jumlah Impresi</label>
 							<div class="controls">
-								<input type="number" placeholder="Jumlah Impresi" class="input-large" value="@campaign_form("impressionLimit").value" name="impressionLimit" id="impressionLimit">	                    
+								<input type="number" placeholder="Jumlah Impresi" class="input-large" 
+								  @("value=0".when(campaign_form("impressionLimit").value==null)) 
+									value="@campaign_form("impressionLimit").value" 
+								  name="impressionLimit" id="impressionLimit">	                    
 							 <p class="help-block">Jumlah Impresi yang ingin didapatkan</p>					
 							</div>
 						</div>
@@ -158,6 +215,7 @@
 							<label class="control-label" for="channel_name">Jumlah Klik </label>
 							<div class="controls">
 								<input type="number" placeholder="Jumlah Click" class="input-large" 
+										@("value=0".when(campaign_form("clickLimit").value==null)) 
 										value="@campaign_form("clickLimit").value" name="clickLimit" id="clickLimit">	                    
 							 <p class="help-block">Jumlah klik iklan yang ingin didapatkan</p>					
 							</div>
@@ -168,7 +226,9 @@
 							<label class="control-label" for="channel_name">Kesediaan Membayar</label>
 							<div class="controls">
 								<input type="number" placeholder="Kesediaan Membayar" class="input-large" 
-										value="@campaign_form("bidPrice").value" name="bidPrice" id="bidPrice">	  
+									  @("value=0".when(campaign_form("bidPrice").value==null)) 	
+										value="@campaign_form("bidPrice").value" 
+										name="bidPrice" id="bidPrice">	  
 							 <p class="help-block" id="bidPrice-help">Jumlah yang harus dibayar setiap satuan hitungan iklan (dalam rupiah)</p>					
 							 <input style="" type="checkbox" id="default-check"> Biarkan Minimal ( IDR <span id="defaultPrice">@campaignData.getClickPrice tiap 1 klik</span>)             
 							</div>
@@ -197,13 +257,12 @@
 
     <script type="text/javascript">
 		$(document).ready(function() {
-	    	$("#input_tab").tabs();
-	    	$("#input_tab").tabs( "option", "disabled", [ 1, 2 ] );
-	    	$("#input_tab").tabs({ active: 0 });
 			
 	    	//Date picker
+	    		
+
+	    		
 			   $( "#startDate" ).datepicker({
-			      defaultDate: "+1w",
 			      changeMonth: true,
 			      numberOfMonths: 1,
 			      onClose: function( selectedDate ) {
@@ -211,7 +270,6 @@
 			      }
 			    });
 			    $( "#endDate" ).datepicker({
-			      defaultDate: "+1w",
 			      changeMonth: true,
 			      numberOfMonths: 1,
 			      onClose: function( selectedDate ) {
@@ -265,7 +323,7 @@
 					console.log("exclusive show");
 				});				
 				var campaignSelected="@campaign_form("campaignType").value";
-
+				var priceModelSelected="@campaign_form("pricingModel").value";
 
 	    		function contractShow(){
 	    			contractMode.show();
@@ -273,12 +331,10 @@
 	    			
 	    			pilihanCPM.removeAttr("disabled");
 	    			pilihanCPA.removeAttr("disabled");
-	    			pilihanCPA.attr("checked","checked");
 	    			
 	    			pilihanFlat.prop("disabled","true");
 	    			pilihanFlat.removeAttr("checked");
 	    			
-	    			clickMode();
 	    		}
 				function exclusiveShow(){
 	    			contractMode.hide();
@@ -288,6 +344,7 @@
 	    			pilihanCPA.removeAttr("checked");
 	    			pilihanFlat.removeAttr("disabled");
 	    			pilihanFlat.attr("checked","checked");
+	    			pilihanFlat.prop("checked","checked");
 	    			
 	    			flatMode();
 	    		}
@@ -313,6 +370,8 @@
 					$("#bidPrice").val(bidPriceDefault);
 					$("#defaultPrice").html(bidPriceDefault+" Per 1000 Impressi");
 					activeMode="CPM";
+					console.log("impresi mode aktif");
+					
 				}
 				function clickMode(){
 					bidPriceDefault=priceCPA;
@@ -321,57 +380,72 @@
 					$("#defaultPrice").html(bidPriceDefault+" Per 1 klik");
 					$("#bidPrice").val(bidPriceDefault);
 					$("#impressionLimit").val(0);
+					console.log("click mode aktif");
 
 					activeMode="CPA";
 				}
 				function flatMode(){
 					bidPriceDefault=priceFlat;
 					$("#defaultPrice").html(bidPriceDefault+" Per hari + diskon");
-					$("#bidPrice").val(bidPriceDefault);
+			//		$("#bidPrice").val(bidPriceDefault);
+					console.log("flat mode aktif");
 
 					activeMode="FLAT";
 				}
-				
-
-				
+				//parse data dalam format dd/mm/yyyy
+				function dateParse(input){
+					var seplit=input.split("/");
+					var date=new Date();
+					date.setFullYear(seplit[2],seplit[1]-1,seplit[0]);
+					return date;
+					
+				}
 				function hitungBiaya(){
-					if(activeMode="CPM"){
-						var bayar=$("#impressionLimit").val()*$("#bidPrice").val();
+					if(activeMode=="CPM"){
+						var bayar=($("input[name=impressionLimit]").val()*$("#bidPrice").val()/1000);
 						$("#bidPrice-help").html("Total Biaya = IDR " + bayar);
-						console.log($("#impressionLimit").val() +" * "+$("#bidPrice").val()+"="+bayar);
-					}else if(activeMode="CPA"){
-						var bayar=$("#clickLimit").val()*$("#bidPrice").val();
+						$("#bidPrice-help").attr("style","color:red;");
+						
+						console.log($("input[name=impressionLimit]").val() +" * ini buat impressi "+$("#bidPrice").val()+"="+bayar);
+					}else if(activeMode=="CPA"){
+						var bayar=$("input[name=clickLimit]").val()*$("#bidPrice").val();
 						$("#bidPrice-help").html("Total Biaya = IDR " +bayar);				
+						$("#bidPrice-help").attr("style","color:red;");
 						console.log(bayar);
 					
-					}else if(activeMode="FLAT"){
-						var date1=$("#startDate").val();
-						var date2=$("#endDate").val();
+					}else if(activeMode=="FLAT"){
+						var date1s=$("input[name=startDate]").val();
+						var date2s=$("input[name=endDate]").val();
+						var date1=dateParse(date1s);
+						var date2=dateParse(date2s);
+						
 						var days=dateDiff(date1,date2,"days");
-						var bayar=days*$("#bidPrice").val();
-						$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "(belum termasuk diskon)");						
-						console.log(bayar);
+						var bayar=(days*$("#bidPrice").val())-(Math.floor(days/7)*discountFactor*$("#bidPrice").val()*7);
+						$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "");						
+						console.log(bayar+" HARI: "+days);
 
+					}else{
+						console.log("Bug ditemukan");
 					}
 				};
 				
-				bidPrice.keyup(function(){
+				bidPrice.change(function(){
 					hitungBiaya();
 					console.log("bid price berubaaah");
 				});
-				$("#impressionLimit").keyup(function(){
+				$("#impressionLimit").change(function(){
 					hitungBiaya();
 					console.log("impresion berubaaah");
 				});
-				$("#clickLimit").keyup(function(){
+				$("#clickLimit").change(function(){
 					hitungBiaya();
 					console.log("click berubaaah");
 				});	
-				$("#startDate").keyup(function(){
+				$("#startDate").change(function(){
 					hitungBiaya();
 					console.log("start berubaaah");
 				});	
-				$("#endDate").keyup(function(){
+				$("#endDate").change(function(){
 					hitungBiaya();
 					console.log("end berubaaah");
 				});					
@@ -379,11 +453,11 @@
 					if($(this).is(":checked")){
 						bidPrice.val(bidPriceDefault);
 						hitungBiaya();
-						bidPrice.prop("disabled","disabled");
+						bidPrice.prop("readonly","readonly");
 					}else{
 						bidPrice.val(bidPriceDefault);
 						hitungBiaya();
-						bidPrice.removeAttr("disabled");						
+						bidPrice.removeAttr("readonly");						
 					}
 				});
 				$("input:radio[name=pricingModel]").click(function() {
@@ -402,11 +476,10 @@
 					if(campaignSelected=="" || campaignSelected=="CONTRACT" ){
 						contractShow();
 						campaignContract.attr("checked","checked");
-					}else if(campainSelected=="EXCLUSIVE"){
+					}else if(campaignSelected=="EXCLUSIVE"){
 							exclusiveShow();
 							campaignExclusive.attr("checked","checked");
 					}
-					
 				    var value = $("input:radio[name=pricingModel]:checked").val();
 				    if(value=="CPM"){
 				    	impressionMode();
@@ -417,7 +490,7 @@
 				    }
 					hitungBiaya();
 
-				
+					console.log("Start Poin perjalan");
 				}
 				startPoint();
 				

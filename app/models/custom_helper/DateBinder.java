@@ -34,7 +34,7 @@ public class DateBinder {
 	}
 	
 	//keperluan testing
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		String  tanggal1="13/07/2013";
 		String  tanggal2="23/06/2013";
 		
@@ -52,5 +52,5 @@ public class DateBinder {
 		System.out.println(binder.isAfterToday(tanggal2date));
 		System.out.println(binder.getDayLength(tanggal1date, tanggal2date));
 
-	}
+	} */
 }

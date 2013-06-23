@@ -13,11 +13,12 @@ public class Global extends GlobalSettings {
 
 	public void onStart(Application app){
 		SetInitialData data=new SetInitialData();
-		data.setDataUser();
-		data.setBannerSize();
-		data.setZoneChannel();
-		
-		SettingDefault default2=new SettingDefault();
-		default2.setAll();
+//		data.setDataUser();
+//		data.setBannerSize();
+//		data.setZoneChannel();
+//		data.setCampaignData();
+
+//		SettingDefault default2=new SettingDefault();
+//		default2.setAll();
 	}
 }

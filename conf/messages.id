@@ -15,14 +15,18 @@ success.forgetPassword=Permintaan diterima, silahkan cek email untuk lanjut ke p
 validation.error_update=Ada kesalahan menyimpan data, data gagal disimpan
 success.preferences=Pengaturan berhasil disimpan
 failure.setting_save=Ada kesalahan saat memperbaharui data
-validation.startDate="Waktu tidak boleh sebelum hari ini"
-validation.bidPrice="Harga tidak boleh kurang dari yang sudah ditentukan, minimal {0} "
-validation.impressionLimit="Jumlah impressi harus lebih dari 0"
-validation.clickLimit="Jumlah klik harus lebih dari 0";
-validation.dateFormat="Format tanggal salah";
-validation.bug="Ada bugs pada aplikasi, hubungi polisi"
-validation.endDate="Waktu selesai harus setelah waktu mulai...."
-validation.wrongInput="Masukan tidak valid"
+validation.startDate=Waktu tidak boleh sebelum hari ini
+validation.bidPrice=Harga tidak boleh kurang dari yang sudah ditentukan, minimal {0} 
+validation.impressionLimit=Jumlah impressi harus lebih dari 0
+validation.clickLimit=Jumlah klik harus lebih dari 0
+validation.dateFormat=Format tanggal salah
+validation.bug="Ada bugs pada aplikasi, hubungi polisi
+validation.endDate=Waktu selesai harus setelah waktu mulai
+validation.wrongInput=Masukan tidak valid
+validation.startdateRequired=Tanggal mulai campaign harus diisi
+validation.enddateRequired=Tanggal selesai campaign harus diisi
+error.invalid=Tipe data tidak valid
+error.invalid.java.util.Date=Invalid date value
 #Default
 
 # --- Constraints

@@ -2,22 +2,29 @@ package models.custom_helper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 import play.db.DB;
 
 import com.avaje.ebean.Ebean;
 
+import models.data.Banner;
 import models.data.BannerSize;
+import models.data.Campaign;
 import models.data.FileUpload;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
 import models.data.Zone;
 import models.data.ZoneChannel;
+import models.data.enumeration.CampaignTypeEnum;
 import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.DefaultViewEnum;
+import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.RoleEnum;
 import models.data.enumeration.ZoneTypeEnum;
 
@@ -35,7 +42,9 @@ public class SetInitialData {
 	public void setDataUser(){
 		
 		
-		//Clean Data dulu
+		//Clean Data dulu		
+		deleteCampaignData();
+
 		deleteUserData();
 		try {
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_seq RESTART WITH 1;");
@@ -43,6 +52,7 @@ public class SetInitialData {
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_contact_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_role_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_channel_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
 
 		} catch (SQLException e) {
@@ -214,6 +224,64 @@ public class SetInitialData {
 		
 
 	}
+	public void setCampaignData(){
+		
+		User user=User.find.where().eq("role", 
+										UserRole.find.where().eq("name", "advertiser").findUnique()).findUnique();
+		//Campaign Tipe kontrak CPA
+		Campaign campaign=new Campaign();
+		campaign.setCampaignName("Tipe kontrak CPA");
+		campaign.setId_user(user);
+		campaign.setActivated(true);
+		campaign.setBid_price(2000);
+		campaign.setLimit_click(1000);
+		campaign.setCampaign_type(CampaignTypeEnum.CONTRACT);
+		campaign.setPricing_model(PricingModelEnum.CPA);
+		campaign.setDescription("Campaign Dengan tipe kontrak CPA");
+		campaign.save();
+		
+		
+		//Campaign Tipe kontrak CPM
+		Campaign campaign2=new Campaign();
+		campaign2.setCampaignName("Tipe kontrak CPM");
+		campaign2.setId_user(user);
+		campaign2.setActivated(true);
+		campaign2.setBid_price(2000);
+		campaign2.setLimit_impression(20000);
+		campaign2.setCampaign_type(CampaignTypeEnum.CONTRACT);
+		campaign2.setPricing_model(PricingModelEnum.CPM);
+		campaign2.setDescription("Campaign Dengan tipe kontrak CPM");
+		campaign2.save();
+			
+		//Campaign Tipe eklusif
+		Campaign campaign3=new Campaign();
+		campaign3.setCampaignName("Tipe Eklusif");
+		campaign3.setId_user(user);
+		campaign3.setActivated(true);
+		campaign3.setStart_date(new Date());
+		
+		DateTime endDate=new DateTime();
+		endDate=endDate.plusMonths(12);
+		campaign3.setEnd_date(endDate.toDate());
+		
+		campaign3.setBid_price(8000);
+		campaign3.setCampaign_type(CampaignTypeEnum.EXCLUSIVE);
+		campaign3.setPricing_model(PricingModelEnum.FLAT);
+		campaign3.setDescription("Campaign Dengan tipe eklusif");
+		campaign3.save();
+			
+	}
+	public void deleteCampaignData(){
+		List<Banner>   banner=Banner.find.all();
+		List<Campaign> campaign=Campaign.find.all();
+		
+		if(banner.size()!=0){
+			Ebean.delete(banner);
+		}
+		if(campaign.size()!=0){
+			Ebean.delete(campaign);
+		}
+	}
 	public void deleteUserData(){
 		
 		List<User> data=User.find.all();
@@ -236,6 +304,8 @@ public class SetInitialData {
 			channel.delete();
 		}
 	}
+	
+	
 	
 	
 

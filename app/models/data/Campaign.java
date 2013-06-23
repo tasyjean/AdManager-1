@@ -167,6 +167,12 @@ public class Campaign extends Model{
 	public void setCampaignName(String campaignName) {
 		this.campaignName = campaignName;
 	}
+	public void setDescription(String description){
+		this.description=description;
+	}
+	public String getDescription(){
+		return this.description;
+	}
  
 
 }
