@@ -248,9 +248,9 @@ public class CampaignController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		int result=campProc.activate(idCampaign);
 		if(result==0){
-			flash("Sukses","Campaign Telah di nonaktifkan");
+			flash("success","Campaign Telah di nonaktifkan");
 		}else if(result==1){
-			flash("Sukses","Campaign Telah di aktifkan");			
+			flash("success","Campaign Telah di aktifkan");			
 		}else{
 			flash("error","aktivasi campaign gagal");						
 		}

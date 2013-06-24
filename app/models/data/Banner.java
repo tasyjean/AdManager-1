@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import models.data.enumeration.ZoneTypeEnum;
+
 import play.db.ebean.Model;
 
 @Entity
@@ -21,8 +23,7 @@ public class Banner extends Model {
 	@ManyToOne
 	private BannerSize bannerSize;
 	
-	@ManyToOne
-	private BannerType bannerType;
+	private ZoneTypeEnum bannerType;
 	
 	private String name;
 	@Column(columnDefinition="TEXT")
@@ -64,10 +65,10 @@ public class Banner extends Model {
 	public void setAdsSize(BannerSize bannerSize) {
 		this.bannerSize = bannerSize;
 	}
-	public BannerType getAdsType() {
+	public ZoneTypeEnum getAdsType() {
 		return bannerType;
 	}
-	public void setAdsType(BannerType bannerType) {
+	public void setAdsType(ZoneTypeEnum bannerType) {
 		this.bannerType = bannerType;
 	}
 	public String getName() {

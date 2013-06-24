@@ -5,7 +5,13 @@ import com.avaje.ebean.annotation.EnumValue;
 public enum ZoneTypeEnum {
 
 	@EnumValue("text")
-	TEXT,
+	TEXT{
+	public String toString() {
+		return "Tipe Teks";
+	}},
 	@EnumValue("banner")
-	BANNER
+	BANNER{
+	public String toString() {
+		return "Tipe Banner";
+	}}
 }

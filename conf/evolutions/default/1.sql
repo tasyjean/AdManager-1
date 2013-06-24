@@ -19,7 +19,7 @@ create table banner (
   id_banner                 integer not null,
   campaign_id_campaign      integer,
   banner_size_id_banner_size integer,
-  banner_type_id_banner_type integer,
+  banner_type               varchar(6),
   name                      varchar(255),
   description               TEXT,
   title                     varchar(255),
@@ -34,6 +34,7 @@ create table banner (
   hide_count                integer,
   is_active                 boolean,
   is_deleted                boolean,
+  constraint ck_banner_banner_type check (banner_type in ('banner','text')),
   constraint pk_banner primary key (id_banner))
 ;
 
@@ -257,36 +258,34 @@ alter table banner add constraint fk_banner_campaign_2 foreign key (campaign_id_
 create index ix_banner_campaign_2 on banner (campaign_id_campaign);
 alter table banner add constraint fk_banner_bannerSize_3 foreign key (banner_size_id_banner_size) references banner_size (id_banner_size);
 create index ix_banner_bannerSize_3 on banner (banner_size_id_banner_size);
-alter table banner add constraint fk_banner_bannerType_4 foreign key (banner_type_id_banner_type) references banner_type (id_banner_type);
-create index ix_banner_bannerType_4 on banner (banner_type_id_banner_type);
-alter table banner add constraint fk_banner_content_link_5 foreign key (content_link_id) references file_upload (id);
-create index ix_banner_content_link_5 on banner (content_link_id);
-alter table banner_action add constraint fk_banner_action_impression_6 foreign key (impression_id_impression) references impression (id_impression);
-create index ix_banner_action_impression_6 on banner_action (impression_id_impression);
-alter table banner_placement add constraint fk_banner_placement_banner_7 foreign key (banner_id_banner) references banner (id_banner);
-create index ix_banner_placement_banner_7 on banner_placement (banner_id_banner);
-alter table banner_placement add constraint fk_banner_placement_zone_8 foreign key (zone_id_zone) references zone (id_zone);
-create index ix_banner_placement_zone_8 on banner_placement (zone_id_zone);
-alter table campaign add constraint fk_campaign_id_user_9 foreign key (id_user_id_user) references user_data (id_user);
-create index ix_campaign_id_user_9 on campaign (id_user_id_user);
-alter table deposito add constraint fk_deposito_user_10 foreign key (user_id_user) references user_data (id_user);
-create index ix_deposito_user_10 on deposito (user_id_user);
-alter table deposito add constraint fk_deposito_user_validator_11 foreign key (user_validator_id_user) references user_data (id_user);
-create index ix_deposito_user_validator_11 on deposito (user_validator_id_user);
-alter table impression add constraint fk_impression_bannerPlacement_12 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
-create index ix_impression_bannerPlacement_12 on impression (banner_placement_id_banner_placement);
-alter table notificaton add constraint fk_notificaton_user_13 foreign key (user_id_user) references user_data (id_user);
-create index ix_notificaton_user_13 on notificaton (user_id_user);
-alter table user_data add constraint fk_user_data_role_14 foreign key (role_id_role) references user_role (id_role);
-create index ix_user_data_role_14 on user_data (role_id_role);
-alter table user_data add constraint fk_user_data_profile_photo_15 foreign key (profile_photo_id) references file_upload (id);
-create index ix_user_data_profile_photo_15 on user_data (profile_photo_id);
-alter table user_contact add constraint fk_user_contact_user_16 foreign key (user_id_user) references user_data (id_user);
-create index ix_user_contact_user_16 on user_contact (user_id_user);
-alter table zone add constraint fk_zone_zone_channel_17 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
-create index ix_zone_zone_channel_17 on zone (zone_channel_id_zone_channel);
-alter table zone add constraint fk_zone_ads_size_18 foreign key (ads_size_id_banner_size) references banner_size (id_banner_size);
-create index ix_zone_ads_size_18 on zone (ads_size_id_banner_size);
+alter table banner add constraint fk_banner_content_link_4 foreign key (content_link_id) references file_upload (id);
+create index ix_banner_content_link_4 on banner (content_link_id);
+alter table banner_action add constraint fk_banner_action_impression_5 foreign key (impression_id_impression) references impression (id_impression);
+create index ix_banner_action_impression_5 on banner_action (impression_id_impression);
+alter table banner_placement add constraint fk_banner_placement_banner_6 foreign key (banner_id_banner) references banner (id_banner);
+create index ix_banner_placement_banner_6 on banner_placement (banner_id_banner);
+alter table banner_placement add constraint fk_banner_placement_zone_7 foreign key (zone_id_zone) references zone (id_zone);
+create index ix_banner_placement_zone_7 on banner_placement (zone_id_zone);
+alter table campaign add constraint fk_campaign_id_user_8 foreign key (id_user_id_user) references user_data (id_user);
+create index ix_campaign_id_user_8 on campaign (id_user_id_user);
+alter table deposito add constraint fk_deposito_user_9 foreign key (user_id_user) references user_data (id_user);
+create index ix_deposito_user_9 on deposito (user_id_user);
+alter table deposito add constraint fk_deposito_user_validator_10 foreign key (user_validator_id_user) references user_data (id_user);
+create index ix_deposito_user_validator_10 on deposito (user_validator_id_user);
+alter table impression add constraint fk_impression_bannerPlacement_11 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
+create index ix_impression_bannerPlacement_11 on impression (banner_placement_id_banner_placement);
+alter table notificaton add constraint fk_notificaton_user_12 foreign key (user_id_user) references user_data (id_user);
+create index ix_notificaton_user_12 on notificaton (user_id_user);
+alter table user_data add constraint fk_user_data_role_13 foreign key (role_id_role) references user_role (id_role);
+create index ix_user_data_role_13 on user_data (role_id_role);
+alter table user_data add constraint fk_user_data_profile_photo_14 foreign key (profile_photo_id) references file_upload (id);
+create index ix_user_data_profile_photo_14 on user_data (profile_photo_id);
+alter table user_contact add constraint fk_user_contact_user_15 foreign key (user_id_user) references user_data (id_user);
+create index ix_user_contact_user_15 on user_contact (user_id_user);
+alter table zone add constraint fk_zone_zone_channel_16 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
+create index ix_zone_zone_channel_16 on zone (zone_channel_id_zone_channel);
+alter table zone add constraint fk_zone_ads_size_17 foreign key (ads_size_id_banner_size) references banner_size (id_banner_size);
+create index ix_zone_ads_size_17 on zone (ads_size_id_banner_size);
 
 
 

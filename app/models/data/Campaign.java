@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import models.custom_helper.Angka;
 import models.custom_helper.DateBinder;
@@ -51,6 +52,7 @@ public class Campaign extends Model{
 	public int current_impression;
 	private int current_click;
 	private int bid_price;
+
 	private boolean isActivated;
 	private boolean isDeleted;
 	private Date createdAt;
