@@ -261,7 +261,7 @@ public class SetInitialData {
 		campaign3.setStart_date(new Date());
 		
 		DateTime endDate=new DateTime();
-		endDate=endDate.plusMonths(12);
+		endDate=endDate.plusMonths(5);
 		campaign3.setEnd_date(endDate.toDate());
 		
 		campaign3.setBid_price(8000);

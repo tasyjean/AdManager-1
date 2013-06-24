@@ -1,8 +1,11 @@
-@(data: TemplateData)
+@(data: TemplateData, campaign_list: Page[Campaign])
 
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+@import scala._
 
 @getError() = {
 	@if(flash.contains("error")) {
@@ -23,21 +26,123 @@
 }
 @main("Manajemen Iklan"){
 		
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		
+		
 		@dashboard_content("Manajemen Iklan","Daftar Campaign", "daftar campaign"){
 
-		<div class="content-padding">
-			@getError
-			@getSuccess
+			<div class="content-padding" style="min-height: @(160+campaign_list.getList.size*32+76)px">
+			<h4>Daftar Semua Campaign</h4>
+				@getSuccess
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_campaign">
+					<thead>
+						<tr>
+							<th>Nama Campaign</th>
+                      	@restrict(List(as("administrator"), as("manager"))){                     
+							<th>Pengiklan</th>
+						}
+							<th>Tipe</th>
+							<th>Model Biaya</th>
+							<th>Jumlah Banner</th>
+							<th>Aktif?</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					@for(campaign <- campaign_list.getList) {
+						 <tr>
+							<td>
+								<a href="@controllers.backend.routes.CampaignController.showSingleCampaign(campaign.getId_campaign)">@campaign.getCampaignName</a>
+							</td>
+							
+						@restrict(List(as("administrator"), as("manager"))){                     
+							<td>
+								<a href="@controllers.backend.routes.UserController.showSingleUser(campaign.getId_user.getId_user)">
+									@campaign.getId_user.getFront_name
+								</a>
+							</td>
+						}
+							<td>@campaign.getCampaign_type.toString</td>
+							<td>@campaign.getPricing_model.toString</td>
+							<td>@campaign.getBanner.size</td>
+							<td>@campaign.isActivated_string</td>
+   							<td>
+								<ul  id="icons" class="ui-widget ui-helper-clearfix">
+									@restrict(List(as("administrator"),as("advertiser"))){ 										
+									<li class="ui-state-default ui-corner-all" title="Edit  @campaign.getCampaignName">
+										<a class="ui-icon ui-icon-pencil" 
+										   href="@controllers.backend.routes.CampaignController.editCampaign(campaign.getId_campaign)"></a>
+									</li>
+									}
+									<li class="ui-state-default ui-corner-all" title="Tampilkan Data Lengkap @campaign.getCampaignName">
+										<a class="ui-icon ui-icon-extlink"
+										   href="@controllers.backend.routes.CampaignController.showSingleCampaign(campaign.getId_campaign)"></a>
+									</li>
+								</ul>
+							</td>
+						
+						</tr>
+					}
+					</tbody>
+				</table>
+			<script type="text/javascript">
+				$(document).ready(function() {
+				    $('#table_campaign').dataTable({
+				    	"bPaginate" : false,
+				    	"bLengthChange":false,
+				        "oLanguage": {
+				            "sLengthMenu": "Display _MENU_ records per page",
+				            "sZeroRecords": "Maaf Data tidak ditemukan",
+				            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+				            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+				            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+				            "sPrevious": "Sebelumnya",
+				            "sNext": "Selanjutnya",
+				            "sSearch": "Filter  :"
+				        }
+				    });
+				    
+					// Hover states on the static widgets
+					$( "#dialog-link, #icons li" ).hover(
+						function() {
+							$( this ).addClass( "ui-state-hover" );
+						},
+						function() {
+							$( this ).removeClass( "ui-state-hover" );
+						}
+					); 
+				} );
+			</script>
 			
-			<h4>Daftar Campaign</h4>
-			<p>Daftar Semua campaign</p>
-			
-		</div>	
-		
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
-        </div>
+					<div id="pagination" class="pagination pagination-user">
+		            <ul>
+		                @if(campaign_list.hasPrev) {
+		                    <li class="prev">
+		                        <a href="controllers.backend.routes.UserController.showUserPage(user_list.getPageIndex - 1)">&larr; Previous</a>
+		                    </li>
+		                } else {
+		                    <li class="prev disabled">
+		                        <a>&larr; Sebelumnya</a>
+		                    </li>
+		                }
+		                <li class="current">
+		                    <a href="controllers.backend.routes.UserController.showUser()">--- @campaign_list.getPageIndex ---</a>
+		                </li>
+		                @if(campaign_list.hasNext) {
+		                    <li class="next">
+		                        <a href="controllers.backend.routes.UserController.showUserPage(user_list.getPageIndex + 1)">Next &rarr;</a>
+		                    </li>
+		                } else {
+		                    <li class="next disabled">
+		                        <a>Selanjutnya &rarr;</a>
+		                    </li>
+		                }
+		            </ul>
+		        </div>			
+	        </div>
       
     }
 

@@ -430,6 +430,7 @@ textarea[readonly="readonly"]
 .single-view td:last-child {
 	padding-right: 10px;
 	max-width: 230px;
+	word-wrap: break-word;
 }
 .single-view tr:last-child {
 	padding-bottom: 10px;

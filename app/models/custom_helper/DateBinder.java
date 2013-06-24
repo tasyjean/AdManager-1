@@ -18,8 +18,10 @@ public class DateBinder {
 	private SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy"); //sementara
 
 	public boolean isAfterToday(Date input){
-		Date today=Calendar.getInstance().getTime();
-		return input.after(today)? true : false; 
+		Calendar today=Calendar.getInstance();
+		today.add(Calendar.DATE, -1);
+		Date yasterday=today.getTime();
+		return input.after(yasterday)? true : false; 
 	}
 	
 	public int getDayLength(Date from,Date to){

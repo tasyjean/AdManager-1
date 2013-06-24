@@ -1,4 +1,4 @@
-@(data: TemplateData, campaign_form:Form[CampaignForm], campaignData:CampaignFormData)
+@(data: TemplateData, campaign_form:Form[CampaignForm], campaign:Campaign, campaignData:CampaignFormData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -83,8 +83,6 @@
 		</div>
 		
 	}
-
-	
 }
 @main("Manajemen Iklan"){
 		
@@ -93,20 +91,18 @@
 		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
 		
 		
-		@dashboard_content("Manajemen Iklan","Iklan Baru", "tambah campaign") {
-		
-			@form(action =controllers.backend.routes.CampaignController.saveNewCampaign(), 'class-> "form-horizontal") {		
+		@dashboard_content("Manajemen Iklan","Ubah Campaign", "daftar campaign") {
+			@form(action =controllers.backend.routes.CampaignController.updateCampaign(campaign.getId_campaign), 'class-> "form-horizontal") {		
 			<div class="content-padding">
-				<h4>Buat Campaign Baru</h4>
-					<h5 style="font-style: italic;">Isi form berikut untuk membuat campaign baru</h5>
+				<h4>Ubah Campaign @campaign.getCampaignName</h4>
+					<h5 style="font-style: italic;">Ubah isi form untuk mengubah campaign</h5>
 					@if(campaign_form.hasGlobalErrors){
 						<div class="alert alert-error">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 		              		@campaign_form.globalError.message     	  	 	
 						</div>
 		      	  	}					
-					@generateError
-		      	  	
+					@generateError	      	  	
 		      	  	@getSuccess
 		      	  	@getError   
 		      	  	
@@ -127,7 +123,7 @@
 										<select name="idUser" id="idUser">
 		
 											@for(user<-campaignData.getUserList){
-												<option value="@user.getId_user" @("selected".when(campaign_form("idUser").value==user.getId_user))>
+												<option value="@user.getId_user" @("selected".when(campaign.getId_user.getId_user==user.getId_user))>
 														@user.getFront_name | @user.getEmail
 												</option>
 												
@@ -141,6 +137,7 @@
 						}
 	                    @* Sudah ditentukan jika advertiser *@
 						
+							<input type="hidden" name="idCampaign" value="@campaign.getId_campaign">
 		                @restrict(la(as("advertiser"))){	      	  	
 							<input type="hidden" name="idUser" value="@data.getId">
 						}
@@ -150,7 +147,7 @@
 							<label class="control-label"  for="channel_name">Nama Campaign</label>
 							<div class="controls">
 								<input type="text" placeholder="Nama Campaign"
-									class="input-large" value="@campaign_form("campaignName").value" name="campaignName" id="campaignName">	                    
+									class="input-large" value="@campaign.getCampaignName" name="campaignName" id="campaignName">	                    
 							 <p class="help-block">Nama dari campaign</p>					
 					
 							</div>
@@ -161,7 +158,7 @@
 							<label class="control-label"  for="channel_name">Tipe Campaign</label>
 							<div class="controls">
 							@for(campaignType<-campaignData.getCampaignType){
-								<input type="radio" @("checked".when(campaign_form("campaignType").value==campaignType(0)))
+								<input type="radio" @("checked".when(campaign.getCampaign_type.name==campaignType(0)))
 									   placeholder="Tipe Campaign" id="@campaignType(0)" name="campaignType" value="@campaignType(0)">
 										@campaignType(1)<br><div class="radio-description">@campaignType(2)</div>
 							}
@@ -173,7 +170,7 @@
 							<label class="control-label" for="channel_name">Mulai Campaign</label>
 							<div class="controls">
 								<input type="text" placeholder="DD/MM/YYYY" 
-									class="input-large" value="@campaign_form("startDate").value" name="startDate" id="startDate">	                    
+									class="input-large" value="@campaign.getStart_date_write_formatted" name="startDate" id="startDate">	                    
 							 <p class="help-block">Kapan campaign mulai berjalan, format : DD/MM/YYYY</p>					
 							</div>
 						</div>		
@@ -182,7 +179,7 @@
 							<label class="control-label" for="channel_name">Selesai Campaign</label>
 							<div class="controls">
 								<input type="text"  placeholder="DD/MM/YYYY" 
-									class="input-large" value="@campaign_form("endDate").value" name="endDate" id="endDate">	                    
+									class="input-large" value="@campaign.getEnd_date_write_formatted" name="endDate" id="endDate">	                    
 							 <p class="help-block">Kapan campaign berakhir, format : DD/MM/YYYY</p>					
 							</div>
 						</div>
@@ -192,7 +189,7 @@
 							<label class="control-label"  for="channel_name">Model Perhitungan Biaya</label>
 							<div class="controls">
 							@for(pricingModel<-campaignData.getPricingModel){
-								<input type="radio" @("checked".when(campaign_form("pricingModel").value==pricingModel(0)))
+								<input type="radio" @("checked".when(campaign.getPricing_model.name==pricingModel(0)))
 									   placeholder="pricing model"  name="pricingModel" value="@pricingModel(0)" id="@pricingModel(0)">
 										@pricingModel(1)<br><div class="radio-description">@pricingModel(2)</div>
 							}
@@ -204,8 +201,7 @@
 							<label class="control-label" for="channel_name">Jumlah Impresi</label>
 							<div class="controls">
 								<input type="number" placeholder="Jumlah Impresi" class="input-large" 
-								  @("value=0".when(campaign_form("impressionLimit").value==null)) 
-									value="@campaign_form("impressionLimit").value" 
+									value="@campaign.getLimit_impression" 
 								  name="impressionLimit" id="impressionLimit">	                    
 							 <p class="help-block">Jumlah Impresi yang ingin didapatkan</p>					
 							</div>
@@ -215,8 +211,7 @@
 							<label class="control-label" for="channel_name">Jumlah Klik </label>
 							<div class="controls">
 								<input type="number" placeholder="Jumlah Click" class="input-large" 
-										@("value=0".when(campaign_form("clickLimit").value==null)) 
-										value="@campaign_form("clickLimit").value" name="clickLimit" id="clickLimit">	                    
+										value="@campaign.getLimit_click" name="clickLimit" id="clickLimit">	                    
 							 <p class="help-block">Jumlah klik iklan yang ingin didapatkan</p>					
 							</div>
 						</div>				
@@ -226,8 +221,7 @@
 							<label class="control-label" for="channel_name">Kesediaan Membayar</label>
 							<div class="controls">
 								<input type="number" placeholder="Kesediaan Membayar" class="input-large" 
-									  @("value=0".when(campaign_form("bidPrice").value==null)) 	
-										value="@campaign_form("bidPrice").value" 
+										value="@campaign.getBid_price" 
 										name="bidPrice" id="bidPrice">	  
 							 <p class="help-block" id="bidPrice-help">Jumlah yang harus dibayar setiap satuan hitungan iklan (dalam rupiah)</p>					
 							 <input style="" type="checkbox" id="default-check"> Biarkan Minimal ( IDR <span id="defaultPrice">@campaignData.getClickPrice tiap 1 klik</span>)             
@@ -239,7 +233,7 @@
 							<label class="control-label" for="channel_name">Deskripsi</label>
 							<div class="controls">
 								<textarea rows="5" placeholder="Deskripsi Campaign" class="input-large" 
-										name="description" id="description">@campaign_form("description").value</textarea>  
+										name="description" id="description">@campaign.getDescription</textarea>  
 								            
 							 <p class="help-block">Deskripsi dari campaign</p>					
 							</div>
@@ -248,8 +242,12 @@
 					
 	
 	        <div class="form-actions">
-		         <button type="submit" class="btn btn-primary">Simpan</button>
+		         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
 	    	     <button type="reset" class="btn">Reset</button>
+	    	     <a  class="btn btn-warning" href="@controllers.backend.routes.CampaignController.showSingleCampaign(campaign.getId_campaign)">
+	    	     	Batal
+	    	     </a>
+	    	     
 	        </div>
     }
 
@@ -263,6 +261,8 @@
 			   $( "#startDate" ).datepicker({
 			      changeMonth: true,
 			      numberOfMonths: 1,
+			      dateFormat: 'dd/mm/yy',
+			      defaultDate: '@campaign.getStart_date_write_formatted',
 			      onClose: function( selectedDate ) {
 			        $( "#endDate" ).datepicker( "option", "minDate", selectedDate );
 			      }
@@ -270,6 +270,8 @@
 			    $( "#endDate" ).datepicker({
 			      changeMonth: true,
 			      numberOfMonths: 1,
+			      dateFormat: 'dd/mm/yy',
+			      defaultDate: '@campaign.getEnd_date_write_formatted',			      
 			      onClose: function( selectedDate ) {
 				        $( "#startDate" ).datepicker( "option", "maxDate", selectedDate );
 
@@ -320,8 +322,8 @@
 					exclusiveShow();
 					console.log("exclusive show");
 				});				
-				var campaignSelected="@campaign_form("campaignType").value";
-				var priceModelSelected="@campaign_form("pricingModel").value";
+				var campaignSelected="@campaign.getCampaign_type.name";
+				var priceModelSelected="@campaign.getPricing_model.name";
 
 	    		function contractShow(){
 	    			contractMode.show();
@@ -478,7 +480,8 @@
 							exclusiveShow();
 							campaignExclusive.attr("checked","checked");
 					}
-				    var value = $("input:radio[name=pricingModel]:checked").val();
+				 //   var value = $("input:radio[name=pricingModel]:checked").val();
+				 	var value=priceModelSelected;
 				    if(value=="CPM"){
 				    	impressionMode();
 				    }else if(value=="CPA"){

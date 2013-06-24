@@ -2,6 +2,8 @@ package models.service;
 
 import models.custom_helper.MD5;
 import models.data.User;
+import models.data.UserRole;
+import models.data.enumeration.RoleEnum;
 import models.form.frontendForm.LoginForm;
 import play.data.Form;
 import play.i18n.Messages;
@@ -27,6 +29,12 @@ public class Authenticator {
 	//Lagi login nggak
 	public boolean isLogin(Session session){
 		return session.containsKey(email_id);
+	}
+	//mendapatkan role user
+	public UserRole getUserRole(Session session){
+		String email=session.get(email_id);
+		User user=User.find.where().eq("email", email).findUnique();
+		return user.getRole();
 	}
 	//authentifikasi user
 	public boolean authenticate(String email, String password){

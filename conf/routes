@@ -22,12 +22,23 @@ GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(em
 GET    /adsdelivery/:zone					controllers.backend.AdsDeliveryController.banner(zone:Integer)
 
 #campaign
-GET   /dashboard/campaign				controllers.backend.CampaignController.showCampaign()
-GET   /dashboard/campaign/new			controllers.backend.CampaignController.newCampaign()
-POST  /dashboard/campaign/save			controllers.backend.CampaignController.saveNewCampaign()
+GET   /dashboard/campaign/:page													controllers.backend.CampaignController.showCampaign(page:Integer)
+GET   /dashboard/campaign/new/campaign											controllers.backend.CampaignController.newCampaign()
+POST  /dashboard/campaign/save													controllers.backend.CampaignController.saveNewCampaign()
+GET   /dashboard/campaign/c/:selectPage/:idUser/:size/:filter/:sortBy/:order 	controllers.backend.CampaignController.showCustomCampaign(selectPage:Integer,idUser:Integer,size:Integer,filter:String,sortBy:String,order:String)
+GET   /dashboard/campaign/show/:idCampaign										controllers.backend.CampaignController.showSingleCampaign(idCampaign:Integer)
+GET   /dashboard/campaign/edit/:idCampaign										controllers.backend.CampaignController.editCampaign(idCampaign:Integer)									
+POST  /dashboard/campaign/edit/:idCampaign										controllers.backend.CampaignController.updateCampaign(idCampaign:Integer)
+GET   /dashboard/campaign/banner/new/:idCampaign								controllers.backend.CampaignController.newBanner(idCampaign:Integer)
+POST  /dashboard/campaign/banner/save											controllers.backend.CampaignController.saveBanner()
+GET   /dashboard/campaign/banner/edit/:idBanner									controllers.backend.CampaignController.editBanner(idBanner:Integer)
+POST  /dashboard/campaign/banner/edit/save										controllers.backend.CampaignController.updateBanner()
+GET   /dashboard/campaign/banner/delete/:idBanner								controllers.backend.CampaignController.deleteBanner(idBanner:Integer)
+GET   /dashboard/campaign/delete/:idCampaign									controllers.backend.CampaignController.deleteCampaign(idCampaign:Integer)
+GET   /dashboard/campaign/activate/:idCampaign									controllers.backend.CampaignController.activate(idCampaign:Integer)
 
 #finance
-GET   /dashboard/finance				controllers.backend.FinanceController.index()
+GET   /dashboard/finance					controllers.backend.FinanceController.index()
 
 #profile
 GET   /dashboard/profile					controllers.backend.ProfileController.showProfile()
@@ -50,8 +61,8 @@ GET   /dashboard/setting/:page				controllers.backend.SettingController.showSett
 POST  /dashboard/setting/save/:page			controllers.backend.SettingController.saveSetting(page:Integer)
 GET   /dashboard/setting/set/default		controllers.backend.SettingController.saveDefault()
 #report
-GET   /dashboard/report					controllers.backend.ReportController.index()
-
+GET   /dashboard/report						controllers.backend.ReportController.index()
+	
 #user management
 GET   /dashboard/user						controllers.backend.UserController.showUser()
 GET	  /dashboard/user/page/:page			controllers.backend.UserController.showUserPage(page:Integer)
@@ -102,8 +113,8 @@ POST  /dashboard/channel/edit/				controllers.backend.ZoneController.saveEditCha
 GET   /dashboard/channel/delete/:id_channel	controllers.backend.ZoneController.deleteChannel(id_channel:Integer)
 
 
-GET   /dashboard/channel/:channel		controllers.backend.ZoneController.showSingleChannel(channel:Integer)
-GET   /dashboard/zone/:zone				controllers.backend.ZoneController.showSingleChannel(zone:Integer)
+GET   /dashboard/channel/:channel			controllers.backend.ZoneController.showSingleChannel(channel:Integer)
+GET   /dashboard/zone/:zone					controllers.backend.ZoneController.showSingleChannel(zone:Integer)
 
 
 #untuk kepentingan testing

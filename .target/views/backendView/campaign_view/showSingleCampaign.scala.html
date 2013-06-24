@@ -1,0 +1,262 @@
+@(data: TemplateData, campaign:Campaign)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+ 		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+
+
+@main("Manajemen Iklan"){
+	
+		@dashboard_content("Manajemen Iklan","Detail Campaign","daftar campaign"){
+  			
+		    <div class="content-padding">
+		      <a class="btn" href="@controllers.backend.routes.CampaignController.showCampaign(1)">&larr; Ke Daftar Campaign</a>		      
+		      <br/><br/>
+		       @if(campaign==null){
+		       	<h5>Maaf, data campaign tidak ditemukan</h5>
+		       }else{
+			       @* jika selesai edit atau create, maka akan dialihkan kesini *@
+			       
+				  @getError
+				  @getSuccess 			       
+			      <div class="row-fluid dua-kolom">
+					  <div class="span5" style="min-width:400px; display:block;float:left;margin-right:10px;">
+			    		  <h4>Detail Untuk   @campaign.getCampaignName</h4>
+					      <table class="single-view" style="margin-left:15px">			        		        
+					        <tr>
+					          <td>Nama Campaign</td><td>:</td>
+					          <td>@campaign.getCampaignName</td>
+					        </tr>
+					         <tr>
+					          <td>Tipe Campaign</td><td>:</td>
+					          <td>@campaign.getCampaign_type.toString</td>
+					        </tr>
+					        <tr>
+					          <td>Model Hitung Biaya</td><td>:</td>
+					          <td>@campaign.getPricing_model.toString</td>
+					        </tr>
+					      @if(campaign.getCampaign_type.name()=="EXCLUSIVE"){
+					        <tr>
+					         	<td>Waktu Mulai</td><td>:</td>
+					         	<td>@campaign.getStart_date_formatted</td>
+					        </tr>
+					        <tr>
+					         	<td>Waktu Selesai</td><td>:</td>
+					         	<td>@campaign.getEnd_date_formatted</td>
+					        </tr>
+					        <tr>
+					         	<td>Durasi</td><td>:</td>
+					         	<td>@campaign.campaignDuration hari</td>
+					        </tr>
+					        <tr>
+					         	<td>Sisa Hari</td><td>:</td>
+					         	<td>@campaign.getDaysLeft hari</td>
+					        </tr>
+					        <tr>
+					         	<td>Harga Per Hari</td><td>:</td>
+					         	<td>@campaign.getBid_price_string</td>
+					        </tr>			        			        
+					       }  
+					       @if(campaign.getPricing_model.name=="CPA"){
+					       	<tr>
+					       		<td>Jumlah Klik</td><td>:</td>
+					       		<td>@campaign.getLimit_click_string()</td>
+					       	</tr>
+					       	<tr>
+					       		<td>Jumlah Klik Saat Ini</td><td>:</td>
+					       		<td>@campaign.getCurrent_click_string</td>
+					       	</tr>
+					       	<tr>
+					       		<td>Klik Tersisa</td><td>:</td>
+					       		<td>@campaign.getClickLeft_string</td>
+					       	</tr>
+					        <tr>
+					         	<td>Harga Per Klik</td><td>:</td>
+					         	<td>@campaign.getBid_price_string</td>
+					        </tr>				       	
+					       }
+					       @if(campaign.getPricing_model.name=="CPM"){
+					       	<tr>
+					       		<td>Jumlah Impressi</td><td>:</td>
+					       		<td>@campaign.getLimit_impression_string</td>
+					       	</tr>
+					       	<tr>
+					       		<td>Jumlah Impresi Saat Ini</td><td>:</td>
+					       		<td>@campaign.getCurrent_impression_string</td>
+					       	</tr>
+					       	<tr>
+					       		<td>Impressi Tersisa</td><td>:</td>
+					       		<td>@(campaign.getImpressionLeft_string)</td>
+					       	</tr>			       	
+					        <tr>
+					         	<td>Harga Per 1000 Impresi</td><td>:</td>
+					         	<td>@campaign.getBid_price_string</td>
+					        </tr>	
+					       } 
+					       <tr>
+					       	<td>Estimasi Total Biaya</td><td>:</td>
+					       	<td>@campaign.costEstimation</td>
+					       </tr>
+					       <tr>			       
+					          <td>Dibuat Pada</td><td>:</td>
+					          <td>@campaign.getCreatedAt_formatted</td>
+					        </tr>
+					        <tr>
+					          <td>Deskripsi</td><td>:</td>
+					          <td>@campaign.getDescription</td>
+					        </tr>
+					        <tr>
+					          <td>Status</td><td>:</td>
+					          <td>@campaign.isActivated_string</td>
+					        </tr> 
+					        </table>
+					     </div> @* end span 5 *@
+						 <div class="span5" style="float:right;display:block;">
+					     <h4>Daftar Banner Untuk Campaign Ini</h4>
+			        @if(campaign.getBanner.size==0){
+			        	<h5>Campaign ini belum memiliki banner</h5>
+			        	<p>Klik <a href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">
+			        	disini</a> untuk membuat banner baru</p>
+			        }else{
+			        	<h5>@campaign.getBanner.size Buah Banner</h5>
+				        @for(banner<-campaign.getBanner){
+							<table class="single-view">
+							<tr>
+								<td>Nama Banner</td><td>:</td>
+								<td>@banner.getName</td>
+							</tr>					
+							<tr>
+								<td>Deskripsi</td><td></td>
+								<td>@banner.getDescription</td>
+							</tr>							
+							<tr>
+								<td>
+									<a class="btn btn-mini" href="" >
+										Lihat Banner
+									</a>
+								</td>
+								<td>
+									<a class="btn btn-mini" href="" >
+										Lihat Detail
+									</a>
+								</td>
+								<td>
+									<a class="btn btn-mini" href="" >
+										Ubah Banner
+									</a>
+								</td>
+
+								
+							</tr>
+					        </table>	        			        	
+				        } @* end for *@
+				     }	 @* End if *@				        	
+			      </div>
+			      </div> @* end span 5 *@
+			     </div> @*end row fluid *@
+			    @restrict(la(as("administrator"),as("advertiser"))){      
+				     <div class="form-actions">
+				        <form  style="display:inline" 
+				        		action="@controllers.backend.routes.CampaignController.editCampaign(campaign.getId_campaign)">
+				    	       <button type="submit"  id="ubah" class="btn btn-primary">Ubah Campaign</button>
+				     	 </form>
+				     	@if(campaign.isActivated){
+				        	<a href="#confirm_modal_nonaktifkan" id="aktifkan" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				           		  class="btn btn-warning" type="submit"> Non Aktifkan
+				     		</a>
+				     	}else{
+					     	<a href="#confirm_modal_nonaktifkan" id="aktifkan" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				           		  class="btn btn-success" type="submit"> Aktifkan 
+				     		</a>	
+				     	}
+				        <a  href="#confirm_modal_hapus" role="button" data-toggle="modal" style="margin-left:10px;display:inline"
+				             class="btn btn-danger" type="submit"> Hapus Campaign
+				     	</a> 
+		     		 	<a style="margin:0px 5px 0 10px" class="btn btn-success" 
+						      href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">Tambah Banner</a>
+				     	  				     				     	  				      
+				    </div>
+
+			@**********Modal Delete*********@
+			<div id="confirm_modal_hapus"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label_hapus">Hapus Campaign</h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau menghapus @campaign.getCampaignName ?</h4>
+					<p class="alert alert-warning" style="color:#000">
+						Penghapusan campaign mengakibatkan banner tidak bisa diakses lagi
+						dan aktifitas berkaitan dengan campaign tidak dapat dilakukan lagi.
+					</p>
+					
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.CampaignController.deleteCampaign(campaign.getId_campaign)">
+				   		Saya Mengerti Semua Resiko dan Hapus Saja
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Saya Takut, Batal Saja</button>
+				</div>
+				
+			</div>
+			@**********Modal Nonaktifkan*********@
+			<div id="confirm_modal_nonaktifkan"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label_nonaktifkan"></h3>
+		  		</div>
+				 <div class="modal-body">
+					<h4>Yakin Mau Merubah Aktif Tidaknya @campaign.getCampaignName ?</h4>
+					<p class="alert alert-warning" style="color:#000">
+						Ketika campaign aktif, maka saat itu juga iklan akan ditampilkan
+						Ketika non aktif, maka tampilan iklan akan dihentikan
+					</p>
+  				</div>
+  				<div class="modal-footer">
+				   <a class="btn btn-warning" 
+				   		href="@controllers.backend.routes.CampaignController.activate(campaign.getId_campaign)">
+				   		Ya, Saya Yakin
+				   	</a>  					
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batalkan Saja</button>
+				</div>			
+			</div>		
+		} @* End restrict *@    
+							
+
+ 		} @*end if *@
+ 		
+ 	}
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("campaign")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

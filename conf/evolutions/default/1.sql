@@ -86,6 +86,7 @@ create table campaign (
   bid_price                 integer,
   is_activated              boolean,
   is_deleted                boolean,
+  created_at                timestamp,
   description               TEXT,
   constraint ck_campaign_campaign_type check (campaign_type in ('contract','exclusive')),
   constraint ck_campaign_pricing_model check (pricing_model in ('cpm','cpa','flat')),

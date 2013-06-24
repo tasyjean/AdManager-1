@@ -83,6 +83,8 @@ campaign.exclusive.info=Campaign ekslusif ditempatkan pada zona dan biaya dihitu
 campaign.contract.name=Kontrak
 campaign.contract.info=Campaign tidak eklusif terhadap zona dan biaya dihitung berdasarkan impresi atau klik
 
+error.editCampaign=Campaign Hanya bisa dirubah pada kondisi non-aktif, silahkan non-aktifkan campaign terlebih dahulu
+
 pricingModel.cpm.name=Per 1000 Impresi
 pricingModel.cpm.info=Biaya iklan dihitung setiap 1000 kali tampil
 pricingModel.cpa.name=Per Klik
