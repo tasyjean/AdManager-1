@@ -15,9 +15,8 @@ public class BannerForm {
 	public String bannerType;
 	public String name;
 	public String description;
-	public String tittle;
+	public String title;
 	public String content_text;
-	public String content;  //calon hapus
 	public String target;
 	public String alt_text;
 	public int weight;
