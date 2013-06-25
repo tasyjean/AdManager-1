@@ -59,16 +59,16 @@ public class Banner extends Model {
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign;
 	}
-	public BannerSize getAdsSize() {
+	public BannerSize getBannerSize() {
 		return bannerSize;
 	}
-	public void setAdsSize(BannerSize bannerSize) {
+	public void setBannerSize(BannerSize bannerSize) {
 		this.bannerSize = bannerSize;
 	}
-	public ZoneTypeEnum getAdsType() {
+	public ZoneTypeEnum getBannerType() {
 		return bannerType;
 	}
-	public void setAdsType(ZoneTypeEnum bannerType) {
+	public void setBannerType(ZoneTypeEnum bannerType) {
 		this.bannerType = bannerType;
 	}
 	public String getName() {

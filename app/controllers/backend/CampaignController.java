@@ -21,6 +21,8 @@ import models.data.Banner;
 import models.data.Campaign;
 import models.data.FileUpload;
 import models.data.User;
+import models.data.Zone;
+import models.data.enumeration.CampaignTypeEnum;
 import models.dataWrapper.TemplateData;
 import models.dataWrapper.campaign.BannerFormData;
 import models.dataWrapper.campaign.CampaignFormData;
@@ -31,6 +33,7 @@ import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Http;
@@ -195,9 +198,14 @@ public class CampaignController extends CompressController {
 	@With(DataFiller.class)
 	public static Result newBanner(int idCampaign){
 		TemplateData data = (TemplateData) 
-				Http.Context.current().args.get("templateData");	
-		bannerFormData = new BannerFormData();
-		return ok(create_banner.render(data, idCampaign,bannerForm, bannerFormData));
+				Http.Context.current().args.get("templateData");
+		Campaign campaign=Campaign.find.byId(idCampaign);
+		if(campaign.getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
+			bannerFormData = new BannerFormData("contract");			
+		}else{
+			bannerFormData = new BannerFormData();						
+		}
+		return ok(create_banner.render(data, idCampaign, bannerForm, bannerFormData));
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -224,7 +232,7 @@ public class CampaignController extends CompressController {
 					Banner banner=bannerProc.saveBanner(filledForm, FileUpload.find.byId(result));
 					if(banner!=null){
 						flash("success","Data Banner ditambahkan");
-						return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
+						return redirect(controllers.backend.routes.CampaignController.newBannerPlacement(banner.getId_banner()));
 					}else{
 						flash("error","Kesalahan saat menyimpan data");
 						return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));									
@@ -266,12 +274,25 @@ public class CampaignController extends CompressController {
 	
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result newBannerPlacement(){
+	public static Result newBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("new Banner placement");
+		List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
+		return ok(create_banner_placement.render(data, idBanner, zones));
 	}
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result saveBannerPlacement(int idBanner){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		DynamicForm filledForm=Form.form().bindFromRequest();
+		boolean result=bannerProc.saveBannerPlacement(filledForm);
+		if(result){
+			return ok("sukses");
+		}else{
+			return ok("gagal");
+		}
+	}	
 	@SubjectPresent
 	@With(DataFiller.class)
 	public static Result editBannerPlacement(){

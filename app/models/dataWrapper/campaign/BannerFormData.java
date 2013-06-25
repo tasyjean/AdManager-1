@@ -17,12 +17,16 @@ public class BannerFormData {
 
 	public BannerFormData() {
 		setBannerSize();
-		setBannerType();
+		setBannerType(false);
+	}
+	public BannerFormData(String type) {
+		setBannerSize();
+		setBannerType(true);
 	}
 	private void setBannerSize() {
 		this.bannerSize=BannerSize.find.all();
 	}
-	private void setBannerType() {
+	private void setBannerType(boolean isContract) {
 		List<String[]> bannerType=new ArrayList<String[]>();
 		int x=0;
 		for(ZoneTypeEnum enums:ZoneTypeEnum.values()){
@@ -30,8 +34,15 @@ public class BannerFormData {
 			if(x==0){
 				checked="checked";
 			}
-			String[] content={enums.name(),enums.toString(),checked};
-			bannerType.add(content);
+			if(isContract){
+				if(enums.equals(ZoneTypeEnum.BANNER)){
+					String[] content={enums.name(),enums.toString(),"checked"};					
+					bannerType.add(content);					
+				}
+			}else{
+				String[] content={enums.name(),enums.toString(),checked};				
+				bannerType.add(content);					
+			}
 			x++;
 		}
 		this.bannerType = bannerType;

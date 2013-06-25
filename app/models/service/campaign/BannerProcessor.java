@@ -1,7 +1,10 @@
 package models.service.campaign;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.ning.http.multipart.FilePartSource;
 
@@ -9,16 +12,19 @@ import net.coobird.thumbnailator.Thumbnailator;
 import net.coobird.thumbnailator.Thumbnails;
 
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Http.MultipartFormData.FilePart;
 import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.Banner;
+import models.data.BannerPlacement;
 import models.data.BannerSize;
 import models.data.Campaign;
 import models.data.FileUpload;
 import models.data.User;
 import models.data.Zone;
+import models.data.enumeration.CampaignTypeEnum;
 import models.data.enumeration.ZoneTypeEnum;
 import models.form.backendForm.campaignForm.BannerForm;
 
@@ -38,8 +44,8 @@ public class BannerProcessor {
 			Campaign campaign=Campaign.find.byId(idCampaign);
 			BannerSize size=BannerSize.find.byId(idBanner_size);
 			banner.setCampaign(campaign);
-			banner.setAdsSize(size);
-			banner.setAdsType(ZoneTypeEnum.valueOf(form.get().bannerType));
+			banner.setBannerSize(size);
+			banner.setBannerType(ZoneTypeEnum.valueOf(form.get().bannerType));
 			banner.setName(form.get().name);
 			banner.setDescription(form.get().description);
 			banner.setTitle(form.get().title);
@@ -110,8 +116,8 @@ public class BannerProcessor {
 			BannerSize size=BannerSize.find.byId(idBanner_size);
 			
 			banner.setCampaign(campaign);
-			banner.setAdsSize(size);
-			banner.setAdsType(ZoneTypeEnum.valueOf(form.get().bannerType));
+			banner.setBannerSize(size);
+			banner.setBannerType(ZoneTypeEnum.valueOf(form.get().bannerType));
 			banner.setName(form.get().name);
 			banner.setDescription(form.get().description);
 			banner.setTitle(form.get().title);
@@ -169,16 +175,64 @@ public class BannerProcessor {
 		}		
 	}
 	/*
-	 * 
+	 * pertama
+	 * -cari zona yang tipenya sama dengan banner, text dengan text gambar dengan gambar
+	 * -pastikan zona tidak sedang dimiliki oleh banner aktif dari campaign yang aktif
+	 * -untuk banner gambar, pastikan zona memiliki ukuran yang sama
+	 * -untuk text, hanya pilih zona jenis text yang punya ukuran rectangle dan leader board saja
+	 * lets do it
 	 */
 	public List<Zone> getZoneAvailable(int idBanner){
-		Banner banner=new Banner();
-		ZoneTypeEnum type=banner.getAdsType();
-		List<Zone> zone=Zone.find.where().eq(arg0, type)
-		return null;
+		Banner banner=Banner.find.byId(idBanner);
+		ZoneTypeEnum type=banner.getBannerType();
+		BannerSize bannerSize=banner.getBannerSize();
+		BannerSize bannerRect=BannerSize.find.where().eq("name", "Rectangle").findUnique();
+		BannerSize bannerLead=BannerSize.find.where().eq("name", "LeaderBoard").findUnique();
+		Collection<BannerSize> coll=new ArrayList<BannerSize>();
+		coll.add(bannerLead);
+		coll.add(bannerRect);
+		List<Zone> zones=null;
+		if(type.equals(ZoneTypeEnum.TEXT)){
+			zones=Zone.find.where().in("ads_size", coll).eq("zone_type", ZoneTypeEnum.TEXT.name().toLowerCase()).order().asc("zone_channel").findList();
+
+		}else{
+			zones=Zone.find.where().eq("ads_size", bannerSize).eq("zone_type", type.name().toLowerCase()).order().asc("zone_channel").findList();
+			int[] delete=new int[zones.size()];
+			int deleteCount=0;
+			Logger.debug("Ukuran Zones 1 " + zones.size());
+			
+			for(int x=0;x<zones.size();x++){
+				if(!isZoneFree(zones.get(x))){
+					zones.remove(x);
+					
+				}			
+			}
+		}
+		Logger.debug("Ukuran Zones " + zones.size());
+		Logger.debug("Type " + type.toString() + type.name());
+		return zones;
 	}
-	public void saveBannerPlacement(){
+
+	private boolean isZoneFree(Zone zone){
+		List<BannerPlacement> banners=BannerPlacement.find.
+													  where().
+												      eq("zone",zone).
+												      findList();
+		Logger.debug("Ukuran zone free " + banners.size());		
+		for(BannerPlacement place:banners){
+			if(place.getBanner().getCampaign().
+					getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
+				return false;
+			}
+		}
+		return true;
 		
+	}
+	
+	public boolean saveBannerPlacement(DynamicForm form){
+		Map<String, String> result=form.data();
+		System.out.println(result.toString());
+		return true;
 	}
 	
 
