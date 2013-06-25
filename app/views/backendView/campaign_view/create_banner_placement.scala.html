@@ -141,7 +141,7 @@
 									<select name="bannerSize" id="bannerSize">
 										@for(banner_size<-formData.getBannerSize){
 										<option value="@banner_size.getId_banner_size()"
-												@("selected".when(banner_size.getId_banner_size()==banner_form("bannerSIze").value))	>
+												@("selected".when(banner_size.getId_banner_size()==banner_form("bannerSIze").value))>
 											@banner_size.getName() -- (@banner_size.getWidth() x @banner_size.getHeight())
 										</option>
 										}

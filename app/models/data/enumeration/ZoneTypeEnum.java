@@ -12,6 +12,6 @@ public enum ZoneTypeEnum {
 	@EnumValue("banner")
 	BANNER{
 	public String toString() {
-		return "Tipe Banner";
+		return "Tipe Gambar dan Objek";
 	}}
 }

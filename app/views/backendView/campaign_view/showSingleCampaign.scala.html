@@ -141,35 +141,37 @@
 			        }else{
 			        	<h5>@campaign.getBanner.size Buah Banner</h5>
 				        @for(banner<-campaign.getBanner){
-							<table class="single-view">
-							<tr>
-								<td>Nama Banner</td><td>:</td>
-								<td>@banner.getName</td>
-							</tr>					
-							<tr>
-								<td>Deskripsi</td><td></td>
-								<td>@banner.getDescription</td>
-							</tr>							
-							<tr>
-								<td>
-									<a class="btn btn-mini" href="" >
-										Lihat Banner
-									</a>
-								</td>
-								<td>
-									<a class="btn btn-mini" href="" >
-										Lihat Detail
-									</a>
-								</td>
-								<td>
-									<a class="btn btn-mini" href="" >
-										Ubah Banner
-									</a>
-								</td>
-
-								
-							</tr>
-					        </table>	        			        	
+							@if(!banner.isDeleted){	
+								<table class="single-view">
+								<tr>
+									<td>Nama Banner</td><td>:</td>
+									<td>@banner.getName</td>
+								</tr>					
+								<tr>
+									<td>Deskripsi</td><td></td>
+									<td>@banner.getDescription</td>
+								</tr>							
+								<tr>
+									<td>
+										<a class="btn btn-mini" href="" >
+											Lihat Banner
+										</a>
+									</td>
+									<td>
+										<a class="btn btn-mini" href="" >
+											Lihat Detail
+										</a>
+									</td>
+									<td>
+										<a class="btn btn-mini" href="" >
+											Ubah Banner
+										</a>
+									</td>
+	
+									
+								</tr>
+						        </table>
+						       }	        			        	
 				        } @* end for *@
 				     }	 @* End if *@				        	
 			      </div>

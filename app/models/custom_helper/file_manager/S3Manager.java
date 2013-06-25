@@ -156,7 +156,58 @@ public class S3Manager implements FileManagerInterface {
 			return false;
 		}
 		return true;
-	}	
+	}
+	public boolean resize(int id, int width, int height){
+		try {
+			FileUpload file=FileUpload.find.byId(id);
+			String output = file.getPath().substring(1,file.getPath().length())
+							+file.getId()+file.getName();
+			Logger.debug("Output untuk resize " + output);
+			File result=new File("temp");
+			if(result.exists()){
+				result.delete();
+			}
+			URL url=new URL(getFileUrl(file));
+			InputStream input=url.openStream();
+			OutputStream outputStream=new FileOutputStream(result);
+			Logger.debug("Input untuk thumbnai " + url.toString());
+
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			
+			Logger.debug("Downloading file " + url.toString());
+			while ((read = input.read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+			
+			File outFile = new File("output.jpg"); 
+			Thumbnails.of(result).width(60).height(60).toFile(outFile);
+			if (S3Plugin.amazonS3 == null) {
+	            Logger.error("Tidak bisa menyimpan karena storage tidak siap");
+	            throw new RuntimeException("Could not save");
+	        }else{
+	        	PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET, output, outFile);
+	            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
+	            S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+	            GetObjectRequest request=new GetObjectRequest(BUCKET, output);
+	            S3Object object =S3Plugin.amazonS3.getObject(request);
+	            if(object==null) throw new RuntimeException(); 
+	            outFile.delete();
+	        }
+			
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+			return false;
+		} catch(IOException io){
+			io.printStackTrace();
+			return false;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public String getFileUrl(int id){
 		FileUpload upload=FileUpload.find.byId(id);
 		return APP_PATH+

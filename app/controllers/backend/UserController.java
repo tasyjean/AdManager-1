@@ -230,6 +230,11 @@ public class UserController extends CompressController {
 				Http.Context.current().args.get("templateData");
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart part = body.getFile("picture");
+		System.out.println(part.getContentType());
+		System.out.println(part.getKey());
+		System.out.println(part.getFilename());
+		System.out.println(part.getFilename());
+		
 		if (part!= null) {
 			
 			int result=creator.saveProfilePicture(part, id_user);

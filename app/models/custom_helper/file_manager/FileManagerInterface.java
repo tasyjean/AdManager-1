@@ -12,4 +12,5 @@ public interface FileManagerInterface {
 	public boolean saveThumbnail(int id);
 	public String getFileUrl(int id);
 	public String getThumbnailFullPath(int id);
+	public boolean resize(int file, int width, int height);
 }

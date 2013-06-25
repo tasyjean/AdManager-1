@@ -30,7 +30,7 @@ GET   /dashboard/campaign/show/:idCampaign										controllers.backend.Campaign
 GET   /dashboard/campaign/edit/:idCampaign										controllers.backend.CampaignController.editCampaign(idCampaign:Integer)									
 POST  /dashboard/campaign/edit/:idCampaign										controllers.backend.CampaignController.updateCampaign(idCampaign:Integer)
 GET   /dashboard/campaign/banner/new/:idCampaign								controllers.backend.CampaignController.newBanner(idCampaign:Integer)
-POST  /dashboard/campaign/banner/save											controllers.backend.CampaignController.saveBanner()
+POST  /dashboard/campaign/banner/new/:idCampaign								controllers.backend.CampaignController.saveBanner(idCampaign:Integer)
 GET   /dashboard/campaign/banner/edit/:idBanner									controllers.backend.CampaignController.editBanner(idBanner:Integer)
 POST  /dashboard/campaign/banner/edit/save										controllers.backend.CampaignController.updateBanner()
 GET   /dashboard/campaign/banner/delete/:idBanner								controllers.backend.CampaignController.deleteBanner(idBanner:Integer)

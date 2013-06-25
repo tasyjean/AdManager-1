@@ -5,6 +5,7 @@ package controllers.backend;
  * Kelas CampaignController digunakan untuk menangani request berkaitan dengan 
  * manajemen iklan dan campaign
  */
+import java.util.List;
 import java.util.Date;
 import java.util.Map;
 
@@ -12,13 +13,21 @@ import com.amazonaws.services.simpleemail.model.Message;
 import com.avaje.ebean.Page;
 
 import models.custom_helper.DateBinder;
+import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.setting.SettingManager;
+import models.data.Banner;
 import models.data.Campaign;
+import models.data.FileUpload;
 import models.data.User;
 import models.dataWrapper.TemplateData;
+import models.dataWrapper.campaign.BannerFormData;
 import models.dataWrapper.campaign.CampaignFormData;
+import models.form.backendForm.campaignForm.BannerForm;
 import models.form.backendForm.campaignForm.CampaignForm;
 import models.service.Authenticator;
+import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
@@ -27,18 +36,24 @@ import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import controllers.CompressController;
 import controllers.action.DataFiller;
 import views.html.backendView.campaign_view.*;
+import views.html.backendView.user_view.show_single_user;
 
 public class CampaignController extends CompressController {
 
 	public static SettingManager manager=new SettingManager();
+	public static FileManagerInterface fileManager=new FileManagerFactory().getManager();
+	public static BannerProcessor bannerProc=new BannerProcessor(fileManager);
 	public static CampaignFormData campaignData;
+	public static Form<BannerForm> bannerForm=Form.form(BannerForm.class);
 	public static Form<CampaignForm> campaignForm=Form.form(CampaignForm.class);
 	public static DateBinder binder=new DateBinder();
 	public static CampaignProcessor campProc=new CampaignProcessor(binder);
-
+	public static BannerFormData bannerFormData;
 	public static Authenticator auth=new Authenticator();
 	
 	@SubjectPresent
@@ -181,16 +196,47 @@ public class CampaignController extends CompressController {
 	public static Result newBanner(int idCampaign){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("new banner");
+		bannerFormData = new BannerFormData();
+		return ok(create_banner.render(data, idCampaign,bannerForm, bannerFormData));
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result saveBanner(){
+	public static Result saveBanner(int idCampaign){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("save banner");
+		Form<BannerForm> filledForm=Form.form(BannerForm.class).bindFromRequest();
+		bannerFormData=new BannerFormData();
+		if(filledForm.hasErrors()){			
+			return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));			
+		}else{
+			//upload file dulu
+			MultipartFormData body = request().body().asMultipartFormData();
+			FilePart part = body.getFile("bannerContent");
+			if (part!= null) {
+				String bannerType=filledForm.get().bannerType;
+				int result=bannerProc.saveFile(part, bannerType);
+				if(result==-1){
+					flash("error","Kesalahan saat upload file");					
+				}else if(result==-2){
+					flash("error","Hanya mendukung file jpg, png dan gif");
+				}else{
+					//baru ngesave
+					Banner banner=bannerProc.saveBanner(filledForm, FileUpload.find.byId(result));
+					if(banner!=null){
+						flash("success","Data Banner ditambahkan");
+						return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
+					}else{
+						flash("error","Kesalahan saat menyimpan data");
+						return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));									
+					}
+				}
+			} else {
+				
+				flash("error", "File banner kosong");
+				return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));			
+			}
+			return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));			
+		}
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -202,6 +248,14 @@ public class CampaignController extends CompressController {
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
+	public static Result updateBanner(){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		
+		return ok("update banner");
+	}	
+	@SubjectPresent
+	@With(DataFiller.class)
 	public static Result deleteBanner(int idbanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
@@ -209,14 +263,7 @@ public class CampaignController extends CompressController {
 		return ok("delete banner");
 		
 	}		
-	@SubjectPresent
-	@With(DataFiller.class)
-	public static Result updateBanner(){
-		TemplateData data = (TemplateData) 
-				Http.Context.current().args.get("templateData");	
-		
-		return ok("update banner");
-	}		
+	
 	@SubjectPresent
 	@With(DataFiller.class)
 	public static Result newBannerPlacement(){

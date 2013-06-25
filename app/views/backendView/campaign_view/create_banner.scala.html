@@ -1,4 +1,5 @@
-@(data: TemplateData, id_user:Integer,contact_form:Form[ContactForm], formData:UserContactData, contacts:List[UserContact])
+@(data: TemplateData, id_campaign:Integer,banner_form:Form[BannerForm], 
+  formData:BannerFormData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -21,7 +22,59 @@
 		</div>
 	}
 }
+@generateError()={
+	@if(banner_form.hasErrors){
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<ul>
+			@if(banner_form.error("title")!=null){
+				<li>
+				@banner_form.error("title").message()
+				</li>
+			}					
+			@if(banner_form.error("content_text")!=null){
+				<li>
+				@banner_form.error("content_text").message()
+				</li>
+			}	
+			@if(banner_form.error("bannerType")!=null){
+				<li>
+				@banner_form.error("bannerType").message()
+				</li>
+			}	
+			@if(banner_form.error("name")!=null){
+				<li>
+				@banner_form.error("name").message()
+				</li>
+			}	
+			@if(banner_form.error("bannerSize")!=null){
+				<li>
+				@banner_form.error("bannerSize").message()
+				</li>
+			}	
+			@if(banner_form.error("weight")!=null){
+				<li>
+				@banner_form.error("weight").message()
+				</li>
+			}				
+			@if(banner_form.error("target")!=null){
+				<li>
+				@banner_form.error("target").message()
+				</li>
+			}			
+			@if(banner_form.error("campaign")!=null){
+				<li>
+				@banner_form.error("campaign").message()
+				</li>
+			}																																																										
+			</ul>
 
+		</div>
+		
+	}
+
+	
+}
 @main("Manajemen Iklan"){
 
 		@* Tambahkan java script dan css *@
@@ -30,141 +83,194 @@
 		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
 		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
 	
-		@dashboard_content("Manajemen Pengguna","Tambah Banner","tambah pengguna"){
+		@dashboard_content("Manajemen Iklan","Tambah Banner","daftar campaign"){
 		
 		<div id="input_tab">
 			<ul>
 				<li><a href="#tabs-1">Buat Banner</a></li>
 				<li><a href="#tabs-2">Hubungkan Dengan Zona</a></li>
 			</ul>
-			<div id="tabs-1">
+			<div id="tabs-2">
 
 			</div>@* End tab 1 *@
-			
-			<div id="tabs-2">
-			@form(action =controllers.backend.routes.UserController.saveContact(id_user), 'class-> "form-horizontal") {
-				<div class="row-fluid dua-kolom">
-				  <div class="span5" style="min-width:400px; display:block;float:right;margin-right:10px;">
-				    <div class="content-padding">
-					@if((contacts.size>0)){
-						@getSuccess()
-				      	<h4>Informasi Tersimpan</h4>
-				      	<h5 style="font-style: italic;">Daftar Informasi user yang sudah disimpan</h5>
-					    <table style="line-height: 24px;width:100%;">				       
-				       	
-				        @for(contact<-contacts){
-						        <tr>
-						           <td>@contact.getContact_type.toString</td><td>:</td>
-						        	<td>@Html(contact.getContact_value_link)</td>		
-						        </tr>			          	
-						        <tr>
-						        	<td></td><td></td>
-						        	<td><span style="font-size:13px;font-style: italic;">@contact.getContact_description</span></td>
-						        </tr>	
-					      	}
-					     </table>	        
-				       				      	
-				      	
-				      }	
-				  </div> @*end content padding *@
-				  </div> @*end span 5 *@
-				  <div class="span5" style="float:left;display:block;">
-						<div class="content-padding">  					
-							
-							<h4>Informasi Pengguna Tambahan</h4>
-							<h5 style="font-style: italic;">Isi informasi Pengguna dengan lebih lengkap</h5>
-								@getError()	
-
-								@if(contact_form.hasErrors){
-									<div class="alert alert-error">
-										<p>Penyimpanan Gagal</p>
-										<p>Ada form yang belum di isi</p>
-									</div>
-						      	}									
+		
+			<div id="tabs-1">
+			@form(action =controllers.backend.routes.CampaignController.saveBanner(id_campaign), 'class-> "form-horizontal", 'enctype -> "multipart/form-data") {
+						<div class="content-padding"> 
+							<h4>Tambah Banner Baru</h4>
+							<h5 style="font-style: italic;">Isi Form banner dibawah ini</h5>
+							<p><a href="#banner_modal" role="button" data-toggle="modal">Lihat Contoh Banner</a></p>
+								@getError()									
+								@generateError()
+								@getSuccess()								
 						</div>
-							@* form untuk informasi dasar *@	
+						<input type="hidden" name="campaign" id="campaign" value="@id_campaign">
+
 						<div class="content-padding">
 							<div class="control-group">
-								<label class="control-label" for="channel_name">Jenis Informasi</label>
+								<label class="control-label" for="channel_name">Nama Banner</label>
 								<div class="controls">
-									<select name="contact_type">
-										@for(data<-formData.getData){
-											<option @("selected".when(data(0)==contact_form("contact_type").value))
+									<input name="name" type="text" placeholder="Nama Banner" value="@banner_form("name").value" id="name">
+									<p class="help-block">Nama dari banner</p>													 
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Deskripsi Banner</label>
+								<div class="controls">
+									<textarea rows="4" placeholder="Deskripsi banner" class="input"  name="description" 
+									id="description">@banner_form("description").value</textarea>	                    								 
+								 	<p class="help-block">Deskripsi dari banner</p>													 
+								</div>
+							</div>															
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Tipe Banner</label>
+								<div class="controls">
+									<select name="bannerType" id="bannerType">
+										@for(data<-formData.getBannerType){
+											<option @data(2)  
 													value="@data(0)">@data(1)</option>
 										}
 									</select>
-									<p class="help-block">Jenis dari informasi</p>													 
+									<p class="help-block">Tipe Dari Banner</p>													 
 								</div>
 							</div>
 										
 							<div class="control-group">
-								<label class="control-label"  for="channel_name">Isi Informasi *</label>
+								<label class="control-label"  for="channel_name">Ukuran Banner</label>
 								<div class="controls">
-									<textarea rows="3"  placeholder="isi informasi" name="value" id="value">@contact_form("value").value</textarea>	                  
-									<p class="help-block">Isi informasi, tergantung jenisnya</p>													 
+									<select name="bannerSize" id="bannerSize">
+										@for(banner_size<-formData.getBannerSize){
+										<option value="@banner_size.getId_banner_size()"
+												@("selected".when(banner_size.getId_banner_size()==banner_form("bannerSIze").value))	>
+											@banner_size.getName() -- (@banner_size.getWidth() x @banner_size.getHeight())
+										</option>
+										}
+									</select>
+									<p class="help-block">Pilih ukuran banner</p>													 
+									<input type="hidden" name="bannerSize" id="bannerSize2" value="@formData.getBannerSize.get(0).getId_banner_size" disabled>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Judul Banner</label>
+								<div class="controls">
+									<input name="title" type="text" maxlength="27" placeholder="Judul Banner" value="@banner_form("title").value" id="title">
+									<p class="help-block">Judul Dari Banner, maksimal 27 karakter</p>																						 
 								</div>
 							</div>
 							
 							<div class="control-group">
-								<label class="control-label" for="channel_name">Deskripsi Informasi  </label>
+								<label class="control-label" for="channel_name">Isi Konten</label>
 								<div class="controls">
-									<textarea rows="4" placeholder="Deskripsi informasi" class="input"  name="description" id="description">@contact_form("description").value</textarea>	                    								 
-								 	<p class="help-block">Deskripsi dari informasi</p>													 
+									<textarea rows="4" maxlength="73" placeholder="isi konten banner" class="input"  name="content_text" 
+									id="description">@banner_form("content_text").value</textarea>	                    								 
+								 	<p class="help-block">Isi Konten Banner, maksimal 73 karakter</p>													 
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Link Banner</label>
+								<div class="controls">
+									<textarea rows="4" type="" placeholder="link banner" class="input"  name="target" 
+									id="description">@banner_form("target").value</textarea>	                    								 
+								 	<p class="help-block">Alamat URL yang dituju ketika banner diklik, url harus valid</p>													 
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Teks Alternatif</label>
+								<div class="controls">
+									<textarea rows="4" placeholder="Teks Alternatif" class="input"  name="alt_text" 
+									id="description">@banner_form("alt_text").value</textarea>	                    								 
+								 	<p class="help-block">Teks Alternatif untuk file banner (untuk attribut alt)</p>													 
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">File Banner</label>
+								<div class="controls">
+ 						   			<input type="file" id="bannerContent" name="bannerContent">	               								 
+								 	<p class="help-block" id="tipeText">File dari banner, format didukung : png, jpg, gif. Ukuran 60x60 pixel </p>													 
+								 	<p class="help-block" id="tipeBanner">File dari banner, format didukung : swf, png, jpg, gif</p>													 
+								 	<p class="help-block" id="tipeBannerx">Pastikan banner memiliki ukuran yang sesuai </p>													 
+								
+								</div>
+							</div>							
+																													
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Bobot Banner</label>
+								<div class="controls">
+								<input type="number" max="10" min="0" placeholder="Bobot Banner" 
+									  @("value=0".when(banner_form("weight").value==null)) 	
+										value="@banner_form("weight").value" 
+										name="weight" id="weight">	  
+								 	<p class="help-block">Bobot relatif banner dalam campaign ini</p>
+								 	<p class="help-block">default 0, skala 0-10, makin tinggi makin berbobot</p>
 								</div>
 							</div>																	
 						</div> @*end content padding *@
 																					
-
-					</div>	@* End span 5 *@
-				 </div> @* end row fluid *@
-					    	 
+					 
 				 <div class="form-actions">
-				    <button type="submit" class="btn btn-primary">Simpan Data</button>
+				    <button type="submit" class="btn btn-primary">Simpan dan Lanjut</button>
 				    <button type="reset" class="btn">Reset</button>
-			         @if(contacts.size==0){
-						<a title="Lewati pengisian form"  href="#confirm_modal" role="button" data-toggle="modal">
-					    	<button type="button" class="btn btn-info">Lewati</button>
-						 </a>
-					}else{
-						<a href="@controllers.backend.routes.UserController.createUserStep(3, id_user)" 
-						  	 role="button" data-toggle="modal" title="Selesai dan lanjut ke langkah selanjutnya" >
-							<button type="button" class="btn btn-info">Selesai</button>
-						 </a>							   
-					}
+					<a href="" class="btn btn-warning">Batal</a>
 				</div> @*end form action *@					
-				</div>	} @*end form *@ 		
-				
+				</div>	} @*end form *@ 						
 			</div> @* End tab 2 *@
-			
-			<div id="tabs-3">
-
-			</div>@* End tab 3 *@
-		</div>	
-				@**********Modal Delete*********@
-			<div id="confirm_modal" style="width:auto;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+		</div>
+		
+		@**********Modal*********@
+			<div id="banner_modal" style="width:auto;margin-left:-350px;float:left;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
 				<div class="modal-header">
 		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		    		<h3 id="label">Lewati Pengisian Form</h3>
+		    		<h4 id="label">Contoh Banner</h4>
 		  		</div>
 				 <div class="modal-body">
-					<h4>Yakin Ingin Melewati Pengisian Form?</h4>
-					<p class="alert alert-warning" style="color:#000">
-						Data ini dapat di isi lagi melalui menu ubah pengguna, jika suatu saat ingin menambah data
-					</p>
+					<h5>Iklan BannerTeks</h5>
+    				@ad_sample(formData.getBannerSize,true)
+    				<h5>Iklan Banner Gambar </h5>
+    				@ad_sample(formData.getBannerSize)
   				</div>
   				<div class="modal-footer">
-				      <a href="@controllers.backend.routes.UserController.createUserStep(3, id_user)">
-				      		<button type="button" class="btn btn-info">Lewati</button>
-				      </a>					
-				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Tutup</button>
 				</div>
+				
 			</div>				
     <script type="text/javascript">
 		$(document).ready(function() {
 	    	$("#input_tab").tabs();
-	    	$("#input_tab").tabs( "option", "disabled", [ 0, 2 ] );
-	    	$("#input_tab").tabs({ active: 1 });
-
+	    	$("#input_tab").tabs( "option", "disabled", [ 1 ] );
+	    	$("#input_tab").tabs({ active: 0 });
+		
+	    	function textMode(){
+	    		$("#bannerSize").attr("disabled","disabled");
+	    		$("#bannerSize2").removeAttr("disabled","disabled");
+	    		$("#tipeText").show();
+	    		$("#tipeBanner").hide();
+	    	}
+	    	function bannerMode(){
+	    		$("#bannerSize").removeAttr("disabled","disabled");
+	    		$("#bannerSize2").attr("disabled","disabled");
+	    		$("#tipeText").hide();
+	    		$("#tipeBanner").show();
+	    	}
+	    	
+			$("#bannerType").click(function() {
+			    var value = $("#bannerType").val();
+			    if(value=="TEXT"){
+			    	textMode();
+			    }else if(value=="BANNER"){
+			    	bannerMode();
+			    }
+			});
+	    	var tipeBanner="@banner_form("bannerType").value";
+	    	function startPoin(){
+	    		if(tipeBanner=="BANNER"){
+	    			bannerMode();
+	    			$("#bannerType").val("BANNER");
+	    		}else{
+	    			textMode();
+	    			$("#bannerType").val("TEXT");
+	    		}
+	    	}
+	    	startPoin();
 		});
 	</script>
    }

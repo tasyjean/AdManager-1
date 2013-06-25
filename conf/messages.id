@@ -27,6 +27,18 @@ validation.startdateRequired=Tanggal mulai campaign harus diisi
 validation.enddateRequired=Tanggal selesai campaign harus diisi
 error.invalid=Tipe data tidak valid
 error.invalid.java.util.Date=Invalid date value
+error.title_required=Judul Tidak boleh kosong
+error.contentText_required=Konten Iklan Tidak boleh kosong
+error.bannerType_required=Tipe Banner Tidak boleh kosong
+error.name_required=Nama Banner Tidak boleh kosong
+error.bannerSize_required=Tipe Banner Tidak boleh kosong
+error.title_toolong=Judul Terlalu panjang, tidak boleh lebih dari 27 karakter
+error.contentText_toolong=Isi konten Terlalu panjang, tidak boleh lebih dari 73 karakter
+error.weight_required="Bobot harus berupa angka"
+error.weight_range=Bobot harus antara 0-10
+error.url_salah=Alamat URL untuk link banner tidak valid
+error.campaign_salah=Campaign tidak valid, ulangi pengisian form melalui detail campaign
+
 #Default
 
 # --- Constraints

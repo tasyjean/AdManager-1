@@ -1,12 +1,40 @@
-@(adsize:List[BannerSize])
+@(adsize:List[BannerSize], isText:Boolean=false)
 
+@if(isText){
 
+<div id="iframe" style="max-width:300px;max-height:250px;padding:5px 0 5px 0;">
+<div style="max-width:300px;max-height:250px;padding:20px 0 20px 0;">
+	<div id="adsItem" style="font-size: 1em;font-family:Arial;display:inline-block;max-width:300px;overflow: hidden;line-height: 10px;"> 
+		<div id="image" style="display:table;float:left;width:60px;height:60px;margin-right:8px;">
+			<a href="target">
+				<img style="width:60px;height:60px;padding:4px"
+				 src="@routes.Assets.at("images/ad_samples/timthumb.jpg")"
+				 alt="Alternatif text ditempatkan disini"
+				 ></a>
+		</div>
+		<div id="adtext" style="padding:4px">
+			<div id="title">
+				<a titel="Link target disini" href="#" style="color:black;font-weight:bold;font-size:1.06em;">
+					Judul Dari Iklan
+				</a>
+			</div>
+			<div id="content_text">
+				<div style="font-size:1em;padding-top:4px;line-height: 20px">Isi Konten akan berada disini, gunakan kata-kata efisien</div>
+			</div>
+		</div>
+	</div>
+	</div></div>
+}else{
 	@for(ad<-adsize){
 	  <div style="padding:14px;display:block">	
-		<h4>@ad.getName (@ad.getWidth x @ad.getHeight pixel)</h4>
-		<p style="font-size:17px;">@ad.getDescription</p><br>
+		<h5>@ad.getName (@ad.getWidth x @ad.getHeight pixel)</h5>
+		<p style="font-size:12px;">@ad.getDescription</p><br>
 		 <div style="background-color:#F8FAF2;min-width:@(ad.getWidth)px;min-height:@(ad.getHeight)px;max-width:@(ad.getWidth)px;max-height:@(ad.getHeight)px;margin:0 auto;border:1px solid black">
 		 	<h5 style="margin:0 auto;text-align:center;">Contoh Iklan @ad.getName</h5>
 		 </div>
 	  </div>
 	}
+	
+}
+
+

@@ -160,7 +160,27 @@ public class FileManager implements FileManagerInterface {
 		}
 		
 		return true;
-	}	
+	}
+	public boolean resize(int input, int width, int height){
+		FileUpload file=FileUpload.find.byId(input);
+		
+		File imageFile = new File(this.getFilePath(file));
+		File output = new File("file.jpg");
+		if(!output.exists()){
+			try {
+				Thumbnails.of(imageFile).width(width).height(height).toFile(output);
+				imageFile.delete();
+				System.out.println("FIle path output"+this.getFilePath(file)+" setelah "+output.getPath());
+				output.renameTo(new File(this.getFilePath(file)));
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+				
+			}
+		}
+		
+		return true;		
+	}
 	public File getFile(FileUpload file){
 		
 		return new File(APP_PATH
