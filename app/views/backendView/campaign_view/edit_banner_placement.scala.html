@@ -1,0 +1,147 @@
+@(data: TemplateData, banner:Banner,zones:List[Array[String]])
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+
+
+@main("Manajemen Iklan"){
+
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("multiselect/js/jquery.multi-select.js")"></script>
+		<link href="@routes.Assets.at("multiselect/css/multi-select.css")" rel="stylesheet">
+		
+		@dashboard_content("Manajemen Iklan","Tambah Banner","daftar campaign"){
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="@controllers.backend.routes.CampaignController.editBanner(banner.getId_banner)">Buat Banner</a></li>
+				<li><a href="#tabs-2">Hubungkan Dengan Zona</a></li>
+			</ul>
+			<div id="tabs-1">
+				
+			</div>@* End tab 1 *@
+
+			<div id="tabs-2">														
+			@if(zones!=null){
+			@form(action =controllers.backend.routes.CampaignController.updateBannerPlacement(banner.getId_banner), 'class-> "form-horizontal") {
+				<div class="content-padding">	
+				 <a href="@controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign().getId_campaign())"	
+					class="btn">Kembali Ke Detail Campaign</a>				
+					@getSuccess
+					@getError
+					<h4>Memperbaharui Penempatan Banner</h4>
+					<h5>Pilih dimana banner akan ditempatkan(dapat lebih dari 1)</h5>
+					
+					<br>
+					<h5>Penempatan saat ini : </h5>
+					Ditempatkan pada  @banner.getActivePlacement   zona<br>
+						@for(place<-banner.getPlacement){
+							if(place.isActive){
+								<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
+									@place.getZone.getZone_name
+								</a>
+								<br>
+							}
+						}													
+					<h5>Zona Tersedia</h5>					
+					<select multiple="multiple" id="placement" name="placement[]" style="width: 500px">
+						@for((zone, index)<-zones.zipWithIndex){
+							@if(zone(0)=="CHANNEL"){
+								@if(index!=0){
+									</optgroup>
+								}
+								<optgroup label="Channel : @zone(2) ">
+							}else{
+								<option value="@zone(1)">
+									@zone(2)
+								</option>							
+							}
+							
+						}
+						</optgroup>
+					</select>
+					<p>Untuk melihat informasi zona tersebut lebih jauh, klik 
+						<a target="_blank" href="@controllers.backend.routes.ZoneController.showZone()" style="color:blue">di Halaman zona</a>
+					</p>
+					</div>								
+					<br>
+
+				 <div class="form-actions">
+				    <button type="submit" class="btn btn-primary">Simpan</button>
+				    <button type="reset" class="btn">Reset</button>
+				</div> @*end form action *@		
+				} @* End Form *@									
+		}else{
+				<div class="content-padding">
+					<h4>Maaf, Belum ada zona kosong tersedia</h4>
+					<h5>Coba gunakan tipe banner lain, atau tunggu hingga ada zona tersedia</h5>
+					<h5>Penempatan saat ini : </h5>
+					 Ditempatkan pada  @banner.getActivePlacement   zona<br>
+						@for(place<-banner.getPlacement){
+							if(place.isActive){
+								<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
+									@place.getZone.getZone_name
+								</a>
+								<br>
+							}
+						}																							
+					<p><a href="@controllers.backend.routes.CampaignController.showCampaign(1)">
+					Kembali ke menu campaign</a></p>
+				</div>
+		} @* end if *@
+							
+				</div>	@* End tab 2 *@						
+			</div> 
+					
+					
+    <script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs( "option", "disabled", [ 0 ] );
+	    	$("#input_tab").tabs({ active: 1 });
+	    	$("#input_tab li.last a").unbind('click');
+
+			$('#placement').multiSelect();
+			$('#placement').multiSelect({
+				  selectableHeader: "<h5>Zona Tersedia</h5>",
+				  selectionHeader: "<h5>Zona Dipilih</div>",
+			});
+		});
+	</script>
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("campaign")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

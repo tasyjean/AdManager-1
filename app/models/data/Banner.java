@@ -166,6 +166,17 @@ public class Banner extends Model {
 	public void setPlacement(List<BannerPlacement> placement) {
 		this.placement = placement;
 	}
-	
+	/*
+	 * Mencari placement yang aktif
+	 */
+	public int getActivePlacement(){
+		int result=0;
+		for(BannerPlacement place:placement){
+			if(place.isActive()){
+				result++;
+			}
+		}
+		return result;
+	}
 	
 }

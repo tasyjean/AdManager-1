@@ -5,10 +5,12 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
 
 import play.data.Form;
 import models.custom_helper.DateBinder;
+import models.data.Banner;
 import models.data.Campaign;
 import models.data.User;
 import models.data.UserRole;
@@ -20,9 +22,11 @@ import models.form.backendForm.campaignForm.CampaignForm;
 public class CampaignProcessor {
 
 	DateBinder binder;
+	BannerProcessor proc;
 	
-	public CampaignProcessor(DateBinder binder){
+	public CampaignProcessor(DateBinder binder, BannerProcessor proc){
 		this.binder=binder;
+		this.proc=proc;
 	}
 	public Campaign save(Form<CampaignForm> form){
 		Campaign campaign=new Campaign();
@@ -147,6 +151,29 @@ public class CampaignProcessor {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 10;
+		}
+	}
+	/*
+	 * Set ke mode is deleted
+	 * set semua banner ke mode delete
+	 */
+	public boolean deleteCampaign(int idCampaign){
+		Ebean.beginTransaction();
+		try {
+			Campaign campaign=Campaign.find.byId(idCampaign);
+			campaign.setDeleted(true);
+			for(Banner banner:campaign.getBanner()){
+				proc.delete(banner.getId_banner());				
+			}
+			campaign.update();
+			Ebean.commitTransaction();
+			return true;
+		} catch (Exception e) {
+			Ebean.rollbackTransaction();
+			e.printStackTrace();
+			return false;
+		}finally{
+			Ebean.endTransaction();
 		}
 	}
 

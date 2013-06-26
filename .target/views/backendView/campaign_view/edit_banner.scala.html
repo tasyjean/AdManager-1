@@ -97,6 +97,9 @@
 			<div id="tabs-1">
 			@form(action =controllers.backend.routes.CampaignController.updateBanner(banner.getId_banner), 'class-> "form-horizontal", 'enctype -> "multipart/form-data") {
 						<div class="content-padding"> 
+						<a href="@controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign().getId_campaign())"	
+						 	class="btn">Kembali Ke Detail Campaign</a>				
+						
 							<h4>Ubah Banner</h4>
 							<h5 style="font-style: italic;">Isi Form banner dibawah ini</h5>
 								@getError()									
@@ -227,7 +230,8 @@
 		$(document).ready(function() {
 	    	$("#input_tab").tabs();
 	    	$("#input_tab").tabs({ active: 0 });
-		
+	    	$("#input_tab li.last a").unbind('click');
+
 	    	function textMode(){
 	    		$("#bannerSize").attr("disabled","disabled");
 	    		$("#bannerSize2").removeAttr("disabled","disabled");

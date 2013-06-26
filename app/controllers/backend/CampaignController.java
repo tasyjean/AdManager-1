@@ -55,7 +55,7 @@ public class CampaignController extends CompressController {
 	public static Form<BannerForm> bannerForm=Form.form(BannerForm.class);
 	public static Form<CampaignForm> campaignForm=Form.form(CampaignForm.class);
 	public static DateBinder binder=new DateBinder();
-	public static CampaignProcessor campProc=new CampaignProcessor(binder);
+	public static CampaignProcessor campProc=new CampaignProcessor(binder, bannerProc);
 	public static BannerFormData bannerFormData;
 	public static Authenticator auth=new Authenticator();
 	
@@ -351,16 +351,28 @@ public class CampaignController extends CompressController {
 	public static Result editBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("edit banner placement");
+		Banner banner=Banner.find.byId(idBanner);
+		List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
+		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+		return ok(edit_banner_placement.render(data,banner,zones_group));		
 	}	
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result updateBannerPlacement(int idbanner){
+	public static Result updateBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("update banner");
+		DynamicForm filledForm=Form.form().bindFromRequest();
+		Banner banner=Banner.find.byId(idBanner);
+		boolean result=bannerProc.updateBannerPlacement(filledForm, idBanner);
+		if(result){
+			flash("success","Penempatan baru disimpan");
+			return redirect(controllers.backend.routes.CampaignController.editBannerPlacement(idBanner));
+		}else{
+			flash("error","Kesalahan dalam penempatan banner");
+			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);			
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+			return ok(edit_banner_placement.render(data, banner, zones_group));
+		}		
 	}
 	public static Result activateBanner(int idBanner){
 		return ok();

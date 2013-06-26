@@ -260,12 +260,14 @@
 														</tr>
 														<tr>
 															<td>Penempataan Zona</td><td>:</td>
-															<td>Ditempatkan pada  @banner.getPlacement.size   zona<br>
+															<td>Ditempatkan pada  @banner.getActivePlacement   zona<br>
 																@for(place<-banner.getPlacement){
-																	<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
-																		@place.getZone.getZone_name
-																	</a>
+																	if(place.isActive){
+																		<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
+																			@place.getZone.getZone_name
+																		</a>
 																	<br>
+																	}
 																}
 															</td>
 														</tr>

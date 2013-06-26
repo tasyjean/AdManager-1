@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.avaje.ebean.Ebean;
 import com.ning.http.multipart.FilePartSource;
 
 import net.coobird.thumbnailator.Thumbnailator;
@@ -95,7 +96,7 @@ public class BannerProcessor {
 
 				FileUpload upload=manager.saveNew(part, SaveToEnum.ADS_FILE);
 				return upload.getId();	//sukses			
-			} else return -2;	
+			} else return -2;	//ngga sesuai format
 		}
 
 		} catch (Exception e) {
@@ -162,20 +163,31 @@ public class BannerProcessor {
 			return null;
 		}
 	}
+	/*
+	 * Hapus banner
+	 * -> Set ke mode deleted
+	 * -> buat hubungan jadi inactive
+	 */
 	public Banner delete(int idBanner){
+		Ebean.beginTransaction();
 		try {
 			Banner banner=Banner.find.byId(idBanner);
-			if(banner.isActive()){
-				banner.setActive(false);
-			}else{
-				banner.setActive(true);
+			banner.setDeleted(true);
+			List<BannerPlacement> placements=BannerPlacement.find.where().eq("banner", banner).findList();
+			for(BannerPlacement placement:placements){
+				placement.setActive(false);
+				placement.update();
 			}
 			banner.update();
+			Ebean.commitTransaction();
 			return banner;
 		} catch (Exception e) {
 			e.printStackTrace();
+			Ebean.rollbackTransaction();
 			return null;
-		}		
+		}finally{
+			Ebean.endTransaction();
+		}
 	}
 	/*
 	 * pertama
@@ -208,7 +220,7 @@ public class BannerProcessor {
 				Logger.debug("Ukuran Zones 1 " + zones.size());
 				//buang zona yang udah di isi oleh campaign eklusif
 				for(int x=0;x<zones.size();x++){
-					if(!isZoneFree(zones.get(x))){
+					if(!isZoneFree(zones.get(x), idBanner)){
 						zones.remove(x);				
 					}			
 				}
@@ -222,7 +234,8 @@ public class BannerProcessor {
 		}
 	}
 	//free dari yang eklusif
-	private boolean isZoneFree(Zone zone){
+	//Tapi misalnya yang nempatin banner itu sendiri, maka dianggap tetep free
+	private boolean isZoneFree(Zone zone, int idBanner){
 		List<BannerPlacement> banners=BannerPlacement.find.
 													  where().
 												      eq("zone",zone).
@@ -231,7 +244,11 @@ public class BannerProcessor {
 		for(BannerPlacement place:banners){
 			if(place.getBanner().getCampaign().
 					getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
-				return false;
+				if(!place.getBanner().isDeleted()){
+					if(place.getBanner().getId_banner()!=idBanner){
+						return false;
+					}
+				}
 			}
 		}
 		return true;
@@ -286,6 +303,57 @@ public class BannerProcessor {
 			return false;
 		}
 		return true;
+	}
+	
+	/* dihapus dulu atau falsekan semua placement yang udah ada 
+	 * Cari udah ada penempatan belum, yang lagi kondisi false;
+	 * kalo udah ada dan ga aktif(false) maka diaktifkan, kalo belum ada, diaktifin lagi
+	 * kalo ga ada bikin baru
+	 */
+	public boolean updateBannerPlacement(DynamicForm form, int idBanner){
+		Ebean.beginTransaction();
+		try{
+			Banner banner=Banner.find.byId(idBanner);
+			Map<String, String> results=form.data();
+			List<BannerPlacement> placements=BannerPlacement.find.where().eq("banner", banner).findList();
+			//sebisa mungkin dihapus, atau difalsekan
+			for(BannerPlacement place:placements){
+				try{
+					place.delete();
+				}catch(Exception e){
+					place.setActive(false);
+					place.update();
+					e.printStackTrace();
+				}
+			}
+			//lets insert data
+			for(Map.Entry<String, String> result:results.entrySet()){
+				Zone zone=Zone.find.byId(Integer.parseInt(result.getValue()));
+				BannerPlacement placement=BannerPlacement.find.where().
+											     eq("banner", banner).eq("zone", zone).findUnique();
+				//Jika kosong bikin baru
+				if(placement==null){
+					BannerPlacement place=new BannerPlacement();
+					place.setBanner(banner);
+					place.setZone(zone);
+					place.save();
+				//jika udah ada maka diaktifkan
+				}else{
+					placement.setActive(true);
+					placement.update();
+				}
+			}
+			
+			Ebean.commitTransaction();			
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			Ebean.rollbackTransaction();
+			return false;
+		}finally{
+			Ebean.endTransaction();
+		}
+		
 	}
 
 	

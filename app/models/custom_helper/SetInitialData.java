@@ -238,6 +238,12 @@ public class SetInitialData {
 		campaign.setCampaign_type(CampaignTypeEnum.CONTRACT);
 		campaign.setPricing_model(PricingModelEnum.CPA);
 		campaign.setDescription("Campaign Dengan tipe kontrak CPA");
+
+		campaign.setStart_date(new Date());
+		
+		DateTime endDate3=new DateTime();
+		endDate3=endDate3.plusMonths(50);
+		campaign.setEnd_date(endDate3.toDate());
 		campaign.save();
 		
 		
@@ -247,6 +253,11 @@ public class SetInitialData {
 		campaign2.setId_user(user);
 		campaign2.setActivated(true);
 		campaign2.setBid_price(2000);
+		campaign2.setStart_date(new Date());
+		
+		DateTime endDate2=new DateTime();
+		endDate2=endDate2.plusMonths(19);
+		campaign2.setEnd_date(endDate2.toDate());		
 		campaign2.setLimit_impression(20000);
 		campaign2.setCampaign_type(CampaignTypeEnum.CONTRACT);
 		campaign2.setPricing_model(PricingModelEnum.CPM);
