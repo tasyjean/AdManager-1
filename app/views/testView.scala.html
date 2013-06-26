@@ -1,5 +1,9 @@
-@(data: List[String])
+@(data: List[String], dataks:List[Array[String]])
 
 @for(d <- data){
 	<li>@d </li>
+}
+
+@for(x<-dataks){
+	@x(0) -- @x(1) -- @x(2) <br>
 }

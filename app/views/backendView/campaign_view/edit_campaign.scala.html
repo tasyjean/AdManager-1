@@ -77,7 +77,12 @@
 				<li>
 				@campaign_form.error("bug").message()
 				</li>
-			}																																																														
+			}
+			@if(campaign_form.error("description")!=null){
+				<li>
+				@campaign_form.error("description").message()
+				</li>
+			}																																																																	
 			</ul>
 
 		</div>
@@ -111,29 +116,7 @@
 	                    @* Pilih advertiser untuk administrator *@
 	                    
 	                    @restrict(la(as("administrator"))){	      	  	
-								@if(campaignData.getUserList.size==0){
-									<div class="alert alert-error">
-										<h5>Tidak ada pengiklan</h5>
-										<p>Tambahkan pengiklan terlebih dahulu pada menu manajemen pengguna</p>
-									</div>
-								}else{							
-										<div class="control-group">
-										<label class="control-label"  for="channel_name">Pilih Advertiser</label>
-										<div class="controls">
-										<select name="idUser" id="idUser">
-		
-											@for(user<-campaignData.getUserList){
-												<option value="@user.getId_user" @("selected".when(campaign.getId_user.getId_user==user.getId_user))>
-														@user.getFront_name | @user.getEmail
-												</option>
-												
-											}
-											</select>
-											 <p class="help-block">Campaign Ditujukan untuk advertiser yang mana</p>					
-										
-										</div>
-									</div>
-								}		
+								<input type="hidden" name="idUser" id="idUser" value="@campaign.getId_user.getId_user">		
 						}
 	                    @* Sudah ditentukan jika advertiser *@
 						
@@ -159,6 +142,7 @@
 							<div class="controls">
 							@for(campaignType<-campaignData.getCampaignType){
 								<input type="radio" @("checked".when(campaign.getCampaign_type.name==campaignType(0)))
+									   @("disabled".when(campaign.getCampaign_type.name!=campaignType(0)))
 									   placeholder="Tipe Campaign" id="@campaignType(0)" name="campaignType" value="@campaignType(0)">
 										@campaignType(1)<br><div class="radio-description">@campaignType(2)</div>
 							}
@@ -255,9 +239,7 @@
 		$(document).ready(function() {
 			
 	    	//Date picker
-	    		
 
-	    		
 			   $( "#startDate" ).datepicker({
 			      changeMonth: true,
 			      numberOfMonths: 1,
@@ -403,13 +385,13 @@
 				function hitungBiaya(){
 					if(activeMode=="CPM"){
 						var bayar=($("input[name=impressionLimit]").val()*$("#bidPrice").val()/1000);
-						$("#bidPrice-help").html("Total Biaya = IDR " + bayar);
+						$("#bidPrice-help").html("Estimasi Total Biaya = IDR " + bayar);
 						$("#bidPrice-help").attr("style","color:red;");
 						
 						console.log($("input[name=impressionLimit]").val() +" * ini buat impressi "+$("#bidPrice").val()+"="+bayar);
 					}else if(activeMode=="CPA"){
 						var bayar=$("input[name=clickLimit]").val()*$("#bidPrice").val();
-						$("#bidPrice-help").html("Total Biaya = IDR " +bayar);				
+						$("#bidPrice-help").html("Estimasi Total Biaya = IDR " +bayar);				
 						$("#bidPrice-help").attr("style","color:red;");
 						console.log(bayar);
 					
@@ -421,7 +403,7 @@
 						
 						var days=dateDiff(date1,date2,"days");
 						var bayar=(days*$("#bidPrice").val())-(Math.floor(days/7)*discountFactor*$("#bidPrice").val()*7);
-						$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "");						
+						$("#bidPrice-help").html("Estimasi Total Biaya = IDR " +bayar + "");						
 						console.log(bayar+" HARI: "+days);
 
 					}else{

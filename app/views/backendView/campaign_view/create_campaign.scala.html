@@ -77,7 +77,12 @@
 				<li>
 				@campaign_form.error("bug").message()
 				</li>
-			}																																																														
+			}
+			@if(campaign_form.error("description")!=null){
+				<li>
+				@campaign_form.error("description").message()
+				</li>
+			}																																																																	
 			</ul>
 
 		</div>
@@ -401,13 +406,13 @@
 				function hitungBiaya(){
 					if(activeMode=="CPM"){
 						var bayar=($("input[name=impressionLimit]").val()*$("#bidPrice").val()/1000);
-						$("#bidPrice-help").html("Total Biaya = IDR " + bayar);
+						$("#bidPrice-help").html("Estimasi Total Biaya = IDR " + bayar);
 						$("#bidPrice-help").attr("style","color:red;");
 						
 						console.log($("input[name=impressionLimit]").val() +" * ini buat impressi "+$("#bidPrice").val()+"="+bayar);
 					}else if(activeMode=="CPA"){
 						var bayar=$("input[name=clickLimit]").val()*$("#bidPrice").val();
-						$("#bidPrice-help").html("Total Biaya = IDR " +bayar);				
+						$("#bidPrice-help").html("Estimasi Total Biaya = IDR " +bayar);				
 						$("#bidPrice-help").attr("style","color:red;");
 						console.log(bayar);
 					

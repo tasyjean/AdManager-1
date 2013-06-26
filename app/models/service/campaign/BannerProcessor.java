@@ -85,7 +85,7 @@ public class BannerProcessor {
 					manager.resize(upload.getId(), 70,70);
 					return upload.getId();	//sukses			
 				
-				} else return 2; //jika ngga sesuai format
+				} else return -2; //jika ngga sesuai format
 			}else{
 				if(filetype.equals("image/png") || 
 						   filetype.equals("image/jpeg") || 
@@ -109,15 +109,15 @@ public class BannerProcessor {
 		Banner banner=null;
 		try {
 			banner=Banner.find.byId(idBanner);
-			int idCampaign=Integer.parseInt(form.get().campaign);
-			int idBanner_size=Integer.parseInt(form.get().bannerSize);
+//			int idCampaign=Integer.parseInt(form.get().campaign);
+//			int idBanner_size=Integer.parseInt(form.get().bannerSize);
 					
-			Campaign campaign=Campaign.find.byId(idCampaign);
-			BannerSize size=BannerSize.find.byId(idBanner_size);
+//			Campaign campaign=Campaign.find.byId(idCampaign);
+//			BannerSize size=BannerSize.find.byId(idBanner_size);
 			
-			banner.setCampaign(campaign);
-			banner.setBannerSize(size);
-			banner.setBannerType(ZoneTypeEnum.valueOf(form.get().bannerType));
+//			banner.setCampaign(campaign);
+//			banner.setBannerSize(size);
+//			banner.setBannerType(ZoneTypeEnum.valueOf(form.get().bannerType));
 			banner.setName(form.get().name);
 			banner.setDescription(form.get().description);
 			banner.setTitle(form.get().title);
@@ -126,11 +126,14 @@ public class BannerProcessor {
 			banner.setAlt_text(form.get().alt_text);
 			banner.setWeight(Integer.parseInt(form.get().weight));
 			if(file!=null){
-				FileUpload upload=banner.getContent_link();
+				FileUpload upload=banner.getContent_link();				
+				banner.setContent_link(file);	
+				banner.update();
 				upload.delete();
-				banner.setContent_link(file);				
+
 			}
 			banner.update();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -183,36 +186,42 @@ public class BannerProcessor {
 	 * lets do it
 	 */
 	public List<Zone> getZoneAvailable(int idBanner){
-		Banner banner=Banner.find.byId(idBanner);
-		ZoneTypeEnum type=banner.getBannerType();
-		BannerSize bannerSize=banner.getBannerSize();
-		BannerSize bannerRect=BannerSize.find.where().eq("name", "Rectangle").findUnique();
-		BannerSize bannerLead=BannerSize.find.where().eq("name", "LeaderBoard").findUnique();
-		Collection<BannerSize> coll=new ArrayList<BannerSize>();
-		coll.add(bannerLead);
-		coll.add(bannerRect);
-		List<Zone> zones=null;
-		if(type.equals(ZoneTypeEnum.TEXT)){
-			zones=Zone.find.where().in("ads_size", coll).eq("zone_type", ZoneTypeEnum.TEXT.name().toLowerCase()).order().asc("zone_channel").findList();
-
-		}else{
-			zones=Zone.find.where().eq("ads_size", bannerSize).eq("zone_type", type.name().toLowerCase()).order().asc("zone_channel").findList();
-			int[] delete=new int[zones.size()];
-			int deleteCount=0;
-			Logger.debug("Ukuran Zones 1 " + zones.size());
-			
-			for(int x=0;x<zones.size();x++){
-				if(!isZoneFree(zones.get(x))){
-					zones.remove(x);
-					
-				}			
+		try {
+			Banner banner=Banner.find.byId(idBanner);
+			ZoneTypeEnum type=banner.getBannerType();
+			BannerSize bannerSize=banner.getBannerSize();
+			BannerSize bannerRect=BannerSize.find.where().eq("name", "Rectangle").findUnique();
+			BannerSize bannerLead=BannerSize.find.where().eq("name", "LeaderBoard").findUnique();
+			Collection<BannerSize> coll=new ArrayList<BannerSize>();
+			coll.add(bannerLead);
+			coll.add(bannerRect);
+			List<Zone> zones=null;
+			//jika teks
+			if(type.equals(ZoneTypeEnum.TEXT)){
+				zones=Zone.find.where().in("ads_size", coll).eq("zone_type", ZoneTypeEnum.TEXT.name().toLowerCase()).
+										order().asc("zone_channel").findList();
+			}else{
+				zones=Zone.find.where().eq("ads_size", bannerSize).eq("zone_type", type.name().toLowerCase()).
+										order().asc("zone_channel").findList();
+				int[] delete=new int[zones.size()];
+				int deleteCount=0;
+				Logger.debug("Ukuran Zones 1 " + zones.size());
+				//buang zona yang udah di isi oleh campaign eklusif
+				for(int x=0;x<zones.size();x++){
+					if(!isZoneFree(zones.get(x))){
+						zones.remove(x);				
+					}			
+				}
 			}
+			Logger.debug("Ukuran Zones " + zones.size());
+			Logger.debug("Type " + type.toString() + type.name());
+			return zones;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		Logger.debug("Ukuran Zones " + zones.size());
-		Logger.debug("Type " + type.toString() + type.name());
-		return zones;
 	}
-
+	//free dari yang eklusif
 	private boolean isZoneFree(Zone zone){
 		List<BannerPlacement> banners=BannerPlacement.find.
 													  where().
@@ -228,12 +237,57 @@ public class BannerProcessor {
 		return true;
 		
 	}
-	
-	public boolean saveBannerPlacement(DynamicForm form){
-		Map<String, String> result=form.data();
-		System.out.println(result.toString());
+	/*
+	 * Spek array 
+	 * array 0 tipe data
+	 * array 1 buat value
+	 * array 2 buat nama yang tampil (entah channel atau zona)
+	 */
+	public List<String[]> getZoneAvailableGrouped(List<Zone> zones){
+		
+		try {
+			int channel=0;
+			int i=0;
+			List<String[]> result=new ArrayList<String[]>();
+			for(Zone zone:zones){
+				if(!(zone.getZone_channel().getId_zone_channel()==channel)){
+					String[] add={"CHANNEL","",zone.getZone_channel().getChannel_name()};
+					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()};
+					result.add(add);
+					result.add(add2);
+				}else{
+					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()};
+					result.add(add);				
+				}
+				channel=zone.getZone_channel().getId_zone_channel();	
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/*
+	 * Nyimpen banner placement
+	 * langsung insert aja, kalo update baru agak ribet
+	 */
+	public boolean saveBannerPlacement(DynamicForm form, int idBanner){
+		try {
+			Map<String, String> results=form.data();
+			System.out.println(results.toString());
+			for(Map.Entry<String, String> result:results.entrySet()){
+				BannerPlacement placement=new BannerPlacement();
+				placement.setBanner(Banner.find.byId(idBanner));
+				placement.setZone(Zone.find.byId(Integer.parseInt(result.getValue())));
+				placement.save();
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
+
 	
 
 }

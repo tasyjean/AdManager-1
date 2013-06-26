@@ -24,4 +24,9 @@ public class AdsDeliveryController extends CompressController {
 		
 		return ok();
 	}
+	
+	public static Result getBanner(int idBanner){
+		
+		return ok();
+	}
 }

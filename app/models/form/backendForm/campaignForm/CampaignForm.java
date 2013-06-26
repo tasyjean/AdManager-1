@@ -38,7 +38,9 @@ public class CampaignForm {
 		DateBinder binder=new DateBinder();
 		
 		List<ValidationError> error= new ArrayList<ValidationError>();
-		
+		if(description.length()>350){
+			error.add(new ValidationError("description", Messages.get("error.description")));			
+		}		
 		//validasi campaign
 		if(campaignType.equals(CampaignTypeEnum.CONTRACT.name())){
 			if(pricingModel.equals(PricingModelEnum.CPA.name())){

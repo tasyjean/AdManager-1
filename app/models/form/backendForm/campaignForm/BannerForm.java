@@ -31,6 +31,9 @@ public class BannerForm {
 	 */
 	public List<ValidationError> validate(){
 		List<ValidationError> error= new ArrayList<ValidationError>();
+		if(description.length()>250){
+			error.add(new ValidationError("description", Messages.get("error.description")));			
+		}
 		//validasi kosong apa ngga
 		if(title.length()==0){
 			error.add(new ValidationError("title", Messages.get("error.title_required")));
@@ -62,8 +65,7 @@ public class BannerForm {
 			} catch (MalformedURLException e) {
 				error.add(new ValidationError("target", Messages.get("error.url_salah")));			
 				e.printStackTrace();
-			}
-			
+			}	
 		}
 		try{
 			int weight_int=Integer.parseInt(weight);

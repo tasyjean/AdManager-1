@@ -48,6 +48,19 @@
 					          <td>Nama Campaign</td><td>:</td>
 					          <td>@campaign.getCampaignName</td>
 					        </tr>
+			    			@restrict(la(as("administrator"),as("manager"))){      
+					          <td>Pengiklan</td><td>:</td>
+					          <td>
+					          		<a href="@controllers.backend.routes.UserController.showSingleUser(campaign.getId_user.getId_user)">
+					          		@campaign.getId_user.getFront_name
+					          		</a>
+					          </td>
+			    				
+			    			}		        
+					         <tr>
+					          <td>Tipe Campaign</td><td>:</td>
+					          <td>@campaign.getCampaign_type.toString</td>
+					        </tr>
 					         <tr>
 					          <td>Tipe Campaign</td><td>:</td>
 					          <td>@campaign.getCampaign_type.toString</td>
@@ -134,6 +147,7 @@
 					     </div> @* end span 5 *@
 						 <div class="span5" style="float:right;display:block;">
 					     <h4>Daftar Banner Untuk Campaign Ini</h4>
+					     
 			        @if(campaign.getBanner.size==0){
 			        	<h5>Campaign ini belum memiliki banner</h5>
 			        	<p>Klik <a href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">
@@ -142,36 +156,168 @@
 			        	<h5>@campaign.getBanner.size Buah Banner</h5>
 				        @for(banner<-campaign.getBanner){
 							@if(!banner.isDeleted){	
-								<table class="single-view">
+								<table class="single-view" style="width: 350px">
 								<tr>
 									<td>Nama Banner</td><td>:</td>
 									<td>@banner.getName</td>
 								</tr>					
+
 								<tr>
 									<td>Deskripsi</td><td></td>
-									<td>@banner.getDescription</td>
-								</tr>							
+									<td style="word-wrap:break-word;">@banner.getDescription</td>
+								</tr>	
 								<tr>
+									<td>Status</td><td></td>
 									<td>
-										<a class="btn btn-mini" href="" >
-											Lihat Banner
-										</a>
+										@("Aktif".when(banner.isActive))
+										@("Tidak Aktif".when(!banner.isActive))							
 									</td>
-									<td>
-										<a class="btn btn-mini" href="" >
-											Lihat Detail
+								</tr>															
+								<tr>
+									<td colspan="3" style="border-top:1px solid black;">
+										<a class="btn btn-mini" href="#detail-banner@banner.getId_banner" 
+											role="button" data-toggle="modal" style="display:inline">
+											Detail Banner
 										</a>
-									</td>
-									<td>
-										<a class="btn btn-mini" href="" >
+										<a class="btn btn-mini" href="@controllers.backend.routes.CampaignController.editBanner(banner.getId_banner)" 
+											style="margin-left:5px;display:inline">
 											Ubah Banner
 										</a>
-									</td>
-	
-									
+										<a class="btn btn-mini btn-danger" href="delete-banner@banner.getId_banner" 
+											style="margin-left:5px;display:inline">
+											Hapus
+										</a>
+										@if(banner.isActive){
+											<a class="btn btn-mini btn-warning" href="" 
+												style="margin-left:5px;display:inline">
+												Non Aktifkan
+											</a>
+										}else {
+											<a class="btn btn-mini btn-info" href="" 
+												style="margin-left:5px;display:inline">
+												Aktifkan
+											</a>											
+										}
+									</td>									
 								</tr>
 						        </table>
-						       }	        			        	
+						        <br><br>
+						        
+								@**********Modal Detail*********@
+								<div id="detail-banner@banner.getId_banner"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+									<div class="modal-header">
+							    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							    		<h3 id="label_hapus">Detail Banner</h3>
+							  		</div>
+									 <div class="modal-body">
+										<h4>@banner.getName</h4>
+										<p style="max-size:400px;word-wrap:break-word;font-style: italic;">@banner.getDescription</p>
+										<p style="max-size:400px;word-wrap:break-word;font-style: italic;">Tipe Banner : @banner.getBannerType.toString</p>
+										<br>
+										<div class="row-fluid dua-kolom">
+					  						<div class="span5" style="min-width:400px;display:block;float:left;margin-right:10px;">
+													<table class="single-view" style="width:350px">
+														<tr>
+															<td>Judul Banner</td><td>:</td>
+															<td>@banner.getTitle</td>
+														</tr>
+														@if(banner.getBannerType.name=="BANNER"){
+															<tr>
+																<td>Ukuran</td><td>:</td>
+																<td>@banner.getBannerSize.getName ( @banner.getBannerSize.getWidth x 
+																	@banner.getBannerSize.getHeight pixel )
+																	 
+																</td>
+															</tr>													
+														}																						
+														<tr>
+															<td>Isi Konten</td><td>:</td>
+															<td style="word-wrap:break-word;">@banner.getContent_text</td>
+														</tr>	
+														<tr>
+															<td>Link Banner</td><td>:</td>
+															<td><a href="@banner.getTarget">@banner.getTarget</a></td>
+														</tr>
+														<tr>
+															<td>Teks Alternatif</td><td>:</td>
+															<td>@banner.getAlt_text</td>
+														</tr>
+														<tr>
+															<td>Bobot</td><td>:</td>
+															<td>@banner.getWeight</td>
+														</tr>
+														<tr>
+															<td>Jumlah Impresi</td><td>:</td>
+															<td>@banner.getImpression_count</td>
+														</tr>
+	
+														<tr>
+															<td>Status</td><td>:</td>
+															<td>
+																@("Aktif".when(banner.isActive))
+																@("Tidak Aktif".when(!banner.isActive))							
+															</td>
+														</tr>
+														<tr>
+															<td>Penempataan Zona</td><td>:</td>
+															<td>Ditempatkan pada  @banner.getPlacement.size   zona<br>
+																@for(place<-banner.getPlacement){
+																	<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
+																		@place.getZone.getZone_name
+																	</a>
+																	<br>
+																}
+															</td>
+														</tr>
+													</table>
+																																								
+					  						</div>
+
+											<div class="span5" style="min-width:400px; display:block;margin:0px auto;">
+												<h4>Tampilan Banner</h4>
+													@if(banner.getBannerType.name=="BANNER"){
+															
+															<iframe style="border:1px solid black" src=""
+																width="@(banner.getBannerSize.getWidth)px"
+																height="@(banner.getBannerSize.getHeight)px">
+															</iframe>					  						
+													}else{
+															<iframe style="border:1px solid black" src=""
+																width="300px"
+																height="250px">
+															</iframe>	
+													}											
+					  						</div>					
+										</div>					
+					  				</div>
+					  				<div class="modal-footer">
+									   <button class="btn"  data-dismiss="modal" aria-hidden="true">Kembali</button>
+									</div>
+									
+								</div>
+								@**********Modal Hapus*********@
+								<div id="delete-banner@banner.getId_banner"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+									<div class="modal-header">
+							    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							    		<h3 id="label_hapus">Hapus Banner</h3>
+							  		</div>
+									 <div class="modal-body">
+										<h4>Yakin Mau menghapus banner @banner.getName?</h4>
+										<p class="alert alert-warning" style="color:#000">
+											Penghapusan banner mengakibatkan banner tidak bisa diakses lagi
+											dan tidak tampil, namun laporan terkait dengan banner akan tetap ada.
+										</p>
+										
+					  				</div>
+					  				<div class="modal-footer">
+									   <a class="btn btn-warning" 
+									   		href="@controllers.backend.routes.CampaignController.deleteBanner(banner.getId_banner)">
+									   		Hapus
+									   	</a>  					
+									   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal Hapus</button>
+									</div>					
+								</div>															        
+						       }	@* End if deleted *@        			        	
 				        } @* end for *@
 				     }	 @* End if *@				        	
 			      </div>
@@ -212,14 +358,13 @@
 						Penghapusan campaign mengakibatkan banner tidak bisa diakses lagi
 						dan aktifitas berkaitan dengan campaign tidak dapat dilakukan lagi.
 					</p>
-					
   				</div>
   				<div class="modal-footer">
 				   <a class="btn btn-warning" 
 				   		href="@controllers.backend.routes.CampaignController.deleteCampaign(campaign.getId_campaign)">
-				   		Saya Mengerti Semua Resiko dan Hapus Saja
+				   		Hapus
 				   	</a>  					
-				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Saya Takut, Batal Saja</button>
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
 				</div>
 				
 			</div>

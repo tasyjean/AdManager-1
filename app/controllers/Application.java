@@ -14,10 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.data.User;
 import models.data.UserRole;
+import models.data.Zone;
 import models.data.ZoneChannel;
 import models.data.enumeration.RoleEnum;
+import models.service.campaign.BannerProcessor;
 
 import play.*;
 import play.data.DynamicForm;
@@ -117,8 +121,12 @@ public class Application extends CompressController {
     	RequestBody body = request().body();
 //    	return ok("Got json: " + body.asText());
     	
+    	List<Zone> zone=Zone.find.order().desc("zone_channel").findList();
+    	FileManagerInterface managers=new FileManagerFactory().getManager();
+    	BannerProcessor proc=new BannerProcessor(managers);
     	
-    	return ok(testView.render(data));
+    	List<String[]> dataks=proc.getZoneAvailableGrouped(zone);
+    	return ok(testView.render(data,dataks));
     	
     }
     

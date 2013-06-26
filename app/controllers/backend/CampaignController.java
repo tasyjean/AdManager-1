@@ -158,7 +158,7 @@ public class CampaignController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		campaignData=new CampaignFormData(manager);
 		Campaign campaign=Campaign.find.byId(idCampaign);
-		if(campaign.isActivated()){
+		if(campaign==null){
 			flash("error",Messages.get("error.editCampaign"));
 			
 			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
@@ -226,12 +226,13 @@ public class CampaignController extends CompressController {
 				if(result==-1){
 					flash("error","Kesalahan saat upload file");					
 				}else if(result==-2){
-					flash("error","Hanya mendukung file jpg, png dan gif");
+					flash("error","Tipe FIle tidak didukung");
 				}else{
 					//baru ngesave
 					Banner banner=bannerProc.saveBanner(filledForm, FileUpload.find.byId(result));
 					if(banner!=null){
 						flash("success","Data Banner ditambahkan");
+						flash("justMe","hanya aku"); //new banner placement cuma ditujukan jika banner baru dibikin
 						return redirect(controllers.backend.routes.CampaignController.newBannerPlacement(banner.getId_banner()));
 					}else{
 						flash("error","Kesalahan saat menyimpan data");
@@ -251,16 +252,48 @@ public class CampaignController extends CompressController {
 	public static Result editBanner(int idbanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("edit banner");
+		Banner banner=Banner.find.byId(idbanner);
+		return ok(edit_banner.render(data, banner, bannerForm));
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result updateBanner(){
+	public static Result updateBanner(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
+		Form<BannerForm> filledForm=Form.form(BannerForm.class).bindFromRequest();
+		Banner banner=Banner.find.byId(idBanner);
 		
-		return ok("update banner");
+		if(filledForm.hasErrors()){			
+			return ok(edit_banner.render(data, banner, filledForm));			
+		}else{
+			//upload file dulu
+			MultipartFormData body = request().body().asMultipartFormData();
+			//jika file upload ngga null, maka ngga ada yang perlu diganti
+			FileUpload upload=null;
+			FilePart part = body.getFile("bannerContent");
+			if (part!= null) {
+				String bannerType=filledForm.get().bannerType;
+				int result=bannerProc.saveFile(part, bannerType);
+				if(result==-1){
+					flash("error","Kesalahan saat upload file");					
+					return ok(edit_banner.render(data, banner, filledForm));			
+				}else if(result==-2){
+					flash("error","Tipe File tidak didukung");
+					return ok(edit_banner.render(data, banner, filledForm));			
+				}else{
+					upload=FileUpload.find.byId(result);
+				}
+			}
+			//baru ngesave
+			Banner bannerSave=bannerProc.updateBanner(filledForm, idBanner , upload);
+			if(bannerSave!=null){
+				flash("success","Data Banner ditambahkan");
+				return redirect(controllers.backend.routes.CampaignController.editBanner(bannerSave.getId_banner()));
+			}else{
+				flash("error","Kesalahan saat menyimpan data");
+				return ok(edit_banner.render(data, banner, filledForm));			
+			}
+		}
 	}	
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -277,8 +310,22 @@ public class CampaignController extends CompressController {
 	public static Result newBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
-		return ok(create_banner_placement.render(data, idBanner, zones));
+		
+		if(flash("justMe")!=null){
+			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+			
+			return ok(create_banner_placement.render(data, idBanner, zones_group));			
+		}else{
+			try {
+				int idCampaign=Banner.find.byId(idBanner).getCampaign().getId_campaign();
+				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
+			}
+		}
+		
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -286,16 +333,22 @@ public class CampaignController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		DynamicForm filledForm=Form.form().bindFromRequest();
-		boolean result=bannerProc.saveBannerPlacement(filledForm);
+		boolean result=bannerProc.saveBannerPlacement(filledForm, idBanner);
 		if(result){
-			return ok("sukses");
+			Banner banner=Banner.find.byId(idBanner);
+			flash("success","Penempatan banner telah disimpan");
+			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
+						    banner.getCampaign().getId_campaign()));
 		}else{
-			return ok("gagal");
+			flash("error","Kesalahan dalam penempatan banner");
+			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);			
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+			return ok(create_banner_placement.render(data, idBanner, zones_group));
 		}
 	}	
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result editBannerPlacement(){
+	public static Result editBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
@@ -303,11 +356,14 @@ public class CampaignController extends CompressController {
 	}	
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result updateBannerPlacement(){
+	public static Result updateBannerPlacement(int idbanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
 		return ok("update banner");
+	}
+	public static Result activateBanner(int idBanner){
+		return ok();
 	}
 	@SubjectPresent
 	@With(DataFiller.class)

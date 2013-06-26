@@ -60,7 +60,7 @@ public class SettingController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
 		DynamicForm dataForm=Form.form().bindFromRequest();
-	
+		
 		if(page==1){
 			String message=settingEditor.savePrice(dataForm);
 			if(message.equals("sukses")){

@@ -12,7 +12,7 @@ import models.custom_helper.setting.SettingDefault;
 public class Global extends GlobalSettings {
 
 	public void onStart(Application app){
-		SetInitialData data=new SetInitialData();
+//		SetInitialData data=new SetInitialData();
 //		data.setDataUser();
 //		data.setBannerSize();
 //		data.setZoneChannel();

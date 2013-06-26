@@ -1,9 +1,12 @@
 package models.data;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import models.data.enumeration.ZoneTypeEnum;
@@ -44,6 +47,8 @@ public class Banner extends Model {
 	private int hide_count;
 	private boolean isActive;
 	private boolean isDeleted;
+	@OneToMany
+	private List<BannerPlacement> placement;
 	
 	public static Model.Finder<Integer,Banner> find = new Model.Finder(Integer.class, Banner.class);
 
@@ -154,6 +159,12 @@ public class Banner extends Model {
 	}
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public List<BannerPlacement> getPlacement() {
+		return placement;
+	}
+	public void setPlacement(List<BannerPlacement> placement) {
+		this.placement = placement;
 	}
 	
 	

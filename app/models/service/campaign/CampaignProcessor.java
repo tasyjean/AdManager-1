@@ -63,7 +63,7 @@ public class CampaignProcessor {
 		User user=User.find.byId(Integer.parseInt(form.get().idUser));
 		
 		campaign.setBid_price(form.get().bidPrice);
-		campaign.setCampaign_type(CampaignTypeEnum.valueOf(form.get().campaignType));
+//		campaign.setCampaign_type(CampaignTypeEnum.valueOf(form.get().campaignType));
 		campaign.setCampaignName(form.get().campaignName);
 		
 		try {
@@ -76,7 +76,7 @@ public class CampaignProcessor {
 			campaign.setEnd_date(endDate.toDate());
 			e.printStackTrace();
 		}
-		campaign.setId_user(user);
+//		campaign.setId_user(user);
 		campaign.setLimit_click(form.get().clickLimit);
 		campaign.setLimit_impression(form.get().impressionLimit);
 		campaign.setPricing_model(PricingModelEnum.valueOf(form.get().pricingModel));

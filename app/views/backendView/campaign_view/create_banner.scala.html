@@ -62,11 +62,12 @@
 				@banner_form.error("target").message()
 				</li>
 			}			
-			@if(banner_form.error("campaign")!=null){
+			@if(banner_form.error("description")!=null){
 				<li>
-				@banner_form.error("campaign").message()
+				@banner_form.error("description").message()
 				</li>
-			}																																																										
+			}
+																																																													
 			</ul>
 
 		</div>

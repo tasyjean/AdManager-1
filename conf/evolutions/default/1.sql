@@ -51,6 +51,7 @@ create table banner_placement (
   id_banner_placement       integer not null,
   banner_id_banner          integer,
   zone_id_zone              integer,
+  is_active                 boolean,
   constraint pk_banner_placement primary key (id_banner_placement))
 ;
 
