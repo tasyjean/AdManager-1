@@ -13,6 +13,7 @@ import play.db.DB;
 import com.avaje.ebean.Ebean;
 
 import models.data.Banner;
+import models.data.BannerPlacement;
 import models.data.BannerSize;
 import models.data.Campaign;
 import models.data.FileUpload;
@@ -220,6 +221,22 @@ public class SetInitialData {
 						"Kosong");
 				zone8.save();
 				
+				Zone zone9=new Zone("Banner Medium rectangle untuk teks", 
+						"Banner kecil untuk tema internet", 
+						channel4, 
+						banners.get(0), 
+						ZoneTypeEnum.TEXT, 
+						DefaultViewEnum.EMPTY, 
+						"Kosong");
+				zone9.save();
+				Zone zone10=new Zone("Banner Leader Board untuk teks", 
+						"Banner leaderboard untuk tema internet", 
+						channel4, 
+						banners.get(3), 
+						ZoneTypeEnum.BANNER, 
+						DefaultViewEnum.EMPTY, 
+						"Kosong");
+				zone10.save();
 		}
 		
 
@@ -230,14 +247,14 @@ public class SetInitialData {
 										UserRole.find.where().eq("name", "advertiser").findUnique()).findUnique();
 		//Campaign Tipe kontrak CPA
 		Campaign campaign=new Campaign();
-		campaign.setCampaignName("Tipe kontrak CPA");
+		campaign.setCampaignName("Pemasaran iPhun 8S");
 		campaign.setId_user(user);
 		campaign.setActivated(true);
 		campaign.setBid_price(2000);
 		campaign.setLimit_click(1000);
 		campaign.setCampaign_type(CampaignTypeEnum.CONTRACT);
 		campaign.setPricing_model(PricingModelEnum.CPA);
-		campaign.setDescription("Campaign Dengan tipe kontrak CPA");
+		campaign.setDescription("Campaign untuk memasarkan lini baru smartphone iphun yang canggih");
 
 		campaign.setStart_date(new Date());
 		
@@ -249,7 +266,7 @@ public class SetInitialData {
 		
 		//Campaign Tipe kontrak CPM
 		Campaign campaign2=new Campaign();
-		campaign2.setCampaignName("Tipe kontrak CPM");
+		campaign2.setCampaignName("Pemasaran Casing Ponsel Tangguh");
 		campaign2.setId_user(user);
 		campaign2.setActivated(true);
 		campaign2.setBid_price(2000);
@@ -261,12 +278,13 @@ public class SetInitialData {
 		campaign2.setLimit_impression(20000);
 		campaign2.setCampaign_type(CampaignTypeEnum.CONTRACT);
 		campaign2.setPricing_model(PricingModelEnum.CPM);
-		campaign2.setDescription("Campaign Dengan tipe kontrak CPM");
+		campaign2.setDescription("Campaign ini ditujukan untuk memasarkan" +
+				" casing baru yang bisa tahan dari serangan bom atom");
 		campaign2.save();
 			
 		//Campaign Tipe eklusif
 		Campaign campaign3=new Campaign();
-		campaign3.setCampaignName("Tipe Eklusif");
+		campaign3.setCampaignName("Pemasaran Layanan Baru Operator Aximtel");
 		campaign3.setId_user(user);
 		campaign3.setActivated(true);
 		campaign3.setStart_date(new Date());
@@ -278,13 +296,201 @@ public class SetInitialData {
 		campaign3.setBid_price(8000);
 		campaign3.setCampaign_type(CampaignTypeEnum.EXCLUSIVE);
 		campaign3.setPricing_model(PricingModelEnum.FLAT);
-		campaign3.setDescription("Campaign Dengan tipe eklusif");
+		campaign3.setDescription("Memasarkan Layanan Aximtel, jaringan paling reliable hingga diseluruh samudra hindia");
 		campaign3.save();
 			
 	}
+	public void createBanner(){
+		
+		Campaign campaign=Campaign.find.where().eq("campaignName", "Pemasaran Casing Ponsel Tangguh").findUnique();
+		
+		BannerSize size=BannerSize.find.where().eq("name","Medium Rectangle").findUnique();
+		
+		//bikin fileupload
+		
+		FileUpload upload=new FileUpload();
+		upload.setId(1);
+		upload.setPath("/public/upload/ads/");
+		upload.setUrl_path("/public/upload/ads/");
+		upload.setName("tridentCase.jpg");
+		upload.save();
+
+		Banner banner=new Banner();
+		banner.setTitle("Bom Atom? Lewat Boy...");
+		banner.setContent_text("Casing baru ini bisa melindungi ponsel dari bom atom, dijamin tahan");
+		banner.setTarget("http://casingatom.com");
+		banner.setAlt_text("Casing Model 101, Tahan luar biasa mantap");
+		banner.setWeight(3);
+		banner.setActive(true);
+		banner.setName("Banner Casing Model 1");
+		banner.setDescription("Berisi gambar untuk casing model 1");
+		banner.setBannerType(ZoneTypeEnum.TEXT);
+		banner.setCampaign(campaign);
+		banner.setContent_link(upload);
+		banner.setBannerSize(size);
+		banner.save();
+		
+		//bikin fileupload
+		
+		FileUpload upload2=new FileUpload();
+		upload2.setId(21);
+		upload2.setPath("/public/upload/ads/");
+		upload2.setUrl_path("/public/upload/ads/");
+		upload2.setName("tridentCase.jpg");
+		upload2.save();
+
+		Banner banner2=new Banner();
+		banner2.setTitle("Bom Atom? Sungguh terlalu..");
+		banner2.setContent_text("Mau tau lebih jauh soal casing ini? Klik iklan ini doong");
+		banner2.setTarget("http://casingatom.com");
+		banner2.setAlt_text("Casing Ini bisa bertahan dari ancaman bom atom dan " +
+				"segala macamnya...bahkan ketika tubuh pemiliknya menguap, casing ini bisa tetap bertahan...wow");
+		banner2.setWeight(0);
+		banner2.setActive(true);
+		banner2.setName("Banner Casing Model 2");
+		banner2.setDescription("Menampung gambar dengan ukuran lebih yahud, ow");
+		banner2.setBannerType(ZoneTypeEnum.BANNER);
+		banner2.setCampaign(campaign);
+		banner2.setContent_link(upload2);
+		banner2.setBannerSize(size);
+		banner2.save();	
+		
+		//====Untuk banner ketiga
+		
+		Campaign campaign2=Campaign.find.where().eq("campaignName", "Pemasaran iPhun 8S").findUnique();
+		BannerSize wideSkyscrapper=BannerSize.find.where().eq("name","Wide Skyscrapper").findUnique();
+	
+		FileUpload upload3=new FileUpload();
+		upload3.setId(41);
+		upload3.setPath("/public/upload/ads/");
+		upload3.setUrl_path("/public/upload/ads/");
+		upload3.setName("btWalking.swf");
+		upload3.save();
+
+		Banner banner3=new Banner();
+		banner3.setTitle("Lihatlah kecanggihan IPhun ");
+		banner3.setContent_text("Lihatlah kecanggihan iPhun 8s yang dilengkapi dengan fitur canggih");
+		banner3.setTarget("http://www.iphun.com");
+		banner3.setAlt_text("Lihatlah kecanggihan iPhun 8s yang " +
+							"dilengkapi dengan fitur canggih, seperti kamera luar biasa bening, " +
+							"dan layar luar biasa tipis..wuahaha");
+		banner3.setWeight(0);
+		banner3.setActive(true);
+		banner3.setName("Iphun 8S Banner 1");
+		banner3.setDescription("Banner ini berisi demo iphun 8s yang baru");
+		banner3.setBannerType(ZoneTypeEnum.BANNER);
+		banner3.setCampaign(campaign2);
+		banner3.setContent_link(upload3);
+		banner3.setBannerSize(wideSkyscrapper);
+		banner3.save();	
+		
+		BannerSize leaderboard=BannerSize.find.where().eq("name","LeaderBoard").findUnique();
+		
+		FileUpload upload4=new FileUpload();
+		upload4.setId(61);
+		upload4.setPath("/public/upload/ads/");
+		upload4.setUrl_path("/public/upload/ads/");
+		upload4.setName("ads.jpg");
+		upload4.save();
+
+		Banner banner4=new Banner();
+		banner4.setTitle("iPhun 8S Sungguh Menawan ");
+		banner4.setContent_text("Lihatlah kecanggihan dan kemulusan perangkat baru ini....");
+		banner4.setTarget("http://www.iphun.com");
+		banner4.setAlt_text("iphun 8s");
+		banner4.setWeight(0);
+		banner4.setActive(true);
+		banner4.setName("Iphun 8S Banner 2");
+		banner4.setDescription("Banner ini untuk ukuran leaderboard, yang static, dan bukan flash");
+		banner4.setBannerType(ZoneTypeEnum.BANNER);
+		banner4.setCampaign(campaign2);
+		banner4.setContent_link(upload4);
+		banner4.setBannerSize(leaderboard);
+		banner4.save();					
+		
+		
+		//===============Untuk banner campaign ketiga ...huah akhirnya
+		BannerSize rectangle=BannerSize.find.where().eq("name","Rectangle").findUnique();
+
+		Campaign campaign3=Campaign.find.where().eq("campaignName", "Pemasaran Layanan Baru Operator Aximtel").findUnique();
+	
+		FileUpload upload5=new FileUpload();
+		upload5.setId(81);
+		upload5.setPath("/public/upload/ads/");
+		upload5.setUrl_path("/public/upload/ads/");
+		upload5.setName("ocean.png");
+		upload5.save();
+
+		Banner banner5=new Banner();
+		banner5.setTitle("Operator Paling Oke");
+		banner5.setContent_text("Nikmati kecanggihan layanan hingga ke samudera hindia paling ujung......");
+		banner5.setTarget("http://www.aximtel.com");
+		banner5.setAlt_text("Aximtel adalah operator seluler nomor 1 di samudra hindia");
+		banner5.setWeight(0);
+		banner5.setActive(true);
+		banner5.setName("Operator Aximtel Layanan 1");
+		banner5.setDescription("Ini adalah banner teks untuk layanan 1");
+		banner5.setBannerType(ZoneTypeEnum.BANNER);
+		banner5.setCampaign(campaign3);
+		banner5.setContent_link(upload5);
+		banner5.setBannerSize(rectangle);
+		banner5.save();	
+		
+		BannerSize medium=BannerSize.find.where().eq("name","Medium Rectangle").findUnique();
+		
+		FileUpload upload6=new FileUpload();
+		upload6.setId(101);
+		upload6.setPath("/public/upload/ads/");
+		upload6.setUrl_path("/public/upload/ads/");
+		upload6.setName("antenna.jpg");
+		upload6.save();
+
+		Banner banner6=new Banner();
+		banner6.setTitle("Sinyal Kuat Di penjuru Bumi");
+		banner6.setContent_text("Dimanapun anda berada, termasuk dari dasar laut, sinyal tetap kuat");
+		banner6.setTarget("http://www.aximtel.com");
+		banner6.setAlt_text("Ini adalah gambar antenna bumi yang kami gunakan untuk menjangkau dasar laut ");
+		banner6.setWeight(3);
+		banner6.setActive(true);
+		banner6.setName("Operator Aximtel Layanan 2");
+		banner6.setDescription("Banner ini untuk ukuran leaderboard, yang static, dan bukan flash");
+		banner6.setBannerType(ZoneTypeEnum.BANNER);
+		banner6.setCampaign(campaign3);
+		banner6.setContent_link(upload6);
+		banner6.setBannerSize(medium);
+		banner6.save();	
+		
+		//Untuk banner 2
+		FileUpload upload7=new FileUpload();
+		upload7.setId(121);
+		upload7.setPath("/public/upload/ads/");
+		upload7.setUrl_path("/public/upload/ads/");
+		upload7.setName("timthumb.jpg");
+		upload7.save();
+
+		Banner banner7=new Banner();
+		banner7.setTitle("Smartphone Anda Canggih?");
+		banner7.setContent_text("Pasti masih kalah canggih dibanding IPhun 8s, pingin tau alasannya?");
+		banner7.setTarget("http://www.iphun.com");
+		banner7.setAlt_text("Iphun 8s, tercanggih");
+		banner7.setWeight(3);
+		banner7.setActive(true);
+		banner7.setName("Banner Teks IPhun 8");
+		banner7.setDescription("Ditujukan untuk mendukung kampanye banner teks iphun");
+		banner7.setBannerType(ZoneTypeEnum.TEXT);
+		banner7.setCampaign(campaign2);
+		banner7.setContent_link(upload7);
+		banner7.setBannerSize(medium);
+		banner7.save();				
+	}
 	public void deleteCampaignData(){
-		List<Banner>   banner=Banner.find.all();
-		List<Campaign> campaign=Campaign.find.all();
+		List<BannerPlacement> places=BannerPlacement.find.all();
+		List<Banner>  		  banner=Banner.find.all();
+		List<Campaign> 		  campaign=Campaign.find.all();
+		
+		if(places.size()!=0){
+			Ebean.delete(places);
+		}
 		
 		if(banner.size()!=0){
 			Ebean.delete(banner);
@@ -300,7 +506,9 @@ public class SetInitialData {
 		List<FileUpload> uploads=FileUpload.find.all();
 		Ebean.delete(data);
 		Ebean.delete(roles);
-		
+		for(FileUpload upload:uploads){
+			upload.deleteDbOnly();
+		}
 		System.out.println("Delete data");
 	}
 	public void deleteZoneChannel(){

@@ -220,7 +220,7 @@ public class BannerProcessor {
 			Banner banner=Banner.find.byId(idBanner);
 			ZoneTypeEnum type=banner.getBannerType();
 			BannerSize bannerSize=banner.getBannerSize();
-			BannerSize bannerRect=BannerSize.find.where().eq("name", "Rectangle").findUnique();
+			BannerSize bannerRect=BannerSize.find.where().eq("name", "Medium Rectangle").findUnique();
 			BannerSize bannerLead=BannerSize.find.where().eq("name", "LeaderBoard").findUnique();
 			Collection<BannerSize> coll=new ArrayList<BannerSize>();
 			coll.add(bannerLead);

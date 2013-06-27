@@ -60,9 +60,6 @@ public class Notification extends Model{
 		return param;
 	}
 
-	public void setLink(String param) {
-		this.param = param;
-	}
 
 	public boolean isRead() {
 		return isRead;

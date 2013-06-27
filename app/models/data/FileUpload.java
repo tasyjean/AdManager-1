@@ -48,6 +48,10 @@ public class FileUpload extends Model {
 		manager.delete(this.id);
 		super.delete();
 	};
+	//cuman ngapus database, ngga file
+	public void deleteDbOnly() {
+		super.delete();
+	};	
 	public int getId() {
 		return id;
 	}

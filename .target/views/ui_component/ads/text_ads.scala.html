@@ -1,11 +1,10 @@
 @(banners:List[Banner], target:String, size:BannerSize)
-
 <a style="margin-bottom:3px;font-family:arial;float:right;font-size:12px;color:#929395;display:inline;" href="">Teknimo Ads Manager</a>
 <div style="max-width:@(size.getWidth)px;max-height:@(size.getHeight)px;padding:20px 0 20px 0;">
 	
 	@for(banner<-banners){
 	
-		<div id="adsItem" style="font-family:arial;display:inline-block;max-width:300px;overflow: hidden;"> 
+		<div id="adsItem" style="font-family:arial;max-width:70px;display:inline-block;max-width:300px;overflow: hidden;"> 
 			<div id="image" style="display:table;float:left;width:60px;height:60px">
 				<a href="@target"><img style="width:60px;height:60px;padding:4px" alt="@banner.getAlt_text" src="@banner.getContent_link.getFileURL"></a>
 			</div>
@@ -16,7 +15,7 @@
 					</a>
 				</div>
 				<div id="content_text">
-					<div style="font-size:0.8em;padding-top:4px">@banner.getContent_text</div>
+					<div style="font-size:0.75em;padding-top:4px">@banner.getContent_text</div>
 				</div>
 			</div>
 		</div>	

@@ -1,12 +1,21 @@
 package models.service.ads_delivery;
 
+import java.util.List;
+
 import play.mvc.Content;
 import models.data.Banner;
+import models.data.BannerPlacement;
 import models.data.Zone;
-
+/*
+ * Untuk menyeleksi iklan
+ */
+import models.service.campaign.BannerProcessor;
+import models.service.campaign.CampaignProcessor;
 public class AdSelector {
 
 	/*
+	 * May be this is most fragile, long and difficult algoritm
+	 * 
 	 * Step
 	 * -> Tentukan tipe zona
 	 * -> Cari banner yang terhubung dengan zona, dan kondisi aktif
@@ -34,8 +43,35 @@ public class AdSelector {
  	 * 		   -> jika bobotnya sama, pake random
  	 * 
 	 */
-	public Content get(int zone_id){
+	/*
+	 * return value : idBanner
+	 */
+	BannerProcessor bannerProc;
+	CampaignProcessor campaignProc;
 
+	public AdSelector(BannerProcessor bannerProc,CampaignProcessor campaignProc){
+		this.bannerProc=bannerProc;
+		this.campaignProc=campaignProc;
+	}
+	public int get(int zone_id){
+
+		//langkah 1, populasikan placement aktif
+		List<BannerPlacement> banners=BannerPlacement.find.where().
+													 eq("zone", Zone.find.byId(zone_id)).
+													 eq("isActive", true).findList();
+		//jika ngga ada, return 0
+		if(banners.size()==0){
+			return 0;
+		}		
+		//langkah 2 populasikan banner yang campaignnya ekslusif
+		int selected=isContainExclusive(banners);
+
+		if(selected==0){
+			
+		}else{
+			return selected;
+		}
+		
 		
 		final int zone=zone_id;
 		Content content=new Content() {
@@ -50,6 +86,13 @@ public class AdSelector {
 				return text;
 			}
 		};
-		return content;
+		return 0;
+	}
+	
+	private int isContainExclusive(List<BannerPlacement> inputs){
+		return 0;
+	}
+	private int selectNonExclusive(List<BannerPlacement> inputs){
+		return 0;
 	}
 }
