@@ -90,6 +90,7 @@ public class AdSelector {
 	}
 	
 	private int isContainExclusive(List<BannerPlacement> inputs){
+		
 		return 0;
 	}
 	private int selectNonExclusive(List<BannerPlacement> inputs){
