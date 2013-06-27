@@ -181,7 +181,7 @@ public class CampaignController extends CompressController {
 		}
 		if(user.getRole().getName().equals("advertiser")){
 			if(!campProc.isOwnerOF(campaign, user)){
-				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(1));
+				return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
 			}
 		}			
 		return ok(edit_campaign.render(data,campaignForm,campaign,campaignData));
@@ -284,7 +284,7 @@ public class CampaignController extends CompressController {
 		User user=auth.getUserLogin(session());
 		if(user.getRole().getName().equals("advertiser")){
 			if(!campProc.isOwnerOF(campaign, user)){
-				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(1));
+				return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
 			}
 		}			
 		return ok(edit_banner.render(data, banner, bannerForm));

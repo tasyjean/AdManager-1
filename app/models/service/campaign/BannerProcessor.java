@@ -262,8 +262,8 @@ public class BannerProcessor {
 		for(BannerPlacement place:banners){
 			if(place.getBanner().getCampaign().
 					getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
-				if(!place.getBanner().isDeleted()){
-					if(place.getBanner().getId_banner()!=idBanner){
+				if(!place.getBanner().isDeleted()){  //pastikan banner ngga kedelet
+					if(place.getBanner().getId_banner()!=idBanner){ //pastikan si zona ngga di kontrak ama yang punya
 						return false;
 					}
 				}
