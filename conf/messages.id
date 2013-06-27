@@ -38,7 +38,7 @@ error.weight_required="Bobot harus berupa angka"
 error.weight_range=Bobot harus antara 0-10
 error.url_salah=Alamat URL untuk link banner tidak valid
 error.campaign_salah=Campaign tidak valid, ulangi pengisian form melalui detail campaign
-
+error.description=Deskripsi terlalu panjang, maksimal {0} karakter
 #Default
 
 # --- Constraints

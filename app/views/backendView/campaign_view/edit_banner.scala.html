@@ -84,21 +84,15 @@
 	
 		@dashboard_content("Manajemen Iklan","Ubah Banner","daftar campaign"){
 		
-		<div id="input_tab">
-			<ul>
-				<li><a href="#tabs-1">Ubah Banner</a></li>
-				<li><a href="@controllers.backend.routes.CampaignController.editBannerPlacement(banner.getId_banner)">
-					   Ubah Hubungan Dengan Zona</a></li>
-			</ul>
-			<div id="tabs-2">
+		   @if(banner!=null){
+				<a style="margin:10px" href="@controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign().getId_campaign())"	
+						 	class="btn"><--Kembali Ke Detail Campaign</a>				
+				<a class="btn disabled" href="#here" style="margin:10px">Ubah Banner</a>
+				<a class="btn" style="margin:10px" href="@controllers.backend.routes.CampaignController.editBannerPlacement(banner.getId_banner)">
+					   Ubah Hubungan Dengan Zona</a>
 
-			</div>@* End tab 1 *@
-		
-			<div id="tabs-1">
 			@form(action =controllers.backend.routes.CampaignController.updateBanner(banner.getId_banner), 'class-> "form-horizontal", 'enctype -> "multipart/form-data") {
 						<div class="content-padding"> 
-						<a href="@controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign().getId_campaign())"	
-						 	class="btn">Kembali Ke Detail Campaign</a>				
 						
 							<h4>Ubah Banner</h4>
 							<h5 style="font-style: italic;">Isi Form banner dibawah ini</h5>
@@ -222,15 +216,23 @@
 					<a href="@controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign.getId_campaign)" 
 					class="btn btn-warning">Batal Perubahan</a>
 				</div> @*end form action *@					
-				</div>	} @*end form *@ 						
-			</div> @* End tab 2 *@
+				</div>	} @*end form *@ 	
+		} else{
+			<div class="content-padding">
+			<h4>Banner tidak terdaftar</h4>
+			</div>
+		} 
+
+		@* end if null *@					
 		</div>
+
 						
     <script type="text/javascript">
 		$(document).ready(function() {
-	    	$("#input_tab").tabs();
-	    	$("#input_tab").tabs({ active: 0 });
-	    	$("#input_tab li.last a").unbind('click');
+	    //	$("#input_tab").tabs();
+	    //	$("#input_tab").tabs({ active: 0 });
+
+
 
 	    	function textMode(){
 	    		$("#bannerSize").attr("disabled","disabled");

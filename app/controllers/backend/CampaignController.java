@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+
 import com.amazonaws.services.simpleemail.model.Message;
 import com.avaje.ebean.Page;
 
@@ -21,6 +23,7 @@ import models.data.Banner;
 import models.data.Campaign;
 import models.data.FileUpload;
 import models.data.User;
+import models.data.UserRole;
 import models.data.Zone;
 import models.data.enumeration.CampaignTypeEnum;
 import models.dataWrapper.TemplateData;
@@ -32,7 +35,10 @@ import models.service.Authenticator;
 import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 
+import be.objectify.deadbolt.java.actions.Group;
+import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.i18n.Messages;
@@ -65,9 +71,10 @@ public class CampaignController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
 		Page<Campaign> page=null;
-		if(auth.getUserRole(session()).equals("advertiser")){
+		if(auth.getUserRole(session()).getName().equals("advertiser")){
 			page=campProc.getUserCampaign(selectPage-1,auth.getUserLogin(session()),
 														 40,"createdAt","ascending","");
+			Logger.debug("Merupakan advertiser");
 		}else{
 			page=campProc.getAllCampaign(selectPage-1, 40, "createdAt", "ascending", "");
 		}
@@ -85,7 +92,7 @@ public class CampaignController extends CompressController {
 			session("sortBy", sortBy);
 			session("order",order);
 	
-			if(auth.getUserRole(session()).equals("advertiser")){
+			if(auth.getUserRole(session()).getName().equals("advertiser")){
 				page=campProc.getUserCampaign(selectPage,auth.getUserLogin(session()),
 															 size,sortBy,order,filter);
 			}else{
@@ -117,11 +124,18 @@ public class CampaignController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		Campaign campaign=Campaign.find.byId(idCampaign);
-		
+		User user=auth.getUserLogin(session());
+		if(user.getRole().getName().equals("advertiser")){
+			if(campProc.isOwnerOF(campaign, user)){
+				return ok(showSingleCampaign.render(data,campaign));				
+			}else{
+				return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
+			}
+		}
 		return ok(showSingleCampaign.render(data,campaign));
 	}
 	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result newCampaign(){
 		TemplateData data = (TemplateData) 
@@ -130,7 +144,7 @@ public class CampaignController extends CompressController {
 		
 		return ok(create_campaign.render(data, campaignForm, campaignData));
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result saveNewCampaign(){
 		TemplateData data = (TemplateData) 
@@ -151,21 +165,28 @@ public class CampaignController extends CompressController {
 		}
 		
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result editCampaign(int idCampaign){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
+		
 		campaignData=new CampaignFormData(manager);
 		Campaign campaign=Campaign.find.byId(idCampaign);
+		User user=auth.getUserLogin(session());			
 		if(campaign==null){
 			flash("error",Messages.get("error.editCampaign"));
 			
 			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
 		}
+		if(user.getRole().getName().equals("advertiser")){
+			if(!campProc.isOwnerOF(campaign, user)){
+				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(1));
+			}
+		}			
 		return ok(edit_campaign.render(data,campaignForm,campaign,campaignData));
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result updateCampaign(int idCampaign){
 		TemplateData data = (TemplateData) 
@@ -186,15 +207,21 @@ public class CampaignController extends CompressController {
 			}
 		}		
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result deleteCampaign(int idCampaign){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("delete campaign");
+		boolean campaign=campProc.deleteCampaign(idCampaign);
+		if(campaign){
+			flash("success","Campaign dihapus");
+			return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
+		}else{
+			flash("error","Campaign gagal dihapus");
+			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(idCampaign));
+		}
 	}	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result newBanner(int idCampaign){
 		TemplateData data = (TemplateData) 
@@ -207,7 +234,7 @@ public class CampaignController extends CompressController {
 		}
 		return ok(create_banner.render(data, idCampaign, bannerForm, bannerFormData));
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result saveBanner(int idCampaign){
 		TemplateData data = (TemplateData) 
@@ -247,12 +274,19 @@ public class CampaignController extends CompressController {
 			return ok(create_banner.render(data, idCampaign, filledForm, bannerFormData));			
 		}
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result editBanner(int idbanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		Banner banner=Banner.find.byId(idbanner);
+		Campaign campaign=Campaign.find.byId(banner.getCampaign().getId_campaign());
+		User user=auth.getUserLogin(session());
+		if(user.getRole().getName().equals("advertiser")){
+			if(!campProc.isOwnerOF(campaign, user)){
+				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(1));
+			}
+		}			
 		return ok(edit_banner.render(data, banner, bannerForm));
 	}
 	@SubjectPresent
@@ -295,17 +329,25 @@ public class CampaignController extends CompressController {
 			}
 		}
 	}	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
-	public static Result deleteBanner(int idbanner){
+	public static Result deleteBanner(int idBanner){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok("delete banner");
+		Banner banner=bannerProc.delete(idBanner);
+		if(banner!=null){
+			flash("sukses","banner telah dihapus");
+			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
+						banner.getCampaign().getId_campaign()));	
+		}else{
+			flash("error","Banner Gagal dihapus");
+			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
+						banner.getCampaign().getId_campaign()));				
+		}
 		
 	}		
 	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result newBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
@@ -327,7 +369,7 @@ public class CampaignController extends CompressController {
 		}
 		
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result saveBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
@@ -346,7 +388,7 @@ public class CampaignController extends CompressController {
 			return ok(create_banner_placement.render(data, idBanner, zones_group));
 		}
 	}	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result editBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
@@ -356,7 +398,7 @@ public class CampaignController extends CompressController {
 		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
 		return ok(edit_banner_placement.render(data,banner,zones_group));		
 	}	
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result updateBannerPlacement(int idBanner){
 		TemplateData data = (TemplateData) 
@@ -374,10 +416,26 @@ public class CampaignController extends CompressController {
 			return ok(edit_banner_placement.render(data, banner, zones_group));
 		}		
 	}
+	@Restrict({@Group("administrator"), @Group("advertiser")})
+	@With(DataFiller.class)	
 	public static Result activateBanner(int idBanner){
-		return ok();
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Banner banner=bannerProc.activate(idBanner);
+		if(banner!=null){
+			if(banner.isActive()){
+				flash("success","Banner diaktifkan");				
+			}else{
+				flash("success","Banner di non aktifkan");				
+			}
+		}else{
+			flash("error","Aktivasi gagal");							
+		}
+		return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
+				banner.getCampaign().getId_campaign()));				
+
 	}
-	@SubjectPresent
+	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result activate(int idCampaign){
 		TemplateData data = (TemplateData) 

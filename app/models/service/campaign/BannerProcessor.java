@@ -110,15 +110,6 @@ public class BannerProcessor {
 		Banner banner=null;
 		try {
 			banner=Banner.find.byId(idBanner);
-//			int idCampaign=Integer.parseInt(form.get().campaign);
-//			int idBanner_size=Integer.parseInt(form.get().bannerSize);
-					
-//			Campaign campaign=Campaign.find.byId(idCampaign);
-//			BannerSize size=BannerSize.find.byId(idBanner_size);
-			
-//			banner.setCampaign(campaign);
-//			banner.setBannerSize(size);
-//			banner.setBannerType(ZoneTypeEnum.valueOf(form.get().bannerType));
 			banner.setName(form.get().name);
 			banner.setDescription(form.get().description);
 			banner.setTitle(form.get().title);
@@ -165,6 +156,7 @@ public class BannerProcessor {
 	}
 	/*
 	 * Hapus banner
+	 * -pertama coba hapus dlu, kalo gagal
 	 * -> Set ke mode deleted
 	 * -> buat hubungan jadi inactive
 	 */
@@ -175,9 +167,13 @@ public class BannerProcessor {
 			banner.setDeleted(true);
 			List<BannerPlacement> placements=BannerPlacement.find.where().eq("banner", banner).findList();
 			for(BannerPlacement placement:placements){
-				placement.setActive(false);
-				placement.update();
-			}
+				try {
+					placement.delete();
+				} catch (Exception e) {
+					placement.setActive(false);
+					placement.update();
+					e.printStackTrace();
+				}			}
 			banner.update();
 			Ebean.commitTransaction();
 			return banner;
@@ -189,6 +185,28 @@ public class BannerProcessor {
 			Ebean.endTransaction();
 		}
 	}
+	//ditujukan untuk delete campaign, (bug transaction)
+	public Banner deleteNonTransaction(int idBanner) throws Exception{
+		try {
+			Banner banner=Banner.find.byId(idBanner);
+			banner.setDeleted(true);
+			List<BannerPlacement> placements=BannerPlacement.find.where().eq("banner", banner).findList();
+			for(BannerPlacement placement:placements){
+				try {
+					placement.delete();
+				} catch (Exception e) {
+					placement.setActive(false);
+					placement.update();
+					e.printStackTrace();
+				}
+			}
+			banner.update();
+			return banner;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}	
 	/*
 	 * pertama
 	 * -cari zona yang tipenya sama dengan banner, text dengan text gambar dengan gambar

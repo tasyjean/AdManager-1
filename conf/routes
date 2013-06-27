@@ -36,6 +36,7 @@ POST  /dashboard/campaign/banner/edit/:idBanner									controllers.backend.Camp
 GET   /dashboard/campaign/banner/delete/:idBanner								controllers.backend.CampaignController.deleteBanner(idBanner:Integer)
 GET   /dashboard/campaign/delete/:idCampaign									controllers.backend.CampaignController.deleteCampaign(idCampaign:Integer)
 GET   /dashboard/campaign/activate/:idCampaign									controllers.backend.CampaignController.activate(idCampaign:Integer)
+GET   /dashboard/campaign/banner/activate/:idBanner								controllers.backend.CampaignController.activateBanner(idBanner:Integer)
 GET   /dashboard/campaign/banner/:idBanner/placement							controllers.backend.CampaignController.newBannerPlacement(idBanner:Integer)
 POST   /dashboard/campaign/banner/:idBanner/placement							controllers.backend.CampaignController.saveBannerPlacement(idBanner:Integer)
 GET   /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backend.CampaignController.editBannerPlacement(idBanner:Integer)

@@ -134,7 +134,6 @@ public class CampaignProcessor {
 		}
 		return null;
 	}
-	
 	public int activate(int idCampaign){
 		try {
 			int returns;
@@ -163,7 +162,7 @@ public class CampaignProcessor {
 			Campaign campaign=Campaign.find.byId(idCampaign);
 			campaign.setDeleted(true);
 			for(Banner banner:campaign.getBanner()){
-				proc.delete(banner.getId_banner());				
+				proc.deleteNonTransaction(banner.getId_banner());				
 			}
 			campaign.update();
 			Ebean.commitTransaction();
@@ -175,6 +174,20 @@ public class CampaignProcessor {
 		}finally{
 			Ebean.endTransaction();
 		}
+	}
+	//campaign pemiliknya si user bukan
+	public boolean isOwnerOF(Campaign campaign, User user){
+		try {
+			if(campaign.getId_user().getId_user()==user.getId_user()){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+			
 	}
 
 }
