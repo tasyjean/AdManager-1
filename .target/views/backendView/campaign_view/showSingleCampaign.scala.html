@@ -153,7 +153,7 @@
 			        	<p>Klik <a href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">
 			        	disini</a> untuk membuat banner baru</p>
 			        }else{
-			        	<h5>@campaign.getBanner.size Buah Banner</h5>
+			        	<h5>@campaign.countNonDeletedBanner Buah Banner</h5>
 				        @for(banner<-campaign.getBanner){
 							@if(!banner.isDeleted){	
 								<table class="single-view" style="width: 350px">
@@ -283,12 +283,14 @@
 												<h4>Tampilan Banner</h4>
 													@if(banner.getBannerType.name=="BANNER"){
 															
-															<iframe style="border:1px solid black" src=""
-																width="@(banner.getBannerSize.getWidth)px"
-																height="@(banner.getBannerSize.getHeight)px">
+															<iframe style="border:1px solid white" 
+															  src="@controllers.backend.routes.AdsDeliveryController.getBanner(banner.getId_banner)"
+																width="@(banner.getBannerSize.getWidth+40)px"
+																height="@(banner.getBannerSize.getHeight+40)px">
 															</iframe>					  						
 													}else{
-															<iframe style="border:1px solid black" src=""
+															<iframe style="border:1px solid white" 
+																src="@controllers.backend.routes.AdsDeliveryController.getSingleTextBanner(banner.getId_banner)"
 																width="300px"
 																height="250px">
 															</iframe>	

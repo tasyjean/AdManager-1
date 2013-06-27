@@ -19,8 +19,7 @@ public class FileDeleteTest {
         		FileUpload upload=FileUpload.find.byId(101);
         		System.out.println(upload.getThumbnailPath());
         		upload.delete();
-        		
-        		
+	
         	}
 	});
         }

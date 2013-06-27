@@ -1,19 +1,20 @@
-@(banner:Banner, target:String, tipe:String="image")
+@(banner:Banner, target:String, tipe:String="IMAGE")
 
 @* Image atau flash *@
-<div style="width:300px;height:262px;padding:5px 0 5px 0;">
+<div style="width:@(banner.getBannerSize.getWidth)px;height:@(banner.getBannerSize.getHeight)px;padding:5px 0 5px 0;">
 	<a style="margin-bottom:3px;font-family:arial;float:right;font-size:10px;color:#929395" href="">Teknimo Ads Manager</a>
 
-	@if(tipe=="image") {
-			<a href="target" id="banner name2">
-				<img src="ad_samples/300x250_uap.gif" title="Ad tittle" alt="content_text">
+	@if(tipe=="IMAGE") {
+			<a href="@(target)" id="@(banner.getName)">
+				<img src="@(banner.getContent_link.getFileURL)" 
+					title="@(banner.getTitle) -- @(banner.getContent_text)" alt="@(banner.getAlt_text)">
 			</a>
 	}else{
-		<a href="target" id="banner name>
-			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="300" height="250" id="name" align="middle">
-				<param name="movie" value="ad_samples/talksport-300x250.swf"/>
+		<a href="@(banner.getTarget)" id="@(banner.getName)">
+			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="@(banner.getBannerSize.getWidth)" height="@(banner.getBannerSize.getHeight)px" id="@(banner.getName)" align="middle">
+				<param name="movie" value="@(banner.getContent_link.getFileURL)"/>
 				<!--[if !IE]>-->
-				<object type="application/x-shockwave-flash" data="ad_samples/talksport-300x250.swf" width="300" height="250">
+				<object type="application/x-shockwave-flash" data="@(banner.getContent_link.getFileURL)" width="@(banner.getBannerSize.getWidth)" height="@(banner.getBannerSize.getHeight)px">
 					<param name="movie" value="ad_samples/talksport-300x250.swf"/>
 				<!--<![endif]-->
 					<a href="http://www.adobe.com/go/getflash">

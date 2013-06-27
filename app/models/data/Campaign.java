@@ -264,4 +264,14 @@ public class Campaign extends Model{
 		return Angka.toRupiah(countPrice());
 	}
 	
+	public int countNonDeletedBanner(){
+		int result=0;
+		for(Banner banner:this.banner){
+			if(!banner.isDeleted()){
+				result++;
+			}
+		}
+		return result;
+	}
+	
 }
