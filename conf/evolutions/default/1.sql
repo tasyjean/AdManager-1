@@ -128,13 +128,15 @@ create table impression (
   constraint pk_impression primary key (id_impression))
 ;
 
-create table notificaton (
+create table notification (
   id_notification           integer not null,
   user_id_user              integer,
-  notification_type         varchar(255),
-  link                      varchar(400),
+  timestamp                 timestamp,
+  notification_type         varchar(15),
+  param                     varchar(255),
   is_read                   boolean,
-  constraint pk_notificaton primary key (id_notification))
+  constraint ck_notification_notification_type check (notification_type in ('NEW_USER','NEW_CAMPAIGN','SEE_REPORT','NEW_BANNER','ACTIVE_ADS','EMPTY_DEPOSITO','NON_ACTIVE_ADS','PLEASE_VALIDATE','VALIDATED')),
+  constraint pk_notification primary key (id_notification))
 ;
 
 create table system_preferences (
@@ -237,7 +239,7 @@ create sequence file_upload_seq;
 
 create sequence impression_seq;
 
-create sequence notificaton_seq;
+create sequence notification_seq;
 
 create sequence system_preferences_seq;
 
@@ -275,8 +277,8 @@ alter table deposito add constraint fk_deposito_user_validator_10 foreign key (u
 create index ix_deposito_user_validator_10 on deposito (user_validator_id_user);
 alter table impression add constraint fk_impression_bannerPlacement_11 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
 create index ix_impression_bannerPlacement_11 on impression (banner_placement_id_banner_placement);
-alter table notificaton add constraint fk_notificaton_user_12 foreign key (user_id_user) references user_data (id_user);
-create index ix_notificaton_user_12 on notificaton (user_id_user);
+alter table notification add constraint fk_notification_user_12 foreign key (user_id_user) references user_data (id_user);
+create index ix_notification_user_12 on notification (user_id_user);
 alter table user_data add constraint fk_user_data_role_13 foreign key (role_id_role) references user_role (id_role);
 create index ix_user_data_role_13 on user_data (role_id_role);
 alter table user_data add constraint fk_user_data_profile_photo_14 foreign key (profile_photo_id) references file_upload (id);
@@ -316,7 +318,7 @@ drop table if exists file_upload cascade;
 
 drop table if exists impression cascade;
 
-drop table if exists notificaton cascade;
+drop table if exists notification cascade;
 
 drop table if exists system_preferences cascade;
 
@@ -354,7 +356,7 @@ drop sequence if exists file_upload_seq;
 
 drop sequence if exists impression_seq;
 
-drop sequence if exists notificaton_seq;
+drop sequence if exists notification_seq;
 
 drop sequence if exists system_preferences_seq;
 
