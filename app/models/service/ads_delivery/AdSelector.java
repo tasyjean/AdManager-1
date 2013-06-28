@@ -104,7 +104,7 @@ public class AdSelector {
 		};
 		return 0;
 	}
-	
+	//mengembalikan id banner, dari campaign eklusif yang valid
 	private int isContainExclusive(List<BannerPlacement> inputs){
 		for(BannerPlacement banner:inputs){
 			
@@ -133,7 +133,7 @@ public class AdSelector {
 		return false;
 		}
 	}
-	//cek date dan keaktifan campaign ekslusif
+	//cek kevalidan campaign ekslusif (siap tampil nggak)
 	//ntar proses ini mesti dipisah
 	private boolean checkExclusiveCampaign(Campaign campaign){
 		Date from=campaign.getStart_date();
@@ -144,17 +144,23 @@ public class AdSelector {
 				sendActiveNotification(campaign); // kirim notifikasi kalo campaign mesti diaktifin
 				return false;
 			}else{ //sudah memasukin masa aktif dan telah diaktifkan
-				return true;
+				if(campaign.getId_user().getCurrent_balance()<campaign.getBid_price()){ //ga cukup duit
+					campaign.setActivated(false);
+					campaign.update();
+					sendNonActiveNotification(campaign);
+					return false;
+				}
+				return true; //memenuhi syarat
 			}
-		}else{
-			if(binder.isBeforeToday(to)){ //campaign udah ga aktif
-				if(campaign.isActivated()){
+		}else{ //jika diluar rentang campaign 
+			if(binder.isBeforeToday(to)){ //campaign diluar end date
+				if(campaign.isActivated()){ //kalo masih aktif, nonaktifin
 					campaign.setActivated(false);
 					campaign.update();
 					sendNonActiveNotification(campaign);
 				}
-				return false;
 			}
+			return false; //campaign diluar rentang, artinya ga valid
 		}
 	}
 	private void sendActiveNotification(Campaign campaign){
@@ -177,6 +183,15 @@ public class AdSelector {
 		notif.pushNew(item);
 		notif.pushNew("ADMINISTRATOR",item);			
 	}
+	private void sendEmptyDeposito(Campaign campaign){
+		NotifItem item=new NotifItem();
+		item.setParam(new String[]{campaign.getCampaignName(),
+						  Integer.toString(campaign.getId_campaign())});
+		item.setType(NotificationType.EMPTY_DEPOSITO);
+		item.setUser(campaign.getId_user());
+		notif.pushNew(item);
+		notif.pushNew("ADMINISTRATOR",item);			
+	}	
 	private int selectNonExclusive(List<BannerPlacement> inputs){
 		return 0;
 	}
