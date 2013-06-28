@@ -8,9 +8,14 @@ package controllers.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.custom_helper.DateBinder;
+import models.custom_helper.file_manager.FileManagerFactory;
+import models.custom_helper.file_manager.FileManagerInterface;
 import models.data.Banner;
 import models.data.BannerSize;
 import models.service.ads_delivery.AdSelector;
+import models.service.campaign.BannerProcessor;
+import models.service.campaign.CampaignProcessor;
 import play.Logger;
 import play.mvc.Content;
 import play.mvc.Result;
@@ -19,7 +24,12 @@ import views.html.ui_component.ads.*;
 
 public class AdsDeliveryController extends CompressController {
 
-	static AdSelector ad_selector= new AdSelector();
+	static FileManagerInterface manager=new FileManagerFactory().getManager();
+	static BannerProcessor banner=new BannerProcessor(manager);
+	static DateBinder binder=new DateBinder();
+	static CampaignProcessor campaign=new CampaignProcessor(binder,banner);
+	static AdSelector ad_selector= new AdSelector(banner, campaign);
+	
 
 	public static Result banner(int zone){
 		
@@ -39,6 +49,7 @@ public class AdsDeliveryController extends CompressController {
 				String fileName=banner.getContent_link().getName();
 				String content;
 				String target=banner.getTarget();
+				
 				if(fileName.endsWith("swf")){
 					content="SWF";
 				}else{

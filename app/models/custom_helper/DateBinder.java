@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import play.Play;
+import play.libs.Akka;
 
 public class DateBinder {
 	
@@ -19,18 +20,29 @@ public class DateBinder {
 
 	public boolean isAfterToday(Date input){
 		Calendar today=Calendar.getInstance();
-		today.add(Calendar.DATE, -1);
+		today.add(Calendar.DATE, -1); //minus sehari
 		Date yasterday=today.getTime();
 		return input.after(yasterday)? true : false; 
 	}
-	
+	public  boolean isBeforeToday(Date input){
+		Calendar today=Calendar.getInstance();
+		today.add(Calendar.DATE,-1);
+		Date yasterday=today.getTime();
+		return input.before(yasterday)? true : false; 		
+	}
 	public int getDayLength(Date from,Date to){
 		DateTime fromx=new DateTime(from);
 		DateTime tox=new DateTime(to);
 		
 		return Days.daysBetween(fromx, tox).getDays();
 	}
-	
+	public boolean todayIsBetween(Date from, Date to){
+		Date today=new Date();
+		if(today.after(from) && today.before(to)){
+			return true;
+		}
+		return false;
+	}
 	public SimpleDateFormat getFormat(){
 		return format;
 	}

@@ -12,12 +12,14 @@ import java.util.List;
 
 import models.data.User;
 import models.service.Authenticator;
+import models.service.notification.NotificationCenter;
 
 import play.mvc.Http.Context;
 
 
 public class TemplateData {
 
+	NotificationCenter notif;
 	Context ctx;
 	//Data User
 	private String frontName="";
@@ -32,8 +34,9 @@ public class TemplateData {
 
 	Authenticator auth = new Authenticator();
 	
-	public TemplateData(Context ctx) {
+	public TemplateData(Context ctx, NotificationCenter notif) {
 		this.ctx = ctx;
+		this.notif=notif;
 	}
 	public void setUserData()
 	{
@@ -51,7 +54,7 @@ public class TemplateData {
 			}
 			
 			//simulasi
-			this.notifCount="3";
+			this.notifCount=Integer.toString(notif.countUnread(user.getId_user()));
 		}
 	}
 	public String getFrontName(){

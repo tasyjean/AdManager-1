@@ -104,3 +104,14 @@ pricingModel.cpa.info=Biaya Iklan dihitung setiap 1 klik
 pricingModel.flat.name=Harian
 pricingModel.flat.info=Biaya Iklan dihitung setiap 1 hari
 
+#notifikasi
+notif.active_ads=Campaign |nama_campaign|  diaktifkan
+notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan
+notif.empty_deposito=Saldo tidak mencukupi, silahkan isi kembali
+notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi
+notif.validated=Pembayaran senilai |jumlah| telah divalidasi
+notif.see_report= Silahkan lihat laporan iklan
+notif.new_campaign=|nama_user| telah membuat campaign baru
+notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar
+notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai
+ 

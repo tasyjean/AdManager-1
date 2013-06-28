@@ -1,16 +1,25 @@
 package models.service.ads_delivery;
 
+import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import play.mvc.Content;
+import models.custom_helper.DateBinder;
 import models.data.Banner;
 import models.data.BannerPlacement;
+import models.data.Campaign;
 import models.data.Zone;
+import models.data.enumeration.CampaignTypeEnum;
 /*
  * Untuk menyeleksi iklan
  */
 import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
+import models.service.notification.NotifItem;
+import models.service.notification.NotificationCenter;
+import models.service.notification.NotificationType;
 public class AdSelector {
 
 	/*
@@ -46,12 +55,19 @@ public class AdSelector {
 	/*
 	 * return value : idBanner
 	 */
-	BannerProcessor bannerProc;
-	CampaignProcessor campaignProc;
-
-	public AdSelector(BannerProcessor bannerProc,CampaignProcessor campaignProc){
+	BannerProcessor    bannerProc;
+	CampaignProcessor  campaignProc;
+	DateBinder 		   binder;
+	NotificationCenter notif;
+	
+	public AdSelector(BannerProcessor bannerProc,
+					  CampaignProcessor campaignProc,
+					  DateBinder binder,
+					  NotificationCenter notif){
 		this.bannerProc=bannerProc;
 		this.campaignProc=campaignProc;
+		this.binder=binder;
+		this.notif=notif;
 	}
 	public int get(int zone_id){
 
@@ -59,7 +75,7 @@ public class AdSelector {
 		List<BannerPlacement> banners=BannerPlacement.find.where().
 													 eq("zone", Zone.find.byId(zone_id)).
 													 eq("isActive", true).findList();
-		//jika ngga ada, return 0
+		//jika ngga ada, return 0 
 		if(banners.size()==0){
 			return 0;
 		}		
@@ -90,8 +106,76 @@ public class AdSelector {
 	}
 	
 	private int isContainExclusive(List<BannerPlacement> inputs){
-		
+		for(BannerPlacement banner:inputs){
+			
+		}
 		return 0;
+	}
+	/*
+	 * 	 * 	-> Aktif
+	 * 		 -> Masih berlaku  -> jika ngga, nonaktifkan, dan kirim notifikasi
+	 * 		 -> Pemiliknya masih punya cukup dana, kalo ga cukup, nonaktifkan iklan, dan kirim notifikasi
+	 * 			-> transaksi dihitung tiap tampilan pertama dalam 1 hari
+	 * 			-> Artinya jika dalam sehari tidak ada impresi, maka tidak ada transaksi
+
+	 */
+	//cek apakah ada yang ekslusig atau
+	private boolean checkValidExclusive(BannerPlacement inputs){
+		Campaign campaign=inputs.getBanner().getCampaign();
+		
+		if(campaign.getCampaign_type()==CampaignTypeEnum.EXCLUSIVE){
+			if(!campaign.isDeleted()){
+				if(campaign.isActivated()){
+					
+				}
+			}
+			
+		return false;
+		}
+	}
+	//cek date dan keaktifan campaign ekslusif
+	//ntar proses ini mesti dipisah
+	private boolean checkExclusiveCampaign(Campaign campaign){
+		Date from=campaign.getStart_date();
+		Date to=campaign.getEnd_date();
+		
+		if(binder.todayIsBetween(from, to)){
+			if(!campaign.isActivated()){  //jika udah memasuki masa tampil, tapi belum tampil, kirim notif
+				sendActiveNotification(campaign); // kirim notifikasi kalo campaign mesti diaktifin
+				return false;
+			}else{ //sudah memasukin masa aktif dan telah diaktifkan
+				return true;
+			}
+		}else{
+			if(binder.isBeforeToday(to)){ //campaign udah ga aktif
+				if(campaign.isActivated()){
+					campaign.setActivated(false);
+					campaign.update();
+					sendNonActiveNotification(campaign);
+				}
+				return false;
+			}
+		}
+	}
+	private void sendActiveNotification(Campaign campaign){
+		NotifItem item=new NotifItem();
+		item.setParam(new String[]{campaign.getCampaignName(),
+						  Integer.toString(campaign.getId_campaign())});
+		item.setType(NotificationType.SHOULD_ACTIVE);
+		item.setUser(campaign.getId_user());
+		if(!notif.isDuplicate(item)){
+			notif.pushNew(item);
+			notif.pushNew("ADMINISTRATOR",item);			
+		}
+	}
+	private void sendNonActiveNotification(Campaign campaign){
+		NotifItem item=new NotifItem();
+		item.setParam(new String[]{campaign.getCampaignName(),
+						  Integer.toString(campaign.getId_campaign())});
+		item.setType(NotificationType.NON_ACTIVE_ADS);
+		item.setUser(campaign.getId_user());
+		notif.pushNew(item);
+		notif.pushNew("ADMINISTRATOR",item);			
 	}
 	private int selectNonExclusive(List<BannerPlacement> inputs){
 		return 0;

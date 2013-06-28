@@ -80,7 +80,39 @@ public class Notification extends Model{
 	public void setParam(String param) {
 		this.param = param;
 	}
-	
+	//mendapatkan teks yang udah di parse
+	/*
+	 * Aturan : 
+	 * 	 *	notif.active_ads=Campaign |nama_campaign|  diaktifkan   (nama campaign, id campaign) untuk pemilik campaign
+		notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan (nama campaign, id campaign) untuk pemilik campaign
+		notif.empty_deposito=Saldo tidak mencukupi, silahkan isi kembali ("", "") atau kosong, untuk pemilik saldo
+		notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi (nama_user, id validasi) untuk management
+		notif.validated=Pembayaran senilai |jumlah| telah divalidasi (jumlah, id pembayaran) untuk pemilik pembayaran
+		notif.see_report= Silahkan lihat laporan iklan  (jumlah, id pembayaran) untuk advertiser
+		notif.new_campaign=|nama_user| telah membuat campaign baru  (nama user, id user) untuk administrator dan manager
+		notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar  (nama user, id user) untuk administrator
+		notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai  (nama_campaign, id_campaign)
+
+	 */
+	public String getParsedText(){
+		String text=notification_type.toString();
+		String replaceParam=param.split(":")[0];
+		switch (notification_type) {
+			case ACTIVE_ADS:text=text.replace("|nama_campaign|", replaceParam);break;
+			case EMPTY_DEPOSITO:break;
+			case NEW_CAMPAIGN:text=text.replace("|nama_user|", replaceParam);break;
+			case NEW_USER:text=text.replace("|nama_user|", replaceParam);break;
+			case NON_ACTIVE_ADS:text=text.replace("|nama_campaign|", replaceParam);break;
+			case PLEASE_VALIDATE:text=text.replace("|nama_user|", replaceParam);break;
+			case SEE_REPORT:break;
+			case VALIDATED:text=text.replace("|jumlah|", replaceParam);break;
+			case SHOULD_ACTIVE:text=text.replace("|nama_campaign|", replaceParam);break;
+		default:
+			break;
+		}
+		
+		return text;
+	}
 	
 
 	
