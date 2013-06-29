@@ -48,7 +48,7 @@ public class SetInitialData {
 
 		deleteUserData();
 		try {
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_seq RESTART WITH 1;");
+			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_data_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_contact_seq RESTART WITH 1;");
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_role_seq RESTART WITH 1;");

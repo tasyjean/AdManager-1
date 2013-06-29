@@ -253,6 +253,7 @@ public class BannerProcessor {
 	}
 	//free dari yang eklusif
 	//Tapi misalnya yang nempatin banner itu sendiri, maka dianggap tetep free
+	//Misalnya banner yang nempatin punya campaign yang sama, maka tetep free juga
 	private boolean isZoneFree(Zone zone, int idBanner){
 		List<BannerPlacement> banners=BannerPlacement.find.
 													  where().
@@ -263,8 +264,12 @@ public class BannerProcessor {
 			if(place.getBanner().getCampaign().
 					getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
 				if(!place.getBanner().isDeleted()){  //pastikan banner ngga kedelet
-					if(place.getBanner().getId_banner()!=idBanner){ //pastikan si zona ngga di kontrak ama yang punya
-						return false;
+					if(place.getBanner().getId_banner()!=idBanner){ //pastikan si zona ngga di kontrak ama yang punya,
+						int idCampaign=Banner.find.byId(idBanner).getCampaign().getId_campaign();
+						if(place.getBanner().getCampaign().getId_campaign()!=idCampaign){  //artinya pemilik banner bisa nambahin banner 
+							return false;							//lainnya di eklusif selama punya campaign yang sama
+																	//behaviour ini bakal ditangani sama adselector
+						}
 					}
 				}
 			}

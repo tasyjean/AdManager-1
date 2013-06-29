@@ -1,17 +1,27 @@
 package models.service.ads_delivery;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.joda.time.DateTime;
 
+
+import play.Logger;
 import play.mvc.Content;
 import models.custom_helper.DateBinder;
 import models.data.Banner;
 import models.data.BannerPlacement;
 import models.data.Campaign;
+import models.data.Impression;
+import models.data.User;
 import models.data.Zone;
 import models.data.enumeration.CampaignTypeEnum;
+import models.data.enumeration.PricingModelEnum;
 /*
  * Untuk menyeleksi iklan
  */
@@ -59,6 +69,7 @@ public class AdSelector {
 	CampaignProcessor  campaignProc;
 	DateBinder 		   binder;
 	NotificationCenter notif;
+	Random random;
 	
 	public AdSelector(BannerProcessor bannerProc,
 					  CampaignProcessor campaignProc,
@@ -68,70 +79,269 @@ public class AdSelector {
 		this.campaignProc=campaignProc;
 		this.binder=binder;
 		this.notif=notif;
+		this.random=new Random();
 	}
-	public int get(int zone_id){
+	//return value= id banner, 0 jika zona kosong
+	public int[] get(int zone_id){
 
 		//langkah 1, populasikan placement aktif
 		List<BannerPlacement> banners=BannerPlacement.find.where().
 													 eq("zone", Zone.find.byId(zone_id)).
 													 eq("isActive", true).findList();
+		Logger.debug("banner placement  size "+banners.size());
 		//jika ngga ada, return 0 
 		if(banners.size()==0){
-			return 0;
+			return new int[]{0};
 		}		
 		//langkah 2 populasikan banner yang campaignnya ekslusif
 		int selected=isContainExclusive(banners);
+		Logger.debug("cek ekslusif "+selected);			
 
-		if(selected==0){
-			
-		}else{
-			return selected;
+		if(selected>0){
+			return new int[]{selected};
 		}
+		//langkah 3 populasikan banner yang campaign non eklusif
+		int selectedContract=selectBannerNonExclusive(banners);
+		Logger.debug("cek kontrak "+selectedContract);			
 		
-		
-		final int zone=zone_id;
-		Content content=new Content() {
-			@Override
-			public String contentType() {
-				return "html/text";
-			}
-			@Override
-			public String body() {
-				String text="<h1>Test Konten</h1>+" +
-						"<p>Ini adalah tes dari zona "+zone+" <p>";
-				return text;
-			}
-		};
-		return 0;
+		if(selectedContract>0){
+			return new int[]{selectedContract};
+		}
+		return new int[]{0};
 	}
-	//mengembalikan id banner, dari campaign eklusif yang valid
-	private int isContainExclusive(List<BannerPlacement> inputs){
-		for(BannerPlacement banner:inputs){
-			
+	//mempopulasikan banner non ekslusif
+	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count){
+		List<Banner> result=new ArrayList<Banner>();
+		for(BannerPlacement bannerPlace:inputs){
+			Logger.debug("selectBannerNonExclusive  "+bannerPlace.getId_banner_placement());			
+			if(checkValidNonExclusive(bannerPlace)){
+				result.add(bannerPlace.getBanner());
+			}
 		}
-		return 0;
+		if(result.size()==0){ //kosong, ngga ada yang valid
+			return new int[]{0};
+		}else if(result.size()==1){ //cuman ada 1
+			return new int[]{result.get(0).getId_banner()};
+		}else{
+			if(count>1){
+				
+			}else{
+				return new int[]{selectBannerBasedBidPrice(result)};
+			}
+		}
+	}
+	//untuk yang teks, mendukung multiple banner
+	private int[] selectMultipleBanner(List<Banner> banners,int count){
+		int iterate=count*4;
+		int[] selected=new int[iterate];
+		for(int i=0;i<iterate;i++){
+			selected[i]=selectBannerBasedBidPrice(banners);
+		}
+		return getHighestFrequency(selected, count);
+	}
+	private int[] getHighestFrequency(int[] input, int count){
+		Arrays.sort(input);
+		ArrayList<int[]> list=new ArrayList<int[]>();
+		ArrayList<Integer>  list2=new ArrayList<Integer>();
+		int i=0;
+		for(int ax:input){
+			if(!list2.contains(ax)){
+				list2.add(ax);
+				list.add(new int[]{ax,1});
+				i++;
+			}else{
+				int[] x=list.get(i-1);
+				x[1]=x[1]+1;
+				list.set(i-1, x);
+			}
+		}
+		Collections.sort(list, new Comparator<int[]>() {
+			public int compare(int[] o1, int[] o2) {
+				return o2[1]-o1[1];
+			}
+			
+		});
+		int[] returnValue=new int[count];
+		int is=0;
+		for(int[] result:list){
+			if(is>=count) break;
+			returnValue[is]=result[0];
+			System.out.println(result[0]+" "+result[1]);
+			is++;
+		}
+		return returnValue;
+	}
+	//memilih banner berdasarkan harga campaign......
+	private int selectBannerBasedBidPrice(List<Banner> banners){
+		//pupulasikan campaign
+		List<Campaign> campaigns=new ArrayList<Campaign>();
+		for(Banner banner:banners){
+			if(!campaigns.contains(banner.getCampaign()))
+				campaigns.add(banner.getCampaign());
+		}
+		//pilih campaign secara random dengan bobot
+		int selectedCampaign=selectCampaignBasedBidPrice(campaigns);
+		
+		//populasikan  banner milik campaign
+		List<Banner> selectedBanner=new ArrayList<Banner>();
+		
+		for(Banner banner:banners){
+			if(banner.getCampaign().getId_campaign()==selectedCampaign)
+				selectedBanner.add(banner);
+		}
+		//pilhan return value
+		if(selectedBanner.size()==0){
+			Logger.debug("Ada bug dalam pemilihan banner");
+			return 0;
+		}else if(selectedBanner.size()==1){
+			return selectedBanner.get(0).getId_banner();
+		}else{
+			return selectBannerBasedWeight(selectedBanner);
+		}
+	}
+	private int selectCampaignBasedBidPrice(List<Campaign> campaigns){
+		Campaign result = null;
+		double bestValue = Double.MAX_VALUE;
+		for (Campaign element : campaigns) {
+		    double  value =  -Math.log(random.nextDouble()) / element.getBid_price();
+		    if (value < bestValue) {
+		        bestValue = value;
+		        result = element;
+		    }
+		}
+		return result.getId_campaign(); //kembalikan id campaign yang kepilih		
+	}
+/*	 * 	  -> populasikan banner non eklusif
+	 * 	     -> pastikan semua memenuhi syarat
+	 * 			-> aktif
+	 * 			-> slot impressi/click masih ada (jika ngga, nonaktifkan, kirim notif)
+	 * 			-> pemiliknya masih punya cukup dana  (jika ngga, nonaktifkan, kirim notif)
+	 * 				-> untuk klik, transaksi dihitung tiap klik
+	 * 				-> untuk impressi, transaksi dihitung tiap kelipatan 1000
+	 * 			-> jika memenuhi syarat, maka tampilkan
+	 * 		-> jika yang memenuhi syarat lebih dari 1
+	 * 		   -> gunakan probabilitas campaign mana yang akan dipilih, melalui harga
+	 * 		   -> Jika yang terpilih memiliki 2 kandidat banner, maka banner yang ditampilkan yang bobotnya lebih tinggi
+	 * 		   -> jika bobotnya sama, pake random
+	 * 	
+	*/
+	private boolean checkValidNonExclusive(BannerPlacement bannerPlace){
+		Campaign campaign=bannerPlace.getBanner().getCampaign();
+		Banner banner = bannerPlace.getBanner();
+		//validasi banner
+		if(banner.isDeleted()){
+			return false;
+		}
+		if(!banner.isActive()){
+			return false;
+		}
+		
+		//validasi campaign
+		if(campaign.getCampaign_type()==CampaignTypeEnum.CONTRACT){
+			if(!campaign.isDeleted()){
+				if(campaign.isActivated()){
+					return checkContractCampaign(campaign);					
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkContractCampaign(Campaign campaign){
+		User user=campaign.getId_user();
+		Logger.debug("Check contract campaign "+user.getCurrent_balance());			
+		
+		if(user.getCurrent_balance()<campaign.getBid_price()){
+			//nonaktifkan
+			Logger.debug("non ekslusif dana ngga cukup "+user.getCurrent_balance());			
+
+			nonActivateCampaign(campaign);
+			sendEmptyDeposito(campaign);
+			return false;
+		}
+		if(campaign.getPricing_model()==PricingModelEnum.CPA){
+			if(campaign.getClickLeft()<1){
+				nonActivateCampaign(campaign);
+				return false;
+			}
+		}if(campaign.getPricing_model()==PricingModelEnum.CPM){
+			if(campaign.getImpressionLeft()<1){
+				nonActivateCampaign(campaign);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//mengembalikan id banner, dari campaign eklusif yang valid
+	//aturan validitas, lihat diatas
+	private int isContainExclusive(List<BannerPlacement> inputs){
+		List<Banner> result=new ArrayList<Banner>();
+		for(BannerPlacement bannerPlace:inputs){
+			if(checkValidExclusive(bannerPlace)){
+				result.add(bannerPlace.getBanner());
+			}
+		}
+		if(result.size()==0){ //kosong, ngga ada yang valid
+			return 0;
+		}else if(result.size()==1){ //cuman ada 1
+			return result.get(0).getId_banner();
+		}else{
+			return selectBannerBasedWeight(result);
+		}
+	}
+	//menangani >1 banner dalam iklan eklusif dalam campaign yang sama
+	private int selectBannerBasedWeight(List<Banner> banner){
+		int sum=0;
+		for(Banner item:banner){
+			sum=sum+item.getWeight();
+		}
+		if(sum==0){
+			sum=banner.size()+1;
+			for(Banner item:banner){
+				item.setWeight(1);
+			}
+		}
+		Banner[] bannerArray=new Banner[sum];
+		int i=0;
+		for(Banner item:banner){
+			for(int x=0;x<item.getWeight();x++){
+				bannerArray[i]=item;
+				Logger.debug(item.getName()+" "+i);
+				i++;
+			}
+		}
+		return bannerArray[new Random().nextInt(sum-1)].getId_banner(); //kembalikan id banner yang kepilih
 	}
 	/*
 	 * 	 * 	-> Aktif
+	 * 		-> Banner aktif
 	 * 		 -> Masih berlaku  -> jika ngga, nonaktifkan, dan kirim notifikasi
 	 * 		 -> Pemiliknya masih punya cukup dana, kalo ga cukup, nonaktifkan iklan, dan kirim notifikasi
 	 * 			-> transaksi dihitung tiap tampilan pertama dalam 1 hari
 	 * 			-> Artinya jika dalam sehari tidak ada impresi, maka tidak ada transaksi
 
 	 */
-	//cek apakah ada yang ekslusig atau
-	private boolean checkValidExclusive(BannerPlacement inputs){
+	
+	//cek apakah ada yang ekslusif atau ngga
+ 	private boolean checkValidExclusive(BannerPlacement inputs){
 		Campaign campaign=inputs.getBanner().getCampaign();
-		
+		Banner banner=inputs.getBanner();
+		//validasi banner
+		if(banner.isDeleted()){
+			return false;
+		}
+		if(!banner.isActive()){
+			return false;
+		}
+
+		//validasi campaign			
 		if(campaign.getCampaign_type()==CampaignTypeEnum.EXCLUSIVE){
 			if(!campaign.isDeleted()){
-				if(campaign.isActivated()){
-					
-				}
+				return checkExclusiveCampaign(campaign);
 			}
-			
-		return false;
 		}
+		return false;
 	}
 	//cek kevalidan campaign ekslusif (siap tampil nggak)
 	//ntar proses ini mesti dipisah
@@ -140,29 +350,49 @@ public class AdSelector {
 		Date to=campaign.getEnd_date();
 		
 		if(binder.todayIsBetween(from, to)){
-			if(!campaign.isActivated()){  //jika udah memasuki masa tampil, tapi belum tampil, kirim notif
-				sendActiveNotification(campaign); // kirim notifikasi kalo campaign mesti diaktifin
-				return false;
-			}else{ //sudah memasukin masa aktif dan telah diaktifkan
-				if(campaign.getId_user().getCurrent_balance()<campaign.getBid_price()){ //ga cukup duit
-					campaign.setActivated(false);
-					campaign.update();
-					sendNonActiveNotification(campaign);
-					return false;
+			if(!campaign.isActivated()){  //jika udah memasuki masa tampil, tapi belum tampil, dan uang cukup, kirim notif
+				if(isShouldActive(campaign)){  
+					sendActiveNotification(campaign);// kirim notifikasi kalo campaign mesti diaktifin
 				}
-				return true; //memenuhi syarat
+					return false;
+			}else{ //sudah memasukin masa aktif dan telah diaktifkan
+				return (isEnoughMoney(campaign))? true:false;  //jika uang cukup, maka oke
 			}
 		}else{ //jika diluar rentang campaign 
 			if(binder.isBeforeToday(to)){ //campaign diluar end date
 				if(campaign.isActivated()){ //kalo masih aktif, nonaktifin
-					campaign.setActivated(false);
-					campaign.update();
-					sendNonActiveNotification(campaign);
+					nonActivateCampaign(campaign);
 				}
 			}
 			return false; //campaign diluar rentang, artinya ga valid
 		}
 	}
+	private void  nonActivateCampaign(Campaign campaign){
+		campaign.setActivated(false);
+		campaign.update();
+		sendNonActiveNotification(campaign);
+	}
+	
+	//duitnya cukup ngga, kalo ngga, kirim notifikasi dan dinonaktifin
+	private boolean isEnoughMoney(Campaign campaign){
+		if(campaign.getId_user().getCurrent_balance()<campaign.getBid_price()){ //ga cukup duit
+			campaign.setActivated(false);
+			campaign.update();
+			sendEmptyDeposito(campaign);
+			sendNonActiveNotification(campaign);			
+			return false;
+		}
+		return true; //memenuhi syarat
+		
+	}
+	//apakah perlu aktif atau ngga dengan membandingkan anu
+	private boolean isShouldActive(Campaign campaign){
+		if(campaign.getId_user().getCurrent_balance()<campaign.getBid_price()){ //ga cukup duit			
+			return false;
+		}
+		return true; //memenuhi syarat
+		
+	}	
 	private void sendActiveNotification(Campaign campaign){
 		NotifItem item=new NotifItem();
 		item.setParam(new String[]{campaign.getCampaignName(),
@@ -192,7 +422,5 @@ public class AdSelector {
 		notif.pushNew(item);
 		notif.pushNew("ADMINISTRATOR",item);			
 	}	
-	private int selectNonExclusive(List<BannerPlacement> inputs){
-		return 0;
-	}
+
 }

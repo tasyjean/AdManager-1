@@ -105,8 +105,8 @@ pricingModel.flat.name=Harian
 pricingModel.flat.info=Biaya Iklan dihitung setiap 1 hari
 
 #notifikasi
-notif.active_ads=Campaign |nama_campaign|  diaktifkan
-notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan
+notif.active_ads=Campaign |nama_campaign| telah diaktifkan
+notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan secara otomatis
 notif.empty_deposito=Saldo tidak mencukupi, silahkan isi kembali
 notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi
 notif.validated=Pembayaran senilai |jumlah| telah divalidasi

@@ -16,6 +16,7 @@ import models.data.BannerSize;
 import models.service.ads_delivery.AdSelector;
 import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
+import models.service.notification.NotificationCenter;
 import play.Logger;
 import play.mvc.Content;
 import play.mvc.Result;
@@ -28,14 +29,14 @@ public class AdsDeliveryController extends CompressController {
 	static BannerProcessor banner=new BannerProcessor(manager);
 	static DateBinder binder=new DateBinder();
 	static CampaignProcessor campaign=new CampaignProcessor(binder,banner);
-	static AdSelector ad_selector= new AdSelector(banner, campaign);
-	
+	static NotificationCenter notif=new NotificationCenter();
+	static AdSelector ad_selector=new AdSelector(banner,campaign,binder,notif);
 
 	public static Result banner(int zone){
 		
 		final int zon=zone;
 
-		return ok(ad_selector.get(100));
+		return ok("Banner terpilih "+ad_selector.get(zone));
 	}
 	public static Result click(int impression){
 		

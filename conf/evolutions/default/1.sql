@@ -135,7 +135,7 @@ create table notification (
   notification_type         varchar(15),
   param                     varchar(255),
   is_read                   boolean,
-  constraint ck_notification_notification_type check (notification_type in ('NEW_USER','NEW_CAMPAIGN','SEE_REPORT','NEW_BANNER','ACTIVE_ADS','EMPTY_DEPOSITO','NON_ACTIVE_ADS','PLEASE_VALIDATE','VALIDATED')),
+  constraint ck_notification_notification_type check (notification_type in ('NEW_USER','NEW_CAMPAIGN','SEE_REPORT','ACTIVE_ADS','EMPTY_DEPOSITO','NON_ACTIVE_ADS','PLEASE_VALIDATE','VALIDATED')),
   constraint pk_notification primary key (id_notification))
 ;
 
