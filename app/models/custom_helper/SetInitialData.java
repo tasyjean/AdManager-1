@@ -229,10 +229,10 @@ public class SetInitialData {
 						DefaultViewEnum.EMPTY, 
 						"Kosong");
 				zone9.save();
-				Zone zone10=new Zone("Banner Leader Board untuk teks", 
+				Zone zone10=new Zone("Banner Leader Board untuk Banner", 
 						"Banner leaderboard untuk tema internet", 
 						channel4, 
-						banners.get(3), 
+						banners.get(2), 
 						ZoneTypeEnum.BANNER, 
 						DefaultViewEnum.EMPTY, 
 						"Kosong");
