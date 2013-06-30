@@ -54,6 +54,7 @@ public class NotificationController extends CompressController {
 				default:
 					break;
 				}
+			notif.setRead(idNotif);
 		} catch (Exception e) {
 			call=controllers.backend.routes.ProfileController.showProfile();
 			e.printStackTrace();

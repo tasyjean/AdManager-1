@@ -83,23 +83,24 @@ public class AdSelector {
 		this.random=new Random();
 	}
 	//return value[]= id banner, [0]=0 jika zona kosong
-	public int[] get(int zone_id){
+	public List<BannerPlacement> get(int zone_id){
 
 		//langkah 1, populasikan placement aktif
 		List<BannerPlacement> banners=BannerPlacement.find.where().
 													 eq("zone", Zone.find.byId(zone_id)).
 													 eq("isActive", true).findList();
 		Logger.debug("banner placement  size "+banners.size());
+		List<BannerPlacement> result=null;
 		//jika ngga ada, return 0 
 		if(banners.size()==0){
-			return new int[]{0};
+			return result;
 		}		
 		//langkah 2 populasikan banner yang campaignnya ekslusif
 		int selected=isContainExclusive(banners);
 		Logger.debug("cek ekslusif "+selected);			
 
 		if(selected>0){
-			return new int[]{selected};
+			return populateFromInt(banners, new int[]{selected});
 		}
 		//langkah 3 populasikan banner yang campaign non eklusif
 		Zone zone=Zone.find.byId(zone_id);
@@ -112,13 +113,27 @@ public class AdSelector {
 				textBanner=selectBannerNonExclusive(banners, 3);
 			}
 			
-			return textBanner;
+			return populateFromInt(banners, textBanner);
 		}
 		
 		int[] selectedContract=selectBannerNonExclusive(banners,1);
 		Logger.debug("cek kontrak "+selectedContract);			
 		
-		return selectedContract;
+		return populateFromInt(banners, selectedContract);
+	}
+	private List<BannerPlacement> populateFromInt(List<BannerPlacement>  banners, int[] input){
+		List<BannerPlacement> result = new ArrayList<BannerPlacement>();
+		int x=0;
+		for(int i:input){
+			for(BannerPlacement place:banners){
+				if(input[x]==place.getBanner().getId_banner()){
+					result.add(place);
+				}
+			}
+			x++;
+		}
+		Logger.debug("Result size : "+result.size());
+		return result;
 	}
 	//mempopulasikan banner non ekslusif
 	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count){

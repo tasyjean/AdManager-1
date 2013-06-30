@@ -124,11 +124,11 @@ public class NotificationCenter {
 								        .order().asc("timestamp")
 								        .findPagingList(show)
 								        .getPage(page);	
-			for(Notification notif:notifs.getList()){
-				if(!notif.isRead()){
-					setRead(notif);
-				}
-			}
+//			for(Notification notif:notifs.getList()){
+//				if(!notif.isRead()){
+//					setRead(notif);
+//				}
+//			}
 			return notifs;
 		} catch (Exception e) {
 			e.printStackTrace();

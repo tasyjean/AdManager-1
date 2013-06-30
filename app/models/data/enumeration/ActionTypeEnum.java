@@ -4,10 +4,10 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum ActionTypeEnum {
 
-	@EnumValue("click")
+	@EnumValue("CLICK")
 	CLICK,
-	@EnumValue("hide")
+	@EnumValue("HIDE")
 	HIDE,
-	@EnumValue("like")
+	@EnumValue("LIKE")
 	LIKE
 }

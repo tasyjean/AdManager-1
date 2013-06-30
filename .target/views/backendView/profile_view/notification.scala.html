@@ -7,47 +7,54 @@
 @main("Profil Pengguna"){
 	
 		@dashboard_content("Profil Pengguna","Notifikasi","notifikasi"){
+		
 		 <div class="content-padding">
 		 <h3>Daftar Notifikasi</h3>
-		 <h5>Menampilkan Halaman @(notification.getPageIndex+1) dari total @(notification.getTotalPageCount)</h5>
-		 <ul style="list-style: none;padding-left: 1px">
-		 @for(notif<-notification.getList){
-		 	<li style="max-width: 520px;margin:10px 0 10px 0; " >
-		 		<div style="background-color:#ecf0f3;padding:5px;border-left: 8px solid #8ea7b7 ">
-			 		<a style="color:  #2b3a44; font-weight: 500;"
-			 			href="@controllers.backend.routes.NotificationController.getLink(notif.getId_notification)">
-			 			@notif.getParsedText
-			 		</a><br>
-			 		<p style="display:inline;font-size: 10px;color:#999999;">@notif.getTimeStamp_formatted</p>
-		 		</div>
-		 	</li>
-		 }
-		 </ul>
-		 	<div id="pagination" style="margin-left: 30px" class="pagination">
-		            <ul>
-		                @if(notification.hasPrev) {
-		                    <li class="prev">
-		                        <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex - 1)">&larr; Previous</a>
-		                    </li>
-		                } else {
-		                    <li class="prev disabled">
-		                        <a>&larr; Sebelumnya</a>
-		                    </li>
-		                }
-		                <li class="current">
-		                    <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex)">--- @notification.getPageIndex ---</a>
-		                </li>
-		                @if(notification.hasNext) {
-		                    <li class="next">
-		                        <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex + 1)">Next &rarr;</a>
-		                    </li>
-		                } else {
-		                    <li class="next disabled">
-		                        <a>Selanjutnya &rarr;</a>
-		                    </li>
-		                }
-		            </ul>
-		        </div>
+		@if(notification.getList.size==0){
+			<h5>Tidak ada notifikasi</h5>
+		}else{
+			 <h5>Menampilkan Halaman @(notification.getPageIndex+1) dari total @(notification.getTotalPageCount) halaman</h5>
+			 <ul style="list-style: none;margin-left: 4px">
+			 @for(notif<-notification.getList){
+			 	<li style="max-width: 520px;margin:10px 0 10px 0; " >
+			 		<div style="background-color:@if(notif.isRead){#ecf0f3}else{#ccf5ff};
+			 			 padding:5px;border-left: 8px solid 
+			 			 @if(notif.isRead){#418ebf}else{#005d99} ">
+				 		<a style="color:  #2b3a44; font-weight: 500;"
+				 			href="@controllers.backend.routes.NotificationController.getLink(notif.getId_notification)">
+				 			@notif.getParsedText
+				 		</a><br>
+				 		<p style="display:inline;font-size: 10px;color:#999999;">@notif.getTimeStamp_formatted</p>
+			 		</div>
+			 	</li>
+			 }
+			 </ul>
+			 	<div id="pagination" style="margin-left: 30px" class="pagination">
+			            <ul>
+			                @if(notification.hasPrev) {
+			                    <li class="prev">
+			                        <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex - 1)">&larr; Previous</a>
+			                    </li>
+			                } else {
+			                    <li class="prev disabled">
+			                        <a>&larr; Sebelumnya</a>
+			                    </li>
+			                }
+			                <li class="current">
+			                    <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex)">--- @notification.getPageIndex ---</a>
+			                </li>
+			                @if(notification.hasNext) {
+			                    <li class="next">
+			                        <a href="@controllers.backend.routes.NotificationController.notifPage(notification.getPageIndex + 1)">Next &rarr;</a>
+			                    </li>
+			                } else {
+			                    <li class="next disabled">
+			                        <a>Selanjutnya &rarr;</a>
+			                    </li>
+			                }
+			            </ul>
+			        </div>
+			   } @*end if*@
 		       </div>
     	}
 

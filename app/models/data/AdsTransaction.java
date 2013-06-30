@@ -20,13 +20,12 @@ public class AdsTransaction extends Model {
 	@Id
 	private int id_ads_transaction;
 	@ManyToOne
-	private Banner banner;
+	private BannerPlacement bannerPlacement;
 	private PricingModelEnum transaction_type;
 	private int amount;
 	private int current_balance;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
-	private boolean isDeleted;
 	
 	public static Model.Finder<Integer,AdsTransaction> find = new Model.Finder(Integer.class, AdsTransaction.class);
 
@@ -40,13 +39,7 @@ public class AdsTransaction extends Model {
 		this.id_ads_transaction = id_ads_transaction;
 	}
 
-	public Banner getBanner() {
-		return banner;
-	}
 
-	public void setBanner(Banner banner) {
-		this.banner = banner;
-	}
 
 	public PricingModelEnum getTransaction_type() {
 		return transaction_type;
@@ -80,13 +73,7 @@ public class AdsTransaction extends Model {
 		this.timestamp = timestamp;
 	}
 
-	public boolean isDeleted() {
-		return isDeleted;
-	}
 
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
 
 	public static Model.Finder<Integer, AdsTransaction> getFind() {
 		return find;
@@ -94,6 +81,14 @@ public class AdsTransaction extends Model {
 
 	public static void setFind(Model.Finder<Integer, AdsTransaction> find) {
 		AdsTransaction.find = find;
+	}
+
+	public BannerPlacement getBannerPlacement() {
+		return bannerPlacement;
+	}
+
+	public void setBannerPlacement(BannerPlacement bannerPlacement) {
+		this.bannerPlacement = bannerPlacement;
 	}
 	
 	
