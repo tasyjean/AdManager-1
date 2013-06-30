@@ -5,12 +5,11 @@
 
 create table ads_transaction (
   id_ads_transaction        integer not null,
-  banner_id_banner          integer,
+  banner_placement_id_banner_placement integer,
   transaction_type          varchar(4),
   amount                    integer,
   current_balance           integer,
   timestamp                 timestamp,
-  is_deleted                boolean,
   constraint ck_ads_transaction_transaction_type check (transaction_type in ('cpm','cpa','flat')),
   constraint pk_ads_transaction primary key (id_ads_transaction))
 ;
@@ -43,7 +42,7 @@ create table banner_action (
   impression_id_impression  bigint,
   action_type               varchar(5),
   timestamp                 timestamp,
-  constraint ck_banner_action_action_type check (action_type in ('hide','like','click')),
+  constraint ck_banner_action_action_type check (action_type in ('HIDE','LIKE','CLICK')),
   constraint pk_banner_action primary key (id_banner_action))
 ;
 
@@ -255,8 +254,8 @@ create sequence zone_seq;
 
 create sequence zone_channel_seq;
 
-alter table ads_transaction add constraint fk_ads_transaction_banner_1 foreign key (banner_id_banner) references banner (id_banner);
-create index ix_ads_transaction_banner_1 on ads_transaction (banner_id_banner);
+alter table ads_transaction add constraint fk_ads_transaction_bannerPlace_1 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
+create index ix_ads_transaction_bannerPlace_1 on ads_transaction (banner_placement_id_banner_placement);
 alter table banner add constraint fk_banner_campaign_2 foreign key (campaign_id_campaign) references campaign (id_campaign);
 create index ix_banner_campaign_2 on banner (campaign_id_campaign);
 alter table banner add constraint fk_banner_bannerSize_3 foreign key (banner_size_id_banner_size) references banner_size (id_banner_size);

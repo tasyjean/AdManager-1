@@ -83,11 +83,11 @@ public class AdSelector {
 		this.random=new Random();
 	}
 	//return value[]= id banner, [0]=0 jika zona kosong
-	public List<BannerPlacement> get(int zone_id){
+	public List<BannerPlacement> get(Zone zone){
 
 		//langkah 1, populasikan placement aktif
 		List<BannerPlacement> banners=BannerPlacement.find.where().
-													 eq("zone", Zone.find.byId(zone_id)).
+													 eq("zone", zone).
 													 eq("isActive", true).findList();
 		Logger.debug("banner placement  size "+banners.size());
 		List<BannerPlacement> result=null;
@@ -103,7 +103,6 @@ public class AdSelector {
 			return populateFromInt(banners, new int[]{selected});
 		}
 		//langkah 3 populasikan banner yang campaign non eklusif
-		Zone zone=Zone.find.byId(zone_id);
 		int[] textBanner ={0};
 		if(zone.getZone_type()==ZoneTypeEnum.TEXT){
 			if(zone.getBanner_size().getName().equals("LeaderBoard")){

@@ -12,9 +12,12 @@ import models.custom_helper.DateBinder;
 import models.custom_helper.file_manager.FileManagerFactory;
 import models.custom_helper.file_manager.FileManagerInterface;
 import models.data.Banner;
+import models.data.BannerAction;
 import models.data.BannerPlacement;
 import models.data.BannerSize;
 import models.data.Impression;
+import models.data.Zone;
+import models.data.enumeration.ZoneTypeEnum;
 import models.service.ads_delivery.AdActionProcessor;
 import models.service.ads_delivery.AdSelector;
 import models.service.ads_delivery.AdsDeliverer;
@@ -24,6 +27,7 @@ import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 import models.service.notification.NotificationCenter;
 import play.Logger;
+import play.mvc.Call;
 import play.mvc.Content;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -45,21 +49,45 @@ public class AdsDeliveryController extends CompressController {
 	
 	
 	public static Result banner(int zone, String source){
-		
-		List<BannerPlacement> result=ad_selector.get(zone);
+		Zone zone_object=Zone.find.byId(zone);
+		List<BannerPlacement> result=ad_selector.get(zone_object);
 		if(result.size()==0){
-			
+			return ok();
 		}else{
-			Impression[] impression=new Impression[result.size()];
+			List<Impression> impression=new ArrayList<Impression>();
+			List<Banner> banner=new ArrayList<Banner>();
 			int i=0;
 			for(BannerPlacement bannerPlacement:result){
-				impression[i]=adsDeliverer.countImpression(bannerPlacement, source, Context.current());
-			}			
+				impression.add(adsDeliverer.countImpression(bannerPlacement, source, Context.current()));
+				banner.add(bannerPlacement.getBanner());
+			}
+			if(zone_object.getZone_type()==ZoneTypeEnum.BANNER){
+				//pastikan ukurannya 1
+				Banner banner_send=banner.get(0);
+				Impression impression_send=impression.get(0);
+				String fileName=banner_send.getContent_link().getName();
+				String tipe="";
+				if(fileName.endsWith("swf")){
+					tipe="SWF";
+				}else{
+					tipe="IMAGE";
+				}
+					return ok(banner_ads_production.render(banner_send,impression_send,tipe));
+				
+			}else{
+				return ok(text_ads_production.render(banner,impression,zone_object.getBanner_size()));
+			}
 		}
-		return ok();
+
 	}
-	public static Result clickHandler(int impression){
-		return ok();
+	public static Result clickHandler(long impression){
+		Impression impresi=Impression.find.byId(impression);
+		String route=impresi.getAdsPlacement().getBanner().getTarget();
+		BannerAction action=adAction.click(impresi);
+		if(action==null){
+			Logger.error("Terjadi exception pada pencatatan click");
+		}
+		return redirect(route);
 	}
 	
 	public static Result getBanner(int idBanner){

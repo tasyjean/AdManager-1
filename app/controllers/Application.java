@@ -155,6 +155,7 @@ public class Application extends CompressController {
     	return ok();
     }
     public static Result testDatabase(){
-    	return ok(User.find.where().eq("email", "komputok@gmail.com").findList().get(0).getEmail());
+//    	return ok(User.find.where().eq("email", "komputok@gmail.com").findList().get(0).getEmail());
+    	return ok("<h1>setangkai anggrek bulan.....</h1>");
     }
 }

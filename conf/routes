@@ -20,9 +20,10 @@ POST 	/forget_password				controllers.frontend.FrontEndController.forgetProcess(
 GET 	/activate/:email/:key			controllers.frontend.FrontEndController.activate(email:String, key:String)
 
 #ads delivery
-GET    /adsdelivery/:zone					controllers.backend.AdsDeliveryController.banner(zone:Integer)
+GET    /adsdelivery/:zone/:source			controllers.backend.AdsDeliveryController.banner(zone:Integer,source:String)
 GET    /adsdelivery/banner/:idBanner		controllers.backend.AdsDeliveryController.getBanner(idBanner:Integer)
 GET    /adsdelivery/banner/text/:idBanner	controllers.backend.AdsDeliveryController.getSingleTextBanner(idBanner:Integer)
+GET    /click/:idImpression					controllers.backend.AdsDeliveryController.clickHandler(idImpression:Long)
 
 #campaign
 GET   /dashboard/campaign/:page													controllers.backend.CampaignController.showCampaign(page:Integer)
