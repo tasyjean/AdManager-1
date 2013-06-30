@@ -50,7 +50,7 @@ GET   /dashboard/finance					controllers.backend.FinanceController.index()
 
 #profile
 GET   /dashboard/profile					controllers.backend.ProfileController.showProfile()
-GET   /dashboard/notification				controllers.backend.ProfileController.showNotification()
+GET   /dashboard/notification/:page			controllers.backend.NotificationController.notifPage(page:Integer)
 GET	  /dashboard/profile/edit/1				controllers.backend.ProfileController.editProfileBasic()
 POST  /dashboard/profile/edit/1				controllers.backend.ProfileController.updateProfileBasic()
 GET	  /dashboard/profile/edit/3				controllers.backend.ProfileController.editProfilePicture()
@@ -63,6 +63,8 @@ GET	  /dashboard/profile/delete/:id_contact controllers.backend.ProfileControlle
 GET   /dashboard/profile/edit/4				controllers.backend.ProfileController.changePassword()
 POST  /dashboard/profile/edit/4				controllers.backend.ProfileController.savePassword()
 
+#notification
+GET /getLink/:idNotif						controllers.backend.NotificationController.getLink(idNotif:Integer)				
 
 #setting
 GET   /dashboard/setting/:page				controllers.backend.SettingController.showSetting(page:Integer)

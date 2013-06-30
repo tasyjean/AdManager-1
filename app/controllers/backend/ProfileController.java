@@ -57,14 +57,6 @@ public class ProfileController extends CompressController {
 		return ok(profile_index.render(data, user));
 	}
 	
-	@SubjectPresent
-	@With(DataFiller.class)
-	public static Result showNotification(){
-		TemplateData data = (TemplateData) 
-				Http.Context.current().args.get("templateData");	
-		User user=auth.getUserLogin(session());
-		return ok(notification.render(data, user));
-	}
 	
 	@With(DataFiller.class)
 	@SubjectPresent	

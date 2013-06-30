@@ -1,5 +1,6 @@
 package models.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -51,7 +52,10 @@ public class Notification extends Model{
 	public NotificationType getNotification_type() {
 		return notification_type;
 	}
-
+	public  String getTimeStamp_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
+		return format.format(timestamp);
+	}
 	public void setNotification_type(NotificationType notification_type) {
 		this.notification_type = notification_type;
 	}

@@ -22,6 +22,7 @@ import models.data.User;
 import models.data.Zone;
 import models.data.enumeration.CampaignTypeEnum;
 import models.data.enumeration.PricingModelEnum;
+import models.data.enumeration.ZoneTypeEnum;
 /*
  * Untuk menyeleksi iklan
  */
@@ -81,7 +82,7 @@ public class AdSelector {
 		this.notif=notif;
 		this.random=new Random();
 	}
-	//return value= id banner, 0 jika zona kosong
+	//return value[]= id banner, [0]=0 jika zona kosong
 	public int[] get(int zone_id){
 
 		//langkah 1, populasikan placement aktif
@@ -101,13 +102,23 @@ public class AdSelector {
 			return new int[]{selected};
 		}
 		//langkah 3 populasikan banner yang campaign non eklusif
-		int selectedContract=selectBannerNonExclusive(banners);
+		Zone zone=Zone.find.byId(zone_id);
+		int[] textBanner ={0};
+		if(zone.getZone_type()==ZoneTypeEnum.TEXT){
+			if(zone.getBanner_size().getName().equals("LeaderBoard")){
+				textBanner=selectBannerNonExclusive(banners, 2);
+			}
+			if(zone.getBanner_size().getName().equals("Medium Rectangle")){
+				textBanner=selectBannerNonExclusive(banners, 3);
+			}
+			
+			return textBanner;
+		}
+		
+		int[] selectedContract=selectBannerNonExclusive(banners,1);
 		Logger.debug("cek kontrak "+selectedContract);			
 		
-		if(selectedContract>0){
-			return new int[]{selectedContract};
-		}
-		return new int[]{0};
+		return selectedContract;
 	}
 	//mempopulasikan banner non ekslusif
 	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count){
@@ -124,7 +135,7 @@ public class AdSelector {
 			return new int[]{result.get(0).getId_banner()};
 		}else{
 			if(count>1){
-				
+				return selectMultipleBanner(result, count);
 			}else{
 				return new int[]{selectBannerBasedBidPrice(result)};
 			}
@@ -420,7 +431,7 @@ public class AdSelector {
 		item.setType(NotificationType.EMPTY_DEPOSITO);
 		item.setUser(campaign.getId_user());
 		notif.pushNew(item);
-		notif.pushNew("ADMINISTRATOR",item);			
+//		notif.pushNew("ADMINISTRATOR",item);			
 	}	
 
 }

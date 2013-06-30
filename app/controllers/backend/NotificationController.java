@@ -9,11 +9,13 @@ import models.service.notification.NotificationCenter;
 import com.avaje.ebean.Page;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import play.mvc.Call;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
 import controllers.CompressController;
 import controllers.action.DataFiller;
+import views.html.backendView.profile_view.notification;
 
 public class NotificationController extends CompressController {
 
@@ -33,15 +35,30 @@ public class NotificationController extends CompressController {
 	static Authenticator auth=new Authenticator();
 	
 	public static Result getLink(int idNotif){
-		Notification notification=Notification.find.byId(idNotif);
-		switch (notification.getNotification_type()) {
-		case ACTIVE_ADS:
-			break;
-
-		default:
-			break;
+		Call call;
+		try {
+			Notification notification=Notification.find.byId(idNotif);
+			int parameter=Integer.parseInt(notification.getParam().split(",")[1]);
+			
+			call = null;
+			switch (notification.getNotification_type()) {
+				case ACTIVE_ADS:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
+				case EMPTY_DEPOSITO:call=controllers.backend.routes.ProfileController.showProfile();break;
+				case NEW_CAMPAIGN:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
+				case NEW_USER:call=controllers.backend.routes.UserController.showSingleUser(parameter);break;
+				case NON_ACTIVE_ADS:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
+				case PLEASE_VALIDATE:call=controllers.backend.routes.ProfileController.showProfile();break;
+				case VALIDATED :call=controllers.backend.routes.ProfileController.showProfile();break;
+				case SEE_REPORT:call=controllers.backend.routes.ReportController.index();break;
+				case SHOULD_ACTIVE:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
+				default:
+					break;
+				}
+		} catch (Exception e) {
+			call=controllers.backend.routes.ProfileController.showProfile();
+			e.printStackTrace();
 		}
-		return ok();
+		return redirect(call);
 	}
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -49,8 +66,11 @@ public class NotificationController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		User user=auth.getUserLogin(session());
+		page=page-1;
 		Page<Notification>  notifications=notif.getListNotif(50, page, user);
-		
-		return ok();
+		notifications.getPageIndex();
+		notifications.getTotalRowCount();
+		notifications.getTotalPageCount();
+		return ok(notification.render(data, notifications));
 	}
 }
