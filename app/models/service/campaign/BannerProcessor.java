@@ -307,6 +307,37 @@ public class BannerProcessor {
 			return null;
 		}
 	}
+	//untuk menandai mana yang udah kepilih
+	public List<String[]> getZoneAvailableGrouped(List<Zone> zones, List<BannerPlacement> selected){
+		
+		try {
+			int channel=0;
+			int i=0;
+			List<String[]> result=new ArrayList<String[]>();
+			for(Zone zone:zones){
+				String string_selected="";
+				for(BannerPlacement place:selected){
+					if(place.getZone().getId_zone()==zone.getId_zone()){
+						string_selected="selected";
+					}
+				}
+				if(!(zone.getZone_channel().getId_zone_channel()==channel)){
+					String[] add={"CHANNEL","",zone.getZone_channel().getChannel_name()};
+					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(),string_selected};
+					result.add(add);
+					result.add(add2);
+				}else{
+					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(), string_selected};
+					result.add(add);				
+				}
+				channel=zone.getZone_channel().getId_zone_channel();	
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
 	/*
 	 * Nyimpen banner placement
 	 * langsung insert aja, kalo update baru agak ribet

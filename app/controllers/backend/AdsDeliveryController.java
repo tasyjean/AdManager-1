@@ -11,6 +11,7 @@ import java.util.List;
 import models.custom_helper.DateBinder;
 import models.custom_helper.file_manager.FileManagerFactory;
 import models.custom_helper.file_manager.FileManagerInterface;
+import models.custom_helper.setting.SettingManager;
 import models.data.Banner;
 import models.data.BannerAction;
 import models.data.BannerPlacement;
@@ -46,7 +47,7 @@ public class AdsDeliveryController extends CompressController {
 	static ImpressionProcessor impression=new ImpressionProcessor(flatProcessor);
 	static AdActionProcessor adAction=new AdActionProcessor();
 	static AdsDeliverer adsDeliverer=new AdsDeliverer(impression);
-	
+	static SettingManager setting=new SettingManager();
 	
 	public static Result banner(int zone, String source){
 		Zone zone_object=Zone.find.byId(zone);

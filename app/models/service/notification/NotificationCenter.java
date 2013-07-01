@@ -121,7 +121,7 @@ public class NotificationCenter {
 		try {
 			Page<Notification> notifs=Notification.find.where()
 			    		  				.eq("user", user)
-								        .order().asc("timestamp")
+								        .order().desc("timestamp")
 								        .findPagingList(show)
 								        .getPage(page);	
 //			for(Notification notif:notifs.getList()){

@@ -26,7 +26,10 @@
                   }
                   @if(title=="Pengaturan"){
                   	@settingMenu(activeMenu)
-                  }				                  
+                  }
+                  @if(title=="Keuangan"){
+                  	@financeMenu(activeMenu)
+                  }                  				                  
                					
                   </div>
                 </section>
@@ -127,15 +130,46 @@
             <div class="kpi">Pengaturan Iklan</div>
             <div class="small">Mengatur tampilan iklan</div>
          </div>
-        </a>    
+        </a> 
+      <a class="span2 sub-menu @("active".when(activeMenu=="pengaturan konten"))"
+          href="@controllers.backend.routes.SettingController.showSetting(2)">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Pengaturan Konten</div>
+            <div class="small">Mengatur Tampilan Konten</div>
+         </div>
+        </a>            
     }    
 }
 @financeMenu(activeMenu:String="")={
-     	<div class="span2 sub-menu">
-            <div class="kpi">Daftar Transaksi</div>
-             <div><small>Daftar Transaksi</small></div>
-        </div>		
-
+      <a class="span2 sub-menu @("active".when(activeMenu=="riwayat transaksi"))"
+          href="@controllers.backend.routes.FinanceController.index()">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Riwayat Transaksi</div>
+            <div class="small">Melihat Riwayat Transaksi</div>
+         </div>
+        </a>  		
+    @restrict(la(as("advertiser"))){                     
+      <a class="span2 sub-menu @("active".when(activeMenu=="pengisian saldo"))"
+          href="@controllers.backend.routes.FinanceController.index()">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Pengisian Saldo</div>
+            <div class="small">Mengisi Saldo Akun</div>
+         </div>
+        </a> 
+      }
+    @restrict(la(as("manager"))){                     
+      <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran"))"
+          href="@controllers.backend.routes.FinanceController.index()">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Pembayaran</div>
+            <div class="small">Mengelola Pembayaran</div>
+         </div>
+        </a> 
+      }      
 }
 @profileMenu(activeMenu:String="")={
       <a  class="span2 sub-menu @("active".when(activeMenu=="data profil"))"

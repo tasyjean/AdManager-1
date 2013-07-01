@@ -395,7 +395,7 @@ public class CampaignController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		Banner banner=Banner.find.byId(idBanner);
 		List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
-		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement());
 		return ok(edit_banner_placement.render(data,banner,zones_group));		
 	}	
 	@Restrict({@Group("administrator"), @Group("advertiser")})
@@ -412,7 +412,7 @@ public class CampaignController extends CompressController {
 		}else{
 			flash("error","Kesalahan dalam penempatan banner");
 			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);			
-			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement());
 			return ok(edit_banner_placement.render(data, banner, zones_group));
 		}		
 	}

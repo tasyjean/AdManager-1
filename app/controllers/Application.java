@@ -34,6 +34,7 @@ import controllers.frontend.*;
 import views.html.*;
 import views.html.test.*;
 import views.html.frontendView.*;
+import views.html.ui_component.ads.*;
 import controllers.frontend.FrontEndController;
 
 public class Application extends CompressController {
@@ -157,5 +158,10 @@ public class Application extends CompressController {
     public static Result testDatabase(){
 //    	return ok(User.find.where().eq("email", "komputok@gmail.com").findList().get(0).getEmail());
     	return ok("<h1>setangkai anggrek bulan.....</h1>");
+    }
+    public static Result testJS(String url){
+
+    	Logger.debug(url);
+    	return ok(empty_ads.render("<h1><a href="+url+">"+url+"</a></h1>"));
     }
 }
