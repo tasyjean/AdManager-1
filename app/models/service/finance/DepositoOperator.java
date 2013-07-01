@@ -59,6 +59,7 @@ public class DepositoOperator {
 		deposito.setCurrent_balance(current_balance+transfer.getAmount());
 		deposito.setPayment_method(PaymentMethodEnum.TRANSFER);
 		deposito.setDescription(transfer.getDescription());
+
 		return true;
 	}
 	public boolean deleteTransfer(TransferConfirmation transfer){
