@@ -25,6 +25,7 @@ validation.endDate=Waktu selesai harus setelah waktu mulai
 validation.wrongInput=Masukan tidak valid
 validation.startdateRequired=Tanggal mulai campaign harus diisi
 validation.enddateRequired=Tanggal selesai campaign harus diisi
+validation.amount_kurang=Jumlah tidak boleh kurang dari 0
 error.invalid=Tipe data tidak valid
 error.invalid.java.util.Date=Invalid date value
 error.title_required=Judul Tidak boleh kosong
@@ -39,6 +40,7 @@ error.weight_range=Bobot harus antara 0-10
 error.url_salah=Alamat URL untuk link banner tidak valid
 error.campaign_salah=Campaign tidak valid, ulangi pengisian form melalui detail campaign
 error.description=Deskripsi terlalu panjang, maksimal {0} karakter
+
 #Default
 
 # --- Constraints
@@ -107,7 +109,7 @@ pricingModel.flat.info=Biaya Iklan dihitung setiap 1 hari
 #notifikasi
 notif.active_ads=Campaign |nama_campaign| telah diaktifkan
 notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan secara otomatis
-notif.empty_deposito=Saldo tidak mencukupi, silahkan isi kembali
+notif.empty_deposito=Saldo tidak mencukupi untuk menampilkan iklan, silahkan isi kembali
 notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi
 notif.validated=Pembayaran senilai |jumlah| telah divalidasi
 notif.see_report= Silahkan lihat laporan iklan
@@ -115,3 +117,7 @@ notif.new_campaign=|nama_user| telah membuat campaign baru
 notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar
 notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai
  
+
+#Payment  method
+payment.transfer=Via Transfer Bank
+

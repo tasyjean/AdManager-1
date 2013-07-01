@@ -103,10 +103,10 @@ create table deposito (
   description               TEXT,
   timestamp_created         timestamp,
   timestamp_validated       timestamp,
-  transfer_evidence         varchar(400),
-  payment_method            varchar(255),
+  payment_method            varchar(8),
   is_validated              boolean,
   is_deleted                boolean,
+  constraint ck_deposito_payment_method check (payment_method in ('TRANSFER')),
   constraint pk_deposito primary key (id_deposito))
 ;
 

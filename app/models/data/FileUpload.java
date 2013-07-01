@@ -27,7 +27,6 @@ public class FileUpload extends Model {
 
     @Id
     private int id;
-
     private String path;
     private String url_path;
     private String name;

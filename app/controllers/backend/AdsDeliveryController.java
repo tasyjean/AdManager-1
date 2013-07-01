@@ -51,6 +51,7 @@ public class AdsDeliveryController extends CompressController {
 	
 	public static Result banner(int zone, String source){
 		Zone zone_object=Zone.find.byId(zone);
+		
 		List<BannerPlacement> result=ad_selector.get(zone_object);
 		if(result.size()==0){
 			return ok();
