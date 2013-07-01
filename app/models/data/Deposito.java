@@ -46,12 +46,6 @@ public class Deposito extends Model {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public User getUser_validator() {
-		return user_validator;
-	}
-	public void setUser_validator(User user_validator) {
-		this.user_validator = user_validator;
-	}
 	public int getCurrent_balance() {
 		return current_balance;
 	}
@@ -64,48 +58,24 @@ public class Deposito extends Model {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getTimestamp_created() {
-		return timestamp_created;
-	}
-	public void setTimestamp_created(Date timestamp_created) {
-		this.timestamp_created = timestamp_created;
-	}
-	public Date getTimestamp_validated() {
-		return timestamp_validated;
-	}
-	public void setTimestamp_validated(Date timestamp_validated) {
-		this.timestamp_validated = timestamp_validated;
-	}
-	
-	public boolean isValidated() {
-		return isValidated;
-	}
-	public void setValidated(boolean isValidated) {
-		this.isValidated = isValidated;
-	}
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
 	public int getAmount() {
 		return amount;
 	}
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public FileUpload getTransfer_evidence() {
-		return transfer_evidence;
-	}
-	public void setTransfer_evidence(FileUpload transfer_evidence) {
-		this.transfer_evidence = transfer_evidence;
-	}
+
 	public PaymentMethodEnum getPayment_method() {
 		return payment_method;
 	}
 	public void setPayment_method(PaymentMethodEnum payment_method) {
 		this.payment_method = payment_method;
+	}
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 	
 	

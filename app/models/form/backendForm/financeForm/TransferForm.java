@@ -17,7 +17,7 @@ public class TransferForm {
 	public String description;
 	public String transfer_date;
 	public String senderBankAccount;
-	SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm");
+	SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy hh:mm");
 	
 	DateBinder binder=new DateBinder(); 
 	public List<ValidationError> validate(){
@@ -36,7 +36,7 @@ public class TransferForm {
 			}	
 			Date date =format.parse(transfer_date);
 			if(binder.isAfterToday(date)){
-				error.add(new ValidationError("validation.transfer_date", Messages.get("validation.transfer_date")));
+				error.add(new ValidationError("transfer_date", Messages.get("validation.transfer_date")));
 			}
 			if(senderBankAccount.length()==0){
 				error.add(new ValidationError("senderBankAccont",Messages.get("error.description",500+"")));				

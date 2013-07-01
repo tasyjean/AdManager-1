@@ -151,17 +151,17 @@
          </div>
         </a>  		
     @restrict(la(as("advertiser"))){                     
-      <a class="span2 sub-menu @("active".when(activeMenu=="pengisian saldo"))"
+      <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-advertiser"))"
           href="@controllers.backend.routes.FinanceController.index()">
           <div class="icon"></div>
          <div class="content" >
-            <div class="kpi">Pengisian Saldo</div>
-            <div class="small">Mengisi Saldo Akun</div>
+            <div class="kpi">Pembayaran</div>
+            <div class="small">Melakukan Pembayaran</div>
          </div>
         </a> 
       }
     @restrict(la(as("manager"))){                     
-      <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran"))"
+      <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-manager"))"
           href="@controllers.backend.routes.FinanceController.index()">
           <div class="icon"></div>
          <div class="content" >

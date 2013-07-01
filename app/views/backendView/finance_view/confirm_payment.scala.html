@@ -1,0 +1,174 @@
+@(data: TemplateData, user:User,transfer_form:Form[TransferForm], content:String, rekening:List[UserContact]) 
+  formData:BannerFormData)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+@generateError()={
+	@if(transfer_form.hasErrors){
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<ul>
+			@if(transfer_form.error("amount")!=null){
+				<li>
+				@transfer_form.error("amount").message()
+				</li>
+			}					
+			@if(transfer_form.error("description")!=null){
+				<li>
+				@transfer_form.error("description").message()
+				</li>
+			}	
+			@if(transfer_form.error("transfer_date")!=null){
+				<li>
+				@transfer_form.error("transfer_date").message()
+				</li>
+			}	
+			@if(transfer_form.error("senderBankAccount")!=null){
+				<li>
+				@transfer_form.error("senderBankAccount").message()
+				</li>
+			}	
+																																																													
+			</ul>
+
+		</div>
+	}
+}
+@main("Keuangan"){
+
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/timepicker.min.js")"></script>
+	
+		@dashboard_content("Keuangan","Melakukan Pembayaran","pembayaran-advertiser"){
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="#tabs-1">Informasi Pembayaran</a></li>
+				<li><a href="#tabs-2">Konfirmasi Pembayaran</a></li>
+			</ul>
+			<div id="tabs-1">
+				<h4>Cara Pembayaran</h4>
+				@content
+			</div>@* End tab 1 *@
+		
+			<div id="tabs-2">
+			@form(action =controllers.backend.routes.FinanceController.saveConfirmation(), 'class-> "form-horizontal", 'enctype -> "multipart/form-data") {
+						<div class="content-padding"> 
+							<h4>Konfirmasi Pembayaran</h4>
+							<h5 style="font-style: italic;">Untuk konfirmasi Pembayaran via transfer, isi form berikut</h5>
+								@getError()									
+								@generateError()
+								@getSuccess()								
+						</div>
+
+						<div class="content-padding">
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Jumlah Pembayaran</label>
+								<div class="controls">
+									<input name="amount" type="number" placeholder="Jumlah Pembayaran" value="@transfer_form("amount").value" id="amount">
+									<p class="help-block">Jumlah transfer dalam rupiah</p>													 
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Waktu Transfer</label>
+								<div class="controls">
+									<input name="transfer_date" type="text" placeholder="Tanggal Transfer" value="@transfer_form("transfer_date").value" id="transfer_date">
+									<p class="help-block">Tanggal & Jam Transfer dilakukan(format : MM/dd/yyyy hh:mm)</p>													 
+								</div>
+							</div>																
+							@if(rekening.size==0){
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Isi Rekening Manual</label>
+								<div class="controls">
+									<textarea rows="5" placeholder="Deskripsi pembayaran" class="input"  name="senderBankAccount" 
+									id="senderBankAccount">@transfer_form("description").value</textarea>	                    								 
+								 	<p class="help-block">Nomor Rekening Pengiriman dan Nama Pemilik</p>													 
+								</div>
+							</div>	
+							}else{
+								<div class="control-group">
+									<label class="control-label" for="channel_name">Rekening Pengirim</label>
+									<div class="controls">
+										<select name="senderBankAccount" id="senderBankAccount1">
+											@for(data<-rekening){
+												<option @("selected".when(data.id_user_contact==@transfer_form("senderBankAccount").value))
+														value="@(data.id_user_contact)">@(contact_value)</option>
+											}
+										</select> 
+										<p class="help-block">Pilih rekening dari daftar kontak atau masukan rekening secara manual</p></br>
+										<textarea rows="5" placeholder="Rekening Pengirim" class="input"  name="senderBankAccount" 
+										id="senderBankAccount2">@transfer_form("senderBankAccount").value</textarea>	                    								 
+									</div>
+								</div>
+							}
+							<div class="control-group">
+								<label class="control-label" for="channel_name">Deskripsi Pembayaran</label>
+								<div class="controls">
+									<textarea rows="5" placeholder="Deskripsi pembayaran" class="input"  name="description" 
+									id="description">@transfer_form("description").value</textarea>	                    								 
+								 	<p class="help-block">Dekripsi dari pembayaran atau dapat juga pesan untuk validasi, Opsional</p>													 
+								</div>
+							</div>																											
+						</div> @*end content padding *@
+																					
+					 
+				 <div class="form-actions">
+				    <button type="submit" class="btn btn-primary">Simpan</button>
+				    <button type="reset" class="btn">Reset</button>
+					<a href="controllers.backend.routes.FinanceController()" 
+					class="btn btn-warning">Batal</a>
+				</div> @*end form action *@					
+				</div>	} @*end form *@ 						
+			</div> @* End tab 2 *@
+		</div>
+		
+>				
+    <script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs({ active: 0 });
+		
+	    	$("#transfer_date").datetimepicker(){
+	    		defaultValue :"12/11/2013 12:22"
+	    	};
+		});
+	</script>
+   }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("finance")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

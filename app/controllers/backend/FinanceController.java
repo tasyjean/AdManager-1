@@ -28,7 +28,7 @@ public class FinanceController extends CompressController {
 	}
 	@Restrict({@Group("advertiser")})
 	@With(DataFiller.class)
-	public static Result newDeposito(){
+	public static Result newConfirmation(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
@@ -36,7 +36,7 @@ public class FinanceController extends CompressController {
 	}
 	@Restrict({@Group("advertiser")})
 	@With(DataFiller.class)
-	public static Result saveDeposito(){
+	public static Result saveConfirmation(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
@@ -44,7 +44,7 @@ public class FinanceController extends CompressController {
 	}
 	@Restrict({@Group("advertiser")})
 	@With(DataFiller.class)	
-	public static Result deleteDeposito(){
+	public static Result deleteConfirmation(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
@@ -52,7 +52,7 @@ public class FinanceController extends CompressController {
 	}
 	@Restrict({@Group("advertiser"), @Group("manager")})
 	@With(DataFiller.class)	
-	public static Result showSingleDeposito(int idDeposito){
+	public static Result showSingleConfirmation(int idDeposito){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
@@ -60,16 +60,16 @@ public class FinanceController extends CompressController {
 	}
 	@Restrict({@Group("advertiser"), @Group("manager")})
 	@With(DataFiller.class)	
-	public static Result listDeposito(int idDeposito){
+	public static Result listConfirmation(String option){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
 		return ok();
 	}
 
-	@Restrict({@Group("advertiser"), @Group("manager")})
+	@Restrict({@Group("manager")})
 	@With(DataFiller.class)	
-	public static Result validate(int idDeposito){
+	public static Result validateConfirmation(int idDeposito){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 
