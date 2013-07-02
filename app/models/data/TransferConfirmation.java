@@ -37,7 +37,7 @@ public class TransferConfirmation  extends Model {
 	private boolean isValidated;
 	private boolean isDeleted;
 	
-	public static Model.Finder<Integer,Deposito> find = new Model.Finder(Integer.class, Deposito.class);
+	public static Model.Finder<Integer,TransferConfirmation> find = new Model.Finder(Integer.class, TransferConfirmation.class);
 
 	public int getId_transferConfirmation() {
 		return id_transferConfirmation;

@@ -1,5 +1,5 @@
 @(data: TemplateData, user:User,transfer_form:Form[TransferForm], content:String, rekening:List[UserContact]) 
-  formData:BannerFormData)
+  
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -71,6 +71,8 @@
 			</ul>
 			<div id="tabs-1">
 				<h4>Cara Pembayaran</h4>
+					@getError()									
+					@getSuccess()								
 				@content
 			</div>@* End tab 1 *@
 		
@@ -114,8 +116,8 @@
 									<div class="controls">
 										<select name="senderBankAccount" id="senderBankAccount1">
 											@for(data<-rekening){
-												<option @("selected".when(data.id_user_contact==@transfer_form("senderBankAccount").value))
-														value="@(data.id_user_contact)">@(contact_value)</option>
+												<option @("selected".when(data.getId_user_contact==transfer_form("senderBankAccount").value))
+														value="@(data.getId_user_contact)">@(data.getContact_value)</option>
 											}
 										</select> 
 										<p class="help-block">Pilih rekening dari daftar kontak atau masukan rekening secara manual</p></br>
@@ -150,10 +152,14 @@
 		$(document).ready(function() {
 	    	$("#input_tab").tabs();
 	    	$("#input_tab").tabs({ active: 0 });
-		
-	    	$("#transfer_date").datetimepicker(){
-	    		defaultValue :"@(@transfer_form("transfer_date"))"
-	    	};
+			
+	    	@if(flash.contains("error")) {
+		    	$("#input_tab").tabs({ active: 1 });	    		
+	    	}
+	    	
+	    	$("#transfer_date").datetimepicker({
+	    		defaultValue :"@(transfer_form("transfer_date").value)",
+	    	});
 			$("#senderBankAccount2").click(function(){
 				$("#senderBankAccount2").removeAttr("disabled");
 				$("#senderBankAccount1").prop("disabled","true");

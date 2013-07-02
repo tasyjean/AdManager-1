@@ -18,7 +18,7 @@ public class Global extends GlobalSettings {
 //		data.setZoneChannel();
 //		data.setCampaignData();
 //		data.createBanner();
-		SettingDefault default2=new SettingDefault();
-		default2.setAll();
+//		SettingDefault default2=new SettingDefault();
+//		default2.setAll();
 	}
 }

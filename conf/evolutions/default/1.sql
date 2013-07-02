@@ -97,15 +97,11 @@ create table campaign (
 create table deposito (
   id_deposito               integer not null,
   user_id_user              integer,
-  user_validator_id_user    integer,
   current_balance           integer,
   amount                    integer,
   description               TEXT,
-  timestamp_created         timestamp,
-  timestamp_validated       timestamp,
-  payment_method            varchar(8),
-  is_validated              boolean,
-  is_deleted                boolean,
+  timestamp                 timestamp,
+  payment_method            varchar(400),
   constraint ck_deposito_payment_method check (payment_method in ('TRANSFER')),
   constraint pk_deposito primary key (id_deposito))
 ;
@@ -141,10 +137,25 @@ create table notification (
 create table system_preferences (
   id_system_preferences     integer not null,
   key                       varchar(255),
-  value                     varchar(255),
+  value                     TEXT,
   name                      varchar(255),
   description               varchar(255),
   constraint pk_system_preferences primary key (id_system_preferences))
+;
+
+create table transfer_confirmation (
+  id_transfer_confirmation  integer not null,
+  user_id_user              integer,
+  user_validator_id_user    integer,
+  amount                    integer,
+  description               TEXT,
+  transfer_date             timestamp,
+  sender_bank_account       varchar(255),
+  timestamp_created         timestamp,
+  timestamp_validated       timestamp,
+  is_validated              boolean,
+  is_deleted                boolean,
+  constraint pk_transfer_confirmation primary key (id_transfer_confirmation))
 ;
 
 create table user_data (
@@ -242,6 +253,8 @@ create sequence notification_seq;
 
 create sequence system_preferences_seq;
 
+create sequence transfer_confirmation_seq;
+
 create sequence user_data_seq;
 
 create sequence user_contact_seq;
@@ -272,22 +285,24 @@ alter table campaign add constraint fk_campaign_id_user_8 foreign key (id_user_i
 create index ix_campaign_id_user_8 on campaign (id_user_id_user);
 alter table deposito add constraint fk_deposito_user_9 foreign key (user_id_user) references user_data (id_user);
 create index ix_deposito_user_9 on deposito (user_id_user);
-alter table deposito add constraint fk_deposito_user_validator_10 foreign key (user_validator_id_user) references user_data (id_user);
-create index ix_deposito_user_validator_10 on deposito (user_validator_id_user);
-alter table impression add constraint fk_impression_bannerPlacement_11 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
-create index ix_impression_bannerPlacement_11 on impression (banner_placement_id_banner_placement);
-alter table notification add constraint fk_notification_user_12 foreign key (user_id_user) references user_data (id_user);
-create index ix_notification_user_12 on notification (user_id_user);
-alter table user_data add constraint fk_user_data_role_13 foreign key (role_id_role) references user_role (id_role);
-create index ix_user_data_role_13 on user_data (role_id_role);
-alter table user_data add constraint fk_user_data_profile_photo_14 foreign key (profile_photo_id) references file_upload (id);
-create index ix_user_data_profile_photo_14 on user_data (profile_photo_id);
-alter table user_contact add constraint fk_user_contact_user_15 foreign key (user_id_user) references user_data (id_user);
-create index ix_user_contact_user_15 on user_contact (user_id_user);
-alter table zone add constraint fk_zone_zone_channel_16 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
-create index ix_zone_zone_channel_16 on zone (zone_channel_id_zone_channel);
-alter table zone add constraint fk_zone_ads_size_17 foreign key (ads_size_id_banner_size) references banner_size (id_banner_size);
-create index ix_zone_ads_size_17 on zone (ads_size_id_banner_size);
+alter table impression add constraint fk_impression_bannerPlacement_10 foreign key (banner_placement_id_banner_placement) references banner_placement (id_banner_placement);
+create index ix_impression_bannerPlacement_10 on impression (banner_placement_id_banner_placement);
+alter table notification add constraint fk_notification_user_11 foreign key (user_id_user) references user_data (id_user);
+create index ix_notification_user_11 on notification (user_id_user);
+alter table transfer_confirmation add constraint fk_transfer_confirmation_user_12 foreign key (user_id_user) references user_data (id_user);
+create index ix_transfer_confirmation_user_12 on transfer_confirmation (user_id_user);
+alter table transfer_confirmation add constraint fk_transfer_confirmation_user_13 foreign key (user_validator_id_user) references user_data (id_user);
+create index ix_transfer_confirmation_user_13 on transfer_confirmation (user_validator_id_user);
+alter table user_data add constraint fk_user_data_role_14 foreign key (role_id_role) references user_role (id_role);
+create index ix_user_data_role_14 on user_data (role_id_role);
+alter table user_data add constraint fk_user_data_profile_photo_15 foreign key (profile_photo_id) references file_upload (id);
+create index ix_user_data_profile_photo_15 on user_data (profile_photo_id);
+alter table user_contact add constraint fk_user_contact_user_16 foreign key (user_id_user) references user_data (id_user);
+create index ix_user_contact_user_16 on user_contact (user_id_user);
+alter table zone add constraint fk_zone_zone_channel_17 foreign key (zone_channel_id_zone_channel) references zone_channel (id_zone_channel);
+create index ix_zone_zone_channel_17 on zone (zone_channel_id_zone_channel);
+alter table zone add constraint fk_zone_ads_size_18 foreign key (ads_size_id_banner_size) references banner_size (id_banner_size);
+create index ix_zone_ads_size_18 on zone (ads_size_id_banner_size);
 
 
 
@@ -320,6 +335,8 @@ drop table if exists impression cascade;
 drop table if exists notification cascade;
 
 drop table if exists system_preferences cascade;
+
+drop table if exists transfer_confirmation cascade;
 
 drop table if exists user_data cascade;
 
@@ -358,6 +375,8 @@ drop sequence if exists impression_seq;
 drop sequence if exists notification_seq;
 
 drop sequence if exists system_preferences_seq;
+
+drop sequence if exists transfer_confirmation_seq;
 
 drop sequence if exists user_data_seq;
 

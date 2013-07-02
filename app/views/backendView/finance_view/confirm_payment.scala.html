@@ -1,5 +1,5 @@
 @(data: TemplateData, user:User,transfer_form:Form[TransferForm], content:String, rekening:List[UserContact]) 
-  formData:BannerFormData)
+  
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -70,12 +70,17 @@
 				<li><a href="#tabs-2">Konfirmasi Pembayaran</a></li>
 			</ul>
 			<div id="tabs-1">
-				<h4>Cara Pembayaran</h4>
-				@content
+				<div class="content-padding">
+					<h4>Cara Pembayaran</h4>
+						@getError()									
+						@getSuccess()									
+						@Html(content)
+
+				</div>
 			</div>@* End tab 1 *@
 		
 			<div id="tabs-2">
-			@form(action =controllers.backend.routes.FinanceController.saveConfirmation(), 'class-> "form-horizontal", 'enctype -> "multipart/form-data") {
+			@form(action =controllers.backend.routes.FinanceController.saveConfirmation(), 'class-> "form-horizontal") {
 						<div class="content-padding"> 
 							<h4>Konfirmasi Pembayaran</h4>
 							<h5 style="font-style: italic;">Untuk konfirmasi Pembayaran via transfer, isi form berikut</h5>
@@ -101,11 +106,11 @@
 							</div>																
 							@if(rekening.size==0){
 							<div class="control-group">
-								<label class="control-label" for="channel_name">Isi Rekening Manual</label>
+								<label class="control-label" for="channel_name">Nomor rekening pengirim</label>
 								<div class="controls">
-									<textarea rows="5" placeholder="Deskripsi pembayaran" class="input"  name="senderBankAccount" 
+									<textarea rows="5" placeholder="Nomor rekening" class="input"  name="senderBankAccount" 
 									id="senderBankAccount">@transfer_form("description").value</textarea>	                    								 
-								 	<p class="help-block">Nomor Rekening Pengiriman dan Nama Pemilik</p>													 
+								 	<p class="help-block">Nomor Rekening Pengiriman dan Nama Pemilik Rekening</p>													 
 								</div>
 							</div>	
 							}else{
@@ -114,12 +119,13 @@
 									<div class="controls">
 										<select name="senderBankAccount" id="senderBankAccount1">
 											@for(data<-rekening){
-												<option @("selected".when(data.id_user_contact==@transfer_form("senderBankAccount").value))
-														value="@(data.id_user_contact)">@(contact_value)</option>
+												<option @("selected".when(data.getId_user_contact==transfer_form("senderBankAccount").value))
+														value="@(data.getId_user_contact)">@(data.getContact_value)</option>
 											}
 										</select> 
 										<p class="help-block">Pilih rekening dari daftar kontak atau masukan rekening secara manual</p></br>
-										<textarea rows="5" placeholder="Masukan Manual Rekening Pengirim" class="input"  name="senderBankAccount" 
+							 			<input style="" type="checkbox" id="default-check"> Masukan Manual  <br><br>
+							 			<textarea rows="5" placeholder="Masukan Manual Rekening Pengirim" class="input"  name="senderBankAccount" 
 										id="senderBankAccount2">@transfer_form("senderBankAccount").value</textarea>	                    								 
 									</div>
 								</div>
@@ -138,32 +144,49 @@
 				 <div class="form-actions">
 				    <button type="submit" class="btn btn-primary">Simpan</button>
 				    <button type="reset" class="btn">Reset</button>
-					<a href="controllers.backend.routes.FinanceController()" 
-					class="btn btn-warning">Batal</a>
 				</div> @*end form action *@					
 				</div>	} @*end form *@ 						
 			</div> @* End tab 2 *@
 		</div>
-		
->				
+					
     <script type="text/javascript">
 		$(document).ready(function() {
 	    	$("#input_tab").tabs();
 	    	$("#input_tab").tabs({ active: 0 });
-		
-	    	$("#transfer_date").datetimepicker(){
-	    		defaultValue :"@(@transfer_form("transfer_date"))"
-	    	};
+			
+	    	@if(flash.contains("error")) {
+		    	$("#input_tab").tabs({ active: 1 });	    		
+	    	}
+    		@if(transfer_form.hasErrors){
+		    	$("#input_tab").tabs({ active: 1 });	    		
+			}
+	    	
+	    	$("#transfer_date").datetimepicker({
+	    		defaultValue :"@(transfer_form("transfer_date").value)",
+	    	});
+			$("#default-check").click(function(){
+					if($(this).is(":checked")){
+						$("#senderBankAccount2").removeAttr("disabled");
+						$("#senderBankAccount1").prop("disabled","disabled");
+					}else{
+						$("#senderBankAccount1").removeAttr("disabled");
+						$("#senderBankAccount2").prop("disabled","disabled");
+					}
+				});	    	
 			$("#senderBankAccount2").click(function(){
 				$("#senderBankAccount2").removeAttr("disabled");
-				$("#senderBankAccount1").prop("disabled","true");
-
+				$("#senderBankAccount1").prop("disabled","disabled");
+				$("#default-check").prop("checked","checked");
 			});
 			$("#senderBankAccount1").click(function(){
 				$("#senderBankAccount1").removeAttr("disabled");
-				$("#senderBankAccount2").prop("disabled","true");
+				$("#default-check").removeAttr("checked");
+				$("#senderBankAccount2").prop("disabled","disabled");
 
 			});			
+			$("#senderBankAccount1").removeAttr("disabled");
+			$("#senderBankAccount2").prop("disabled","disabled");
+
 		});
 	</script>
    }

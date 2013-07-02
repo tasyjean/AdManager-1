@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.avaje.ebean.Ebean;
 
-import play.api.data.Form;
+import play.data.Form;
 import models.data.AdsTransaction;
 import models.data.Deposito;
 import models.data.TransferConfirmation;
@@ -18,11 +18,16 @@ import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.PaymentMethodEnum;
 import models.form.backendForm.financeForm.DepositoForm;
 import models.form.backendForm.financeForm.TransferForm;
+import models.service.notification.NotificationCenter;
 
 public class DepositoOperator {
 
+	NotificationCenter notif;
 	SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy hh:mm");
 
+	public DepositoOperator(NotificationCenter notif){
+		this.notif=notif;
+	}
 	public TransferConfirmation saveConfirmation(Form<TransferForm> input, User user){
 		try {
 			TransferConfirmation confirmation=new TransferConfirmation();
@@ -63,7 +68,7 @@ public class DepositoOperator {
 			Deposito deposito=new Deposito();
 			User user=transfer.getUser();
 			int current_balance=user.getCurrent_balance();
-			
+
 			//deposito
 			deposito.setAmount(transfer.getAmount());
 			deposito.setCurrent_balance(current_balance+transfer.getAmount());

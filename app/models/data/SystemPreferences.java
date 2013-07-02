@@ -1,5 +1,6 @@
 package models.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,6 +14,7 @@ public class SystemPreferences extends Model{
 	@Id
 	private int id_system_preferences;
 	private String key;
+	@Column(columnDefinition = "TEXT")
 	private String value;
 	private String name;
 	private String description;

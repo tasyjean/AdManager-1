@@ -12,11 +12,16 @@ import play.db.DB;
 
 import com.avaje.ebean.Ebean;
 
+import models.data.AdsTransaction;
 import models.data.Banner;
+import models.data.BannerAction;
 import models.data.BannerPlacement;
 import models.data.BannerSize;
 import models.data.Campaign;
+import models.data.Deposito;
 import models.data.FileUpload;
+import models.data.Impression;
+import models.data.TransferConfirmation;
 import models.data.User;
 import models.data.UserContact;
 import models.data.UserRole;
@@ -44,8 +49,11 @@ public class SetInitialData {
 		
 		
 		//Clean Data dulu		
+		deleteTransactionData();
+		deleteFinanceData();
 		deleteCampaignData();
-
+		
+		
 		deleteUserData();
 		try {
 			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_data_seq RESTART WITH 1;");
@@ -99,8 +107,10 @@ public class SetInitialData {
 		ArrayList<UserContact> contact2=new ArrayList<UserContact>();
 		UserContact kontak2_item1=new UserContact("(021)2132999",ContactTypeEnum.HOME_PHONE,"Hubungi nomor ini jika istri saya tidak dirumah");
 		UserContact kontak2_item2=new UserContact("Jalan Sudarmanto nomor 21", ContactTypeEnum.ADDRESS, "Ini websitenya");
+		UserContact kontak2_item3=new UserContact("116090010010-0 \n A.N Sayuti Hidayat \n  Bank Banyumas Jabang Jawa Barat", ContactTypeEnum.BANK_ACCOUNT, "Nomor rekening saya");
 		contact2.add(kontak2_item1);
 		contact2.add(kontak2_item2);
+		contact2.add(kontak2_item3);
 		user2.setUserContact(contact2);	
 		user2.save();
 		
@@ -510,6 +520,31 @@ public class SetInitialData {
 			upload.deleteDbOnly();
 		}
 		System.out.println("Delete data");
+	}
+	public void deleteTransactionData(){
+		List<BannerAction> actions=BannerAction.find.all();
+		List<Impression> impressions=Impression.find.all();
+		for(BannerAction action:actions){
+			action.delete();
+		}
+		for(Impression impresi:impressions){
+			impresi.delete();
+		}
+		List<AdsTransaction> transactions = AdsTransaction.find.all();
+		for(AdsTransaction transaction:transactions){
+			transaction.delete();
+		}
+	}
+	public void deleteFinanceData(){
+		List<TransferConfirmation> transfers =TransferConfirmation.find.all();
+		List<Deposito> depositos = Deposito.find.all();
+		for(TransferConfirmation transfer:transfers){
+			transfer.delete();
+		}
+		for(Deposito deposito:depositos){
+			deposito.delete();
+		}
+		
 	}
 	public void deleteZoneChannel(){
 		List<ZoneChannel> channels = ZoneChannel.find.all();

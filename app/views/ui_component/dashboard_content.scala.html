@@ -144,7 +144,7 @@
 @financeMenu(activeMenu:String="")={
       <a class="span2 sub-menu @("active".when(activeMenu=="riwayat transaksi"))"
           href="@controllers.backend.routes.FinanceController.index()">
-          <div class="icon"></div>
+         <div class="icon"></div>
          <div class="content" >
             <div class="kpi">Riwayat Transaksi</div>
             <div class="small">Melihat Riwayat Transaksi</div>
@@ -152,7 +152,7 @@
         </a>  		
     @restrict(la(as("advertiser"))){                     
       <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-advertiser"))"
-          href="@controllers.backend.routes.FinanceController.index()">
+          href="@controllers.backend.routes.FinanceController.newConfirmation()">
           <div class="icon"></div>
          <div class="content" >
             <div class="kpi">Pembayaran</div>
@@ -162,14 +162,23 @@
       }
     @restrict(la(as("manager"))){                     
       <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-manager"))"
-          href="@controllers.backend.routes.FinanceController.index()">
+          href="@controllers.backend.routes.FinanceController.listConfirmation("")">
           <div class="icon"></div>
          <div class="content" >
-            <div class="kpi">Pembayaran</div>
-            <div class="small">Mengelola Pembayaran</div>
+            <div class="kpi">Validasi Pembayaran</div>
+            <div class="small">Pembayaran Dari Pengiklan</div>
          </div>
         </a> 
-      }      
+      
+      <a class="span2 sub-menu @("active".when(activeMenu=="tambah-saldo"))"
+          href="@controllers.backend.routes.FinanceController.newDeposito()">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Tambah Saldo</div>
+            <div class="small">Menambah Saldo Pengiklan</div>
+         </div>
+        </a> 
+      }       
 }
 @profileMenu(activeMenu:String="")={
       <a  class="span2 sub-menu @("active".when(activeMenu=="data profil"))"

@@ -84,6 +84,9 @@ zone.default_view.empty=Kosong
 zone.default_view.default_code=Kode Sendiri
 zone.default_view.default_ads=Iklan Umum
 
+payment.instruction=<h5>Transfer via bank<h5><ol><li>Transfer dulu dengan jumlah sesuai dengan estimasi harga campaign, ke rekening xxx</li><li>konfirmasikan pembayaran melalui menu konfirmasi, isi data dengan tepat untuk mempermudah verifikasi</li><li>Tunggu hingga konfirmasi diverifikasi</li><li>Ketika saldo sudah masuk ke sistem, maka iklan siap tampil</li></ol>
+
+
 #EMAIL
 email.registered.content=Email anda baru saja didaftarkan pada manajemen iklan teknimo oleh staff kami sebagai {2}.<br> Anda dapat mulai login pada sistem melalui alamat {0}<br><br>Data login adalah sebagai berikut : <br> Email Login : Alamat email anda <br> Password : {1} <br><br> Salam Sejahtera <br> Manajemen Teknimo Ads Manager
 email.registered.subject=Teknimo Ad Manager : Anda Telah Di Daftarkan
@@ -119,6 +122,5 @@ notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar
 notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai
  
 
-#Payment  method
+#Paymentmethod
 payment.transfer=Via Transfer Bank
-payment.instruction=<h5>Transfer via bank<h5> <ol><li>Transfer dulu dengan jumlah sesuai dengan estimasi harga campaign, ke rekening xxx</li><li>konfirmasikan pembayaran melalui menu konfirmasi, isi data dengan tepat untuk mempermudah verifikasi</li><li>Tunggu hingga konfirmasi diverifikasi</li><li>Ketika saldo sudah masuk ke sistem, maka iklan siap tampil</li></ol>

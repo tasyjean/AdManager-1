@@ -1,5 +1,6 @@
 package models.custom_helper.setting;
 
+import play.Logger;
 import play.i18n.Messages;
 import models.data.SystemPreferences;
 
@@ -9,7 +10,6 @@ public class SettingDefault {
 	final String DEFAULT_IMPRESSION="2000";
 	final String DISCOUNT_FACTOR="0.1";
 	final String DEFAULT_DAYS="8000";
-	final String DEFAULT_INSTRUCTION=Messages.get("payment.instruction"); 
 
 	/*
 		 * 	BASE_PRICE_CLICK,
@@ -57,10 +57,16 @@ public class SettingDefault {
 			sysPref=new SystemPreferences();
 			isNull=true;
 		}
+		String input="<h5>Transfer via bank<h5><ol><li>Transfer dulu dengan jumlah sesuai dengan " +
+					 "estimasi harga campaign, ke rekening xxx</li><li>konfirmasikan pembayaran melalui " +
+					 "menu konfirmasi, isi data dengan tepat untuk mempermudah verifikasi</li><li>Tunggu hingga" +
+					 " konfirmasi diverifikasi</li><li>Ketika saldo sudah masuk ke sistem, maka iklan siap tampil</li></ol>";
+		Logger.debug(input);
+		
 		sysPref.setKey(KeyEnum.PAYMENT_INSTRUCTION.name());
 		sysPref.setName(KeyEnum.BASE_PRICE_CLICK.toString());
-		sysPref.setValue(DEFAULT_INSTRUCTION);
-		sysPref.setDescription("Instruksi pembayaran");
+		sysPref.setValue(input +" <br><br> Selamat beriklan!");
+		sysPref.setDescription(KeyEnum.PAYMENT_INSTRUCTION.toString());
 		
 		if(isNull){
 			sysPref.save();
