@@ -16,6 +16,7 @@ validation.error_update=Ada kesalahan menyimpan data, data gagal disimpan
 success.preferences=Pengaturan berhasil disimpan
 failure.setting_save=Ada kesalahan saat memperbaharui data
 validation.startDate=Waktu tidak boleh sebelum hari ini
+validation.transfer_date=Waktu tidak boleh setelah hari ini
 validation.bidPrice=Harga tidak boleh kurang dari yang sudah ditentukan, minimal {0} 
 validation.impressionLimit=Jumlah impressi harus lebih dari 0
 validation.clickLimit=Jumlah klik harus lebih dari 0
@@ -120,4 +121,4 @@ notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun be
 
 #Payment  method
 payment.transfer=Via Transfer Bank
-
+payment.instruction=<h5>Transfer via bank<h5> <ol><li>Transfer dulu dengan jumlah sesuai dengan estimasi harga campaign, ke rekening xxx</li><li>konfirmasikan pembayaran melalui menu konfirmasi, isi data dengan tepat untuk mempermudah verifikasi</li><li>Tunggu hingga konfirmasi diverifikasi</li><li>Ketika saldo sudah masuk ke sistem, maka iklan siap tampil</li></ol>

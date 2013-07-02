@@ -119,7 +119,7 @@
 											}
 										</select> 
 										<p class="help-block">Pilih rekening dari daftar kontak atau masukan rekening secara manual</p></br>
-										<textarea rows="5" placeholder="Rekening Pengirim" class="input"  name="senderBankAccount" 
+										<textarea rows="5" placeholder="Masukan Manual Rekening Pengirim" class="input"  name="senderBankAccount" 
 										id="senderBankAccount2">@transfer_form("senderBankAccount").value</textarea>	                    								 
 									</div>
 								</div>
@@ -152,8 +152,18 @@
 	    	$("#input_tab").tabs({ active: 0 });
 		
 	    	$("#transfer_date").datetimepicker(){
-	    		defaultValue :"12/11/2013 12:22"
+	    		defaultValue :"@(@transfer_form("transfer_date"))"
 	    	};
+			$("#senderBankAccount2").click(function(){
+				$("#senderBankAccount2").removeAttr("disabled");
+				$("#senderBankAccount1").prop("disabled","true");
+
+			});
+			$("#senderBankAccount1").click(function(){
+				$("#senderBankAccount1").removeAttr("disabled");
+				$("#senderBankAccount2").prop("disabled","true");
+
+			});			
 		});
 	</script>
    }

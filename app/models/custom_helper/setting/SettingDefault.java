@@ -1,5 +1,6 @@
 package models.custom_helper.setting;
 
+import play.i18n.Messages;
 import models.data.SystemPreferences;
 
 public class SettingDefault {
@@ -8,7 +9,7 @@ public class SettingDefault {
 	final String DEFAULT_IMPRESSION="2000";
 	final String DISCOUNT_FACTOR="0.1";
 	final String DEFAULT_DAYS="8000";
-	
+	final String DEFAULT_INSTRUCTION=Messages.get("payment.instruction"); 
 
 	/*
 		 * 	BASE_PRICE_CLICK,
@@ -25,16 +26,18 @@ public class SettingDefault {
 	
 	public void setDefault(KeyEnum keyEnum){
 		switch (keyEnum) {
-		case BASE_PRICE_CLICK	  : setBase_price_click();
-							        break;
-		case BASE_PRICE_DAYS	  : setBase_price_days();
-							        break;
-		case BASE_PRICE_IMPRESSION: setBase_price_impression();
-		  						    break;
-		case DISCOUNT_FACTOR 	  :setDiscount_factor();
-									break;
-		default:
-			break;
+			case BASE_PRICE_CLICK	  : setBase_price_click();
+								        break;
+			case BASE_PRICE_DAYS	  : setBase_price_days();
+								        break;
+			case BASE_PRICE_IMPRESSION: setBase_price_impression();
+			  						    break;
+			case DISCOUNT_FACTOR 	  :setDiscount_factor();
+										break;
+			case PAYMENT_INSTRUCTION : setPayment_instruction();
+									   break;
+			default:
+				break;
 		}
 	}
 	public void setAll(){
@@ -42,8 +45,29 @@ public class SettingDefault {
 		setBase_price_days();
 		setDiscount_factor();
 		setBase_price_impression();
+		setPayment_instruction();
 	}
-	
+	private void setPayment_instruction(){
+		SystemPreferences sysPref=SystemPreferences.find.
+				where().
+				eq("key", KeyEnum.PAYMENT_INSTRUCTION.name()).
+				findUnique();		
+		boolean isNull=false;
+		if(sysPref==null){
+			sysPref=new SystemPreferences();
+			isNull=true;
+		}
+		sysPref.setKey(KeyEnum.PAYMENT_INSTRUCTION.name());
+		sysPref.setName(KeyEnum.BASE_PRICE_CLICK.toString());
+		sysPref.setValue(DEFAULT_INSTRUCTION);
+		sysPref.setDescription("Instruksi pembayaran");
+		
+		if(isNull){
+			sysPref.save();
+		}else{
+			sysPref.update();
+		}
+	}
 	private void setBase_price_click(){
 		SystemPreferences sysPref=SystemPreferences.find.
 								where().

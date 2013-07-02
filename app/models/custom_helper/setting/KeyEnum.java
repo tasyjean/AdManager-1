@@ -38,7 +38,12 @@ public enum KeyEnum {
 		public String toString() {
 			return "Biaya Tiap Hari";
 	}},
-
+	@EnumValue("PAYMENT_INSTRUCTION")
+	PAYMENT_INSTRUCTION{
+		public String toString(){
+			return "Instruksi Pembayaran";
+		}
+	}
 
 	
 
