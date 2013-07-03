@@ -20,9 +20,6 @@ public class DepositoForm {
 		List<ValidationError> error= new ArrayList<ValidationError>();		
 		try {
 			int amounts=Integer.parseInt(amount);
-			if(amounts<0){
-				error.add(new ValidationError("amount",Messages.get("validation.amount_kurang")));
-			}
 
 			if(description.length()>500){
 				error.add(new ValidationError("description",Messages.get("error.description",500+"")));

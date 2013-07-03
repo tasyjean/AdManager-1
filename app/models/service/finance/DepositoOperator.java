@@ -9,6 +9,7 @@ import java.util.List;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
 
+import play.Logger;
 import play.data.Form;
 import models.data.AdsTransaction;
 import models.data.Campaign;
@@ -76,6 +77,7 @@ public class DepositoOperator {
 							                    .order().desc("timestamp_created")    
 							                    .findPagingList(pageSize)
 							                    .getPage(page);		
+			Logger.debug("Ukuran transfer" +transfer.getList().size());
 			return transfer;
 			
 	}	public TransferConfirmation saveConfirmation(Form<TransferForm> input, User user){
@@ -114,10 +116,33 @@ public class DepositoOperator {
 		}
 	}
 	
-	public TransferConfirmation updateConfirmation(Form<TransferForm> form, TransferConfirmation transfer){
-		return null;
+	public TransferConfirmation updateConfirmation(Form<TransferForm> input, TransferConfirmation confirmation){
+		try {
+			confirmation.setAmount(Integer.parseInt(input.get().amount));
+			confirmation.setDescription(input.get().description);
+			if(input.get().senderBankAccount.length()<5){
+				try{
+					Integer idContact=Integer.parseInt(input.get().senderBankAccount);
+					UserContact contact=UserContact.find.byId(idContact);
+					confirmation.setSenderBankAccount(contact.getContact_value());
+				}catch(Exception e){
+					confirmation.setSenderBankAccount(input.get().senderBankAccount);
+					e.printStackTrace();
+				}
+				
+			}
+			confirmation.setTransfer_date(format.parse(input.get().transfer_date));
+			confirmation.update();	
+			return confirmation;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	public boolean validate(TransferConfirmation transfer, User userValidator){
+	public boolean validate(TransferConfirmation transfer, User userValidator, String message, boolean isValid){
 		Ebean.beginTransaction();
 		try {
 			Deposito deposito=new Deposito();
@@ -131,24 +156,27 @@ public class DepositoOperator {
 			deposito.setDescription(transfer.getDescription());
 			deposito.setTimestamp(new Date());
 			deposito.setUser(user);
-			deposito.save();
+			
 			
 			//transfer
 			transfer.setTimestamp_validated(new Date());
 			transfer.setUser_validator(userValidator);
-			transfer.setValidated(true);
+			transfer.setValidated(isValid);
+			transfer.setManager_message(message);
 			transfer.update();
 			
 			//user
 			user.setCurrent_balance(current_balance+transfer.getAmount());
-			user.update();
 
 			NotifItem item=new NotifItem();
 			item.setParam(new String[]{transfer.getAmount()+"",transfer.getId_transferConfirmation()+""});
-			item.setType(NotificationType.PLEASE_VALIDATE);
+			item.setType(NotificationType.VALIDATED);
 			item.setUser(user);
-			notif.pushNew(item);
-			
+			if(isValid){
+				deposito.save();				
+				notif.pushNew(item);
+				user.update();
+			}
 			Ebean.commitTransaction();
 			return true;
 		} catch (Exception e) {

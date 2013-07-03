@@ -57,7 +57,7 @@ public class SettingDefault {
 			sysPref=new SystemPreferences();
 			isNull=true;
 		}
-		String input="<h5>Transfer via bank<h5><ol><li>Transfer dulu dengan jumlah sesuai dengan " +
+		String input="<h5>Transfer via bank<h5><ol><li>Transfer terlebih dulu dengan jumlah sesuai dengan " +
 					 "estimasi harga campaign, ke rekening xxx</li><li>konfirmasikan pembayaran melalui " +
 					 "menu konfirmasi, isi data dengan tepat untuk mempermudah verifikasi</li><li>Tunggu hingga" +
 					 " konfirmasi diverifikasi</li><li>Ketika saldo sudah masuk ke sistem, maka iklan siap tampil</li></ol>";

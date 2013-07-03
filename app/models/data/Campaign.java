@@ -260,6 +260,9 @@ public class Campaign extends Model{
 		}
 		return 0;
 	}
+	public String countPrice_rupiah(){
+		return Angka.toRupiah(countPrice());
+	}
 	public String costEstimation(){
 		return Angka.toRupiah(countPrice());
 	}

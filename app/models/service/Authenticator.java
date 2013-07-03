@@ -1,5 +1,7 @@
 package models.service;
 
+import com.avaje.ebean.Ebean;
+
 import models.custom_helper.MD5;
 import models.data.User;
 import models.data.UserRole;

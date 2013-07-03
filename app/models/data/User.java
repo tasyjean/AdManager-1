@@ -7,6 +7,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.Constraint;
 
+import models.custom_helper.Angka;
 import models.custom_helper.MD5;
 import models.data.enumeration.RoleEnum;
 
@@ -198,7 +199,9 @@ public class User extends Model implements Subject {
 	public int getCurrent_balance() {
 		return current_balance;
 	}
-
+	public String getCurrent_balance_rupiah() {
+		return Angka.toRupiah(current_balance);
+	}
 	public void setCurrent_balance(int current_balance) {
 		this.current_balance = current_balance;
 	}

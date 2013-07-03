@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import models.custom_helper.Angka;
 import models.data.enumeration.PaymentMethodEnum;
 import play.db.ebean.Model;
 
@@ -50,6 +51,10 @@ public class TransferConfirmation  extends Model {
 		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm");
 		return format.format(transfer_date);
 	}
+	public  String getTimestamp_validated_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm");
+		return format.format(timestamp_validated);
+	}	
 	public int getId_transferConfirmation() {
 		return id_transferConfirmation;
 	}
@@ -145,6 +150,8 @@ public class TransferConfirmation  extends Model {
 	public void setManager_message(String manager_message) {
 		this.manager_message = manager_message;
 	}
-
+	public String getAmount_rupiah(){
+		return Angka.toRupiah(amount);
+	}
 	
 }

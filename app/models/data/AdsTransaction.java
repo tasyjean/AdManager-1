@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import models.custom_helper.Angka;
 import models.data.enumeration.PricingModelEnum;
 
 import play.db.ebean.Model;
@@ -38,8 +39,13 @@ public class AdsTransaction extends Model {
 	public void setId_ads_transaction(int id_ads_transaction) {
 		this.id_ads_transaction = id_ads_transaction;
 	}
-
-
+	
+	public String getCurrent_balance_rupiah(){
+		return Angka.toAngka(current_balance);
+	}
+	public String getAmount_rupiah(){
+		return Angka.toAngka(amount);
+	}
 
 	public PricingModelEnum getTransaction_type() {
 		return transaction_type;

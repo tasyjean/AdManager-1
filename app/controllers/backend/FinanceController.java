@@ -24,6 +24,9 @@ import models.form.backendForm.financeForm.TransferForm;
 import models.service.Authenticator;
 import models.service.finance.DepositoOperator;
 import models.service.notification.NotificationCenter;
+import play.Logger;
+import play.data.DynamicForm;
+import play.data.DynamicForm.Dynamic;
 import play.data.Form;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -54,7 +57,6 @@ public class FinanceController extends CompressController {
 	public static Result newConfirmation(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-//		@(data: TemplateData, user:User,transfer_form:Form[TransferForm], content:String, rekening:List[UserContact]) 
 		User user=auth.getUserLogin(session()); 
 		String content=setting.getString(KeyEnum.PAYMENT_INSTRUCTION);
 		List<UserContact> contact=deposit.getUserBankAccount(user);
@@ -82,7 +84,6 @@ public class FinanceController extends CompressController {
 				flash("error", "Konfirmasi pembayaran gagal disimpan");
 				return ok(confirm_payment.render(data, user, filledForm, content, contact));							
 			}
-			
 		}
 	}
 	@Restrict({@Group("advertiser")})
@@ -90,8 +91,19 @@ public class FinanceController extends CompressController {
 	public static Result deleteConfirmation(int idConfirmation){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok();
+		try {
+			boolean sukses=deposit.deleteTransfer(TransferConfirmation.find.byId(idConfirmation));
+			if(!sukses){
+				flash("error","Data gagal dihapus");
+			}else{
+				flash("success","Data berhasil dihapus");
+				return redirect(controllers.backend.routes.FinanceController.listConfirmation("all"));
+			}
+		} catch (Exception e) {
+			flash("error","Terjadi kesalahan pada proses penghapusan");
+			e.printStackTrace();
+		}
+		return redirect(controllers.backend.routes.FinanceController.showSingleConfirmation(idConfirmation));		
 	}
 	@Restrict({@Group("manager")})
 	@With(DataFiller.class)	
@@ -130,13 +142,13 @@ public class FinanceController extends CompressController {
 		}
 	}
 		
-	@Restrict({@Group("advertiser"), @Group("manager")})
+	@SubjectPresent
 	@With(DataFiller.class)	
 	public static Result showSingleConfirmation(int idConfirmation){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok();
+		TransferConfirmation confirm=TransferConfirmation.find.byId(idConfirmation);
+		return ok(show_single_confirmation.render(data, confirm));
 	}
 	@SubjectPresent
 	@With(DataFiller.class)	
@@ -146,25 +158,27 @@ public class FinanceController extends CompressController {
 		/*
 		 * Urutan request [page].[user].[validated].
 		 */
-		String[] options=option.split(".");
+		String[] options=option.split("-");
 		int page;
 		int validated;
 		int user_id;
 		try {
 			if(options.length!=3){
+				Logger.debug("Ukuran Option "+options.length+" "+option);
 				throw  new Exception();
 			}
 			page = Integer.parseInt(options[0]);
 			validated = Integer.parseInt(options[2]);
 			user_id = Integer.parseInt(options[1]);
 		} catch (Exception e) {
-			page=1;
+			page=0;
 			validated=2;
 			user_id=0;
-			e.printStackTrace();
+			e.getMessage();
 		}
 		Page<TransferConfirmation> result=null;
-		
+		Logger.debug("Parsing Page "+page+" "+validated+" "+user_id+" ");
+
 		if(auth.getUserRole(session()).getName().equals("advertiser")){
 			User userLogin=auth.getUserLogin(session());
 			result=deposit.getTransferConfirmationByUser(page, 30, userLogin, validated);
@@ -185,8 +199,25 @@ public class FinanceController extends CompressController {
 	public static Result validateConfirmation(int idConfirmation){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		
-		return ok();
+		try {
+			DynamicForm filledForm=Form.form().bindFromRequest();
+			String message=filledForm.get("message");
+			boolean valid=filledForm.get("valid") != null;
+			TransferConfirmation confirm=TransferConfirmation.find.byId(idConfirmation);
+			Logger.debug(message+" "+valid);
+			boolean success=deposit.validate(confirm, auth.getUserLogin(session()), message, valid);{
+				if(success){
+					flash("success","Validasi disimpan");
+				}else{
+					flash("error","Kesalahan dalam validasi konfirmasi");
+				}
+			}
+		} catch (Exception e) {
+			flash("error","Kesalahan dalam validasi konfirmasi");			
+			e.printStackTrace();
+		}
+		return redirect(controllers.backend.routes.FinanceController.showSingleConfirmation(idConfirmation));			
+
 	}
 	
 

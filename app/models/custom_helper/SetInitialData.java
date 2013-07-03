@@ -21,6 +21,7 @@ import models.data.Campaign;
 import models.data.Deposito;
 import models.data.FileUpload;
 import models.data.Impression;
+import models.data.Notification;
 import models.data.TransferConfirmation;
 import models.data.User;
 import models.data.UserContact;
@@ -48,7 +49,8 @@ public class SetInitialData {
 	public void setDataUser(){
 		
 		
-		//Clean Data dulu		
+		//Clean Data dulu	
+		deleteNotification();
 		deleteTransactionData();
 		deleteFinanceData();
 		deleteCampaignData();
@@ -520,6 +522,12 @@ public class SetInitialData {
 			upload.deleteDbOnly();
 		}
 		System.out.println("Delete data");
+	}
+	public void deleteNotification(){
+		List<Notification> notifs=Notification.find.all();
+		for(Notification notif:notifs){
+			notif.delete();
+		}
 	}
 	public void deleteTransactionData(){
 		List<BannerAction> actions=BannerAction.find.all();
