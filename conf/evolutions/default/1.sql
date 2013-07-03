@@ -102,7 +102,7 @@ create table deposito (
   description               TEXT,
   timestamp                 timestamp,
   payment_method            varchar(400),
-  constraint ck_deposito_payment_method check (payment_method in ('TRANSFER')),
+  constraint ck_deposito_payment_method check (payment_method in ('OTHER','TRANSFER')),
   constraint pk_deposito primary key (id_deposito))
 ;
 
@@ -130,7 +130,7 @@ create table notification (
   notification_type         varchar(15),
   param                     varchar(255),
   is_read                   boolean,
-  constraint ck_notification_notification_type check (notification_type in ('NEW_USER','NEW_CAMPAIGN','SEE_REPORT','ACTIVE_ADS','EMPTY_DEPOSITO','NON_ACTIVE_ADS','PLEASE_VALIDATE','VALIDATED')),
+  constraint ck_notification_notification_type check (notification_type in ('NEW_USER','NEW_CAMPAIGN','SEE_REPORT','ACTIVE_ADS','EMPTY_DEPOSITO','NON_ACTIVE_ADS','SHOULD_ACTIVE','NEW_DEPOSITO','PLEASE_VALIDATE','VALIDATED')),
   constraint pk_notification primary key (id_notification))
 ;
 
@@ -149,6 +149,7 @@ create table transfer_confirmation (
   user_validator_id_user    integer,
   amount                    integer,
   description               TEXT,
+  manager_message           TEXT,
   transfer_date             timestamp,
   sender_bank_account       varchar(255),
   timestamp_created         timestamp,

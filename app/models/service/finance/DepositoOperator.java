@@ -7,9 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Page;
 
 import play.data.Form;
 import models.data.AdsTransaction;
+import models.data.Campaign;
 import models.data.Deposito;
 import models.data.TransferConfirmation;
 import models.data.User;
@@ -18,7 +20,9 @@ import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.PaymentMethodEnum;
 import models.form.backendForm.financeForm.DepositoForm;
 import models.form.backendForm.financeForm.TransferForm;
+import models.service.notification.NotifItem;
 import models.service.notification.NotificationCenter;
+import models.service.notification.NotificationType;
 
 public class DepositoOperator {
 
@@ -28,7 +32,53 @@ public class DepositoOperator {
 	public DepositoOperator(NotificationCenter notif){
 		this.notif=notif;
 	}
-	public TransferConfirmation saveConfirmation(Form<TransferForm> input, User user){
+	public Page<TransferConfirmation> getTransferConfirmationByUser(int page, int pageSize, User user, int validated){
+		boolean isValidated=true;
+		if(validated==1){
+			isValidated=true;
+		}else if(validated==0){
+			isValidated=false;
+		}else{
+			Page<TransferConfirmation> transfer=TransferConfirmation.find.where()
+                    .eq("user", user)
+                    .eq("isDeleted", false)
+                    .order().desc("timestamp_created")
+                    .findPagingList(pageSize)
+                    .getPage(page);	
+			return transfer;
+		}
+		Page<TransferConfirmation> transfer=TransferConfirmation.find.where()
+						                    .eq("user", user)
+						                    .eq("isDeleted", false)
+						                    .eq("isValidated", isValidated)
+						                    .order().desc("timestamp_created")    
+						                    .findPagingList(pageSize)
+						                    .getPage(page);		
+		return transfer;
+	}
+		public Page<TransferConfirmation> getTransferConfirmation(int page, int pageSize, int validated){
+			boolean isValidated=true;
+			if(validated==1){
+				isValidated=true;
+			}else if(validated==0){
+				isValidated=false;
+			}else{
+				Page<TransferConfirmation> transfer=TransferConfirmation.find.where()
+	                    .eq("isDeleted", false)
+	                    .order().desc("timestamp_created")
+	                    .findPagingList(pageSize)
+	                    .getPage(page);	
+				return transfer;
+			}
+			Page<TransferConfirmation> transfer=TransferConfirmation.find.where()
+							                    .eq("isDeleted", false)
+							                    .eq("isValidated", isValidated)
+							                    .order().desc("timestamp_created")    
+							                    .findPagingList(pageSize)
+							                    .getPage(page);		
+			return transfer;
+			
+	}	public TransferConfirmation saveConfirmation(Form<TransferForm> input, User user){
 		try {
 			TransferConfirmation confirmation=new TransferConfirmation();
 			confirmation.setAmount(Integer.parseInt(input.get().amount));
@@ -48,6 +98,11 @@ public class DepositoOperator {
 			confirmation.setTransfer_date(format.parse(input.get().transfer_date));
 			confirmation.setUser(user);
 			confirmation.save();
+			
+			NotifItem item=new NotifItem();
+			item.setParam(new String[]{user.getFront_name(),confirmation.getId_transferConfirmation()+""});
+			item.setType(NotificationType.PLEASE_VALIDATE);
+			notif.pushNew("MANAGER", item);
 			
 			return confirmation;
 		} catch (NumberFormatException e) {
@@ -87,6 +142,13 @@ public class DepositoOperator {
 			//user
 			user.setCurrent_balance(current_balance+transfer.getAmount());
 			user.update();
+
+			NotifItem item=new NotifItem();
+			item.setParam(new String[]{transfer.getAmount()+"",transfer.getId_transferConfirmation()+""});
+			item.setType(NotificationType.PLEASE_VALIDATE);
+			item.setUser(user);
+			notif.pushNew(item);
+			
 			Ebean.commitTransaction();
 			return true;
 		} catch (Exception e) {
@@ -116,8 +178,15 @@ public class DepositoOperator {
 			
 			user.setCurrent_balance(current_balance+amount);
 			user.update();
-			Ebean.commitTransaction();
 			
+			NotifItem notifItem=new NotifItem();
+			notifItem.setParam(new String[]{amount+"",deposito.getId_deposito()+""});
+			notifItem.setType(NotificationType.NEW_DEPOSITO);
+			notifItem.setUser(user);
+			notif.pushNew(notifItem);
+			
+			Ebean.commitTransaction();
+			return deposito;
 		} catch (NumberFormatException e) {
 			Ebean.rollbackTransaction();
 			e.printStackTrace();
@@ -126,9 +195,7 @@ public class DepositoOperator {
 		}finally{
 			Ebean.endTransaction();
 		}
-		
-		
-		return null;
+		return null;		
 	}
 	public boolean deleteTransfer(TransferConfirmation transfer){
 		try {

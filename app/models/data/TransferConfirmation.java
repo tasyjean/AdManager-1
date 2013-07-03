@@ -1,5 +1,6 @@
 package models.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,6 +29,8 @@ public class TransferConfirmation  extends Model {
 	private int amount;
 	@Column(columnDefinition="TEXT")
 	private String description;
+	@Column(columnDefinition="TEXT")
+	private String manager_message;
 	private Date transfer_date;
 	private String senderBankAccount;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -39,6 +42,14 @@ public class TransferConfirmation  extends Model {
 	
 	public static Model.Finder<Integer,TransferConfirmation> find = new Model.Finder(Integer.class, TransferConfirmation.class);
 
+	public  String getTimestamp_created_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
+		return format.format(timestamp_created);
+	}
+	public  String getTransfer_date_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm");
+		return format.format(transfer_date);
+	}
 	public int getId_transferConfirmation() {
 		return id_transferConfirmation;
 	}
@@ -125,6 +136,14 @@ public class TransferConfirmation  extends Model {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public String getManager_message() {
+		return manager_message;
+	}
+
+	public void setManager_message(String manager_message) {
+		this.manager_message = manager_message;
 	}
 
 	

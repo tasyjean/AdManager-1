@@ -79,9 +79,17 @@ public enum NotificationType {
 			return Messages.get("notif.new_user");
 		}
 	},
+	@EnumValue("SHOULD_ACTIVE")
 	SHOULD_ACTIVE{
 		public String toString(){
 			return Messages.get("notif.should_active");
 		}
+	},
+	@EnumValue("NEW_DEPOSITO")
+	NEW_DEPOSITO{
+		public String toString(){
+			return Messages.get("notif.new_deposito");
+		}		
 	}
+	
 }

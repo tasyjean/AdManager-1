@@ -38,11 +38,13 @@ public class NotificationCenter {
 		notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan (nama campaign, id campaign) untuk pemilik campaign
 		notif.empty_deposito=Saldo tidak mencukupi, silahkan isi kembali ("", "") atau kosong, untuk pemilik saldo
 		notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi (nama_user, id validasi) untuk management
-		notif.validated=Pembayaran senilai |jumlah| telah divalidasi (jumlah, id pembayaran) untuk pemilik pembayaran
+		notif.validated=Pembayaran senilai |jumlah| telah divalidasi (jumlah, id transfer confirmation) untuk pemilik pembayaran
 		notif.see_report= Silahkan lihat laporan iklan  (jumlah, id pembayaran) untuk advertiser
 		notif.new_campaign=|nama_user| telah membuat campaign baru  (nama user, id user) untuk administrator dan manager
 		notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar  (nama user, id user) untuk administrator
 		notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai  (nama_campaign, id_campaign)
+		notif.new_deposito=Dana Iklan sejumlan |jumlah| telah dikirim  (id_deposito,jumlah)
+
 	*
 	 */
 

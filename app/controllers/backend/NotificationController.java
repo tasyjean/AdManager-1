@@ -51,6 +51,7 @@ public class NotificationController extends CompressController {
 				case VALIDATED :call=controllers.backend.routes.ProfileController.showProfile();break;
 				case SEE_REPORT:call=controllers.backend.routes.ReportController.index();break;
 				case SHOULD_ACTIVE:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
+				
 				default:
 					break;
 				}

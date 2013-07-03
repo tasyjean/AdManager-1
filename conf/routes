@@ -52,10 +52,11 @@ GET   /dashboard/finance/payment							controllers.backend.FinanceController.new
 POST  /dashboard/finance/payment							controllers.backend.FinanceController.saveConfirmation()
 GET   /dashboard/finance/payment/validate/:idConfirmation	controllers.backend.FinanceController.validateConfirmation(idConfirmation:Integer)
 GET   /dashboard/finance/payment/delete/:idConfirmation 	controllers.backend.FinanceController.deleteConfirmation(idConfirmation:Integer)
-GET   /dashbaord/finance/list/:option						controllers.backend.FinanceController.listConfirmation(option:String)
-GET   /dashboard/finance/new/:idUser						controllers.backend.FinanceController.newDeposito(idUser:Integer)
-POST  /dashboard/finance/new/:idUser 						controllers.backend.FinanceController.saveDeposito(idUser:Integer)
-GET  /dashboard/finance/delete/:idDeposito					controllers.backend.FinanceController.deleteDeposito(idDeposito:Integer)
+GET   /dashboard/finance/list/:option						controllers.backend.FinanceController.listConfirmation(option:String)
+GET   /dashboard/finance/new/								controllers.backend.FinanceController.newDeposito()
+POST  /dashboard/finance/new/		 						controllers.backend.FinanceController.saveDeposito()
+GET   /dashboard/finance/delete/:idDeposito					controllers.backend.FinanceController.deleteDeposito(idDeposito:Integer)
+GET   /dashboard/finance/payment/show/:idConfirmation		controllers.backend.FinanceController.showSingleConfirmation(idConfirmation:Integer)
 
 #profile
 GET   /dashboard/profile					controllers.backend.ProfileController.showProfile()

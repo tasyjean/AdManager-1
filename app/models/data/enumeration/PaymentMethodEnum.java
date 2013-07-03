@@ -11,5 +11,11 @@ public enum PaymentMethodEnum {
 		public String toString() {
 			return Messages.get("payment.transfer");
 		}
+	},
+	@EnumValue("OTHER")
+	OTHER(){
+		public String toString(){
+			return Messages.get("payment.other");
+		}
 	}
 }

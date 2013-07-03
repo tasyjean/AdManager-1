@@ -1,0 +1,187 @@
+@(data: TemplateData, confirmation_list: Page[TransferConfirmation],user_list:List[User], validated:Integer,page:Integer,user:Integer)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+@import scala._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+ 		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+@main("Keuangan"){
+		
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		
+		
+		@dashboard_content("Keuangan","Konfirmasi Pembayaran","pembayaran"){
+
+			<div class="content-padding" style="min-height: @(160+confirmation_list.getList.size*32+76)px">
+			<h4>Daftar Konfirmasi</h4>
+
+				@getSuccess
+				<span>Tampilkan : </span>
+				<a href="@controllers.backend.routes.FinanceController.listConfirmation((page)+"."+user+".1")">
+					[Telah divalidasi]
+				</a>
+				<a href="@controllers.backend.routes.FinanceController.listConfirmation((page)+"."+user+".0")">
+					[Belum divalidasi]
+				</a>		
+				<a href="@controllers.backend.routes.FinanceController.listConfirmation((page)+"."+user+".2")">
+					[Keduanya]
+				</a><br>
+				@restrict(List(as("administrator"), as("manager"))){                     
+						
+					Filter Pengguna : 
+						<select name="user" id="user">
+							<option  @("selected".when(user==0))  value=0>Semua User</option>
+							@for(single_user<-user_list){
+									<option @("selected".when(single_user.getId_user.toString==user))
+											value="@(single_user.getId_user)">@(single_user.getFront_name) | @single_user.getEmail</option>
+								}
+						</select>
+						<a href="@controllers.backend.routes.FinanceController.listConfirmation((page)+"."+user+".1")"  
+							class="btn" id="filterpengguna">
+							Filter Pengguna
+						</a>
+						
+				}
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_campaign">
+					<thead>
+						<tr>
+							<th>Jumlah Pembayaran </th>
+                      	@restrict(List(as("administrator"), as("manager"))){                     
+							<th>Pengiklan</th>
+						}
+							<th>Waktu Transfer</th>
+							<th>Waktu Dibuat</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					@for(confirmation <- confirmation_list.getList) {
+						 <tr>
+							<td>
+								<a href="@controllers.backend.routes.FinanceController.showSingleConfirmation(confirmation.getId_transferConfirmation)">@confirmation.getAmount</a>
+							</td>
+							
+						@restrict(List(as("administrator"), as("manager"))){                     
+							<td>
+								<a href="@controllers.backend.routes.UserController.showSingleUser(confirmation.getUser.getId_user)">
+									@confirmation.getUser.getFront_name
+								</a>
+							</td>
+						}
+							<td>@confirmation.getTransfer_date_formatted()</td>
+							<td>@confirmation.getTimestamp_created_formatted()</td>
+							<td>
+								@("Telah Divalidasi".when(confirmation.isValidated==true))
+								@("Belum Divalidasi".when(confirmation.isValidated==false))						
+							</td>
+   							<td style="@if(confirmation.getManager_message.length!=0 && confirmation.isValidated==false){background-color:#d37782}">
+								<ul  id="icons" class="ui-widget ui-helper-clearfix">
+									<li class="ui-state-default ui-corner-all" title="Tampilkan Data Lengkap">
+										<a class="ui-icon ui-icon-extlink"
+										   href="@controllers.backend.routes.FinanceController.showSingleConfirmation(confirmation.getId_transferConfirmation)"></a>
+									</li>
+								</ul>
+							</td>
+						
+						</tr>
+					}
+					</tbody>
+				</table>
+			<script type="text/javascript">
+				$(document).ready(function() {
+				    $('#table_campaign').dataTable({
+				    	"bPaginate" : false,
+				    	"bLengthChange":false,
+				        "oLanguage": {
+				            "sLengthMenu": "Display _MENU_ records per page",
+				            "sZeroRecords": "Maaf Data tidak ditemukan",
+				            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+				            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+				            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+				            "sPrevious": "Sebelumnya",
+				            "sNext": "Selanjutnya",
+				            "sSearch": "Filter  :"
+				        }
+				    });
+				    var userLink="@controllers.backend.routes.FinanceController.listConfirmation("")";
+				    $('#user').change(function() {
+				            $("#filterpengguna").prop("href",userLink+@page+"."+$(this).val()+"."+@validated);
+				    });
+					// Hover states on the static widgets
+					$( "#dialog-link, #icons li" ).hover(
+						function() {
+							$( this ).addClass( "ui-state-hover" );
+						},
+						function() {
+							$( this ).removeClass( "ui-state-hover" );
+						}
+					); 
+				} );
+			</script>
+			
+					<div id="pagination" class="pagination pagination-user">
+		            <ul>
+		                @if(confirmation_list.hasPrev) {
+		                    <li class="prev">
+		                        <a href="@controllers.backend.routes.FinanceController.listConfirmation((page-1)+"."+user+"."+validated)">&larr; Previous</a>
+		                    </li>
+		                } else {
+		                    <li class="prev disabled">
+		                        <a>&larr; Sebelumnya</a>
+		                    </li>
+		                }
+		                <li class="current">
+		                    <a href="@controllers.backend.routes.FinanceController.listConfirmation((page)+"."+user+"."+validated)">--- @confirmation_list.getPageIndex ---</a>
+		                </li>
+		                @if(confirmation_list.hasNext) {
+		                    <li class="next">
+		                        <a href="@controllers.backend.routes.FinanceController.listConfirmation((page+1)+"."+user+"."+validated)">Next &rarr;</a>
+		                    </li>
+		                } else {
+		                    <li class="next disabled">
+		                        <a>Selanjutnya &rarr;</a>
+		                    </li>
+		                }
+		            </ul>
+		        </div>			
+	        </div>
+      
+    }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("finance")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

@@ -115,12 +115,13 @@ notif.active_ads=Campaign |nama_campaign| telah diaktifkan
 notif.non_active_ads=Campaign |nama_campaign|  di non aktifkan secara otomatis
 notif.empty_deposito=Saldo tidak mencukupi untuk menampilkan iklan, silahkan isi kembali
 notif.please_validate=Ada pembayaran baru dari |nama_user| yang perlu divalidasi
-notif.validated=Pembayaran senilai |jumlah| telah divalidasi
+notif.validated=Konfirmasi pembayaran senilai |jumlah| telah divalidasi
 notif.see_report= Silahkan lihat laporan iklan
 notif.new_campaign=|nama_user| telah membuat campaign baru
 notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar
 notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai
- 
+notif.new_deposito=Dana Iklan sejumlan |jumlah| telah dikirim 
 
 #Paymentmethod
 payment.transfer=Via Transfer Bank
+payment.other=Metode Lainnya (isi metode pada deskripsi)

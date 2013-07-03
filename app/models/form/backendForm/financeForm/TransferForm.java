@@ -27,10 +27,7 @@ public class TransferForm {
 			if(amounts<0){
 				error.add(new ValidationError("amount",Messages.get("validation.amount_kurang")));
 			}
-			if(description.length()==0){
-				error.add(new ValidationError("description",Messages.get("constraint.required")));
 
-			}
 			if(description.length()>500){
 				error.add(new ValidationError("description",Messages.get("error.description",500+"")));
 			}	
