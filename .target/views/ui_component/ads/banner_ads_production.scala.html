@@ -6,13 +6,13 @@
 
 	@if(tipe=="IMAGE") {
 			<a href="@controllers.backend.routes.AdsDeliveryController.clickHandler(target.getId_impression)" 
-				id="@(banner.getName)">
+				id="@(banner.getName)" target="_blank">
 				<img src="@(banner.getContent_link.getFileURL)" 
 					title="@(banner.getTitle) -- @(banner.getContent_text)" alt="@(banner.getAlt_text)">
 			</a>
 	}else{
 		<a href="@controllers.backend.routes.AdsDeliveryController.clickHandler(target.getId_impression)" 
-			id="@(banner.getName)">
+			id="@(banner.getName)" target="_blank">
 			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="@(banner.getBannerSize.getWidth)" height="@(banner.getBannerSize.getHeight)px" id="@(banner.getName)" align="middle">
 				<param name="movie" value="@(banner.getContent_link.getFileURL)"/>
 				<!--[if !IE]>-->
@@ -26,6 +26,8 @@
 				</object>
 				<!--<![endif]-->
 			</object>
+			<i style="display:block; height: @(banner.getBannerSize.getHeight)px; width:@(banner.getBannerSize.getWidth)px; background-color:#233122; opacity:0.01;filter:alpha(opacity=1); position: relative; z-index: 9; margin-top: @(-banner.getBannerSize.getHeight)px;"></i>
+			
 	</a>
 	}
 

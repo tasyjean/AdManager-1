@@ -47,8 +47,8 @@ GET   /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backe
 POST  /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backend.CampaignController.updateBannerPlacement(idBanner:Integer)
 
 #finance
-GET   /dashboard/finance/:idUser							controllers.backend.FinanceController.index(idUser:Integer)
-GET   /dashboard/finance/first/								controllers.backend.FinanceController.index_default()
+GET   /dashboard/finance/show/:idUser						controllers.backend.FinanceController.index(idUser:Integer)
+GET   /dashboard/finance/show/								controllers.backend.FinanceController.index_default()
 GET   /dashboard/finance/:idUser/ads/:option				controllers.backend.FinanceController.showAdsTransactionList(idUser:Integer, option:String)
 POST  /dashboard/finance/:idUser/ads/:option				controllers.backend.FinanceController.showAdsTransactionList(idUser:Integer, option:String)
 GET   /dashboard/finance/:idUser/deposito/:option			controllers.backend.FinanceController.showDepositoList(idUser:Integer, option:String)

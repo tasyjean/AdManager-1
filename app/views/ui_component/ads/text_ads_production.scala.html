@@ -6,12 +6,12 @@
 	
 		<div id="adsItem" style="font-family:arial;max-width:70px;display:inline-block;max-width:300px;overflow: hidden;"> 
 			<div id="image" style="display:table;float:left;width:60px;height:60px">
-				<a href="@controllers.backend.routes.AdsDeliveryController.clickHandler(target.get(index).getId_impression)">
+				<a href="@controllers.backend.routes.AdsDeliveryController.clickHandler(target.get(index).getId_impression)" target="_blank">
 					<img style="width:60px;height:60px;padding:4px" alt="@banner.getAlt_text" src="@banner.getContent_link.getFileURL"></a>
 			</div>
 			<div id="adtext" style="padding:4px">
 				<div id="title">
-					<a href="@target" style="color:black;font-weight:bold;font-size:0.9em;">
+					<a href="@target" style="color:black;font-weight:bold;font-size:0.9em;" target="_blank">
 						@(banner.getTitle)
 					</a>
 				</div>

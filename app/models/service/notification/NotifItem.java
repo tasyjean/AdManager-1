@@ -11,7 +11,7 @@ public class NotifItem {
 	public String getParam() {
 		String result = "";
 		for(String x:param){
-			result=result+x+",";
+			result=result+x+":";
 		}
 		return result;
 	}

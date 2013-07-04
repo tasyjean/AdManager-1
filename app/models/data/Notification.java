@@ -111,6 +111,7 @@ public class Notification extends Model{
 			case SEE_REPORT:break;
 			case VALIDATED:text=text.replace("|jumlah|", replaceParam);break;
 			case SHOULD_ACTIVE:text=text.replace("|nama_campaign|", replaceParam);break;
+			case NEW_DEPOSITO:text=text.replace("|jumlah|", replaceParam);
 		default:
 			break;
 		}

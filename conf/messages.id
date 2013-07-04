@@ -120,8 +120,8 @@ notif.see_report= Silahkan lihat laporan iklan
 notif.new_campaign=|nama_user| telah membuat campaign baru
 notif.new_user=Pengguna baru bernama |nama_user| telah terdaftar
 notif.should_active=Campaign |nama_campaign| sudah memasuki masa mulai, namun belum diaktifkan, silahkan aktifkan atau mundurkan waktu mulai
-notif.new_deposito=Dana Iklan sejumlan |jumlah| telah dikirim 
+notif.new_deposito=Dana Iklan sejumlah |jumlah| telah diterima
 
 #Paymentmethod
 payment.transfer=Via Transfer Bank
-payment.other=Metode Lainnya (isi metode pada deskripsi)
+payment.other=Metode Lainnya

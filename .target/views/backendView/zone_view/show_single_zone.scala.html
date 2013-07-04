@@ -51,14 +51,24 @@
 			          <td>Tipe Zona</td><td>:</td>
 			          <td>@zone.getZone_type</td>
 			        </tr>     
+			    @restrict(la(as("administrator"), as("manager"))){    
 			        <tr>
 			          <td>Default Code</td><td>:</td>
-			          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
+			          <td><textarea style="width:500px" class="code" rows="6" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
 			        </tr>
 			        <tr>
+
 			          <td>Kode Pemasangan</td><td>:</td>
-			          <td><textarea class="code" rows="4" readonly="readonly" >@Html(zone.getZone_default_code)</textarea></td>
-			        </tr>  
+			          <td>
+			          	<textarea style="width:500px" class="code" rows="6" readonly="readonly" >
+<script type='text/javascript'>
+var url = parent.document.URL;
+document.write('<iframe width="@(zone.getBanner_size.getWidth+10)" height="@(zone.getBanner_size.getHeight+40)" style="border:1px solid white" src="@(play.Play.application().configuration().getString("domain.url"))/adsdelivery/@(zone.getId_zone)/'+encodeURIComponent(url)+'"></iframe>');
+</script>
+			          	</textarea>
+			          </td>
+			        </tr> 
+			        } 
 			      </table>
 			      </div>
 			    @restrict(la(as("administrator"))){      

@@ -352,6 +352,7 @@ public class BannerProcessor {
 				placement.setZone(Zone.find.byId(Integer.parseInt(result.getValue())));
 				placement.save();
 			}
+
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			return false;

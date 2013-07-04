@@ -71,7 +71,7 @@
 									<div class="controls">
 										<select name=idUser id="idUser">
 											@for(data<-depositoData.getUser){
-												<option @("selected".when(data.getId_user==deposito_form("iDUser").value))
+												<option @("selected".when(data.getId_user.toString==deposito_form("iDUser").value))
 														value="@(data.getId_user)">@(data.getFront_name) | @data.getEmail</option>
 											}
 										</select> 

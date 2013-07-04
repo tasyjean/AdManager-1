@@ -38,7 +38,7 @@ public class NotificationController extends CompressController {
 		Call call;
 		try {
 			Notification notification=Notification.find.byId(idNotif);
-			int parameter=Integer.parseInt(notification.getParam().split(",")[1]);
+			int parameter=Integer.parseInt(notification.getParam().split(":")[1]);
 			
 			call = null;
 			switch (notification.getNotification_type()) {
@@ -47,11 +47,11 @@ public class NotificationController extends CompressController {
 				case NEW_CAMPAIGN:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
 				case NEW_USER:call=controllers.backend.routes.UserController.showSingleUser(parameter);break;
 				case NON_ACTIVE_ADS:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
-				case PLEASE_VALIDATE:call=controllers.backend.routes.ProfileController.showProfile();break;
-				case VALIDATED :call=controllers.backend.routes.ProfileController.showProfile();break;
+				case PLEASE_VALIDATE:call=controllers.backend.routes.FinanceController.showSingleConfirmation(parameter);break;
+				case VALIDATED :call=controllers.backend.routes.FinanceController.showDepositoList(parameter, "all");break;
 				case SEE_REPORT:call=controllers.backend.routes.ReportController.index();break;
 				case SHOULD_ACTIVE:call=controllers.backend.routes.CampaignController.showSingleCampaign(parameter);break;
-				
+				case NEW_DEPOSITO:call=controllers.backend.routes.FinanceController.showDepositoList(parameter, "all");break;
 				default:
 					break;
 				}

@@ -53,6 +53,8 @@ public class AdsDeliveryController extends CompressController {
 		Zone zone_object=Zone.find.byId(zone);
 		
 		List<BannerPlacement> result=ad_selector.get(zone_object);
+		Logger.debug("Daftar Banner= "+result.toString());
+		Logger.debug("Ukuran Banner= "+result.size());
 		if(result.size()==0){
 			return ok();
 		}else{
@@ -82,9 +84,14 @@ public class AdsDeliveryController extends CompressController {
 		}
 
 	}
+	public static Result showZoneDefaultView(int zone){
+		return TODO;
+		
+	}
 	public static Result clickHandler(long impression){
 		Impression impresi=Impression.find.byId(impression);
 		String route=impresi.getAdsPlacement().getBanner().getTarget();
+		Logger.debug("Route "+route);
 		BannerAction action=adAction.click(impresi);
 		if(action==null){
 			Logger.error("Terjadi exception pada pencatatan click");

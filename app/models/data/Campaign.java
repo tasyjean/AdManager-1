@@ -245,7 +245,7 @@ public class Campaign extends Model{
 		
 	}
 	//menghitung harga
-	private int countPrice(){
+	public int countPrice(){
 		SettingManager manager=new SettingManager();
 		if(pricing_model.equals(PricingModelEnum.CPA)){
 			return bid_price*limit_click;

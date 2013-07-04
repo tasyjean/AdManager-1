@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
+import play.data.DynamicForm;
+import play.data.Form;
 import play.db.DB;
 
 import com.avaje.ebean.Ebean;
 
+import models.custom_helper.file_manager.FileManager;
 import models.data.AdsTransaction;
 import models.data.Banner;
 import models.data.BannerAction;
@@ -31,16 +35,27 @@ import models.data.ZoneChannel;
 import models.data.enumeration.CampaignTypeEnum;
 import models.data.enumeration.ContactTypeEnum;
 import models.data.enumeration.DefaultViewEnum;
+import models.data.enumeration.PaymentMethodEnum;
 import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.RoleEnum;
 import models.data.enumeration.ZoneTypeEnum;
+import models.form.backendForm.financeForm.DepositoForm;
+import models.service.campaign.BannerProcessor;
+import models.service.finance.DepositoOperator;
+import models.service.notification.NotifItem;
+import models.service.notification.NotificationCenter;
+import models.service.notification.NotificationType;
 
 /*Set Initial Data, 
  * 
  * Buat ngisi data dalam rangka testing
  */
 public class SetInitialData {
-
+	FileManager manager=new FileManager();
+	BannerProcessor bannerproc=new BannerProcessor(manager);
+	NotificationCenter notif=new NotificationCenter();
+	DepositoOperator deposito=new DepositoOperator(notif);
+	
 	public SetInitialData(){
 		//Konstruktor
 	}
@@ -130,8 +145,66 @@ public class SetInitialData {
 		contact3.add(kontak3_item2);
 		user3.setUserContact(contact3);	
 		user3.save();
+		
+		DepositoForm form1=new DepositoForm();
+			form1.amount="500000";
+			form1.description="Pembayaran Awal untuk campaign aximtel";
+			form1.idUser=(user2.getId_user()+"");
+			form1.paymentMethod=PaymentMethodEnum.TRANSFER.name();
+		DepositoForm form2=new DepositoForm();
+			form2.amount="2000000";
+			form2.description="Pembayaran untuk kekurangan di pembayaran sebelumnya";
+			form2.idUser=(user2.getId_user()+"");
+			form2.paymentMethod=PaymentMethodEnum.TRANSFER.name();
+		DepositoForm form3=new DepositoForm();
+			form3.amount="400000";
+			form3.description="Pembayaran Akhir";
+			form3.idUser=(user2.getId_user()+"");
+			form3.paymentMethod=PaymentMethodEnum.TRANSFER.name();
+		
+		newDeposito(form1);
+		newDeposito(form2);
+		newDeposito(form3);
+			
 	}
-	
+	public Deposito newDeposito(DepositoForm form){
+		Ebean.beginTransaction();
+		Deposito deposito=null;
+		try {
+			deposito=new Deposito();
+			User user=User.find.byId(Integer.parseInt(form.idUser));
+			int current_balance=user.getCurrent_balance();
+			int amount=Integer.parseInt(form.amount);
+			
+			deposito.setAmount(amount);
+			deposito.setCurrent_balance(current_balance+amount);
+			deposito.setDescription(form.description);
+			deposito.setTimestamp(new Date());
+			deposito.setPayment_method(PaymentMethodEnum.valueOf(form.paymentMethod));
+			deposito.setUser(user);
+			deposito.save();
+			
+			user.setCurrent_balance(current_balance+amount);
+			user.update();
+			
+			NotifItem notifItem=new NotifItem();
+			notifItem.setParam(new String[]{amount+"",deposito.getId_deposito()+""});
+			notifItem.setType(NotificationType.NEW_DEPOSITO);
+			notifItem.setUser(user);
+			notif.pushNew(notifItem);
+			
+			Ebean.commitTransaction();
+			return deposito;
+		} catch (NumberFormatException e) {
+			Ebean.rollbackTransaction();
+			e.printStackTrace();
+		}catch(Exception e){
+			Ebean.rollbackTransaction();
+		}finally{
+			Ebean.endTransaction();
+		}
+		return null;		
+	}	
 	public void setBannerSize(){
 
 		//udah ada apa ngga dulu
@@ -493,8 +566,34 @@ public class SetInitialData {
 		banner7.setCampaign(campaign2);
 		banner7.setContent_link(upload7);
 		banner7.setBannerSize(medium);
-		banner7.save();				
+		banner7.save();	
+		
+		saveBannerPlacement(banner5);
+		saveBannerPlacement(banner);
+		saveBannerPlacement(banner2);
+		saveBannerPlacement(banner3);
+		saveBannerPlacement(banner4);
+		saveBannerPlacement(banner7);
 	}
+	
+	public boolean saveBannerPlacement(Banner banner){
+		List<Zone> available=bannerproc.getZoneAvailable(banner.getId_banner());
+		
+		try {
+			System.out.println(available.toString());
+			for(Zone zone:available){
+				BannerPlacement placement=new BannerPlacement();
+				placement.setBanner(banner);
+				placement.setZone(zone);
+				placement.save();
+			}
+
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}	
 	public void deleteCampaignData(){
 		List<BannerPlacement> places=BannerPlacement.find.all();
 		List<Banner>  		  banner=Banner.find.all();
@@ -566,6 +665,7 @@ public class SetInitialData {
 			channel.delete();
 		}
 	}
+	
 	
 	
 	

@@ -2,6 +2,8 @@ package models.service.ads_delivery;
 
 import java.util.Date;
 
+import play.Logger;
+
 import com.avaje.ebean.Ebean;
 
 import models.data.AdsTransaction;
@@ -25,8 +27,9 @@ public class AdActionProcessor {
 											eq("impression", impression).
 											eq("action_type", ActionTypeEnum.CLICK.name()).
 											findUnique();
-			if(action!=null){
+			if(action==null){
 				action=newClick(impression);
+				Logger.debug("New Click + "+action.getTimestamp());
 				Ebean.commitTransaction();
 			}
 			return action;

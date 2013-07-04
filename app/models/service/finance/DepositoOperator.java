@@ -169,7 +169,7 @@ public class DepositoOperator {
 			user.setCurrent_balance(current_balance+transfer.getAmount());
 
 			NotifItem item=new NotifItem();
-			item.setParam(new String[]{transfer.getAmount()+"",transfer.getId_transferConfirmation()+""});
+			item.setParam(new String[]{transfer.getAmount()+"",user.getId_user()+""});
 			item.setType(NotificationType.VALIDATED);
 			item.setUser(user);
 			if(isValid){
@@ -208,7 +208,7 @@ public class DepositoOperator {
 			user.update();
 			
 			NotifItem notifItem=new NotifItem();
-			notifItem.setParam(new String[]{amount+"",deposito.getId_deposito()+""});
+			notifItem.setParam(new String[]{amount+"",user.getId_user()+""});
 			notifItem.setType(NotificationType.NEW_DEPOSITO);
 			notifItem.setUser(user);
 			notif.pushNew(notifItem);

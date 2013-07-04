@@ -143,16 +143,24 @@
 }
 @financeMenu(activeMenu:String="")={
       <a class="span2 sub-menu @("active".when(activeMenu=="riwayat transaksi"))"
-          href="@controllers.backend.routes.FinanceController.index()">
-          <div class="icon"></div>
+          href="@controllers.backend.routes.FinanceController.index_default()">
+         <div class="icon"></div>
          <div class="content" >
             <div class="kpi">Riwayat Transaksi</div>
             <div class="small">Melihat Riwayat Transaksi</div>
          </div>
         </a>  		
+      <a style="width:215px" class="span2 sub-menu @("active".when(activeMenu=="pembayaran"))"
+          href="@controllers.backend.routes.FinanceController.listConfirmation("all")">
+          <div class="icon"></div>
+         <div class="content" >
+            <div class="kpi">Konfirmasi Pembayaran</div>
+            <div class="small">Daftar Konfirmasi Pembayaran</div>
+         </div>
+        </a>   
     @restrict(la(as("advertiser"))){                     
       <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-advertiser"))"
-          href="@controllers.backend.routes.FinanceController.index()">
+          href="@controllers.backend.routes.FinanceController.newConfirmation()">
           <div class="icon"></div>
          <div class="content" >
             <div class="kpi">Pembayaran</div>
@@ -160,16 +168,19 @@
          </div>
         </a> 
       }
+
     @restrict(la(as("manager"))){                     
-      <a class="span2 sub-menu @("active".when(activeMenu=="pembayaran-manager"))"
-          href="@controllers.backend.routes.FinanceController.index()">
+      
+      <a style="width:200px" class="span2 sub-menu @("active".when(activeMenu=="tambah-saldo"))"
+          href="@controllers.backend.routes.FinanceController.newDeposito()">
           <div class="icon"></div>
          <div class="content" >
-            <div class="kpi">Pembayaran</div>
-            <div class="small">Mengelola Pembayaran</div>
+            <div class="kpi">Tambah Saldo</div>
+            <div class="small">Menambah Saldo Pengiklan</div>
          </div>
         </a> 
-      }      
+      } 
+          
 }
 @profileMenu(activeMenu:String="")={
       <a  class="span2 sub-menu @("active".when(activeMenu=="data profil"))"

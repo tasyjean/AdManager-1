@@ -29,7 +29,7 @@ public class ImpressionProcessor {
 			impresi.setViewer_source(source);
 			impresi.save();
 			context.response().setCookie(placement.getBanner().getId_banner()+"",
-										placement.getBanner().getName(), 3*60*60); //satu impresi user dibatesi selama 3 jam
+										placement.getId_banner_placement()+"", 3*60*60); //satu impresi user dibatesi selama 3 jam
 			
 			//impressioon count untuk banner dan campaign
 			Banner banner=placement.getBanner();
@@ -63,11 +63,11 @@ public class ImpressionProcessor {
 	private void addTransaction(Banner banner, BannerPlacement placement) throws Exception {
 		Campaign campaign=banner.getCampaign();
 		User user=campaign.getId_user();
-		
-		int currentBalance=user.getCurrent_balance()-campaign.getBid_price();
+		int dailyPrice=campaign.countPrice()/campaign.campaignDuration();
+		int currentBalance=user.getCurrent_balance()-dailyPrice;
 		
 		AdsTransaction transaction = new AdsTransaction();
-		transaction.setAmount(campaign.getBid_price());
+		transaction.setAmount(dailyPrice);
 		transaction.setBannerPlacement(placement);
 		transaction.setCurrent_balance(currentBalance);
 		transaction.setTransaction_type(PricingModelEnum.CPM);
