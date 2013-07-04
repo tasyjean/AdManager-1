@@ -89,7 +89,7 @@ public class AdSelector {
 		List<BannerPlacement> banners=BannerPlacement.find.where().
 													 eq("zone", zone).
 													 eq("isActive", true).findList();
-		Logger.debug("banner placement  size "+banners.size());
+//		Logger.debug("banner placement  size "+banners.size());
 		List<BannerPlacement> result=null;
 		//jika ngga ada, return 0 
 		if(banners.size()==0){
@@ -97,7 +97,7 @@ public class AdSelector {
 		}		
 		//langkah 2 populasikan banner yang campaignnya ekslusif
 		int selected=isContainExclusive(banners);
-		Logger.debug("cek ekslusif "+selected);			
+//		Logger.debug("cek ekslusif "+selected);			
 
 		if(selected>0){
 			return populateFromInt(banners, new int[]{selected});
@@ -116,7 +116,7 @@ public class AdSelector {
 		}
 		
 		int[] selectedContract=selectBannerNonExclusive(banners,1);
-		Logger.debug("cek kontrak "+selectedContract);			
+//		Logger.debug("cek kontrak "+selectedContract);			
 		
 		return populateFromInt(banners, selectedContract);
 	}
@@ -131,14 +131,14 @@ public class AdSelector {
 			}
 			x++;
 		}
-		Logger.debug("Result size : "+result.size());
+//		Logger.debug("Result size : "+result.size());
 		return result;
 	}
 	//mempopulasikan banner non ekslusif
 	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count){
 		List<Banner> result=new ArrayList<Banner>();
 		for(BannerPlacement bannerPlace:inputs){
-			Logger.debug("selectBannerNonExclusive  "+bannerPlace.getId_banner_placement());			
+//			Logger.debug("selectBannerNonExclusive  "+bannerPlace.getId_banner_placement());			
 			if(checkValidNonExclusive(bannerPlace)){
 				result.add(bannerPlace.getBanner());
 			}
@@ -216,7 +216,7 @@ public class AdSelector {
 		}
 		//pilhan return value
 		if(selectedBanner.size()==0){
-			Logger.debug("Ada bug dalam pemilihan banner");
+//			Logger.debug("Ada bug dalam pemilihan banner");
 			return 0;
 		}else if(selectedBanner.size()==1){
 			return selectedBanner.get(0).getId_banner();
@@ -274,11 +274,11 @@ public class AdSelector {
 	
 	private boolean checkContractCampaign(Campaign campaign){
 		User user=campaign.getId_user();
-		Logger.debug("Check contract campaign "+user.getCurrent_balance());			
+//		Logger.debug("Check contract campaign "+user.getCurrent_balance());			
 		
 		if(user.getCurrent_balance()<campaign.getBid_price()){
 			//nonaktifkan
-			Logger.debug("non ekslusif dana ngga cukup "+user.getCurrent_balance());			
+//			Logger.debug("non ekslusif dana ngga cukup "+user.getCurrent_balance());			
 
 			nonActivateCampaign(campaign);
 			sendEmptyDeposito(campaign);
