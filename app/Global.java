@@ -14,14 +14,14 @@ import models.custom_helper.setting.SettingDefault;
 public class Global extends GlobalSettings {
 
 	public void onStart(Application app){
-		SetInitialData data=new SetInitialData();
-		data.setDataUser();
-		data.setBannerSize();
-		data.setZoneChannel();
-		data.setCampaignData();
-		data.createBanner();
-		data.simulasi();
-		SettingDefault default2=new SettingDefault();
-		default2.setAll();
+//		SetInitialData data=new SetInitialData();
+//		data.setDataUser();
+//		data.setBannerSize();
+//		data.setZoneChannel();
+//		data.setCampaignData();
+//		data.createBanner();
+//		data.simulasi();
+//		SettingDefault default2=new SettingDefault();
+//		default2.setAll();
 	}
 }

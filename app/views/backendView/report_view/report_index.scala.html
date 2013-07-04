@@ -3,20 +3,205 @@
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
 
 @main("Laporan Iklan"){
+		
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("multiselect/js/jquery.multi-select.js")"></script>
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/highcharts.js")"></script>
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/modules/exporting.js")"></script>
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		
+		<link href="@routes.Assets.at("multiselect/css/multi-select.css")" rel="stylesheet">
+		
 	
-		@dashboard_content("Laporan Iklan","Semua Laporan"){
-		<div style="padding:12px;font-size:16px; line-height:20px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-		"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. exercitationepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." </div>
+		@dashboard_content("Laporan","Laporan Iklan","laporan"){
+		<div class="content-padding">
+		<h4>Lihat Laporan Iklan</h4>
+		<a role="button" data-toggle="modal" class="btn" href="#setting_modal"  style="display:inline;margin-right:10px;margin-left:0px"> Pengaturan Tampilan</a>
+
+		@**********Modal Setting********@
+			<div id="setting_modal" style="width:600px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Pengaturan Laporan</h3>
+		  		</div>
+		  	@form(action =controllers.backend.routes.CampaignController.saveNewCampaign(), 'class-> "form-horizontal") {				
+				 <div class="modal-body" style="background-color:#f9f9f9;">
+					<div id="forms" style="background-color:#f9f9f9;padding:10px; margin:0 auto;">
+			
+						<div style="float:left;margin-left:35px;padding-right:10px">
+							<label for="user">Pilih Pengguna </label>					
+							@restrict(la(as("administrator"),as("manager"))){	      	  	
+							
+								<select name="user" id="user">
+									<option value="1">Pengguna 1</option>
+									<option value="3">Pengguna 2</option>
+								</select><br>
+							
+							}
+							<label for="user" style="padding-top:10px">Pilih Campaign</label>										
+							<select name="campaign" id="campaign">
+								<option value="1">Semua Campaign</option>
+								<option value="3">Campaign 2</option>
+							</select>
+						</div>
+						<div style="margin-left:90px;display:inherit">
+							<label for="from">Dari Tanggal </label>
+							<input placeholder="Dari Tanggal" class="" type="text" id="from" name="from" />
+							<label for="to">Hingga</label>
+							<input placeholder="Hingga Tanggal" class="" type="text" id="to" name="to"/><br>
+						</div></br>
+			</div> 
+  		</div>@*End Div *@
+  				<div class="modal-footer">
+				   		<button type="submit" class="btn">Tampilkan Laporan</button>
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+				} @* End Form *@	
+
+			</div>	
 
 
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
-        </div>
-    }
+			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin:12px;"></div>
+			<div id="chart" style="width:87%;height:auto;margin: 0 auto;border:1px solid #ccc">
+				chart
+			</div>
+			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin:12px;"></div>			
+			 <div id="table">
+			 	<h4>Laporan Campaign Selama Periode Terpilih</h4>
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_report">
+					<thead>
+						<tr>
+							<th>Nama Banner</th>
+							<th>Jumlah Impresi</th>
+							<th>Jumlah Klik</th>
+							<th>Impresi/Klik</th>
+						</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>Banner1</td>
+						<td>32144</td>
+						<td>323</td>
+						<td>23/222</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div> @* End Content padding *@
+		
+	  }
+	
+		<script text="text/javascript">
+		$(document).ready(function() {
 
+		    $('#table_report').dataTable({
+		    	"bPaginate" : false,
+		    	"bLengthChange":false,
+		        "oLanguage": {
+		            "sLengthMenu": "Display _MENU_ records per page",
+		            "sZeroRecords": "Maaf Data tidak ditemukan",
+		            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+		            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+		            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+		            "sPrevious": "Sebelumnya",
+		            "sNext": "Selanjutnya",
+		            "sSearch": "Filter  :"
+		        }
+		    });			
+	        $('#chart').highcharts({
+	            chart: {
+	                type: 'column'
+	            },
+	            title: {
+	                text: 'Monthly Average Rainfall'
+	            },
+	            subtitle: {
+	                text: 'Source: WorldClimate.com'
+	            },
+	            xAxis: {
+	                categories: [
+	                    'Jan',
+	                    'Feb',
+	                    'Mar',
+	                    'Apr',
+	                    'May',
+	                    'Jun',
+	                    'Jul',
+	                    'Aug',
+	                    'Sep',
+	                    'Oct',
+	                    'Nov',
+	                    'Dec'
+	                ]
+	            },
+	            yAxis: {
+	                min: 0,
+	                title: {
+	                    text: 'Rainfall (mm)'
+	                }
+	            },
+	            tooltip: {
+	                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+	                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+	                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+	                footerFormat: '</table>',
+	                shared: true,
+	                useHTML: true
+	            },
+	            plotOptions: {
+	                column: {
+	                    pointPadding: 0.2,
+	                    borderWidth: 0
+	                }
+	            },
+	            series: [{
+	                name: 'Tokyo',
+	                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+	    
+	            }, {
+	                name: 'New York',
+	                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+	    
+	            }, {
+	                name: 'London',
+	                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+	    
+	            }, {
+	                name: 'Berlin',
+	                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+	    
+	            }]
+	        });
+
+	        $( "#from" ).datepicker({
+	            defaultDate: "+1w",
+	            changeMonth: true,
+	            numberOfMonths: 2,
+	            onClose: function( selectedDate ) {
+	              $( "#to" ).datepicker( "option", "minDate", selectedDate );
+	            }
+	          });
+	          $( "#to" ).datepicker({
+	            defaultDate: "+1w",
+	            changeMonth: true,
+	            numberOfMonths: 2,
+	            onClose: function( selectedDate ) {
+	              $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+	            }
+	          });
+	        
+			
+		});
+		
+		</script>
 
 
 } {

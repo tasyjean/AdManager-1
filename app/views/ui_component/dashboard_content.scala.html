@@ -29,6 +29,9 @@
                   }
                   @if(title=="Keuangan"){
                   	@financeMenu(activeMenu)
+                  }                    
+                  @if(title=="Laporan"){
+                  	@reportMenu(activeMenu)
                   }                  				                  
                					
                   </div>
@@ -205,10 +208,15 @@
 
 }
 @reportMenu(activeMenu:String="")={
-     	<div class="span2 sub-menu">
-            <div class="kpi">Semua Laporan</div>
-             <div><small>Lihat Semua Laporan</small></div>
-        </div>		
+      <a class="span2 sub-menu @("active".when(activeMenu=="laporan"))"
+          href="@controllers.backend.routes.UserController.showUser()">
+            <div class="icon"></div>
+
+         <div class="content">
+            <div class="kpi">Laporan Iklan</div>
+            <div class="small">Lihat Laporan Iklan</div>
+         </div>
+      </a> 	
 
 }
 @userMenu(activeMenu:String="")={
