@@ -47,7 +47,12 @@ GET   /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backe
 POST  /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backend.CampaignController.updateBannerPlacement(idBanner:Integer)
 
 #finance
-GET   /dashboard/finance									controllers.backend.FinanceController.index()
+GET   /dashboard/finance/:idUser							controllers.backend.FinanceController.index(idUser:Integer)
+GET   /dashboard/finance/first/								controllers.backend.FinanceController.index_default()
+GET   /dashboard/finance/:idUser/ads/:option				controllers.backend.FinanceController.showAdsTransactionList(idUser:Integer, option:String)
+POST  /dashboard/finance/:idUser/ads/:option				controllers.backend.FinanceController.showAdsTransactionList(idUser:Integer, option:String)
+GET   /dashboard/finance/:idUser/deposito/:option			controllers.backend.FinanceController.showDepositoList(idUser:Integer, option:String)
+POST   /dashboard/finance/:idUser/deposito/:option			controllers.backend.FinanceController.showDepositoList(idUser:Integer, option:String)
 GET   /dashboard/finance/payment							controllers.backend.FinanceController.newConfirmation()
 POST  /dashboard/finance/payment							controllers.backend.FinanceController.saveConfirmation()
 GET   /dashboard/finance/payment/validate/:idConfirmation	controllers.backend.FinanceController.validateConfirmation(idConfirmation:Integer)
@@ -55,7 +60,6 @@ GET   /dashboard/finance/payment/delete/:idConfirmation 	controllers.backend.Fin
 GET   /dashboard/finance/list/:option						controllers.backend.FinanceController.listConfirmation(option:String)
 GET   /dashboard/finance/new/								controllers.backend.FinanceController.newDeposito()
 POST  /dashboard/finance/new/		 						controllers.backend.FinanceController.saveDeposito()
-GET   /dashboard/finance/delete/:idDeposito					controllers.backend.FinanceController.deleteDeposito(idDeposito:Integer)
 GET   /dashboard/finance/payment/show/:idConfirmation		controllers.backend.FinanceController.showSingleConfirmation(idConfirmation:Integer)
 
 #profile

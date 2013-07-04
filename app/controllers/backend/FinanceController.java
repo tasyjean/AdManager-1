@@ -4,6 +4,7 @@ package controllers.backend;
  * Kelas FinanceController digunakan untuk menangani request berkaitan dengan 
  * manajemen keuangan
  */
+import java.util.ArrayList;
 import java.util.List;
 
 import com.avaje.ebean.Page;
@@ -13,16 +14,19 @@ import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.custom_helper.setting.KeyEnum;
 import models.custom_helper.setting.SettingManager;
+import models.data.AdsTransaction;
 import models.data.Deposito;
 import models.data.TransferConfirmation;
 import models.data.User;
 import models.data.UserContact;
 import models.dataWrapper.TemplateData;
 import models.dataWrapper.finance.DepositoData;
+import models.dataWrapper.finance.UserFinancialData;
 import models.form.backendForm.financeForm.DepositoForm;
 import models.form.backendForm.financeForm.TransferForm;
 import models.service.Authenticator;
 import models.service.finance.DepositoOperator;
+import models.service.finance.TransactionFetcher;
 import models.service.notification.NotificationCenter;
 import play.Logger;
 import play.data.DynamicForm;
@@ -43,15 +47,141 @@ public class FinanceController extends CompressController {
 	public static SettingManager setting=new SettingManager();
 	public static NotificationCenter notif=new NotificationCenter();
 	public static DepositoOperator deposit=new DepositoOperator(notif);
+	public static TransactionFetcher fetcher=new TransactionFetcher();
+
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result index_default(){
+		List<User> user_list=new ArrayList<User>();	
+		DepositoData depositoData=new DepositoData();
+		user_list=depositoData.getUser();
+		
+		int user_id;
+		if(user_list.size()!=0){
+			user_id=user_list.get(0).getId_user();
+		}else{
+			user_id=5;
+		}
+		return redirect(controllers.backend.routes.FinanceController.index(user_id));
+	}
 	
 	@SubjectPresent
 	@With(DataFiller.class)
-	public static Result index(){
+	public static Result index(int idUser){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		DepositoData depositoData=null;
+		List<User> user_list=new ArrayList<User>();		
+		UserFinancialData financeData=null;
+		User user=null;
+		try {
+			depositoData=new DepositoData();
+			if(auth.getUserRole(session()).getName().equals("advertiser")){
+				user=auth.getUserLogin(session());
+			}else{
+				user=User.find.byId(idUser);
+				user_list=depositoData.getUser();
+				if(user==null){
+					user=user_list.get(0);
+				}
+			}
+			financeData=new UserFinancialData(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ok(finance_index.render(data, user, user_list, financeData));
+		
+	}
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result showAdsTransactionList(int idUser, String option){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		
-		return ok(finance_index.render(data));
+		/*
+		 * Urutan request [page].[user].[validated].
+		 */
+		String[] options=option.split("-");
+		int page;
+		int show;
+		try {
+			DynamicForm form=Form.form().bindFromRequest();
+			try {
+				show=Integer.parseInt(form.get("view"));
+			} catch (Exception e) {
+				e.printStackTrace();
+				show = Integer.parseInt(options[1]);
+			}
+			if(options.length!=2){
+				Logger.debug("Ukuran Option "+options.length+" "+option);
+				throw  new Exception();
+			}
+			page = Integer.parseInt(options[0]);
+		} catch (Exception e) {
+			page=0;
+			show=50;
+			e.getMessage();
+		}
+		User user=null;
+		Page<AdsTransaction> result=null;
+		Logger.debug("Parsing Page "+page+" "+show+" "+idUser+" ");
+		//@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer,user:User)
+
+		if(auth.getUserRole(session()).getName().equals("advertiser")){
+			User userLogin=auth.getUserLogin(session());
+			result=fetcher.getAdsTransaction(userLogin, show, page);
+			return ok(ads_transaction.render(data,result,show,page,userLogin));	    			
+		}else{
+			user=User.find.byId(idUser);
+			result=fetcher.getAdsTransaction(user, show, page);
+		}
+		return ok(ads_transaction.render(data,result,show,page,user));	    
 	}
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result showDepositoList(int idUser, String option){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		/*
+		 * Urutan request [page].[user].[validated].
+		 */
+		String[] options=option.split("-");
+		int page;
+		int show;
+		try {
+			DynamicForm form=Form.form().bindFromRequest();
+			try {
+				show=Integer.parseInt(form.get("view"));
+			} catch (Exception e) {
+				e.printStackTrace();
+				show = Integer.parseInt(options[1]);
+			}
+			if(options.length!=2){
+				Logger.debug("Ukuran Option "+options.length+" "+option);
+				throw  new Exception();
+			}
+			page = Integer.parseInt(options[0]);
+		} catch (Exception e) {
+			page=0;
+			show=50;
+			e.getMessage();
+		}
+		User user=null;
+		Page<Deposito> result=null;
+		Logger.debug("Parsing Page "+page+" "+show+" "+idUser+" ");
+		//@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer,user:User)
+
+		if(auth.getUserRole(session()).getName().equals("advertiser")){
+			User userLogin=auth.getUserLogin(session());
+			result=fetcher.getDeposito(userLogin, show, page);
+			return ok(deposito_list.render(data,result,show,page,userLogin));	    			
+		}else{
+			user=User.find.byId(idUser);
+			result=fetcher.getDeposito(user, show, page);
+		}
+		return ok(deposito_list.render(data,result,show,page,user));	    
+		
+	}	
 	@Restrict({@Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result newConfirmation(){
@@ -86,7 +216,7 @@ public class FinanceController extends CompressController {
 			}
 		}
 	}
-	@Restrict({@Group("advertiser")})
+	@Restrict({@Group("advertiser"),@Group("manager")})
 	@With(DataFiller.class)	
 	public static Result deleteConfirmation(int idConfirmation){
 		TemplateData data = (TemplateData) 
@@ -105,14 +235,6 @@ public class FinanceController extends CompressController {
 		}
 		return redirect(controllers.backend.routes.FinanceController.showSingleConfirmation(idConfirmation));		
 	}
-	@Restrict({@Group("manager")})
-	@With(DataFiller.class)	
-	public static Result deleteDeposito(int idConfirmation){
-		TemplateData data = (TemplateData) 
-				Http.Context.current().args.get("templateData");	
-		
-		return ok();
-	}	
 	@Restrict({@Group("manager")})
 	@With(DataFiller.class)	
 	public static Result newDeposito(){

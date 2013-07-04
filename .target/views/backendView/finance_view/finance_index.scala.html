@@ -1,24 +1,118 @@
-@(data: TemplateData)
+@(data: TemplateData, user:User, user_list:List[User], financeData:UserFinancialData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
 @import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
 
 @main("Keuangan"){
 	
 		@dashboard_content("Keuangan","Riwayat Transaksi","riwayat transaksi"){
-		<div class="content-padding">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-		"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. exercitationepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." 
+		<div class="content-padding">
+		  <h4>Riwayat Transaksi</h4>
+		  
+		  @restrict(List(as("administrator"), as("manager"))){                     
+			@if(user_list.size!=0){
+				Pilih Pengguna : 
+					<select name="user" id="user">
+						@for(single_user<-user_list){
+								<option @("selected".when(single_user.getId_user.toString==user.getId_user))
+										value="@(single_user.getId_user)">@(single_user.getFront_name) | @single_user.getEmail</option>
+							}
+					</select>
+					<a style="margin-top:-5px" href="@controllers.backend.routes.FinanceController.index(0)"
+						class="btn" id="filterpengguna">
+						Pilih Pengguna
+					</a>
+				}else{
+
+					<h4>Tidak ada pengiklan yang terdaftar</h4>
+				}
+				@if(user==null){
+		       	<h5>Maaf, data pengguna tidak ditemukan</h5>
+		       }else{
+		      		 
+			      <h4>Ringkasan Transaksi @user.getFront_name </h4>
+			      <table class="single-view" style="width:400px">
+			        <tr>
+			          <td>Saldo Saat ini </td><td>:</td>
+			          <td>@financeData.getCurrentBalance_rupiah</td>
+			        </tr>
+			         <tr>
+			          <td>Jumlah Transaksi Iklan</td><td>:</td>
+			          <td>@financeData.getAdsTransaction_count_angka Transaksi</td>
+			        </tr>
+			         <tr>
+			          <td>Total Dana Untuk Iklan</td><td>:</td>
+			          <td>@financeData.getTotalAdsSpending_rupiah</td>
+			        </tr>			        
+			         <tr>
+			          <td>Jumlah Deposito</td><td>:</td>
+			          <td>@financeData.getPaymentCount_angka  Kali Deposito</td>
+			        </tr>
+			         <tr>
+			          <td>Total Dana Deposito</td><td>:</td>
+			          <td>@financeData.getTotalDeposito_rupiah</td>
+			        </tr>
+			         <tr>
+			         </tr>
+			         <tr>
+			          <td colspan="3">
+						<a href=""
+						   class="btn" style="margin:0 auto; display:inline";
+						>
+							Lihat Riwayat Deposito
+						</a>
+						<a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(financeData.getUser.getId_user,0+"-"+50)"
+						   class="btn" style="margin-left:10px;display:inline"
+						>
+							Lihat Riwayat Transaksi Iklan
+						</a>						
+			          </td>
+			        </tr>
+			        </table>		       
+		       
+		       } @*end if *@
+						
+		}			
+			
 		</div>
 
-
-        <div class="form-actions">
-	         <button type="submit" class="btn btn-primary">Save changes</button>
-    	     <button type="reset" class="btn">Cancel</button>
-        </div>
     }
 
+	<script type="text/javascript">
+	    
+	$(document).ready(function() {
 
+		var userLink="@controllers.backend.routes.FinanceController.index(0)";
+	    $("#user").change(function() {
+	            $("#filterpengguna").prop("href",userLink+$(this).val());
+	    });
+	    $("#user").click(function() {
+	            $("#filterpengguna").prop("href",userLink.replace("0",$(this).val()));
+	    });	    
+	});
+	</script>
 
 } {
   
@@ -32,3 +126,4 @@
   @menu_profile(data)
 
 }
+

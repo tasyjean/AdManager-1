@@ -63,6 +63,7 @@ public class ImpressionProcessor {
 	private void addTransaction(Banner banner, BannerPlacement placement) throws Exception {
 		Campaign campaign=banner.getCampaign();
 		User user=campaign.getId_user();
+		
 		int currentBalance=user.getCurrent_balance()-campaign.getBid_price();
 		
 		AdsTransaction transaction = new AdsTransaction();

@@ -1,0 +1,153 @@
+@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer,user:User)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+@import scala._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+ 		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+@main("Keuangan"){
+		
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		
+		
+		@dashboard_content("Keuangan","Riwayat Transaksi","riwayat transaksi"){
+
+			<div class="content-padding" style="min-height: @(250+ads_transaction_list.getList.size*32+76)px">
+			@if(user==null){
+			
+				<h4>Pengguna tidak ditemukan</h4>
+				Silahkan kembali ke menu<a href="@controllers.backend.routes.FinanceController.index(0)">Ringkasan riwayat transaksi
+				</a>
+				
+			}else{
+			     <a class="btn" href="@controllers.backend.routes.FinanceController.index(user.getId_user)">&larr; Kembali Ke Ringkasan Riwayat</a>
+	
+				<h4>Riwayat Transaksi Iklan Untuk @user.getFront_name</h4>
+					@getSuccess
+						Tampilkan : 
+							<form action="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show)"
+								  method="POST">
+							<select name="view" id="view">
+								<option  @("selected".when(show==50))  value=20>50 item</option>
+								<option  @("selected".when(show==70))  value=50>70 item</option>
+								<option  @("selected".when(show==100))  value=100>100 item</option>
+								<option  @("selected".when(show==200))  value=200>200 item</option>
+								
+							</select>
+							<button style="margin-top:-7px;" type="submit" class="btn">Submit</button>
+							</form>
+							
+	
+					<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_campaign">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Waktu Transaksi</th>
+								<th>Nominal</th>
+								<th>Tipe Transaksi</th>
+								<th>Campaign</th>
+								<th>Jumlah Saldo</th>
+							</tr>
+						</thead>
+						<tbody>
+						@for((transaction,index)<- ads_transaction_list.getList.zipWithIndex) {
+							 <tr>
+								<td>
+									@(index+1+(ads_transaction_list.getTotalPageCount*ads_transaction_list.getPageIndex))
+								</td>
+			
+								<td>@transaction.getTimestamp_formatted</td>
+								<td>@transaction.getAmount_rupiah</td>
+								<td>@transaction.getTransaction_type.toString</td>
+								<td>@transaction.getBannerPlacement.getBanner.getCampaign.getCampaignName</td>															
+								<td>@transaction.getCurrent_balance_rupiah</td>							
+							</tr>
+						}
+						</tbody>
+					</table>
+				<script type="text/javascript">
+					$(document).ready(function() {
+					    $('#table_campaign').dataTable({
+					    	"bPaginate" : false,
+					    	"bLengthChange":false,
+					        "oLanguage": {
+					            "sLengthMenu": "Display _MENU_ records per page",
+					            "sZeroRecords": "Maaf Data tidak ditemukan",
+					            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+					            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+					            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+					            "sPrevious": "Sebelumnya",
+					            "sNext": "Selanjutnya",
+					            "sSearch": "Filter  :"
+					        }
+					    });
+ 
+					} );
+				</script>
+				
+						<div id="pagination" class="pagination pagination-user">
+			            <ul>
+			                @if(ads_transaction_list.hasPrev) {
+			                    <li class="prev">
+			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page-1)+"-"+show)">&larr; Sebelumnya</a>
+			                    </li>
+			                } else {
+			                    <li class="prev disabled">
+			                        <a>&larr; Sebelumnya</a>
+			                    </li>
+			                }
+			                <li class="current">
+			                    <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show)">--- @ads_transaction_list.getPageIndex ---</a>
+			                </li>
+			                @if(ads_transaction_list.hasNext) {
+			                    <li class="next">
+			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page+1)+"-"+show)">Selanjutnya &rarr;</a>
+			                    </li>
+			                } else {
+			                    <li class="next disabled">
+			                        <a>Selanjutnya &rarr;</a>
+			                    </li>
+			                }
+			            </ul>
+			        </div>
+			   }			
+	        </div>
+      
+    }
+
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("finance")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

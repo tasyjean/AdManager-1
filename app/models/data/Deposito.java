@@ -9,7 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.text.SimpleDateFormat;
 
+import models.custom_helper.Angka;
 import models.data.enumeration.PaymentMethodEnum;
 
 import play.db.ebean.Model;
@@ -37,12 +39,22 @@ public class Deposito extends Model {
 	public int getId_deposito() {
 		return id_deposito;
 	}
+	public  String getTimestamp_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
+		return format.format(timestamp);
+	}		
 	public void setId_deposito(int id_deposito) {
 		this.id_deposito = id_deposito;
 	}
 	public User getUser() {
 		return user;
 	}
+	public String getCurrent_balance_rupiah(){
+		return Angka.toRupiah(current_balance);
+	}
+	public String getAmount_rupiah(){
+		return Angka.toRupiah(amount);
+	}	
 	public void setUser(User user) {
 		this.user = user;
 	}

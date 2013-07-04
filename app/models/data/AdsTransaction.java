@@ -1,5 +1,6 @@
 package models.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -31,7 +32,10 @@ public class AdsTransaction extends Model {
 	public static Model.Finder<Integer,AdsTransaction> find = new Model.Finder(Integer.class, AdsTransaction.class);
 
 	
-	
+	public  String getTimestamp_formatted(){
+		SimpleDateFormat format=new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
+		return format.format(timestamp);
+	}	
 	public int getId_ads_transaction() {
 		return id_ads_transaction;
 	}
