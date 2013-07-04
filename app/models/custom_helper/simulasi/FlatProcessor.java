@@ -1,13 +1,9 @@
-package models.service.ads_delivery;
+package models.custom_helper.simulasi;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
-import play.Logger;
 
 import models.data.AdsTransaction;
 import models.data.Banner;
@@ -16,20 +12,19 @@ import models.data.Campaign;
 import models.data.User;
 import models.data.Zone;
 import models.data.enumeration.PricingModelEnum;
-
-//memutuskan apakah mesti transaksi
-//dihitung secara harian
+import play.Logger;
 
 public class FlatProcessor {
 
-	public void process(BannerPlacement place) throws Exception{
+	public void process(BannerPlacement place, Date timestamp) throws Exception{
 		Banner banner=place.getBanner();
-		Zone zone=place.getZone();
 		Campaign campaign=banner.getCampaign();
+		Zone zone=place.getZone();
 		List<Banner> banners=Banner.find.where().eq("campaign", campaign).findList();
 		List<BannerPlacement> bannerPlace=BannerPlacement.find.where().in("banner", banners).findList();
 		
-		Calendar calendar=Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(timestamp);
 		calendar.set(Calendar.HOUR, -12);//siklus dari jam 12:01 pagi sampe jam 12:01 pagi besoknya
 		calendar.set(Calendar.MINUTE, +1);
 		calendar.set(Calendar.SECOND, 0);				
@@ -39,13 +34,12 @@ public class FlatProcessor {
 		//dihitung secara harian
 		List<AdsTransaction> transaction=AdsTransaction.find.where().between("timestamp", startOfToday, endOfToday).in("bannerPlacement", bannerPlace)
 															  .eq("transaction_type", PricingModelEnum.FLAT.name().toLowerCase()).findList();
-		Logger.trace("Size Transaction "+transaction );
 		if(transaction.size()==0){
-			startTransaction(place);
+			startTransaction(place, timestamp);
 		}
 	}
 	
-	private void startTransaction(BannerPlacement placement) throws Exception{
+	private void startTransaction(BannerPlacement placement, Date timestamp) throws Exception{
 		Banner banner=placement.getBanner();
 		Campaign campaign=banner.getCampaign();
 		User user=campaign.getId_user();
@@ -58,7 +52,7 @@ public class FlatProcessor {
 		transaction.setAmount(dailyPrice);
 		transaction.setCurrent_balance(current_balance-dailyPrice);
 		transaction.setBannerPlacement(placement);
-		transaction.setTimestamp(new Date());
+		transaction.setTimestamp(timestamp);
 		transaction.setTransaction_type(PricingModelEnum.FLAT);
 		transaction.save();
 		

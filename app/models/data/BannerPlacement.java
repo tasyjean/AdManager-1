@@ -40,7 +40,7 @@ public class BannerPlacement extends Model {
 	 *ntar aja
 	 */
 	public void update(){
-		
+		super.update();
 	}
 	public int getId_banner_placement() {
 		return id_banner_placement;

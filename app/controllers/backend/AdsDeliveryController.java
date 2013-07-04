@@ -11,6 +11,7 @@ import java.util.List;
 import models.custom_helper.DateBinder;
 import models.custom_helper.file_manager.FileManagerFactory;
 import models.custom_helper.file_manager.FileManagerInterface;
+import models.custom_helper.setting.KeyEnum;
 import models.custom_helper.setting.SettingManager;
 import models.data.Banner;
 import models.data.BannerAction;
@@ -18,6 +19,7 @@ import models.data.BannerPlacement;
 import models.data.BannerSize;
 import models.data.Impression;
 import models.data.Zone;
+import models.data.enumeration.DefaultViewEnum;
 import models.data.enumeration.ZoneTypeEnum;
 import models.service.ads_delivery.AdActionProcessor;
 import models.service.ads_delivery.AdSelector;
@@ -49,15 +51,30 @@ public class AdsDeliveryController extends CompressController {
 	static AdsDeliverer adsDeliverer=new AdsDeliverer(impression);
 	static SettingManager setting=new SettingManager();
 	
+	
 	public static Result banner(int zone, String source){
 		Zone zone_object=Zone.find.byId(zone);
 		
 		List<BannerPlacement> result=ad_selector.get(zone_object);
-		Logger.debug("Daftar Banner= "+result.toString());
-		Logger.debug("Ukuran Banner= "+result.size());
-		if(result.size()==0){
-			return ok();
+		if(result==null){
+			String body="";		
+			try {
+				if(zone_object.getZone_default_view()==DefaultViewEnum.DEFAULT_ADS){
+					body=zone_object.getBanner_size().getDefault_code();
+				}else if(zone_object.getZone_default_view()==DefaultViewEnum.DEFAULT_CODE){
+					body=zone_object.getZone_default_code();				
+				}else{
+					body="";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				body="";
+			}			
+			return ok(empty_ads.render(body));
 		}else{
+			Logger.debug("Daftar Banner= "+result.toString());
+			Logger.debug("Ukuran Banner= "+result.size());
+
 			List<Impression> impression=new ArrayList<Impression>();
 			List<Banner> banner=new ArrayList<Banner>();
 			int i=0;

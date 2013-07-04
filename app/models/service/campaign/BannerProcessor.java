@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.PersistenceException;
+
 import com.avaje.ebean.Ebean;
 import com.ning.http.multipart.FilePartSource;
 
@@ -317,7 +319,7 @@ public class BannerProcessor {
 			for(Zone zone:zones){
 				String string_selected="";
 				for(BannerPlacement place:selected){
-					if(place.getZone().getId_zone()==zone.getId_zone()){
+					if(place.getZone().getId_zone()==zone.getId_zone() && place.isActive()==true){
 						string_selected="selected";
 					}
 				}
@@ -366,26 +368,37 @@ public class BannerProcessor {
 	 * kalo ga ada bikin baru
 	 */
 	public boolean updateBannerPlacement(DynamicForm form, int idBanner){
-		Ebean.beginTransaction();
+//		Ebean.beginTransaction();
 		try{
 			Banner banner=Banner.find.byId(idBanner);
 			Map<String, String> results=form.data();
 			List<BannerPlacement> placements=BannerPlacement.find.where().eq("banner", banner).findList();
 			//sebisa mungkin dihapus, atau difalsekan
+			Logger.debug("Jumlah saat ini" +placements.size());
 			for(BannerPlacement place:placements){
 				try{
-					place.delete();
-				}catch(Exception e){
+					place.delete();	
+				}catch(PersistenceException e){
 					place.setActive(false);
 					place.update();
-					e.printStackTrace();
+					Logger.debug("Gagal dihapus, maka di falsekan" + place.isActive());
+//					e.printStackTrace();
+				}catch (Exception e) {
+					place.setActive(false);
+					place.update();
+					Logger.debug("Gagal dihapus, maka di falsekan");
+//					e.printStackTrace();				
 				}
+				Logger.debug(place.getBanner()+" "+place.isActive()); 
 			}
+			
 			//lets insert data
+			Logger.debug("Ukuran Result "+results.entrySet().size());
 			for(Map.Entry<String, String> result:results.entrySet()){
 				Zone zone=Zone.find.byId(Integer.parseInt(result.getValue()));
 				BannerPlacement placement=BannerPlacement.find.where().
 											     eq("banner", banner).eq("zone", zone).findUnique();
+				
 				//Jika kosong bikin baru
 				if(placement==null){
 					BannerPlacement place=new BannerPlacement();
@@ -396,17 +409,19 @@ public class BannerProcessor {
 				}else{
 					placement.setActive(true);
 					placement.update();
+					Logger.debug("Placement set active false");
 				}
 			}
-			
-			Ebean.commitTransaction();			
+//			Ebean.commitTransaction();			
 			return true;
 		}catch(Exception e){
-			e.printStackTrace();
-			Ebean.rollbackTransaction();
+//			e.printStackTrace();
+			Logger.debug("Gagal semuanya ooooh" +e.getMessage()+" "+e.getLocalizedMessage());
+
+//			Ebean.rollbackTransaction();
 			return false;
 		}finally{
-			Ebean.endTransaction();
+//			Ebean.endTransaction();
 		}
 		
 	}

@@ -18,6 +18,7 @@ public class AdsDeliverer {
 		this.impression=impression;
 	}
 	public Impression countImpression(BannerPlacement placement, String source, Context context){
+				
 		Banner banner=placement.getBanner();
 		Impression impresi;
 		if(context.request().cookies().get(banner.getId_banner()+"")==null){

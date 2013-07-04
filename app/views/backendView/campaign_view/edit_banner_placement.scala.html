@@ -100,7 +100,7 @@
 					<h5>Penempatan saat ini : </h5>
 					 Ditempatkan pada  @banner.getActivePlacement   zona<br>
 						@for(place<-banner.getPlacement){
-							if(place.isActive){
+							@if(place.isActive){
 								<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
 									@place.getZone.getZone_name
 								</a>

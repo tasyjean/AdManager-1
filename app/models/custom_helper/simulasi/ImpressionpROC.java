@@ -1,8 +1,6 @@
-package models.service.ads_delivery;
+package models.custom_helper.simulasi;
 
 import java.util.Date;
-
-import com.avaje.ebean.Ebean;
 
 import models.data.AdsTransaction;
 import models.data.Banner;
@@ -11,26 +9,25 @@ import models.data.Campaign;
 import models.data.Impression;
 import models.data.User;
 import models.data.enumeration.PricingModelEnum;
-import play.Logger;
 import play.mvc.Http.Context;
 
-public class ImpressionProcessor {
+import com.avaje.ebean.Ebean;
+
+public class ImpressionpROC {
 
 	FlatProcessor flatProcessor;
-	public ImpressionProcessor(FlatProcessor flatProcessor){
+	public ImpressionpROC(FlatProcessor flatProcessor){
 		this.flatProcessor=flatProcessor;
 	}
-	public Impression newImpression(BannerPlacement placement, String source,  Context context){
+	public Impression newImpression(BannerPlacement placement, String source,  Date timestamp){
 		Ebean.beginTransaction();
 		try {
 			Impression impresi=new Impression();
 			impresi.setAdsPlacement(placement);
-			impresi.setTimestamp(new Date());
-			impresi.setViewer_ip(context.request().remoteAddress());
+			impresi.setTimestamp(timestamp);
+			impresi.setViewer_ip("simulated");
 			impresi.setViewer_source(source);
 			impresi.save();
-			context.response().setCookie(placement.getBanner().getId_banner()+"",
-										placement.getId_banner_placement()+"", 3*60*60); //satu impresi user dibatesi selama 3 jam
 			
 			//impressioon count untuk banner dan campaign
 			Banner banner=placement.getBanner();
@@ -45,12 +42,12 @@ public class ImpressionProcessor {
 			campaign.update();
 			if(campaign.getPricing_model()==PricingModelEnum.CPM){
 				if(isTimeToTransaction(campaign)){
-					addTransaction(banner,placement);
+					addTransaction(banner,placement, timestamp);
 				}
 				
 			}else if(campaign.getPricing_model()==PricingModelEnum.FLAT){
 				
-				flatProcessor.process(placement);
+				flatProcessor.process(placement,timestamp);
 			}
 			Ebean.commitTransaction();
 			return impresi;
@@ -63,7 +60,7 @@ public class ImpressionProcessor {
 		}
 	}
 	
-	private void addTransaction(Banner banner, BannerPlacement placement) throws Exception {
+	private void addTransaction(Banner banner, BannerPlacement placement, Date timestamp) throws Exception {
 		Campaign campaign=banner.getCampaign();
 		User user=campaign.getId_user();
 		int dailyPrice=campaign.getBid_price();
@@ -74,7 +71,7 @@ public class ImpressionProcessor {
 		transaction.setBannerPlacement(placement);
 		transaction.setCurrent_balance(currentBalance);
 		transaction.setTransaction_type(PricingModelEnum.CPM);
-		transaction.setTimestamp(new Date());
+		transaction.setTimestamp(timestamp);
 		transaction.save();		
 		user.setCurrent_balance(currentBalance);
 		user.update();
@@ -87,4 +84,5 @@ public class ImpressionProcessor {
 		}
 		return false;
 	}
+
 }

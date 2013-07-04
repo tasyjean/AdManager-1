@@ -3,6 +3,8 @@ import play.libs.*;
 
 import java.util.*;
 
+import javax.naming.Context;
+
 import com.avaje.ebean.*;
 
 import models.*;
@@ -18,6 +20,7 @@ public class Global extends GlobalSettings {
 		data.setZoneChannel();
 		data.setCampaignData();
 		data.createBanner();
+		data.simulasi();
 		SettingDefault default2=new SettingDefault();
 		default2.setAll();
 	}

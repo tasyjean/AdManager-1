@@ -2,6 +2,7 @@ package models.custom_helper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,13 +10,20 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.db.DB;
+import play.mvc.Http.Context;
+import scala.util.Random;
+import views.html.ui_component.ads.empty_ads;
 
 import com.avaje.ebean.Ebean;
 
 import models.custom_helper.file_manager.FileManager;
+import models.custom_helper.simulasi.AdDeliver;
+import models.custom_helper.simulasi.Click;
+import models.custom_helper.simulasi.ImpressionpROC;
 import models.data.AdsTransaction;
 import models.data.Banner;
 import models.data.BannerAction;
@@ -40,7 +48,12 @@ import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.RoleEnum;
 import models.data.enumeration.ZoneTypeEnum;
 import models.form.backendForm.financeForm.DepositoForm;
+import models.service.ads_delivery.AdActionProcessor;
+import models.service.ads_delivery.AdSelector;
+import models.custom_helper.simulasi.FlatProcessor;
+import models.service.ads_delivery.ImpressionProcessor;
 import models.service.campaign.BannerProcessor;
+import models.service.campaign.CampaignProcessor;
 import models.service.finance.DepositoOperator;
 import models.service.notification.NotifItem;
 import models.service.notification.NotificationCenter;
@@ -53,8 +66,13 @@ import models.service.notification.NotificationType;
 public class SetInitialData {
 	FileManager manager=new FileManager();
 	BannerProcessor bannerproc=new BannerProcessor(manager);
+	DateBinder binder=new DateBinder();
+	CampaignProcessor campaignProc=new CampaignProcessor(binder, bannerproc);
 	NotificationCenter notif=new NotificationCenter();
 	DepositoOperator deposito=new DepositoOperator(notif);
+	AdSelector selector=new AdSelector(bannerproc, campaignProc, binder, notif);
+	AdActionProcessor action=new AdActionProcessor();
+	
 	
 	public SetInitialData(){
 		//Konstruktor
@@ -157,7 +175,7 @@ public class SetInitialData {
 			form2.idUser=(user2.getId_user()+"");
 			form2.paymentMethod=PaymentMethodEnum.TRANSFER.name();
 		DepositoForm form3=new DepositoForm();
-			form3.amount="400000";
+			form3.amount="40000000";
 			form3.description="Pembayaran Akhir";
 			form3.idUser=(user2.getId_user()+"");
 			form3.paymentMethod=PaymentMethodEnum.TRANSFER.name();
@@ -165,7 +183,6 @@ public class SetInitialData {
 		newDeposito(form1);
 		newDeposito(form2);
 		newDeposito(form3);
-			
 	}
 	public Deposito newDeposito(DepositoForm form){
 		Ebean.beginTransaction();
@@ -215,7 +232,6 @@ public class SetInitialData {
 			data.add(new BannerSize("Rectangle", 180, 150, "Ini ukuran kecil"));
 			data.add(new BannerSize("LeaderBoard", 728, 90, "Ini ukuran panjang"));
 			data.add(new BannerSize("Wide Skyscrapper", 160, 600, "Ini ukuran tinggi"));
-			
 			Ebean.save(data);			
 		}
 		
@@ -575,7 +591,48 @@ public class SetInitialData {
 		saveBannerPlacement(banner4);
 		saveBannerPlacement(banner7);
 	}
-	
+	public void simulasi(){
+		//simulasi impresi & klik
+		List<Zone> zone=Zone.find.all();
+		Random random=new Random();
+		int zoneCount=zone.size()-1;
+		FlatProcessor processor=new FlatProcessor();
+		ImpressionpROC impressionROC=new ImpressionpROC(processor);
+		Click click=new Click();
+		AdDeliver deliver=new AdDeliver(impressionROC);
+		Calendar calendar=Calendar.getInstance();
+		calendar.set(Calendar.DATE, -90);
+		for(int i=0;i<10000;i++){
+			
+			List<BannerPlacement> result=selector.get(zone.get(random.nextInt(zoneCount)));
+			List<Impression> impression=new ArrayList<Impression>();
+			List<Banner> banner=new ArrayList<Banner>();
+			if(result==null){
+			
+			}else{
+				int x=0;
+				for(BannerPlacement bannerPlacement:result){
+					impression.add(deliver.countImpression(bannerPlacement, "Simulated",  calendar.getTime()));
+					banner.add(bannerPlacement.getBanner());
+				}
+			}
+			
+			//hitung klik secara random
+			for(Impression impresi:impression){
+				if(random.nextInt(30)==1){
+					click.click(impresi, calendar.getTime());
+				}				
+			}
+			if(i%500==0){
+				Logger.debug("Proses pengisian data " +(((double)i/10000))*100+"%");
+			}
+			calendar.set(Calendar.MINUTE, new Random().nextInt(10));
+			if(i%200==0){
+				calendar.set(Calendar.HOUR, new Random().nextInt(12));				
+			}
+			//ubah variabel
+		}
+	}
 	public boolean saveBannerPlacement(Banner banner){
 		List<Zone> available=bannerproc.getZoneAvailable(banner.getId_banner());
 		
