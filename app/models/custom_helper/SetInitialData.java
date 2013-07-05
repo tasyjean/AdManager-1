@@ -628,7 +628,7 @@ public class SetInitialData {
 			}
 			calendar.set(Calendar.MINUTE, new Random().nextInt(10));
 			if(i%200==0){
-				calendar.set(Calendar.HOUR, new Random().nextInt(12));				
+				calendar.set(Calendar.HOUR, new Random().nextInt(54));				
 			}
 			//ubah variabel
 		}

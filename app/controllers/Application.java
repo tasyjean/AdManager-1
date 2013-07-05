@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,13 @@ import java.util.Map;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.FileManagerFactory;
 import models.custom_helper.file_manager.FileManagerInterface;
+import models.data.Banner;
 import models.data.User;
 import models.data.UserRole;
 import models.data.Zone;
 import models.data.ZoneChannel;
 import models.data.enumeration.RoleEnum;
+import models.dataWrapper.report.BannerList;
 import models.service.campaign.BannerProcessor;
 
 import play.*;
@@ -163,5 +166,15 @@ public class Application extends CompressController {
 
     	Logger.debug(url);
     	return ok(empty_ads.render("<h1><a href="+url+">"+url+"</a></h1>"));
+    }
+    public static Result testReport(int id){
+    	Banner banner=Banner.find.byId(id);
+    	Calendar calendar=Calendar.getInstance();
+    	calendar.set(Calendar.DATE, -90);
+    	Date from=calendar.getTime();
+    	calendar.set(Calendar.DATE, 20);
+    	Date to=calendar.getTime();
+    	BannerList banners=new BannerList(banner, from, to);
+    	return ok(banners.getCTR()+" "+banners.getClick_count()+" "+banners.getImpresion_count()+" "+banners.getBanner().getName());
     }
 }
