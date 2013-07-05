@@ -28,7 +28,7 @@ public class ReportData {
 		return userList;
 	}
 	public void setUserList() {
-		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER.name()).findUnique();
+		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER).findUnique();
 		userList=User.find.where().eq("role", advertiser_role).findList();
 		Logger.debug("Set User Liiist");
 	}
