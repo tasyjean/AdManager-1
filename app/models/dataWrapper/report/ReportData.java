@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import play.Logger;
+
 import models.data.Campaign;
 import models.data.User;
 import models.data.UserRole;
@@ -26,8 +28,9 @@ public class ReportData {
 		return userList;
 	}
 	public void setUserList() {
-		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER).findUnique();
+		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER.name()).findUnique();
 		userList=User.find.where().eq("role", advertiser_role).findList();
+		Logger.debug("Set User Liiist");
 	}
 	public List<BannerList> getBannerList() {
 		return bannerList;

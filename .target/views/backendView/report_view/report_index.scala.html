@@ -82,7 +82,7 @@
 
 			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin-top:12px;"></div>
 			<h4>Laporan Campaign Selama Periode @reportData.getFrom_formatted hingga @reportData.getTo_formatted</h4>
-			<div id="chart" style="width:87%;height:auto;margin: 0 auto;border:1px solid #ccc">
+			<div id="chart" style="width:85%;height:auto;margin: 0 auto;border:1px solid #ccc">
 				chart
 			</div>
 			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin: 12px 0 12px 0;"></div>			
@@ -144,40 +144,31 @@
 		    });			
 	        $('#chart').highcharts({
 	            chart: {
-	                type: 'column'
+	                type: 'bar'
 	            },
 	            title: {
-	                text: 'Monthly Average Rainfall'
+	                text: '@reportData.getDiagramData.getText'
 	            },
 	            subtitle: {
-	                text: 'Source: WorldClimate.com'
+	                text: '@reportData.getDiagramData.getSubtext'
 	            },
 	            xAxis: {
 	                categories: [
-	                    'Jan',
-	                    'Feb',
-	                    'Mar',
-	                    'Apr',
-	                    'May',
-	                    'Jun',
-	                    'Jul',
-	                    'Aug',
-	                    'Sep',
-	                    'Oct',
-	                    'Nov',
-	                    'Dec'
+	                    @for(kategori<-reportData.getDiagramData.getCategories){
+	                    	'@kategori',
+	                    }     
 	                ]
 	            },
 	            yAxis: {
 	                min: 0,
 	                title: {
-	                    text: 'Rainfall (mm)'
+	                    text: 'Jumlah'
 	                }
 	            },
 	            tooltip: {
 	                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 	                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-	                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+	                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
 	                footerFormat: '</table>',
 	                shared: true,
 	                useHTML: true
@@ -189,20 +180,20 @@
 	                }
 	            },
 	            series: [{
-	                name: 'Tokyo',
-	                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+	                name: 'Impresi',
+	                data: [
+								@for(impresi<-reportData.getDiagramData.getImpresi){
+									  @impresi,
+								 }
+	                       ]
 	    
 	            }, {
-	                name: 'New York',
-	                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-	    
-	            }, {
-	                name: 'London',
-	                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-	    
-	            }, {
-	                name: 'Berlin',
-	                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+	                name: 'Klik',
+	                data: [
+	                       @for(klik<-reportData.getDiagramData.getClick){
+	                    	  @klik,
+	                       }	                       
+	                       ]
 	    
 	            }]
 	        });

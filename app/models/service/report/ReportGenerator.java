@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import play.Logger;
+
 import scala.Array;
 
 import models.custom_helper.DateBinder;
@@ -42,6 +44,7 @@ public class ReportGenerator {
 		data.setSelectedUser(user);
 		data.setTo(to);
 		data.setFrom(from);
+		data.setDiagramData(generateDiagramData_campaign(data));
 		return data;
 	}
 	private ReportData getReportByCampaign(User user, Campaign campaign, Date from, Date to){
@@ -58,7 +61,8 @@ public class ReportGenerator {
 		data.setCampaignList(campaigns);
 		data.setSelectedUser(user);
 		data.setTo(to);
-		data.setFrom(from);		
+		data.setFrom(from);
+		data.setDiagramData(generateDiagramData_campaign(data));
 		return data;		
 	}
 
@@ -72,23 +76,34 @@ public class ReportGenerator {
 		int click_count=0;
 		int impression_count=0;
 		int i=0;
+		int x=0;
 		String nama_pengiklan = "";
+		boolean status=true;
 		for(BannerList bannerList:data.getBannerList()){
 			if(i==0){
-				currentCampaign=bannerList.getBanner().getCampaign().getId_campaign();
-				nama_pengiklan=bannerList.getBanner().getCampaign().getId_user().getFront_name();
-			}
-			if(bannerList.getBanner().getCampaign().getId_campaign()==currentCampaign){
-				click_count=click_count+bannerList.getClick_count();
-				impression_count=impression_count+bannerList.getImpresion_count();
-			}else{
-				currentCampaign=bannerList.getBanner().getCampaign().getId_campaign();
+				click.add(bannerList.getClick_count());
+				impresi.add(bannerList.getImpresion_count());
 				kategori.add(bannerList.getBanner().getCampaign().getCampaignName());
-				click.add(click_count);
-				click.add(impression_count);
-				click_count=0;
-				impression_count=0;
-			}
+				Logger.debug("kategori size" +kategori.size()+kategori.get(0));
+				x++;
+			}else{
+				status=false;
+				if(kategori.get(x-1).equals(bannerList.getBanner().getCampaign().getCampaignName())){
+					int f=click.get(x-1);
+					click.set(x-1, f+bannerList.getClick_count());
+					
+					int y=impresi.get(x-1);
+					impresi.set(x-1, y+bannerList.getImpresion_count());
+					Logger.debug("Impresi "+kategori.size()+kategori.get(x-1));
+				}else{
+					click.add(bannerList.getClick_count());
+					impresi.add(bannerList.getImpresion_count());
+					kategori.add(bannerList.getBanner().getCampaign().getCampaignName());
+					x++;
+					Logger.debug("kategori add" +kategori.size()+kategori.get(x-1));
+					
+				}
+			}				
 			i++;
 		}
 		//Jika hanya satu campaign, maka tampilkan berdasarkan banner
@@ -98,40 +113,36 @@ public class ReportGenerator {
 			diagramData.setCategories(kategori);
 			diagramData.setClick(click);
 			diagramData.setImpresi(impresi);
-			diagramData.setText("Grafik Jumlah Impresi Dan Klik Dari Campaign");
+			diagramData.setText("Jumlah Impresi Dan Klik Dari Campaign");
 			diagramData.setSubtext("Pengiklan: "+nama_pengiklan);
 			return diagramData;
 		}
-		
 	}
 	private DiagramData generateDiagramData_banner(ReportData data){
 		DiagramData diagramData=new DiagramData();
 		
 		List<String> kategori=new ArrayList<String>();
-		List<String> click=new ArrayList<String>();
-		List<String> impresi=new ArrayList<String>();
-		int currentCampaign=0;
-		int click_count=0;
-		int impression_count=0;
+		List<Integer> click=new ArrayList<Integer>();
+		List<Integer> impresi=new ArrayList<Integer>();
 		int i=0;
 		String nama_pengiklan = "";
 		for(BannerList bannerList:data.getBannerList()){
 			if(i==0){
 				nama_pengiklan=bannerList.getBanner().getCampaign().getId_user().getFront_name();
 			}
-			currentCampaign=bannerList.getBanner().getCampaign().getId_campaign();
 			kategori.add(bannerList.getBanner().getName());
-			click.add(Integer.toString(bannerList.getClick_count()));
-			click.add(Integer.toString(impression_count));
-
+			click.add(bannerList.getClick_count());
+			impresi.add(bannerList.getImpresion_count());
 			i++;
+			Logger.debug("Banner List" +bannerList.getBanner().getName() );
 		}
 
 		diagramData.setCategories(kategori);
 		diagramData.setClick(click);
 		diagramData.setImpresi(impresi);
-		diagramData.setText("Grafik Jumlah Impresi Dan Klik Dari Campaign");
+		diagramData.setText("Jumlah Impresi Dan Klik Dari Banner");
 		diagramData.setSubtext("Pengiklan: "+nama_pengiklan);
+		
 		return diagramData;
 	
 	}
