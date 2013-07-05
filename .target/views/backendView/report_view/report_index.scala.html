@@ -1,4 +1,4 @@
-@(data: TemplateData)
+@(data: TemplateData, selectedUser:User, reportData:ReportData)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -23,66 +23,95 @@
 	
 		@dashboard_content("Laporan","Laporan Iklan","laporan"){
 		<div class="content-padding">
-
 		<h4>Lihat Laporan Iklan</h4>
-			<div id="forms" style="width:60%;height:210px;background-color:#f9f9f9;border:1px solid #cccccc;padding:10px; margin:0 auto;">
-			<button type="button" id="hide" class="close"><span class="icon icon-chevron-up"/></button>
-			<h5>Pengaturan Laporan</h5>
-			@form(action =controllers.backend.routes.CampaignController.saveNewCampaign(), 'class-> "form-horizontal") {		
-					<div class="row">
-						<div style="float:left;margin-left:35px;padding-right:10px">
-							<label for="user">Pilih Pengguna </label>					
-							@restrict(la(as("administrator"),as("manager"))){	      	  	
-							
-								<select name="user" id="user">
-									<option value="1">Pengguna 1</option>
-									<option value="3">Pengguna 2</option>
-								</select><br>
-							
+	    @restrict(List(as("administrator"), as("manager"))){                     		
+		@if(reportData.getUserList.size!=0){
+				Pilih Pengiklan : 
+					<select name="user" id="user">
+						@for(single_user<-reportData.getUserList){
+								<option @("selected".when(single_user.getId_user.toString==selectedUser.getId_user))
+										value="@(single_user.getId_user)">@(single_user.getFront_name) | @single_user.getEmail</option>
 							}
+					</select>
+					<a style="margin-top:-8px" href="@controllers.backend.routes.ReportController.indexWithForm(selectedUser.getId_user)"
+						class="btn" id="filterpengguna">
+						Pilih
+					</a>
+			}else{
+
+					<h4>Tidak ada pengiklan yang terdaftar</h4>
+			}<br/>	
+		}
+		<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin:12px 0 12px 0;"></div>
+
+		<a role="button" data-toggle="modal" class="btn" href="#setting_modal"  style="display:inline;margin-right:10px;margin-left:0px"> Pengaturan Tampilan</a>
+
+		@**********Modal Setting********@
+			<div id="setting_modal" style="width:600px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Pengaturan Laporan</h3>
+		  		</div>
+
+		  	@form(action =controllers.backend.routes.ReportController.indexWithForm(selectedUser.getId_user), 'class-> "form-horizontal") {				
+				 <div class="modal-body" style="background-color:#f9f9f9;">
+					<div id="forms" style="background-color:#f9f9f9;padding:10px; margin:0 auto;">
+			
+							
 							<label for="user" style="padding-top:10px">Pilih Campaign</label>										
 							<select name="campaign" id="campaign">
-								<option value="1">Semua Campaign</option>
-								<option value="3">Campaign 2</option>
+								<option value="0">Semua Campaign</option>
+							@for(campaign<-reportData.getCampaignList){
+								<option value="@campaign.getId_campaign">@campaign.getCampaignName</option>
+							}
 							</select>
-						</div>
-						<div style="margin-left:90px;display:table">
 							<label for="from">Dari Tanggal </label>
-							<input type="text" id="from" name="from" />
+							<input placeholder="Dari Tanggal" class="" type="text" id="from" name="from" />
 							<label for="to">Hingga</label>
-							<input type="text" id="to" name="to"/><br>
-						</div>
-					</div>
-						<div style="padding:5px">
-							<button type="submit" class="btn">Tampilkan Laporan</button>	
-						</div>
-			} @* End Form *@	
-			</div> @*End Div *@
-			<div style="border:1px solid #ccc;width:90%;height:2px;margin:0 auto;margin:12px;"></div>
-			<div id="chart" style="width:80%;height:auto;margin: 0 auto;border:1px solid #ccc">
+							<input placeholder="Hingga Tanggal" class="" type="text" id="to" name="to"/><br>
+			</div> 
+  		</div>@*End Div *@
+  				<div class="modal-footer">
+				   		<button type="submit" class="btn">Tampilkan Laporan</button>
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+				} @* End Form *@	
+
+			</div>	
+
+
+			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin-top:12px;"></div>
+			<h4>Laporan Campaign Selama Periode @reportData.getFrom_formatted hingga @reportData.getTo_formatted</h4>
+			<div id="chart" style="width:87%;height:auto;margin: 0 auto;border:1px solid #ccc">
 				chart
 			</div>
-			<div style="border:1px solid #ccc;width:90%;height:2px;margin:0 auto;margin:12px;"></div>			
+			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin: 12px 0 12px 0;"></div>			
 			 <div id="table">
-			 	<h4>Laporan Campaign Selama Periode Terpilih</h4>
 				<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_report">
 					<thead>
 						<tr>
+							<th>No</th>
+							<th>Nama Campaign</th>
 							<th>Nama Banner</th>
 							<th>Jumlah Impresi</th>
 							<th>Jumlah Klik</th>
-							<th>Impresi/Klik</th>
+							<th>Klik/Impresi (CTR)</th>
 						</tr>
 					</thead>
 					<tbody>
+					@for((bannerList, index)<-reportData.getBannerList.zipWithIndex) {
 					<tr>
-						<td>Banner1</td>
-						<td>32144</td>
-						<td>323</td>
-						<td>23/222</td>
+						<td>@(index+1)</td>
+						<td>@bannerList.getBanner.getCampaign.getCampaignName</td>
+						<td>@bannerList.getBanner.getName</td>
+						<td>@bannerList.getImpresion_count_angka</td>
+						<td>@bannerList.getClick_count_angka</td>
+						<td>@bannerList.getCTR</td>
 					</tr>
+					}
 					</tbody>
 				</table>
+				<div style="height:50px"></div>
 			</div>
 		</div> @* End Content padding *@
 		
@@ -90,18 +119,17 @@
 	
 		<script text="text/javascript">
 		$(document).ready(function() {
-			var state=0; // 1 show 0 hide
-			$("#hide").click(function(){
-				if(state==0){
-				    $("#forms").animate({height:'130px'});
-				    state=1;
-				}else{
-				    $("#forms").show();
-					state=0;
-				}
-			});
+
+			var userLink="@controllers.backend.routes.ReportController.indexWithForm(0)";
+		    $("#user").change(function() {
+		            $("#filterpengguna").prop("href",userLink+$(this).val());
+		    });
+		    $("#user").click(function() {
+		            $("#filterpengguna").prop("href",userLink.replace("0",$(this).val()));
+		    });	 
+
 		    $('#table_report').dataTable({
-		    	"bPaginate" : false,
+		    	"bPaginate" : true,
 		    	"bLengthChange":false,
 		        "oLanguage": {
 		            "sLengthMenu": "Display _MENU_ records per page",

@@ -30,13 +30,14 @@ object ApplicationBuild extends Build {
     templatesImport += "models.dataWrapper.setting._",    
     templatesImport += "models.dataWrapper.campaign._",    
     templatesImport += "models.dataWrapper.finance._",    
+    templatesImport += "models.dataWrapper.report._",    
     templatesImport += "models.data._",
     templatesImport += "models.form.frontendForm.LoginForm",
     templatesImport += "models.form.frontendForm._",
     templatesImport += "models.form.frontendForm.ForgetPassForm",
-	  templatesImport +="models.form.backendForm.zoneForm._",
+	templatesImport +="models.form.backendForm.zoneForm._",
     templatesImport +="models.form.backendForm.userForm._",
-	  templatesImport +="models.form.backendForm.campaignForm._",
+	templatesImport +="models.form.backendForm.campaignForm._",
     templatesImport +="models.form.backendForm.financeForm._",
        
     //Deadbolt

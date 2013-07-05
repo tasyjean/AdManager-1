@@ -1,5 +1,7 @@
 package models.dataWrapper.report;
 
+import java.util.List;
+
 import models.data.Campaign;
 
 public class DiagramData {
@@ -8,10 +10,15 @@ public class DiagramData {
 	private Campaign campaign;
 	private String text;
 	private String subtext;
-	private String[] categories;
-	private int[] click;
-	private int[] impresi;
-	
+	private List<String> categories;
+	private List<Integer> impresi;
+	private List<Integer> click;
+	public Campaign getCampaign() {
+		return campaign;
+	}
+	public void setCampaign(Campaign campaign) {
+		this.campaign = campaign;
+	}
 	public String getText() {
 		return text;
 	}
@@ -24,22 +31,26 @@ public class DiagramData {
 	public void setSubtext(String subtext) {
 		this.subtext = subtext;
 	}
-	public String[] getCategories() {
+	public List<String> getCategories() {
 		return categories;
 	}
-	public void setCategories(String[] categories) {
+	public void setCategories(List<String> categories) {
 		this.categories = categories;
 	}
-	public int[] getClick() {
-		return click;
-	}
-	public void setClick(int[] click) {
-		this.click = click;
-	}
-	public int[] getImpresi() {
+	public List<Integer> getImpresi() {
 		return impresi;
 	}
-	public void setImpresi(int[] impresi) {
+	public void setImpresi(List<Integer> impresi) {
 		this.impresi = impresi;
 	}
+	public List<Integer> getClick() {
+		return click;
+	}
+	public void setClick(List<Integer> click) {
+		this.click = click;
+	}
+
+
+	
+
 }

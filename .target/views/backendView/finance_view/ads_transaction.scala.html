@@ -50,7 +50,7 @@
 							<form action="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show)"
 								  method="POST">
 							<select name="view" id="view">
-								<option  @("selected".when(show==50))  value=20>50 item</option>
+								<option  @("selected".when(show==50))  value=50>50 item</option>
 								<option  @("selected".when(show==70))  value=50>70 item</option>
 								<option  @("selected".when(show==100))  value=100>100 item</option>
 								<option  @("selected".when(show==200))  value=200>200 item</option>
@@ -75,7 +75,7 @@
 						@for((transaction,index)<- ads_transaction_list.getList.zipWithIndex) {
 							 <tr>
 								<td>
-									@(index+1+(ads_transaction_list.getTotalPageCount*ads_transaction_list.getPageIndex))
+									@(index+1+(show*ads_transaction_list.getPageIndex))
 								</td>
 			
 								<td>@transaction.getTimestamp_formatted</td>

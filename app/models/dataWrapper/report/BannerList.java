@@ -67,6 +67,7 @@ public class BannerList {
 	}
 	public String getCTR(){
 		try {
+			if(impresion_count==0) throw new Exception();
 			float click_float=(float)click_count;
 			float impresion_float=(float)impresion_count;
 			return String.format("%.2f", ((double)(click_float/impresion_float)*100))+"%";
