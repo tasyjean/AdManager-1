@@ -91,15 +91,15 @@ public class SetInitialData {
 		
 		deleteUserData();
 		try {
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_data_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_contact_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_role_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_channel_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
-			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_data_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_contact_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE user_role_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE zone_channel_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
+//			DB.getConnection().createStatement().execute("ALTER SEQUENCE file_upload_seq RESTART WITH 1;");
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("Insert data");

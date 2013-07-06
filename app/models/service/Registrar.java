@@ -39,7 +39,7 @@ public class Registrar {
 		user.setJoin_date(new Date());
 		user.setPassword(form.get().password);
 		
-		UserRole role=new UserRole(RoleEnum.ADVERTISER);
+		UserRole role=UserRole.find.where().eq("name",RoleEnum.ADVERTISER.name().toLowerCase()).findUnique();
 		user.setRole(role);
 		
 		user.save();
