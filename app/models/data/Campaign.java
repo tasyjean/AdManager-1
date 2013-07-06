@@ -49,7 +49,7 @@ public class Campaign extends Model{
 	private PricingModelEnum pricing_model;
 	private int limit_impression;
 	private int limit_click;
-	public int current_impression;
+	private int current_impression;
 	private int current_click;
 	private int bid_price;
 
