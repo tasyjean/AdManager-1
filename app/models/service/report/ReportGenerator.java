@@ -85,6 +85,7 @@ public class ReportGenerator {
 				impresi.add(bannerList.getImpresion_count());
 				kategori.add(bannerList.getBanner().getCampaign().getCampaignName());
 				Logger.debug("kategori size" +kategori.size()+kategori.get(0));
+				nama_pengiklan=bannerList.getBanner().getCampaign().getId_user().getFront_name();
 				x++;
 			}else{
 				status=false;

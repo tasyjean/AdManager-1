@@ -423,8 +423,15 @@
 						var date2=dateParse(date2s);
 						
 						var days=dateDiff(date1,date2,"days");
-						var bayar=(days*$("#bidPrice").val())-(Math.floor(days/7)*discountFactor*$("#bidPrice").val()*7);
-						$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "");						
+						var bayar=(days*$("#bidPrice").val());
+						var diskon=(Math.floor(days/7)*discountFactor*$("#bidPrice").val()*7);
+						var total=bayar-diskon;
+						
+						if(discountFactor>0){
+							$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "");													
+						}else{
+							$("#bidPrice-help").html("Total Biaya = IDR " +bayar + "<br>Diskon = IDR "+diskon+" <br>"+"Total : "+total);													
+						}
 						console.log(bayar+" HARI: "+days);
 
 					}else{

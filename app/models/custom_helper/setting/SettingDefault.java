@@ -64,7 +64,7 @@ public class SettingDefault {
 		Logger.debug(input);
 		
 		sysPref.setKey(KeyEnum.PAYMENT_INSTRUCTION.name());
-		sysPref.setName(KeyEnum.BASE_PRICE_CLICK.toString());
+		sysPref.setName(KeyEnum.PAYMENT_INSTRUCTION.toString());
 		sysPref.setValue(input +" <br><br> Selamat beriklan!");
 		sysPref.setDescription(KeyEnum.PAYMENT_INSTRUCTION.toString());
 		
@@ -155,7 +155,7 @@ public class SettingDefault {
 		sysPref.setKey(KeyEnum.DISCOUNT_FACTOR.name());
 		sysPref.setName(KeyEnum.DISCOUNT_FACTOR.toString());
 		sysPref.setValue(DISCOUNT_FACTOR);
-		sysPref.setDescription("Merupakan faktor diskon harga jika iklan tampil lebih dari 1 bulan");
+		sysPref.setDescription("Merupakan faktor diskon harga jika iklan tampil lebih dari 1 Minggu");
 		
 		if(isNull){
 			sysPref.save();

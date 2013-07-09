@@ -119,7 +119,7 @@
 									<div class="controls">
 										<select name="senderBankAccount" id="senderBankAccount1">
 											@for(data<-rekening){
-												<option @("selected".when(data.getId_user_contact==transfer_form("senderBankAccount").value))
+												<option @("selected".when(data.getId_user_contact.toString==transfer_form("senderBankAccount").value))
 														value="@(data.getId_user_contact)">@(data.getContact_value)</option>
 											}
 										</select> 

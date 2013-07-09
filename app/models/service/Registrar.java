@@ -86,4 +86,8 @@ public class Registrar {
 		
 		return "<a href=http://"+host+"/activate/"+emailCrypt+"/"+key+">Link Aktivasi</a>";
 	}
+	public Boolean forgetPassword(){
+		// TODO
+		return true;
+	}
 }

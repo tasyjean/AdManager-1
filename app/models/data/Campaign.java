@@ -64,7 +64,7 @@ public class Campaign extends Model{
 	
 	SimpleDateFormat  format_read=new SimpleDateFormat("dd-MM-yyyy");
 	SimpleDateFormat  format_write=new SimpleDateFormat("dd/MM/yyyy");
-	
+	SettingManager manager=new SettingManager();
 	public static Model.Finder<Integer,Campaign> find = new Model.Finder(Integer.class, Campaign.class);
 
 
@@ -226,9 +226,14 @@ public class Campaign extends Model{
 		DateBinder binder=new DateBinder();
 		Date today=new Date();
 		int result=binder.getDayLength(today, end_date)+1;
+		int result2=binder.getDayLength(start_date, end_date);
+		
 		if(result<0){
 			return 0;
 		}else{
+			if(binder.isAfterToday(start_date)){
+				return result2;
+			}
 			return result;
 		}
 	}
@@ -259,6 +264,24 @@ public class Campaign extends Model{
 			return (int)Math.floor((hari*bid_price)-(Math.floor(hari/7)*discount*bid_price*7));
 		}
 		return 0;
+	}
+	private int getFlatPriceBeforeDiscount(){
+		int afterDiscount=countPrice();
+		int beforeDiscount=campaignDuration() * bid_price;
+		return beforeDiscount;
+	}
+	public String getPriceText(){
+		if(pricing_model.equals(PricingModelEnum.FLAT)){
+			if(manager.getFloat(KeyEnum.DISCOUNT_FACTOR)>0){
+				return Angka.toRupiah(getFlatPriceBeforeDiscount())+"<br>Diskon menjadi : "
+					   +Angka.toRupiah(countPrice())
+					   +" ("+Angka.toRupiah(countPrice()/campaignDuration())+" Per Hari)";
+			}else{
+				return Angka.toRupiah(getFlatPriceBeforeDiscount());
+			}
+		}else{
+			return countPrice_rupiah();
+		}
 	}
 	public String countPrice_rupiah(){
 		return Angka.toRupiah(countPrice());

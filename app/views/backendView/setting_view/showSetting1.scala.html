@@ -36,8 +36,15 @@
 				<div class="control-group">
 					<label class="control-label" for="channel_name">@setting.getName</label>
 					<div class="controls">
-						<input type="text" placeholder="nama belakang" class="input-large" value="@setting.getValue" name="@setting.getKey" id="@setting.getKey">	                    								 
-				 		<p class="help-block">@setting.getDescription</p>													 
+						@if(setting.getKey=="PAYMENT_INSTRUCTION"){
+							<textarea rows="4"  class="input-large" name="@setting.getKey" id="@setting.getKey">@setting.getValue</textarea>	                    								 
+				 			<p class="help-block">@setting.getDescription</p>
+						
+						}else{
+						
+							<input type="text"  class="input-large" value="@setting.getValue" name="@setting.getKey" id="@setting.getKey">	                    								 
+				 			<p class="help-block">@setting.getDescription</p>
+				 		}													 
 					</div>
 				</div>
 			} @*end for *@
