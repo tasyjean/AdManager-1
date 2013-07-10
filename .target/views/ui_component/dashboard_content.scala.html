@@ -135,7 +135,7 @@
          </div>
         </a> 
       <a class="span2 sub-menu @("active".when(activeMenu=="pengaturan konten"))"
-          href="@controllers.backend.routes.SettingController.showSetting(2)">
+          href="@controllers.backend.routes.SettingController.showSetting(3)">
           <div class="icon"></div>
          <div class="content" >
             <div class="kpi">Pengaturan Konten</div>
@@ -217,7 +217,17 @@
             <div class="small">Lihat Laporan Iklan</div>
          </div>
       </a> 	
+  @restrict(la(as("administrator"), as("manager"))){                     
+      <a class="span2 sub-menu @("active".when(activeMenu=="laporan_user"))"
+          href="@controllers.backend.routes.ReportController.userPerformanceReport(1)">
+            <div class="icon"></div>
 
+         <div class="content">
+            <div class="kpi">Laporan Pengguna</div>
+            <div class="small">Lihat Laporan Pengguna</div>
+         </div>
+      </a>       
+   }
 }
 @userMenu(activeMenu:String="")={
   

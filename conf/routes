@@ -85,10 +85,10 @@ GET   /dashboard/setting/:page				controllers.backend.SettingController.showSett
 POST  /dashboard/setting/save/:page			controllers.backend.SettingController.saveSetting(page:Integer)
 GET   /dashboard/setting/set/default		controllers.backend.SettingController.saveDefault()
 #report
-GET   /dashboard/report						controllers.backend.ReportController.index()
-POST  /dashboard/report/c/:idUser			controllers.backend.ReportController.indexWithForm(idUser:Integer)
-GET  /dashboard/report/c/:idUser			controllers.backend.ReportController.indexWithForm(idUser:Integer)
-	
+GET   /dashboard/report							controllers.backend.ReportController.index()
+POST  /dashboard/report/c/:idUser				controllers.backend.ReportController.indexWithForm(idUser:Integer)
+GET   /dashboard/report/c/:idUser				controllers.backend.ReportController.indexWithForm(idUser:Integer)
+GET   /dashboard/report/userperformance/:page	controllers.backend.ReportController.userPerformanceReport(page:Integer)
 #user management
 GET   /dashboard/user						controllers.backend.UserController.showUser()
 GET	  /dashboard/user/page/:page			controllers.backend.UserController.showUserPage(page:Integer)

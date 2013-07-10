@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.avaje.ebean.Page;
+
 import play.Logger;
 
 import scala.Array;
@@ -12,9 +14,13 @@ import models.custom_helper.DateBinder;
 import models.data.Banner;
 import models.data.Campaign;
 import models.data.User;
+import models.data.UserRole;
+import models.data.enumeration.RoleEnum;
 import models.dataWrapper.report.BannerList;
 import models.dataWrapper.report.DiagramData;
 import models.dataWrapper.report.ReportData;
+import models.dataWrapper.report.UserList;
+import models.dataWrapper.report.UserListPage;
 
 public class ReportGenerator {
 
@@ -32,7 +38,8 @@ public class ReportGenerator {
 	
 	private ReportData getReportAllCampaign(User user, Date from, Date to){
 		ReportData data=new ReportData();
-		List<Campaign> campaigns=Campaign.find.where().eq("id_user", user).findList();
+		List<Campaign> campaigns;
+		campaigns=Campaign.find.where().eq("id_user", user).findList();
 		List<Banner> banners=Banner.find.where().in("campaign", campaigns).findList();
 		List<BannerList> bannerLists=new ArrayList<BannerList>();
 		for(Banner banner:banners){
@@ -145,6 +152,20 @@ public class ReportGenerator {
 		
 		return diagramData;
 	
+	}
+	
+	public UserListPage getReportCMO(int page, int size){
+		UserRole advertiser_role=UserRole.find.where().eq("name", RoleEnum.ADVERTISER).findUnique();
+		Page<User> users=User.find.where().eq("role", advertiser_role)
+			        						.findPagingList(size)
+			        						.getPage(page);	
+		List<UserList> resultList=new ArrayList<UserList>();
+		for(User user:users.getList()){
+			resultList.add(new UserList(user));
+		}
+		
+		return new UserListPage(resultList, users);
+		
 	}
 	private DiagramData breakDownByMonth(User user, Campaign campaign, Date from, Date to){
 		return null;

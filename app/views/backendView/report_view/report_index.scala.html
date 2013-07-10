@@ -95,6 +95,8 @@
 							<th>Nama Banner</th>
 							<th>Jumlah Impresi</th>
 							<th>Jumlah Klik</th>
+							<th>impresi/hari</th>
+							<th>klik/hari</th>
 							<th>Klik/Impresi (CTR)</th>
 						</tr>
 					</thead>
@@ -106,6 +108,8 @@
 						<td>@bannerList.getBanner.getName</td>
 						<td>@bannerList.getImpresion_count_angka</td>
 						<td>@bannerList.getClick_count_angka</td>
+						<td>@bannerList.getDailyAverageImpression_string</td>
+						<td>@bannerList.getDailyAverageClick_string</td>						
 						<td>@bannerList.getCTR</td>
 					</tr>
 					}

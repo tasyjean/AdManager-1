@@ -129,6 +129,15 @@ public class ReportController extends CompressController {
 		}
 		return ok(report_index.render(data, selectedUser, reportData));
 	}
+	
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result userPerformanceReport(int page){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		
+		return ok();
+	}
 
 }
 

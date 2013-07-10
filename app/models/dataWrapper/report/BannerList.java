@@ -3,6 +3,7 @@ package models.dataWrapper.report;
 import java.util.Date;
 import java.util.List;
 
+import models.custom_helper.DateBinder;
 import models.data.Banner;
 import models.data.BannerAction;
 import models.data.BannerPlacement;
@@ -18,7 +19,7 @@ public class BannerList {
 	private List<BannerPlacement> placement;
 	private List<Impression> impresi;
 	private List<BannerAction> click;
-	
+	DateBinder binder=new DateBinder();
 	public BannerList(Banner banner, Date from, Date to){
 		this.banner=banner;
 		this.from=from;
@@ -75,6 +76,26 @@ public class BannerList {
 			e.printStackTrace();
 			return "0 %";
 		}
+	}
+	public float getDailyAverageImpression(){
+		if(getImpresion_count()>0){
+			return getImpresion_count()/binder.getDayLength(from, to);			
+		}else{
+			return 0;
+		}
+	}
+	public float getDailyAverageClick(){
+		if(getClick_count()>0){
+			return getClick_count()/binder.getDayLength(from, to);			
+		}else{
+			return 0;
+		}
+	}	
+	public String getDailyAverageImpression_string(){
+		return String.format("%.2f", ((double)(getDailyAverageImpression())));
+	}
+	public String getDailyAverageClick_string(){
+		return String.format("%.2f", ((double)(getDailyAverageClick())));
 	}
 
 }
