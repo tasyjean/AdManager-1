@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import models.custom_helper.SetInitialData;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.FileManagerFactory;
 import models.custom_helper.file_manager.FileManagerInterface;
@@ -176,5 +177,15 @@ public class Application extends CompressController {
     	Date to=calendar.getTime();
     	BannerList banners=new BannerList(banner, from, to);
     	return ok(banners.getCTR()+" "+banners.getClick_count()+" "+banners.getImpresion_count()+" "+banners.getBanner().getName());
+    }
+    public static Result simulasi(){
+		SetInitialData data=new SetInitialData();
+		data.setDataUser();
+		data.setBannerSize();
+		data.setZoneChannel();
+		data.setCampaignData();
+		data.createBanner();
+		data.simulasi();    
+		return ok("sukses");
     }
 }
