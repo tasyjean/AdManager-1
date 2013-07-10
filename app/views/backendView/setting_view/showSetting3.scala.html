@@ -44,7 +44,7 @@
 					@getSuccess	
 						<h4>Judul : Tentang Teknimo</h4>
 						<input type="hidden" name="type" value="about">
-						<textarea id="about" style="min-height:400px" name="value" cols="20">@settingData.aboutValue</textarea>
+						<textarea id="about" style="min-height:400px;" name="value" cols="20">@settingData.aboutValue</textarea>
 						
 				</div>
 					<div class="form-actions">
@@ -54,14 +54,14 @@
        				}										
 			</div>
 	    	<div id="tabs-2">
-						@form(action=controllers.backend.routes.SettingController.saveSetting(3), 'class-> "form-horizontal") {
+				@form(action=controllers.backend.routes.SettingController.saveSetting(3), 'class-> "form-horizontal") {
 				<div class="content-padding">
 					<h3>Ubah Halaman "Bantuan" </h3>
 					@getError
 					@getSuccess
 						<h4>Judul : Bantuan</h3>
 						<input type="hidden" name="type" value="help">
-						<textarea id="help" style="min-height:400px"  name="value" cols="20">@settingData.helpValue</textarea>
+						<textarea id="help" style="min-height:400px;"  name="value" cols="20">@settingData.helpValue</textarea>
 						
 				</div>	    	
 					<div class="form-actions">
@@ -79,7 +79,7 @@
 						@getSuccess
 						<h4>Judul : Hubungi Kami</h4>
 						<input type="hidden" name="type" value="contact">
-						<textarea id="contact" style="min-height:400px"  cols="20" name="value">@settingData.contactValue</textarea>
+						<textarea id="contact" style="min-height:400px;"  cols="20" name="value">@settingData.contactValue</textarea>
 						
 				</div>	    	
 					<div class="form-actions">
@@ -98,7 +98,8 @@
 
 			tinymce.init({
 			    selector: "#about",
-			    plugins: [
+			    height:400,
+		 		plugins: [
 			        "advlist autolink lists link image charmap  preview anchor",
 			        "searchreplace visualblocks code fullscreen",
 			        "insertdatetime media table contextmenu paste "
@@ -107,6 +108,7 @@
 			});
 			tinymce.init({
 			    selector: "#contact",
+			    height:400,
 			    plugins: [
 			        "advlist autolink lists link image charmap  preview anchor",
 			        "searchreplace visualblocks code fullscreen",
@@ -116,6 +118,7 @@
 			});
 			tinymce.init({
 			    selector: "#help",
+			    height:400,
 			    plugins: [
 			        "advlist autolink lists link image charmap  preview anchor",
 			        "searchreplace visualblocks code fullscreen",
