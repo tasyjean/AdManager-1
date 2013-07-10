@@ -31,7 +31,7 @@ public class DashboardController extends CompressController {
 	public static Result index(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		return ok(dashboard_index.render(data));
+		return redirect(controllers.backend.routes.CampaignController.showCampaign(1));
 	}
 	
 	

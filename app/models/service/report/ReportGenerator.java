@@ -1,6 +1,9 @@
 package models.service.report;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import models.data.Campaign;
 import models.data.User;
 import models.data.UserRole;
 import models.data.enumeration.RoleEnum;
+import models.dataWrapper.finance.UserFinancialData;
 import models.dataWrapper.report.BannerList;
 import models.dataWrapper.report.DiagramData;
 import models.dataWrapper.report.ReportData;
@@ -39,13 +43,18 @@ public class ReportGenerator {
 	private ReportData getReportAllCampaign(User user, Date from, Date to){
 		ReportData data=new ReportData();
 		List<Campaign> campaigns;
-		campaigns=Campaign.find.where().eq("id_user", user).findList();
+		campaigns=Campaign.find.where().eq("id_user", user).order().asc("campaignName").findList();
 		List<Banner> banners=Banner.find.where().in("campaign", campaigns).findList();
 		List<BannerList> bannerLists=new ArrayList<BannerList>();
 		for(Banner banner:banners){
 			BannerList bannerList=new BannerList(banner, from, to);
 			bannerLists.add(bannerList);
 		}
+		Collections.sort(bannerLists, new Comparator<BannerList>() {
+			public int compare(BannerList o1, BannerList o2) {
+				return o2.getBanner().getCampaign().getId_campaign()-o1.getBanner().getCampaign().getId_campaign();
+			}
+		});
 		data.setBannerList(bannerLists);
 		data.setCampaignList(campaigns);
 		data.setSelectedUser(user);
@@ -64,6 +73,7 @@ public class ReportGenerator {
 			BannerList bannerList=new BannerList(banner, from, to);
 			bannerLists.add(bannerList);
 		}
+
 		data.setBannerList(bannerLists);
 		data.setCampaignList(campaigns);
 		data.setSelectedUser(user);

@@ -19,6 +19,7 @@ public class UserListPage {
 	}
 	public Page<User> getPage() {
 		return page;
+		
 	}
 
 	

@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import be.objectify.deadbolt.java.actions.Group;
+import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.custom_helper.DateBinder;
 import models.data.Campaign;
@@ -19,6 +21,7 @@ import models.data.UserRole;
 import models.data.enumeration.RoleEnum;
 import models.dataWrapper.TemplateData;
 import models.dataWrapper.report.ReportData;
+import models.dataWrapper.report.UserListPage;
 import models.service.Authenticator;
 import models.service.report.ReportGenerator;
 import play.Logger;
@@ -130,13 +133,14 @@ public class ReportController extends CompressController {
 		return ok(report_index.render(data, selectedUser, reportData));
 	}
 	
-	@SubjectPresent
+	@Restrict({@Group("administrator"),@Group("manager")})
 	@With(DataFiller.class)
 	public static Result userPerformanceReport(int page){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
+		UserListPage userPage=report.getReportCMO(page-1, 30);
 		
-		return ok();
+		return ok(management_report.render(data,userPage));
 	}
 
 }

@@ -19,7 +19,7 @@
 		
 	
 		@dashboard_content("Laporan","Laporan Performansi Pengiklan","laporan_user"){
-		<div class="content-padding">
+			<div class="content-padding" style="min-height: @(160+listData.getUserList.size*32+76)px">
 		<h4>Laporan Performansi Pengiklan</h4>
 			<p>Menampilkan jumlah iklan, impresi, klik dan total dana yang sudah dikeluarkan untuk beriklan untuk masing-masing pengiklan</p>
 			<div style="border:1px solid #ccc;width:100%;height:2px;margin:0 auto;margin-top:12px;"></div>
@@ -30,7 +30,7 @@
 							<th>No</th>
 							<th>Nama Pengguna</th>
 							<th>Total Transaksi Iklan</th>
-							<th>Total Dana Iklan </th>
+							<th>Total Biaya Iklan</th>
 							<th>Jumlah Campaign</th>
 							<th>Jumlah Banner</th>
 							<th>Jumlah Impresi</th>
@@ -38,22 +38,52 @@
 						</tr>
 					</thead>
 					<tbody>
-					@for((bannerList, index)<-reportData.getBannerList.zipWithIndex) {
+					@for((user, index)<-listData.getUserList.zipWithIndex) {
 					<tr>
 						<td>@(index+1)</td>
-						<td>@bannerList.getBanner.getCampaign.getCampaignName</td>
-						<td>@bannerList.getBanner.getName</td>
-						<td>@bannerList.getImpresion_count_angka</td>
-						<td>@bannerList.getClick_count_angka</td>
-						<td>@bannerList.getDailyAverageImpression_string</td>
-						<td>@bannerList.getDailyAverageClick_string</td>						
-						<td>@bannerList.getCTR</td>
+						<td>
+							<a href="@controllers.backend.routes.UserController.showSingleUser(user.getUser.getId_user)">
+								@user.getUser.getFront_name
+							</a>
+						
+						</td>
+						<td>@user.getTotalAdsTransaction_angka</td>
+						<td>@user.getTotalAdsTransactionFund_rupiah</td>
+						<td>@user.getTotalCampaign_angka</td>
+						<td>@user.getTotalBanner</td>
+						<td>@user.getTotalImpression_angka</td>						
+						<td>@user.getTotalClick_angka</td>
 					</tr>
 					}
 					</tbody>
 				</table>
-				<div style="height:50px"></div>
 			</div>
+			
+					<div id="pagination" class="pagination pagination-user">
+		            <ul>
+		                @if(listData.getPage.hasPrev) {
+		                    <li class="prev">
+		                        <a href="@controllers.backend.routes.ReportController.userPerformanceReport(listData.getPage.getPageIndex - 1)">&larr; Previous</a>
+		                    </li>
+		                } else {
+		                    <li class="prev disabled">
+		                        <a>&larr; Sebelumnya</a>
+		                    </li>
+		                }
+		                <li class="current">
+		                    <a href="@controllers.backend.routes.ReportController.userPerformanceReport(1)"> --- @(listData.getPage.getPageIndex+1) ---</a>
+		                </li>
+		                @if(listData.getPage.hasNext) {
+		                    <li class="next">
+		                        <a href="@controllers.backend.routes.ReportController.userPerformanceReport(listData.getPage.getPageIndex - 1)">Next &rarr;</a>
+		                    </li>
+		                } else {
+		                    <li class="next disabled">
+		                        <a>Selanjutnya &rarr;</a>
+		                    </li>
+		                }
+		            </ul>
+		        </div>				
 		</div> @* End Content padding *@
 		
 	  }
@@ -70,92 +100,19 @@
 		    });	 
 
 		    $('#table_report').dataTable({
-		    	"bPaginate" : true,
+		    	"bPaginate" : false,
 		    	"bLengthChange":false,
 		        "oLanguage": {
 		            "sLengthMenu": "Display _MENU_ records per page",
 		            "sZeroRecords": "Maaf Data tidak ditemukan",
 		            "sInfo": "Menampilkan _END_ buah data",
-		            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
+		            "sInfoEmpty": "",
 		            "sInfoFiltered": "<br>Di filter dari total _MAX_ buah data",
 		            "sPrevious": "Sebelumnya",
 		            "sNext": "Selanjutnya",
 		            "sSearch": "Filter  :"
 		        }
-		    });			
-	        $('#chart').highcharts({
-	            chart: {
-	                type: 'bar'
-	            },
-	            title: {
-	                text: '@reportData.getDiagramData.getText'
-	            },
-	            subtitle: {
-	                text: '@reportData.getDiagramData.getSubtext'
-	            },
-	            xAxis: {
-	                categories: [
-	                    @for(kategori<-reportData.getDiagramData.getCategories){
-	                    	'@kategori',
-	                    }     
-	                ]
-	            },
-	            yAxis: {
-	                min: 0,
-	                title: {
-	                    text: 'Jumlah'
-	                }
-	            },
-	            tooltip: {
-	                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-	                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-	                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-	                footerFormat: '</table>',
-	                shared: true,
-	                useHTML: true
-	            },
-	            plotOptions: {
-	                column: {
-	                    pointPadding: 0.2,
-	                    borderWidth: 0
-	                }
-	            },
-	            series: [{
-	                name: 'Impresi',
-	                data: [
-								@for(impresi<-reportData.getDiagramData.getImpresi){
-									  @impresi,
-								 }
-	                       ]
-	    
-	            }, {
-	                name: 'Klik',
-	                data: [
-	                      	 @for(klik<-reportData.getDiagramData.getClick){
-	                    	  @klik,
-	                       	}	                       
-	                       ]
-	            }]
-	        });
-
-	        $( "#from" ).datepicker({
-	            defaultDate: "+1w",
-	            changeMonth: true,
-	            numberOfMonths: 2,
-	            onClose: function( selectedDate ) {
-	              $( "#to" ).datepicker( "option", "minDate", selectedDate );
-	            }
-	          });
-	          $( "#to" ).datepicker({
-	            defaultDate: "+1w",
-	            changeMonth: true,
-	            numberOfMonths: 2,
-	            onClose: function( selectedDate ) {
-	              $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-	            }
-	          });
-	        
-			
+		    });					
 		});
 		
 		</script>
