@@ -2,6 +2,8 @@ package models.custom_helper.setting;
 
 import java.util.List;
 
+import play.Logger;
+
 import models.data.SystemPreferences;
 
 public class SettingManager {
@@ -56,9 +58,12 @@ public class SettingManager {
 	}
 	public boolean editPref(KeyEnum key, String value) throws Exception{ 
 		try {
+			Logger.debug("Set value" + value);
 			SystemPreferences pref=getPref(key);
 			pref.setValue(value);
 			pref.update();
+			Logger.debug("Set value" + pref.getValue());
+		
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

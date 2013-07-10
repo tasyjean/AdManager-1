@@ -85,7 +85,7 @@ public class SettingController extends CompressController {
 		}else if(page==3){
 			boolean sukses=settingEditor.saveContent(dataForm);
 			if(sukses){
-				flash("sukses","Isi konten telah disimpan");
+				flash("success","Isi konten telah disimpan");
 				return redirect(controllers.backend.routes.SettingController.showSetting(3));								
 			}else{
 				flash("erorr","Data gagal disimpan");

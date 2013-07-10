@@ -8,6 +8,7 @@ import models.custom_helper.setting.KeyEnum;
 import models.custom_helper.setting.SettingDefault;
 import models.custom_helper.setting.SettingManager;
 import models.data.BannerSize;
+import play.Logger;
 import play.data.DynamicForm;
 import play.i18n.Messages;
 
@@ -71,6 +72,8 @@ public class SettingEditor {
 	
 	public boolean saveContent(DynamicForm form){
 		try {
+			Logger.debug(form.get("value"));
+			Logger.debug(form.get("type"));
 			String type=form.get("type");
 			if(type.equals("help")){
 				settingManager.editPref(KeyEnum.HELP_PAGE, form.get("value"));
