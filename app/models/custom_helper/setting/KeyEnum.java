@@ -43,7 +43,26 @@ public enum KeyEnum {
 		public String toString(){
 			return "Instruksi Pembayaran";
 		}
+	},
+	@EnumValue("ABOUT_PAGE")
+	ABOUT_PAGE{
+		public String toString(){
+			return "Halaman Tentang";
+		}
+	},
+	@EnumValue("CONTACT_PAGE")
+	CONTACT_PAGE{
+		public String toString(){
+			return "Halaman Kontak";
+		}
+	},
+	@EnumValue("HELP_PAGE")
+	HELP_PAGE{
+		public String toString(){
+			return "Halaman Bantuan";
+		}
 	}
+	
 
 	
 

@@ -54,7 +54,7 @@
 		       }else{
 		      		 
 			      <h4>Ringkasan Transaksi @user.getFront_name </h4>
-			      <table class="single-view" style="width:400px">
+			      <table class="single-view" style="width:600px;table-layout: auto;">
 			        <tr>
 			          <td>Saldo Saat ini </td><td>:</td>
 			          <td>@financeData.getCurrentBalance_rupiah</td>
@@ -75,6 +75,25 @@
 			          <td>Total Dana Deposito</td><td>:</td>
 			          <td>@financeData.getTotalDeposito_rupiah</td>
 			        </tr>
+			        <tr>
+			        	<td colspan="3" style="padding:12px 0 6px 0;font-weight: bold;">Ringkasan Tiap Campaign</td>
+			        </tr>
+
+			        @for(campaignData<-financeData.getCampaignData){
+			        <tr>
+			        	<td colspan="3" style="font-weight: bold;">Campaign @campaignData.getCampaign.getCampaignName</td>
+			        </tr>
+			        <tr>
+			        	<td>Total Transaksi</td><td>:</td>
+			        	<td>@campaignData.getTotalTransaction</td>
+			        </tr>
+			        <tr>
+			        	<td style="min-width:200px !important;">Total Pengeluaran Campaign</td><td>:</td>
+			        	<td>@campaignData.getTotalPrice</td>
+			        </tr>
+			        
+			        }
+			        <tr>
 			         <tr>
 			         </tr>
 			         <tr>

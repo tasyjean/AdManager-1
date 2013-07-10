@@ -1,4 +1,4 @@
-@(templateData: TemplateData)
+@(templateData: TemplateData, about:String, help:String)
 
 @import helper._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
@@ -67,12 +67,12 @@
       <div class="row-fluid" >
         <div class="span6 ringkasan-artikel" style="float:left;">
           <h3>Tentang Teknimo</h3>
-          <p>Teknimo merupakan website blog yang berisi berita, artikel, review dan opini-opini yang berkaitan dengan perkembangan teknologi, khususnya teknologi informasi dan komunikasi. Didirikan pada tanggal 2 Oktober 2012 dan dapat di akses di alamat <a href="http://www.teknimo.com">http://www.teknimo.com</a> </p>
+		   @Html(about)
           <p><a class="btn" href="about">Lebih Lengkap »</a></p>
         </div>
         <div class="span6 ringkasan-artikel" style="float:right">
           <h3>Bantuan Lebih Lanjut</h3>
-          <p>Ads Manager merupakan aplikasi yang difungsikan untuk mengelola iklan untuk website teknimo. Kegiatan seperti menambahkan iklan, mengelola pembayaran, melihat laporan, pengaturan iklan hingga perhitungan biaya ada disini semua. Baca bantuan penggunaan dulu sebelum menggunakan sistem.</p>
+		   @Html(help)
           <p><a class="btn" href="help">Lebih Lengkap »</a></p>
         </div>
       </div>

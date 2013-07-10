@@ -68,5 +68,22 @@ public class SettingEditor {
 	public void setDefault(){
 		settingDefault.setAll();
 	}
+	
+	public boolean saveContent(DynamicForm form){
+		try {
+			String type=form.get("type");
+			if(type.equals("help")){
+				settingManager.editPref(KeyEnum.HELP_PAGE, form.get("value"));
+			}else if(type.equals("about")){
+				settingManager.editPref(KeyEnum.ABOUT_PAGE, form.get("value"));
+			}else if(type.equals("contact")){
+				settingManager.editPref(KeyEnum.CONTACT_PAGE, form.get("value"));
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }

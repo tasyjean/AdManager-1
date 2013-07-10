@@ -2,9 +2,13 @@ package models.service;
 
 import java.util.Date;
 
+import play.Logger;
 import play.data.Form;
+import play.i18n.Messages;
 import meesy.Meesy;
+import models.custom_helper.DomainURL;
 import models.custom_helper.EmailSenderThread;
+import models.custom_helper.PasswordGenerator;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
 import models.data.User;
@@ -21,9 +25,11 @@ public class Registrar {
 	final String MEESY_KEY="nanana";
 	Meesy meesy;
 	RoleFactory factory;
+	PasswordGenerator pass_gen;
 	
-	public Registrar(SendMail mailer, Meesy meesy, RoleFactory factory) {
+	public Registrar(SendMail mailer, Meesy meesy, RoleFactory factory, PasswordGenerator pass_gen) {
 		super();
+		this.pass_gen=pass_gen;
 		this.mailer = mailer;
 		this.meesy = meesy;
 		this.factory = factory;
@@ -86,8 +92,44 @@ public class Registrar {
 		
 		return "<a href=http://"+host+"/activate/"+emailCrypt+"/"+key+">Link Aktivasi</a>";
 	}
-	public Boolean forgetPassword(){
-		// TODO
-		return true;
+	public Boolean forgetPassword(String email){
+		try {
+			Logger.error(email);
+			User user= User.find.where().eq("email",email).findUnique();			
+			String password=pass_gen.getRandom();
+			//pastikan email sudah dikirim sebelum password diganti
+			if(sendEmailPassword(user, password)){
+				user.setPassword(password);	
+				user.update();
+			}else{
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}	
+	}
+	private boolean sendEmailPassword(User user, String password){
+		try {
+			String content=Messages.get("email.reset.content", 
+										 DomainURL.get()+"/login",
+										 password);
+			
+			mailer.setRecipient(user.getEmail());
+			mailer.setSender(Messages.get("email.sender"));
+			mailer.setContent(content);
+			mailer.setSubject(Messages.get("email.reset.subject"));
+			mailer.setCc(Messages.get("email.sender"));
+			
+			EmailSenderThread sender = new EmailSenderThread(mailer);
+			new Thread(sender).start();
+			return true;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 }

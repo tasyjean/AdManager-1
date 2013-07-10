@@ -102,7 +102,6 @@ public class ReportGenerator {
 					kategori.add(bannerList.getBanner().getCampaign().getCampaignName());
 					x++;
 					Logger.debug("kategori add" +kategori.size()+kategori.get(x-1));
-					
 				}
 			}				
 			i++;

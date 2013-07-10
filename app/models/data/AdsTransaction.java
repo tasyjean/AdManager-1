@@ -45,10 +45,10 @@ public class AdsTransaction extends Model {
 	}
 	
 	public String getCurrent_balance_rupiah(){
-		return Angka.toAngka(current_balance);
+		return Angka.toRupiah(current_balance);
 	}
 	public String getAmount_rupiah(){
-		return Angka.toAngka(amount);
+		return Angka.toRupiah(amount);
 	}
 
 	public PricingModelEnum getTransaction_type() {

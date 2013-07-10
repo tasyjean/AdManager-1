@@ -1,0 +1,124 @@
+@(data: TemplateData,settingData:SettingData)
+
+@import views.html.ui_component._
+@import helper._
+@import views.html.backendView.main
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 	  	    
+@getSuccess()= {
+ 	@if(flash.contains("success")) {
+		<div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>Sukses!</p>
+		<p>@flash.get("success")</p>
+		</div>
+	}
+}
+@main("Pengaturan"){
+	
+	@dashboard_content("Pengaturan","Pengaturan Konten","pengaturan konten"){
+		@* Tambahkan java script dan css *@
+		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		<script type="text/javascript" src="@routes.Assets.at("js/tinymce/tinymce.min.js")"></script>
+
+		
+		<div id="input_tab">
+			<ul>
+				<li><a href="#tabs-1">Halaman Tentang</a></li>
+				<li><a href="#tabs-2">Halaman Hubungi Kami</a></li>
+				<li><a href="#tabs-3">Halaman Bantuan</a></li>
+			</ul>
+			<div id="tabs-1">
+				<div class="content-padding">
+					@form(action=controllers.backend.routes.SettingController.saveSetting(3), 'class-> "form-horizontal") {
+					<h3>Ubah Halaman "Tentang" </h3>					
+					@getError
+					@getSuccess	
+						<h4>Judul : Tentang Teknimo</h4>
+						<input type="hidden" name="type" value="about">
+						<textarea rows="30" name="value" cols="20">@settingData.aboutValue</textarea>
+						
+				</div>
+					<div class="form-actions">
+	      				<button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    	 			    <button type="reset" class="btn">Reset</button>
+       				</div>	
+       				}										
+			</div>
+	    	<div id="tabs-2">
+				<div class="content-padding">
+					@form(action=controllers.backend.routes.SettingController.saveSetting(3), 'class-> "form-horizontal") {
+					<h4>Ubah Halaman "Bantuan" </h4>
+					@getError
+					@getSuccess
+						<h5>Judul : Bantuan</h5>
+						<input type="hidden" name="type" value="help">
+						<textarea rows="30" name="value" cols="20">@settingData.helpValue</textarea>
+						
+				</div>	    	
+					<div class="form-actions">
+	      				<button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    	 			    <button type="reset"  class="btn">Reset</button>
+       				</div>	
+       				}	
+	    	</div>
+
+	    	<div id="tabs-3">
+			@form(action=controllers.backend.routes.SettingController.saveSetting(3), 'class-> "form-horizontal") {
+				<div class="content-padding">
+					<h4>Ubah Halaman "Hubungi Kami"</h4>
+					@getError
+					@getSuccess
+						<h5>Judul : Hubungi Kami</h5>
+						<input type="hidden" name="type" value="contact">
+						<textarea rows="30" cols="20" name="value">@settingData.contactValue</textarea>
+						
+				</div>	    	
+					<div class="form-actions">
+	      				<button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    	 			    <button type="reset" class="btn">Reset</button>
+       				</div>
+       				}					
+				</div>	    
+	    	</div>
+       
+     }
+		<script type="text/javascript">
+		$(document).ready(function() {
+	    	$("#input_tab").tabs();
+	    	$("#input_tab").tabs({ active: 1 });
+
+			tinymce.init({
+			    selector: "textarea",
+			    plugins: [
+			        "advlist autolink lists link image charmap  preview anchor",
+			        "searchreplace visualblocks code fullscreen",
+			        "insertdatetime media table contextmenu paste "
+			    ],
+			    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+			});
+
+		});
+		</script>
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("setting")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

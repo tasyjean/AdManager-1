@@ -4,7 +4,10 @@ package controllers.backend;
  * Kelas FinanceController digunakan untuk menangani request berkaitan dengan 
  * manajemen keuangan
  */
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.avaje.ebean.Page;
@@ -15,11 +18,13 @@ import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.custom_helper.setting.KeyEnum;
 import models.custom_helper.setting.SettingManager;
 import models.data.AdsTransaction;
+import models.data.Campaign;
 import models.data.Deposito;
 import models.data.TransferConfirmation;
 import models.data.User;
 import models.data.UserContact;
 import models.dataWrapper.TemplateData;
+import models.dataWrapper.campaign.CampaignList;
 import models.dataWrapper.finance.DepositoData;
 import models.dataWrapper.finance.UserFinancialData;
 import models.form.backendForm.financeForm.DepositoForm;
@@ -48,6 +53,7 @@ public class FinanceController extends CompressController {
 	public static NotificationCenter notif=new NotificationCenter();
 	public static DepositoOperator deposit=new DepositoOperator(notif);
 	public static TransactionFetcher fetcher=new TransactionFetcher();
+	public static SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy");
 
 	@SubjectPresent
 	@With(DataFiller.class)
@@ -99,11 +105,24 @@ public class FinanceController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		
 		/*
-		 * Urutan request [page].[user].[validated].
+		 * Urutan request [page].[user].[validated].[filter] (0 semua, 1 klik, 2 impresi 3 harian)
+		 * @(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer, option=Integer, user:User, campaignList:List[Campaign])
 		 */
+		
 		String[] options=option.split("-");
 		int page;
 		int show;
+		int showOption;
+		int idCampaign;
+		Date from;
+		Date to;
+		//Date default value
+		Calendar calendar=Calendar.getInstance();
+		to=calendar.getTime();
+		calendar.set(Calendar.DATE, -9000);
+		from=calendar.getTime();
+		
+		Campaign campaign=null;
 		try {
 			DynamicForm form=Form.form().bindFromRequest();
 			try {
@@ -112,30 +131,51 @@ public class FinanceController extends CompressController {
 				e.printStackTrace();
 				show = Integer.parseInt(options[1]);
 			}
-			if(options.length!=2){
+			try {
+				idCampaign = Integer.parseInt(form.get("campaign"));
+			} catch (Exception e1) {
+				idCampaign=0;
+				e1.printStackTrace();
+			}
+			if(idCampaign!=0){
+				campaign=Campaign.find.byId(idCampaign);				
+			}			
+			
+			try {
+				from = format.parse(form.get("from"));
+				to = format.parse(form.get("to"));
+			} catch (Exception e) {
+				Logger.debug("Calendar error");
+			}
+			if(options.length!=3){
 				Logger.debug("Ukuran Option "+options.length+" "+option);
 				throw  new Exception();
 			}
 			page = Integer.parseInt(options[0]);
+			showOption= Integer.parseInt(options[2]);
 		} catch (Exception e) {
 			page=0;
 			show=50;
+			showOption=0;
 			e.getMessage();
 		}
 		User user=null;
 		Page<AdsTransaction> result=null;
 		Logger.debug("Parsing Page "+page+" "+show+" "+idUser+" ");
-		//@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer,user:User)
-
+		//@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer, option=Integer, user:User, campaignList:List[Campaign])
+		CampaignList campaignList;
 		if(auth.getUserRole(session()).getName().equals("advertiser")){
 			User userLogin=auth.getUserLogin(session());
-			result=fetcher.getAdsTransaction(userLogin, show, page);
-			return ok(ads_transaction.render(data,result,show,page,userLogin));	    			
+			campaignList=new CampaignList(userLogin);
+			result=fetcher.getAdsTransaction(userLogin, show, page, showOption, campaign, from, to);
+			return ok(ads_transaction.render(data,result,show,page,showOption,userLogin, campaignList));	    			
 		}else{
 			user=User.find.byId(idUser);
-			result=fetcher.getAdsTransaction(user, show, page);
+			campaignList=new CampaignList(user);
+			
+			result=fetcher.getAdsTransaction(user, show, page, showOption, campaign, from, to);
 		}
-		return ok(ads_transaction.render(data,result,show,page,user));	    
+		return ok(ads_transaction.render(data,result,show, page, showOption, user,campaignList));	    
 	}
 	@SubjectPresent
 	@With(DataFiller.class)

@@ -83,7 +83,7 @@
 						@for(zone_type<-zone_data.getZoneType){
 							<span class="radio-style">
 								<input type="radio"  name="zone_type"
-								 @("checked".when(current_data.getZone_type.toString==zone_type(0))) value="@zone_type(0)">
+								 @("checked".when(current_data.getZone_type.name==zone_type(0))) value="@zone_type(0)">
 								<span>@zone_type(1)</span>
 							</span>
 							<br/>
@@ -109,9 +109,7 @@
 			<div class="control-group">
 					<label class="control-label" for="zone_default_code">Kode Sendiri</label>
 					<div class="controls">
-						<textarea class="code" value="@current_data.getZone_default_code"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code">
-						@current_data.getZone_default_code
-						</textarea>
+						<textarea class="code" value="@current_data.getZone_default_code"  class="input-large" rows="5" name="zone_default_code" id="zone_default_code">@current_data.getZone_default_code</textarea>
 	                    <p class="help-block">Kode html untuk tampilan default, mendukung semua tag html</p>
 					</div>
 				   <div style="font-size:10px; float:left;"><i> *) Wajib di isi</i></div>				

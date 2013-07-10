@@ -1,6 +1,7 @@
 package models.dataWrapper.finance;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.custom_helper.Angka;
@@ -25,6 +26,7 @@ public class UserFinancialData {
 	 * Total Transaksi
 	 * Total Pengeluaran Iklan
 	 * Tabel : Transaksi Terakhir
+	 * Array Campaign + Jumlah dana
 	 * 
 	 * Hall Of Fame
 	 * -> Saldo Tertinggi
@@ -38,7 +40,10 @@ public class UserFinancialData {
 	private int paymentCount; //jumlah berapa kali pembayaran yang dilaukan
  	private long totalAdsSpending; //total biaya yang udah dikeluarkan untuk iklan
 	private long totalDeposito; //jumlah total nilai uang yang pernah di depositokan
+	private List<CampaignData> campaignData;
 	private User user;
+	
+	
 	
 	public UserFinancialData(User user) {
 		if(user!=null){
@@ -48,12 +53,14 @@ public class UserFinancialData {
 			setCurrentBalance();
 			setPaymentCount();
 			setTotalAdsSpending();
-			setTotalDeposito();			
+			setTotalDeposito();	
+			setCampaignData();
 		}
 	}
 	public User getUser(){
 		return user;
 	}
+	
 	public int getCurrentBalance() {
 		return currentBalance;
 	}	
@@ -118,6 +125,16 @@ public class UserFinancialData {
 			result=result+deposit.getAmount();
 		}
 		this.totalDeposito = result;
+	}
+	public List<CampaignData> getCampaignData() {
+		return campaignData;
+	}
+	public void setCampaignData() {
+		List<Campaign> campaigns=Campaign.find.where().eq("id_user", user).findList();
+		campaignData=new ArrayList<CampaignData>();
+		for(Campaign campaign:campaigns){
+			campaignData.add(new CampaignData(campaign));
+		}
 	}
 
 	

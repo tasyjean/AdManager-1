@@ -1,4 +1,4 @@
-@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer,user:User)
+@(data: TemplateData, ads_transaction_list: Page[AdsTransaction], show:Integer, page:Integer, option:Integer, user:User, campaignList:CampaignList)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -27,6 +27,7 @@
 @main("Keuangan"){
 		
 		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTables.min.js")"></script>
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/dataTable.grouping.min.js")"></script>
 		<link href="@routes.Assets.at("css/table.css")" rel="stylesheet">
 		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
 		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
@@ -47,7 +48,7 @@
 				<h4>Riwayat Transaksi Iklan Untuk @user.getFront_name</h4>
 					@getSuccess
 						Tampilkan : 
-							<form action="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show)"
+							<form action="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-"+option)"
 								  method="POST">
 							<select name="view" id="view">
 								<option  @("selected".when(show==50))  value=50>50 item</option>
@@ -58,8 +59,57 @@
 							</select>
 							<button style="margin-top:-7px;" type="submit" class="btn">Submit</button>
 							</form>
+				<a role="button" data-toggle="modal" class="btn" href="#setting_modal"  style="display:inline;margin-right:10px;margin-left:0px">Pengaturan Tampilan</a>
 							
-	
+		@**********Modal Setting********@
+			<div id="setting_modal" style="width:600px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="banner_modal" aria-hidden="true">
+				<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    		<h3 id="label">Pengaturan Laporan</h3>
+		  		</div>
+
+		  	@form(action =controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-"+option), 'class-> "form-horizontal") {				
+				 <div class="modal-body" style="background-color:#f9f9f9;">
+					<div id="forms" style="background-color:#f9f9f9;padding:10px; margin:0 auto;">
+			
+							
+							<label for="user" style="padding-top:10px">Pilih Campaign</label>										
+							<select name="campaign" id="campaign">
+								<option value="0">Semua Campaign</option>
+							@for(campaign<-campaignList.getList){
+								<option value="@campaign.getId_campaign">@campaign.getCampaignName</option>
+							}
+							</select>
+							<label for="from">Dari Tanggal </label>
+							<input placeholder="Dari Tanggal" class="" type="text" id="from" name="from" />
+							<label for="to">Hingga</label>
+							<input placeholder="Hingga Tanggal" class="" type="text" id="to" name="to"/><br>
+
+							<span>Tampilkan : </span>
+							<a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-3")">
+								[Transaksi Iklan Harian]
+							</a>
+							<a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-1")">
+								[Transaksi Klik]
+							</a>		
+							<a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-2")">
+								[Transaksi Impresi]
+							</a>
+							<a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-0")">
+								[Semua]
+							</a>											
+																		
+			</div> 
+  		</div>@*End Div *@
+  				<div class="modal-footer">
+				   		<button type="submit" class="btn">Tampilkan Laporan</button>
+				   <button class="btn"  data-dismiss="modal" aria-hidden="true">Batal</button>
+				</div>
+	} @* End Form *@	
+	</div>
+
+											
+					
 					<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_campaign">
 						<thead>
 							<tr>
@@ -95,15 +145,32 @@
 					        "oLanguage": {
 					            "sLengthMenu": "Display _MENU_ records per page",
 					            "sZeroRecords": "Maaf Data tidak ditemukan",
-					            "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ buah data",
+					            "sInfo": "Menampilkan _END_ buah data",
 					            "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 buah data",
-					            "sInfoFiltered": "(Di filter dari total _MAX_ buah data )",
+					            "sInfoFiltered": "<br>Di filter dari total _MAX_ buah data",
 					            "sPrevious": "Sebelumnya",
 					            "sNext": "Selanjutnya",
 					            "sSearch": "Filter  :"
 					        }
-					    });
+					    })
  
+					    $( "#from" ).datepicker({
+					        defaultDate: "+1w",
+					        changeMonth: true,
+					        numberOfMonths: 2,
+					        onClose: function( selectedDate ) {
+					        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+					     }
+					    });
+					   $( "#to" ).datepicker({
+					        defaultDate: "+1w",
+			                changeMonth: true,
+				            numberOfMonths: 2,
+				            onClose: function( selectedDate ) {
+				              $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+				            }
+					   });
+							
 					} );
 				</script>
 				
@@ -111,7 +178,7 @@
 			            <ul>
 			                @if(ads_transaction_list.hasPrev) {
 			                    <li class="prev">
-			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page-1)+"-"+show)">&larr; Sebelumnya</a>
+			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page-1)+"-"+show+"-"+option)">&larr; Sebelumnya</a>
 			                    </li>
 			                } else {
 			                    <li class="prev disabled">
@@ -119,11 +186,11 @@
 			                    </li>
 			                }
 			                <li class="current">
-			                    <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show)">--- @ads_transaction_list.getPageIndex ---</a>
+			                    <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,page+"-"+show+"-"+option)">--- @ads_transaction_list.getPageIndex ---</a>
 			                </li>
 			                @if(ads_transaction_list.hasNext) {
 			                    <li class="next">
-			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page+1)+"-"+show)">Selanjutnya &rarr;</a>
+			                        <a href="@controllers.backend.routes.FinanceController.showAdsTransactionList(user.getId_user,(page+1)+"-"+show+"-"+option)">Selanjutnya &rarr;</a>
 			                    </li>
 			                } else {
 			                    <li class="next disabled">

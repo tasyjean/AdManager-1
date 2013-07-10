@@ -63,9 +63,7 @@ public class SettingManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		}
-		
-		
+		}		
 	}
 	public List<SystemPreferences> getAll(){
 		return SystemPreferences.find.all();

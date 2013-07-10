@@ -3,6 +3,7 @@ package models.service.finance;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.avaje.ebean.Page;
@@ -15,6 +16,7 @@ import models.data.Deposito;
 import models.data.Notification;
 import models.data.User;
 import models.data.UserRole;
+import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.RoleEnum;
 import models.dataWrapper.finance.UserFinancialData;
 
@@ -57,6 +59,53 @@ public class TransactionFetcher {
 			return null;
 		}
 	}
+	public Page<AdsTransaction> getAdsTransaction(User user, int pageSize,int page,int option, Campaign campaign, Date from, Date to){
+		//(0 semua, 1 klik, 2 impresi 3 harian)
+		PricingModelEnum enumFilter=null;
+		if(option==0){
+			enumFilter=null;
+		}else if(option==1){
+			enumFilter=PricingModelEnum.CPA;
+		}else if(option==2){
+			enumFilter=PricingModelEnum.CPM;
+		}else if(option==3){
+			enumFilter=PricingModelEnum.FLAT;
+		}
+		
+		try {
+			List<Banner> banner;
+			List<Campaign> campaigns;
+			if(campaign!=null){
+				banner=Banner.find.where().in("campaign", campaign).findList();				
+			}else{
+    			campaigns=Campaign.find.where().eq("id_user", user).findList();				
+				banner=Banner.find.where().in("campaign", campaigns).findList();								
+			}
+			List<BannerPlacement> placement=BannerPlacement.find.where().in("banner", banner).findList();
+			Page<AdsTransaction> transactions = null;
+			if(enumFilter==null){
+				transactions=AdsTransaction.find.where()
+						  .in("bannerPlacement",placement)
+						  .between("timestamp", from, to)
+						  .order().desc("timestamp")
+						  .findPagingList(pageSize)
+						  .getPage(page);
+				
+			}else{
+				transactions=AdsTransaction.find.where()
+						  .in("bannerPlacement",placement)
+						  .eq("transaction_type", enumFilter.name().toLowerCase())
+						  .between("timestamp", from, to)
+						  .order().desc("timestamp")
+						  .findPagingList(pageSize)
+						  .getPage(page);				
+			}
+			return transactions;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
 	public Page<Deposito> getDeposito(User user, int pageSize,int page){
 		try {
 			Page<Deposito> deposito=Deposito.find.where()

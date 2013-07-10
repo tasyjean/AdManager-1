@@ -21,7 +21,7 @@ public class Global extends GlobalSettings {
 //		data.setCampaignData();
 //		data.createBanner();
 //		data.simulasi();
-//		SettingDefault default2=new SettingDefault();
-//		default2.setAll();
+		SettingDefault default2=new SettingDefault();
+		default2.setAll();
 	}
 }

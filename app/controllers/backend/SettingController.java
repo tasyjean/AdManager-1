@@ -44,10 +44,11 @@ public class SettingController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
 		
-		SettingData settingData= new SettingData(page);
+		SettingData settingData= new SettingData(page, settingManager);
 		switch(page){
 			case 1:return ok(showSetting1.render(data, settingData));
 			case 2:return ok(showSetting2.render(data, settingData));
+			case 3:return ok(showSetting3.render(data, settingData));
 			default:redirect(controllers.backend.routes.SettingController.showSetting(1));
 		}
 		
@@ -80,6 +81,15 @@ public class SettingController extends CompressController {
 					flash("success", Messages.get(message));
 					return redirect(controllers.backend.routes.SettingController.showSetting(2));								
 				}
+			}
+		}else if(page==3){
+			boolean sukses=settingEditor.saveContent(dataForm);
+			if(sukses){
+				flash("sukses","Isi konten telah disimpan");
+				return redirect(controllers.backend.routes.SettingController.showSetting(3));								
+			}else{
+				flash("erorr","Data gagal disimpan");
+				return redirect(controllers.backend.routes.SettingController.showSetting(3));								
 			}
 		}
 		return redirect(controllers.backend.routes.SettingController.showSetting(1));

@@ -56,7 +56,53 @@ public class AdsDeliveryController extends CompressController {
 		Zone zone_object=Zone.find.byId(zone);
 		
 		List<BannerPlacement> result=ad_selector.get(zone_object);
-		if(result==null){
+		if(result!=null){
+			if (result.size()!=0) {
+				Logger.debug("Daftar Banner= " + result.toString());
+				Logger.debug("Ukuran Banner= " + result.size());
+				List<Impression> impression = new ArrayList<Impression>();
+				List<Banner> banner = new ArrayList<Banner>();
+				int i = 0;
+				for (BannerPlacement bannerPlacement : result) {
+					impression.add(adsDeliverer.countImpression(
+							bannerPlacement, source, Context.current()));
+					banner.add(bannerPlacement.getBanner());
+				}
+				if (zone_object.getZone_type() == ZoneTypeEnum.BANNER) {
+					//pastikan ukurannya 1
+					Banner banner_send = banner.get(0);
+					Impression impression_send = impression.get(0);
+					String fileName = banner_send.getContent_link().getName();
+					String tipe = "";
+					if (fileName.endsWith("swf")) {
+						tipe = "SWF";
+					} else {
+						tipe = "IMAGE";
+					}
+					return ok(banner_ads_production.render(banner_send,
+							impression_send, tipe));
+
+				} else {
+					return ok(text_ads_production.render(banner, impression,
+							zone_object.getBanner_size()));
+				}
+			}else{
+				String body="";		
+				try {
+					if(zone_object.getZone_default_view()==DefaultViewEnum.DEFAULT_ADS){
+						body=zone_object.getBanner_size().getDefault_code();
+					}else if(zone_object.getZone_default_view()==DefaultViewEnum.DEFAULT_CODE){
+						body=zone_object.getZone_default_code();				
+					}else{
+						body="";
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					body="";
+				}			
+				return ok(empty_ads.render(body));				
+			}
+		}else{
 			String body="";		
 			try {
 				if(zone_object.getZone_default_view()==DefaultViewEnum.DEFAULT_ADS){
@@ -71,33 +117,6 @@ public class AdsDeliveryController extends CompressController {
 				body="";
 			}			
 			return ok(empty_ads.render(body));
-		}else{
-			Logger.debug("Daftar Banner= "+result.toString());
-			Logger.debug("Ukuran Banner= "+result.size());
-
-			List<Impression> impression=new ArrayList<Impression>();
-			List<Banner> banner=new ArrayList<Banner>();
-			int i=0;
-			for(BannerPlacement bannerPlacement:result){
-				impression.add(adsDeliverer.countImpression(bannerPlacement, source, Context.current()));
-				banner.add(bannerPlacement.getBanner());
-			}
-			if(zone_object.getZone_type()==ZoneTypeEnum.BANNER){
-				//pastikan ukurannya 1
-				Banner banner_send=banner.get(0);
-				Impression impression_send=impression.get(0);
-				String fileName=banner_send.getContent_link().getName();
-				String tipe="";
-				if(fileName.endsWith("swf")){
-					tipe="SWF";
-				}else{
-					tipe="IMAGE";
-				}
-					return ok(banner_ads_production.render(banner_send,impression_send,tipe));
-				
-			}else{
-				return ok(text_ads_production.render(banner,impression,zone_object.getBanner_size()));
-			}
 		}
 
 	}

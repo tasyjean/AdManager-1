@@ -1,4 +1,4 @@
-@(templateData: TemplateData)
+@(templateData: TemplateData, help:String)
 
 @import helper._
 
@@ -9,13 +9,8 @@
             <li><a href="/">Home</a><span class="divider">/<span><li>
             <li><a href="help">Bantuan</a><li>
           </ul>
-          <h1><a href="help">Tentang Teknimo</a></h1><br>
-          <p>Teknimo merupakan website blog yang berisi berita, artikel, review dan opini-opini yang berkaitan dengan perkembangan teknologi, khususnya teknologi informasi dan komunikasi. Didirikan pada tanggal 2 Oktober 2012 dan dapat di akses di alamat  <a href="http://www.teknimo.com">http://www.teknimo.com</a>. Tujuan Teknimo dibuat adalah untuk menyajikan informasi tentang perkembangan teknologi dan informasi, di dalam dan luar negeri kepada masyarakat Indonesia.<p>
-          <p>Teknologi Informasi bergerak dengan cepat. Banyak produk baru, teknologi baru, software, dan hardware yang perkembangannya begitu cepat. Sulit untuk mengikuti perkembangan teknologi yang begitu cepat, sementara mengetahui perkembangan teknologi saat ini adalah hal yang penting.</p>
-          <p>Karena itulah Teknimo ada. Berbekal cinta kami terhadap teknologi dan perkembangannya, visi kami adalah menyajikan informasi tentang perkembangan teknologi, dengan  akurat, dan lengkap ke seluruh masyarakat Indonesia.  Dengan harapan Indonesia makin "melek" teknologi dan mengetahui perkembangan teknologi  di luar maupun di dalam Indonesia.</p>
-       	
-       	<a href="/testRequest">TEst</a>
-       
-        </div>
+          <h1><a href="help">Bantuan</a></h1><br>
+			@Html(help)	       
+          </div>
 
 }

@@ -9,10 +9,13 @@ import com.google.inject.Inject;
 import be.objectify.deadbolt.java.actions.SubjectNotPresent;
 
 import meesy.Meesy;
+import models.custom_helper.PasswordGenerator;
 import models.custom_helper.RecaptchaRegistration;
 import models.custom_helper.RoleFactory;
 import models.custom_helper.SendMail;
+import models.custom_helper.setting.SettingManager;
 import models.dataWrapper.TemplateData;
+import models.dataWrapper.setting.SettingData;
 import models.form.frontendForm.ForgetPassForm;
 import models.form.frontendForm.LoginForm;
 import models.form.frontendForm.RegistrationForm;
@@ -37,24 +40,30 @@ public class FrontEndController extends CompressController {
     static SendMail mail=new SendMail();
     static Meesy meesy=new Meesy();
     static RoleFactory role=new RoleFactory();
-    
-    static Registrar registrar = new Registrar(mail,meesy,role);
+    static PasswordGenerator pass_gen=new PasswordGenerator();
+    static Registrar registrar = new Registrar(mail,meesy,role, pass_gen);
     static Authenticator auth=new Authenticator();
     
+    static SettingManager manager=new SettingManager();
     
 	@With(DataFiller.class)
 	public static Result home() {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
-		return ok(home.render(data));
+		SettingData datas=new SettingData(3,manager);
+		String content1=datas.aboutValue.substring(0, 268);
+		String content2=datas.helpValue.substring(0, 268);
+		
+		return ok(home.render(data, content1,content2));
     }
 
 	@With(DataFiller.class)
 	public static Result contact(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
-		
-		return ok(contact.render(data));
+		SettingData datas=new SettingData(3,manager);
+		String content=datas.contactValue;
+		return ok(contact.render(data, content));
 	}
 	@SubjectNotPresent
 	@With(DataFiller.class)
@@ -88,7 +97,9 @@ public class FrontEndController extends CompressController {
 	public static Result help(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		return ok(help.render(data));
+		SettingData datas=new SettingData(3,manager);
+		String content2=datas.helpValue;
+		return ok(help.render(data, content2));
 	}
 	@With(DataFiller.class)
 	public static Result authenticate(){
@@ -109,7 +120,10 @@ public class FrontEndController extends CompressController {
 	public static Result about(){
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		return ok(about.render(data));
+		SettingData datas=new SettingData(3,manager);
+		String content1=datas.aboutValue;
+
+		return ok(about.render(data, content1));
 	}
 	
 	@With(DataFiller.class)
@@ -117,7 +131,10 @@ public class FrontEndController extends CompressController {
 		auth.logout(session());
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
-		return ok(home.render(data));
+		SettingData datas=new SettingData(3,manager);
+		String content1=datas.aboutValue.substring(0, 268);
+		String content2=datas.helpValue.substring(0, 268);
+		return ok(home.render(data, content1, content2));
 	}
 	public static Result forgetPassword(){
 		return ok(forget_password.render(forgetForm));
@@ -125,8 +142,20 @@ public class FrontEndController extends CompressController {
 	public static Result forgetProcess(){
 		Form<ForgetPassForm> forgetForm = Form.form(ForgetPassForm.class).bindFromRequest();
 		flash().put("status", "success");
-		// TODO prosesing proses forget password
-		return ok(forget_password.render(forgetForm));
+		if(forgetForm.hasErrors()){
+			flash("error","Email tidak terdaftar ");
+			return ok(forget_password.render(forgetForm));
+		}else{
+			boolean sukses=registrar.forgetPassword(forgetForm.get().email);
+			if(sukses){
+				flash("success","Reset password berhasil, password baru telah dikirim ke "+forgetForm.get().email);
+				return ok(forget_password.render(forgetForm));
+			}else{
+				flash("error","Reset password gagal, silahkan hubungi administrator " +
+						"("+Messages.get("email.sender")+") untuk info lebih lanjut");
+				return ok(forget_password.render(forgetForm));				
+			}
+		}
 	}
 	
 	
