@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import models.custom_helper.SendMail;
 import models.custom_helper.SetInitialData;
 import models.custom_helper.file_manager.FileManager;
 import models.custom_helper.file_manager.FileManagerFactory;
@@ -180,12 +181,26 @@ public class Application extends CompressController {
     }
     public static Result simulasi(){
 		SetInitialData data=new SetInitialData();
-		data.setDataUser();
-		data.setBannerSize();
-		data.setZoneChannel();
-		data.setCampaignData();
-		data.createBanner();
-		data.simulasi();    
-		return ok("sukses");
+		InitialData set;
+		set=new InitialData(data);
+		
+		new Thread(set).start();
+		return ok("Initial Data start");
+    }
+    
+    public static class InitialData extends Thread{
+    	SetInitialData data;
+    	public InitialData(SetInitialData data) {
+    		this.data=data;
+    	}
+    	
+    	public void run(){
+    		data.setDataUser();
+    		data.setBannerSize();
+    		data.setZoneChannel();
+    		data.setCampaignData();
+    		data.createBanner();
+    		data.simulasi(); 
+    	}
     }
 }
