@@ -153,4 +153,4 @@ GET		/testJS/:anu					controllers.Application.testJS(anu:String)
 GET		/testReport/:id					controllers.Application.testReport(id:Integer)
 GET     /insertData/					controllers.Application.simulasi()
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /public/*file               controllers.Assets.at(path="/public", file)

@@ -340,9 +340,10 @@ public class CampaignController extends CompressController {
 			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
 						banner.getCampaign().getId_campaign()));	
 		}else{
-			flash("error","Banner Gagal dihapus");
+			flash("error","Banner Gagal dihapus, data banner terhubung dengan data lainnya");
+			Banner bannerReturn=Banner.find.byId(idBanner);
 			return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(
-						banner.getCampaign().getId_campaign()));				
+						bannerReturn.getCampaign().getId_campaign()));				
 		}
 		
 	}		

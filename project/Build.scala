@@ -16,7 +16,8 @@ object ApplicationBuild extends Build {
     "be.objectify" %% "deadbolt-java" % "2.1-RC2",
     "com.typesafe" %% "play-plugins-mailer" % "2.1.0",
     "net.tanesha.recaptcha4j" % "recaptcha4j" % "0.0.7",
-  	"com.amazonaws" % "aws-java-sdk" % "1.3.11"
+  	"com.amazonaws" % "aws-java-sdk" % "1.5.0"
+            
 
   )
 

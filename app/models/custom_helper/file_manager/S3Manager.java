@@ -67,10 +67,13 @@ public class S3Manager implements FileManagerInterface {
             throw new RuntimeException("Could not save");
         }else{
         	PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET, uploadPath+save_name, file);
-            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
+//        	PutObjectRequest putObjectRequest = new PutObjectRequest("adsmanagerbucket", "testfile.something", file);
+        	putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead); // public for all
             S3Plugin.amazonS3.putObject(putObjectRequest); // upload file
+            System.out.println(" ====================== sudah sampai di sini lho!!");
             GetObjectRequest request=new GetObjectRequest(BUCKET, uploadPath+save_name);
             S3Object object =S3Plugin.amazonS3.getObject(request);
+            object.getKey();
             if(object==null) throw new RuntimeException(); 
         }
 		return upload;
