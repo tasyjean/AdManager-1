@@ -51,8 +51,8 @@ public class FrontEndController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");
 		SettingData datas=new SettingData(3,manager);
-		String content1=datas.aboutValue;
-		String content2=datas.helpValue;
+		String content1=datas.aboutValue.substring(0,350);
+		String content2=datas.helpValue.substring(0,350);
 		
 		return ok(home.render(data, content1,content2));
     }

@@ -5,6 +5,8 @@
 @import be.objectify.deadbolt.java.views.html._
 
 @main("",templateData.getFrontName,templateData.getRole) {
+
+    <script src="@routes.Assets.at("js/jquery-1.9.1.min.js")" type="text/javascript"></script>
     
       <div class="promo">
         <h1>Langkah Mudah Beriklan di Teknimo</h1>
@@ -67,13 +69,18 @@
       <div class="row-fluid" >
         <div class="span6 ringkasan-artikel" style="float:left;">
           <h3>Tentang Teknimo</h3>
-		   <div style="max-height:150px !important;">@Html(about)</div>
+		   <div id="about" style="max-height:250px !important;">@Html(about)</div>
           <p><a class="btn" href="about">Lebih Lengkap »</a></p>
         </div>
         <div class="span6 ringkasan-artikel" style="float:right">
           <h3>Bantuan Lebih Lanjut</h3>
-		   <div style="max-height:150px !important;">@Html(help)</div>
+		   <div id="help" style="max-height:250px !important;">@Html(help)</div>
           <p><a class="btn" href="help">Lebih Lengkap »</a></p>
         </div>
       </div>
+      
+      <script>
+
+
+	</script>
 }
