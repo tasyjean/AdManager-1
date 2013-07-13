@@ -64,9 +64,11 @@ public class AdsDeliveryController extends CompressController {
 				List<Banner> banner = new ArrayList<Banner>();
 				int i = 0;
 				for (BannerPlacement bannerPlacement : result) {
-					impression.add(adsDeliverer.countImpression(
-							bannerPlacement, source, Context.current()));
-					banner.add(bannerPlacement.getBanner());
+					Impression impresi=adsDeliverer.countImpression(bannerPlacement, source, Context.current());
+					if(impresi!=null){
+						impression.add(impresi);
+						banner.add(bannerPlacement.getBanner());						
+					}
 				}
 				if (zone_object.getZone_type() == ZoneTypeEnum.BANNER) {
 					//pastikan ukurannya 1

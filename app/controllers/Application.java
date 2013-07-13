@@ -137,13 +137,17 @@ public class Application extends CompressController {
     }
     
     public static Result testWrite(){
+//    	
+//    	ZoneChannel channel=new ZoneChannel();
+//    	channel.setChannel_name("Channel 1");
+//    	channel.setChannel_description("Channel Name");
+//    	
+//    	channel.save();
+//    	
     	
-    	ZoneChannel channel=new ZoneChannel();
-    	channel.setChannel_name("Channel 1");
-    	channel.setChannel_description("Channel Name");
-    	
-    	channel.save();
-    	
+    	User user=new User();
+    	user.setActive(false);
+    	user.update();
     	return ok();
     	
     }

@@ -23,6 +23,7 @@ import models.dataWrapper.finance.UserFinancialData;
 import models.dataWrapper.report.BannerList;
 import models.dataWrapper.report.DiagramData;
 import models.dataWrapper.report.ReportData;
+import models.dataWrapper.report.SummaryData;
 import models.dataWrapper.report.UserList;
 import models.dataWrapper.report.UserListPage;
 
@@ -177,10 +178,16 @@ public class ReportGenerator {
 		return new UserListPage(resultList, users);
 		
 	}
+	public SummaryData getSummary(Date from, Date to){
+		
+		return new SummaryData(from, to);
+	}
 	private DiagramData breakDownByMonth(User user, Campaign campaign, Date from, Date to){
+		
 		return null;
 	}
 	private DiagramData breakDownByDay(User user, Campaign campaign, Date from, Date to){
+		
 		return null;
 	}	
 
