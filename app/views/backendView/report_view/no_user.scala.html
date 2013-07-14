@@ -1,0 +1,32 @@
+@(data: TemplateData)
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+
+@main("Laporan Iklan"){
+		
+
+	
+		@dashboard_content("Laporan","Laporan Iklan","laporan"){
+		<div class="content-padding">
+			<h4>Lihat Laporan Iklan</h4>
+			<h3>Maaf tidak ada advertiser yang terdaftar</h3>
+		</div>
+		}
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("report")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}

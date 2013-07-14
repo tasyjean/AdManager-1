@@ -217,6 +217,16 @@
             <div class="small">Lihat Laporan Iklan</div>
          </div>
       </a> 	
+       <a class="span2 sub-menu @("active".when(activeMenu=="ringkasan"))"
+          href="@controllers.backend.routes.ReportController.getSummary()">
+            <div class="icon"></div>
+
+         <div class="content">
+            <div class="kpi">Ringkasan</div>
+            <div class="small">Lihat ringkasan laporan</div>
+         </div>
+      </a> 
+ 
   @restrict(la(as("administrator"), as("manager"))){                     
       <a class="span2 sub-menu @("active".when(activeMenu=="laporan_user"))"
           href="@controllers.backend.routes.ReportController.userPerformanceReport(1)">

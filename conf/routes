@@ -89,6 +89,8 @@ GET   /dashboard/report							controllers.backend.ReportController.index()
 POST  /dashboard/report/c/:idUser				controllers.backend.ReportController.indexWithForm(idUser:Integer)
 GET   /dashboard/report/c/:idUser				controllers.backend.ReportController.indexWithForm(idUser:Integer)
 GET   /dashboard/report/userperformance/:page	controllers.backend.ReportController.userPerformanceReport(page:Integer)
+GET   /dashboard/report/summary					controllers.backend.ReportController.getSummary()
+POST  /dashboard/report/summary					controllers.backend.ReportController.getSummary()
 #user management
 GET   /dashboard/user						controllers.backend.UserController.showUser()
 GET	  /dashboard/user/page/:page			controllers.backend.UserController.showUserPage(page:Integer)

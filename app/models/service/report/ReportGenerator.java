@@ -178,9 +178,8 @@ public class ReportGenerator {
 		return new UserListPage(resultList, users);
 		
 	}
-	public SummaryData getSummary(Date from, Date to){
-		
-		return new SummaryData(from, to);
+	public SummaryData getSummary(Date from, Date to, User user){
+		return new SummaryData(from, to, user);
 	}
 	private DiagramData breakDownByMonth(User user, Campaign campaign, Date from, Date to){
 		

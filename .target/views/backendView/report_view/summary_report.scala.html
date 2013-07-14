@@ -1,0 +1,125 @@
+@(data: TemplateData, summaryList:List[SummaryData])
+
+@import views.html.ui_component._
+@import views.html.backendView.main
+@import helper._
+@import scala._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import be.objectify.deadbolt.java.views.html._
+
+@getError() = {
+	@if(flash.contains("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<p>@flash.get("error")</p>
+		</div>
+	}
+} 
+@main("Laporan Iklan"){
+		
+		@* Tambahkan java script dan css *@
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("js/jquery-ui-1.10.3.custom.min.js")"></script>
+		<link href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet">
+		
+	
+		@dashboard_content("Laporan","Ringkasan","ringkasan"){
+		<div class="content-padding">
+		<h3>Ringkasan Iklan</h3>
+		@getError
+		
+		@if(flash.contains("show")) {
+			<a href="@controllers.backend.routes.ReportController.getSummary()" class="btn" style="margin-bottom:10px">Tampilkan Semua</a><br>
+		}
+			<a href="#filter" id="showButton" class="btn">Tampilkan Filter</a>
+			<div id="tanggal"><br>
+		  	@form(action =controllers.backend.routes.ReportController.getSummary(), 'class-> "form-horizontal") {											
+				<h5>Filter Tanggal</h5>
+				<noBr><label for="from">Dari Tanggal </label>
+				<input placeholder="Dari Tanggal" class="" type="text" id="from" name="from" />
+				<label for="to">Hingga</label>
+				<input placeholder="Hingga Tanggal" class="" type="text" id="to" name="to"/></noBr><br>
+			   	<button type="submit" class="btn" style="margin:10px;margin-left:0px">Filter</button>
+			} @* End Form *@
+			</div>
+			<br>
+			<div class="row-fluid">
+			@for(summary<-summaryList){
+			  <div class="span5" style="margin:10px;margin-top:0;border:1px #BEC9CF solid;">
+				<h5 style="color:#000;background-color:#BEC9CF;padding:4px;margin-top:0px;">Ringkasan Untuk : @summary.getTitle</h5>
+			      <table class="single-view" style="width:350px; margin:7px;table-layout: auto;">
+			        <tr>
+			          <td>Jumlah Impresi</td><td>:</td>
+			          <td>@summary.getImpression_angka </td>
+			        </tr>
+			         <tr>
+			          <td>Jumlah Klik</td><td>:</td>
+			          <td>@summary.getClick_angka</td>
+			        </tr>
+			         <tr>
+			          <td>Dana Untuk Iklan</td><td>:</td>
+			          <td>@summary.getTotalMoney_rupiah</td>
+			        </tr>			        
+			         <tr>
+			          <td>Jumlah Transaksi</td><td>:</td>
+			          <td>@summary.getTransactionCount_angka</td>
+			        </tr>
+			        </table>
+			       </div>
+			} @* End for *@
+			</div>
+			</div> @* End Content padding *@			
+	  	}
+		<script text="text/javascript">
+	
+		$(document).ready(function() {
+			
+			$("#tanggal").hide();
+			var state=1;
+			$("#showButton").click(function(){
+				if(state==1){
+					$("#tanggal").show("fast");
+					state=0;
+					$("#showButton").html("Sembunyikan Filter")
+				}else{
+					$("#tanggal").hide("fast");
+					state=1;				
+					$("#showButton").html("Tampilkan Filter")
+				}
+				
+			});
+			
+	        $( "#from" ).datepicker({
+	            defaultDate: "+1w",
+	            changeMonth: true,
+	            numberOfMonths: 2,
+	            onClose: function( selectedDate ) {
+	              $( "#to" ).datepicker( "option", "minDate", selectedDate );
+	            }
+	          });
+	          $( "#to" ).datepicker({
+	            defaultDate: "+1w",
+	            changeMonth: true,
+	            numberOfMonths: 2,
+	            onClose: function( selectedDate ) {
+	              $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+	            }
+	          });
+	        
+			
+		});
+		
+		</script>
+
+
+} {
+  
+  @* Untuk bagian Menu *@
+  
+  @menu_dashboard("report")
+
+} {
+  
+  @* Untuk bagian menu profile *@
+  @menu_profile(data)
+
+}
