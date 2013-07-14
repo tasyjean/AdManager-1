@@ -41,7 +41,7 @@ import views.html.helper.form;
 
 public class ReportController extends CompressController {
 
-	public static SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy");
+	public static SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
 	public static DateBinder binder=new DateBinder();
 	public static ReportGenerator report=new ReportGenerator(binder);
 	public static Authenticator auth=new Authenticator();
@@ -198,14 +198,11 @@ public class ReportController extends CompressController {
 		//untuk kemarin
 		Date yasterday_from;
 		Date yasterday_to;
-		Calendar calendar2=Calendar.getInstance();
-		calendar2.set(Calendar.DATE, -1);
-		calendar2.set(Calendar.HOUR_OF_DAY, 0);
-		calendar2.set(Calendar.MINUTE, 0);
-		yasterday_from=calendar2.getTime();
-		calendar2.set(Calendar.HOUR_OF_DAY, 23);
-		calendar2.set(Calendar.MINUTE, 59);
-		yasterday_to=calendar2.getTime();
+		
+		DateTime dateTime=new DateTime().minusDays(1).withHourOfDay(0).withMinuteOfHour(0);
+		yasterday_from=dateTime.toDate();
+		yasterday_to=dateTime.withHourOfDay(23).withMinuteOfHour(59).withMillisOfSecond(999).toDate();
+		
 		SummaryData yasterday=report.getSummary(yasterday_from, yasterday_to, user);
 		yasterday.setTitle("Kemarin");
 		Logger.debug("Kemarin: "+format.format(yasterday_from)+" "+format.format(yasterday_to));
