@@ -41,7 +41,7 @@ import views.html.helper.form;
 
 public class ReportController extends CompressController {
 
-	public static SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm");
+	public static SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy");
 	public static DateBinder binder=new DateBinder();
 	public static ReportGenerator report=new ReportGenerator(binder);
 	public static Authenticator auth=new Authenticator();
