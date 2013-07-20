@@ -42,6 +42,30 @@
 								<td>:</td>
 								<td>@zone.getDescription</td>
 							</tr>
+							@if(zone.getPriceFactor>=0.2 && zone.getPriceFactor<1){
+					        <tr>
+					          <td>Kelompok Harga</td><td>:</td>
+					          <td>Zona premium </td>
+					        </tr>     					
+							}
+							@if(zone.getPriceFactor>=1){
+					        <tr>
+					          <td>Kelompok Harga</td><td>:</td>
+					          <td>Zona Ultimate </td>
+					        </tr>     					
+							}
+							@if(zone.getPriceFactor<0.2 && zone.getPriceFactor>=0){
+					        <tr>
+					          <td>Kelompok Harga</td><td>:</td>
+					          <td>Zona Standar </td>
+					        </tr>     					
+							}					
+							@if(zone.getPriceFactor<0){
+					        <tr>
+					          <td>Kelompok Harga</td><td>:</td>
+					          <td>Zona Hemat </td>
+					        </tr>     					
+							}							
 							<tr >
 								<td colspan="3" style="padding-top:10px;padding-bottom:5px;">
 									<form action="@controllers.backend.routes.ZoneController.showSingleZone(zone.getId_zone)" style="display:inline;">

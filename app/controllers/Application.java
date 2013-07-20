@@ -131,7 +131,7 @@ public class Application extends CompressController {
     	FileManagerInterface managers=new FileManagerFactory().getManager();
     	BannerProcessor proc=new BannerProcessor(managers);
     	
-    	List<String[]> dataks=proc.getZoneAvailableGrouped(zone);
+    	List<String[]> dataks=proc.getZoneAvailableGrouped(zone, Banner.find.all().get(0));
     	return ok(testView.render(data,dataks));
     	
     }

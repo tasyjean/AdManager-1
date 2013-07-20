@@ -24,7 +24,7 @@ public class Main {
 		SummarizePage summarizePage =new SummarizePage(extractor,cleaner,keyword,counter);
 		String[] pages={//"http://arstechnica.com/science/2013/07/making-heavy-elements-by-colliding-neutron-stars/",
 						//"http://www.teknimo.com/2013/01/menggali-lebih-jauh-data-facebook-dengan-layanan-wolfram-alpha/",
-						"http://www.teknimo.com/2013/04/kini-seperempat-perangkat-android-menggunakan-versi-jelly-bean/"};
+						"http://www.javaperformancetuning.com/tips/rawtips.shtml"};
 		List<String> result = null;
 		for(String page:pages){
 			System.out.println("===============================================================");

@@ -57,8 +57,18 @@
 							@if(place.isActive){
 								<li>
 								<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
-									@place.getZone.getZone_name
+									@place.getZone.getZone_name  
 								</a>
+								(Harga : Rp @(place.getBanner.getCampaign.getBid_price+place.getBanner.getCampaign.getBid_price*place.getZone.getPriceFactor) 
+								@if(place.getBanner.getCampaign.getPricing_model.name=="CPM"){
+									per 1000 impressi
+								}
+								@if(place.getBanner.getCampaign.getPricing_model.name=="CPA"){
+								    per klik
+								}
+								@if(place.getBanner.getCampaign.getPricing_model.name=="FLAT"){
+									per hari
+								}	)						
 								</li>
 							}
 						}

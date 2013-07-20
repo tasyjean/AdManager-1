@@ -355,10 +355,10 @@ public class CampaignController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		
 		if(flash("justMe")!=null){
+			Banner banner=Banner.find.byId(idBanner);
 			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
-			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
-			
-			return ok(create_banner_placement.render(data, idBanner, zones_group));			
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner);
+			return ok(create_banner_placement.render(data, idBanner, zones_group, banner));			
 		}else{
 			try {
 				int idCampaign=Banner.find.byId(idBanner).getCampaign().getId_campaign();
@@ -384,9 +384,10 @@ public class CampaignController extends CompressController {
 						    banner.getCampaign().getId_campaign()));
 		}else{
 			flash("error","Kesalahan dalam penempatan banner");
+			Banner banner=Banner.find.byId(idBanner);
 			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);			
-			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones);
-			return ok(create_banner_placement.render(data, idBanner, zones_group));
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner);
+			return ok(create_banner_placement.render(data, idBanner, zones_group, banner));
 		}
 	}	
 	@Restrict({@Group("administrator"), @Group("advertiser")})
@@ -396,7 +397,7 @@ public class CampaignController extends CompressController {
 				Http.Context.current().args.get("templateData");	
 		Banner banner=Banner.find.byId(idBanner);
 		List<Zone> zones=bannerProc.getZoneAvailable(idBanner);
-		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement());
+		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement(), banner);
 		return ok(edit_banner_placement.render(data,banner,zones_group));		
 	}	
 	@Restrict({@Group("administrator"), @Group("advertiser")})
@@ -413,7 +414,7 @@ public class CampaignController extends CompressController {
 		}else{
 			flash("error","Kesalahan dalam penempatan banner");
 			List<Zone> zones=bannerProc.getZoneAvailable(idBanner);			
-			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement());
+			List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, banner.getPlacement(), banner);
 			return ok(edit_banner_placement.render(data, banner, zones_group));
 		}		
 	}

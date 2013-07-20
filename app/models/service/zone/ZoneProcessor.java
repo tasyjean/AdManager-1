@@ -36,7 +36,7 @@ public class ZoneProcessor {
 			zone.setZone_default_code(data.get().zone_default_code);
 			zone.setZone_default_view(DefaultViewEnum.valueOf(data.get().zone_default_view));
 			zone.setZone_type(ZoneTypeEnum.valueOf(data.get().zone_type));
-			
+			zone.setPriceFactor(Float.parseFloat(data.get().priceFactor));
 			zone.save();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public class ZoneProcessor {
 			zone.setZone_default_code(data.get().zone_default_code);
 			zone.setZone_default_view(DefaultViewEnum.valueOf(data.get().zone_default_view));
 			zone.setZone_type(ZoneTypeEnum.valueOf(data.get().zone_type));
-			
+			zone.setPriceFactor(Float.parseFloat(data.get().priceFactor));
 			zone.update();
 		} catch (Exception e) {
 			e.printStackTrace();			

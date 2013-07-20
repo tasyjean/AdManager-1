@@ -70,7 +70,7 @@ public class ImpressionProcessor {
 		int currentBalance=user.getCurrent_balance()-dailyPrice;
 		
 		AdsTransaction transaction = new AdsTransaction();
-		transaction.setAmount(dailyPrice);
+		transaction.setAmount(dailyPrice+(int)(dailyPrice*placement.getZone().getPriceFactor()));
 		transaction.setBannerPlacement(placement);
 		transaction.setCurrent_balance(currentBalance);
 		transaction.setTransaction_type(PricingModelEnum.CPM);

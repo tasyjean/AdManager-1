@@ -55,7 +55,7 @@ public class FlatProcessor {
 		int dailyPrice=campaign.countPrice()/campaign.campaignDuration();
 
 		AdsTransaction transaction=new AdsTransaction();
-		transaction.setAmount(dailyPrice);
+		transaction.setAmount(dailyPrice+(int)(dailyPrice*placement.getZone().getPriceFactor()));
 		transaction.setCurrent_balance(current_balance-dailyPrice);
 		transaction.setBannerPlacement(placement);
 		transaction.setTimestamp(new Date());

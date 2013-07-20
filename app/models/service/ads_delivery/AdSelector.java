@@ -105,27 +105,19 @@ public class AdSelector {
 		if(selected>0){
 			return populateFromInt(banners, new int[]{selected});
 		}
-		//Revisi TA
-		//Jika banner placement yang ada lebih dari 5, maka dipilih yang isinya relevan doang
-		int selectBanner=5;
-		if(url!=null){
-			if(banners.size()>selectBanner){
-				relevancy.filterRelevantBanner(banners, url, selectBanner);
-			}
-		}
 		//langkah 3 populasikan banner yang campaign non eklusif
 		int[] textBanner ={0};
 		if(zone.getZone_type()==ZoneTypeEnum.TEXT){
 			if(zone.getBanner_size().getName().equals("LeaderBoard")){
-				textBanner=selectBannerNonExclusive(banners, 2);
+				textBanner=selectBannerNonExclusive(banners, 2, url);
 			}
 			if(zone.getBanner_size().getName().equals("Medium Rectangle")){
-				textBanner=selectBannerNonExclusive(banners, 3);
+				textBanner=selectBannerNonExclusive(banners, 3, url);
 			}
 			return populateFromInt(banners, textBanner);
 		}
 		
-		int[] selectedContract=selectBannerNonExclusive(banners,1);
+		int[] selectedContract=selectBannerNonExclusive(banners,1, url);
 //		Logger.debug("cek kontrak "+selectedContract);			
 		
 		return populateFromInt(banners, selectedContract);
@@ -145,7 +137,7 @@ public class AdSelector {
 		return result;
 	}
 	//mempopulasikan banner non ekslusif
-	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count){
+	private int[] selectBannerNonExclusive(List<BannerPlacement> inputs, int count, String url){
 		List<Banner> result=new ArrayList<Banner>();
 		for(BannerPlacement bannerPlace:inputs){
 //			Logger.debug("selectBannerNonExclusive  "+bannerPlace.getId_banner_placement());			
@@ -158,6 +150,14 @@ public class AdSelector {
 		}else if(result.size()==1){ //cuman ada 1
 			return new int[]{result.get(0).getId_banner()};
 		}else{
+			//Revisi TA
+			//Jika banner placement yang ada lebih dari 5, maka dipilih yang isinya relevan doang
+			int selectBanner=5;
+			if(url!=null){
+				if(result.size()>selectBanner){
+					relevancy.filterRelevantBanner_banner(result, url, selectBanner);
+				}
+			}
 			if(count>1){
 				return selectMultipleBanner(result, count);
 			}else{

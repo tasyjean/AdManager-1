@@ -27,6 +27,8 @@
 
 
 @main("Manajemen Iklan"){
+		
+		<script type="text/javascript" language="javascript" src="@routes.Assets.at("bootstrap/js/bootstrap-tooltip.js")"></script>
 	
 		@dashboard_content("Manajemen Iklan","Detail Campaign","daftar campaign"){
   			
@@ -41,9 +43,9 @@
 				  @getError
 				  @getSuccess 			       
 			      <div class="row-fluid dua-kolom">
-					  <div class="span5" style="min-width:400px; display:block;float:left;margin-right:10px;">
+					  <div class="span5" style="min-width:400px; display:block;float:left;margin-right:2px;">
 			    		  <h4>Detail Untuk   @campaign.getCampaignName</h4>
-					      <table class="single-view" style="margin-left:15px">			        		        
+					      <table class="single-view" style="margin-left:4px;width:100%;">			        		        
 					        <tr>
 					          <td>Nama Campaign</td><td>:</td>
 					          <td>@campaign.getCampaignName</td>
@@ -83,7 +85,11 @@
 					         	<td>@campaign.getDaysLeft hari</td>
 					        </tr>
 					        <tr>
-					         	<td>Harga Per Hari</td><td>:</td>
+					         	<td>Harga Normal Per Hari
+					         		<a href="#" data-toggle="tooltip"  data-placement="bottom"
+					         		title="Harga normal adalah harga standar dari iklan, harga sebenarnya bervariasi tergantung dari zona tempat iklan ditampilkan. Harga sebenarnya dapat dilihat pada detail banner">
+					         		?</a>					         	
+					         	</td><td>:</td>
 					         	<td>@campaign.getBid_price_string</td>
 					        </tr>			        			        
 					       }  
@@ -101,7 +107,11 @@
 					       		<td>@campaign.getClickLeft_string</td>
 					       	</tr>
 					        <tr>
-					         	<td>Harga Per Klik</td><td>:</td>
+					         	<td>Harga Normal Per Klik
+					         		<a href="#" data-toggle="tooltip" data-placement="bottom"
+					         		title="Harga normal adalah harga standar dari iklan, harga sebenarnya bervariasi tergantung dari zona tempat iklan ditampilkan. Harga sebenarnya dapat dilihat pada detail banner">
+					         		?</a>					         	
+					         	</td><td>:</td>
 					         	<td>@campaign.getBid_price_string</td>
 					        </tr>				       	
 					       }
@@ -119,12 +129,20 @@
 					       		<td>@(campaign.getImpressionLeft_string)</td>
 					       	</tr>			       	
 					        <tr>
-					         	<td>Harga Per 1000 Impresi</td><td>:</td>
+					         	<td>Harga Normal Per 1000 Impresi 
+					         		<a href="#" data-toggle="tooltip" data-placement="bottom"
+					         		title="Harga normal adalah harga standar dari iklan, harga sebenarnya bervariasi tergantung dari zona tempat iklan ditampilkan. Harga sebenarnya dapat dilihat pada detail banner">
+					         		?</a>
+					         	</td><td>:</td>
 					         	<td>@campaign.getBid_price_string</td>
 					        </tr>	
 					       } 
 					       <tr>
-					       	<td>Estimasi Total Biaya</td><td>:</td>
+					       	<td>Estimasi Total Biaya
+					         		<a href="#" data-toggle="tooltip" data-placement="bottom"
+					         		title="Estimasi berdasarkan harga normal, total harga dapat bervariasi tergantung penempatan zona">
+					         		?</a>					       	
+					       	</td><td>:</td>
 					       	<td>@Html(campaign.getPriceText)</td>
 					       </tr>
 					       <tr>			       
@@ -216,7 +234,7 @@
 										<br>
 										<div class="row-fluid dua-kolom">
 					  						<div class="span5" style="min-width:400px;display:block;float:left;margin-right:10px;">
-													<table class="single-view" style="width:500px">
+													<table class="single-view" style="width:600px">
 														<tr>
 															<td>Judul Banner</td><td>:</td>
 															<td>@banner.getTitle</td>
@@ -263,9 +281,21 @@
 															<td>Ditempatkan pada  @banner.getActivePlacement   zona<br>
 																@for(place<-banner.getPlacement){
 																	@if(place.isActive){
-																		<a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
-																			@place.getZone.getZone_name
+																		<noBr><a target="_blank" href="@controllers.backend.routes.ZoneController.showSingleZone(place.getZone.getId_zone)">
+																			@place.getZone.getZone_name 
 																		</a>
+																			(Harga : Rp @(campaign.getBid_price+campaign.getBid_price*place.getZone.getPriceFactor) 
+																			@if(campaign.getPricing_model.name=="CPM"){
+																				per 1000 impressi
+																			}
+																			@if(campaign.getPricing_model.name=="CPA"){
+																				per klik
+																			}
+																			@if(campaign.getPricing_model.name=="FLAT"){
+																				per hari
+																			}
+																			)
+																		</noBr>																			
 																	<br>
 																	}
 																}

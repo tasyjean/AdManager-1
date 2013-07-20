@@ -1,4 +1,4 @@
-@(data: TemplateData, id_banner:Integer,zones:List[Array[String]])
+@(data: TemplateData, id_banner:Integer,zones:List[Array[String]], banner:Banner)
 
 @import views.html.ui_component._
 @import views.html.backendView.main
@@ -21,8 +21,6 @@
 		</div>
 	}
 }
-
-
 @main("Manajemen Iklan"){
 
 		@* Tambahkan java script dan css *@
@@ -103,6 +101,8 @@
 				  selectableHeader: "<h5>Zona Tersedia</h5>",
 				  selectionHeader: "<h5>Zona Dipilih</div>",
 			});
+			
+			
 		});
 	</script>
    }

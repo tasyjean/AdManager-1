@@ -71,7 +71,7 @@ public class AdActionProcessor {
 		int amount = campaign.getBid_price();
 	
 		AdsTransaction transaction=new AdsTransaction();
-		transaction.setAmount(campaign.getBid_price());
+		transaction.setAmount(campaign.getBid_price()+(int)(campaign.getBid_price()*placement.getZone().getPriceFactor()));
 		transaction.setCurrent_balance(current_balance-amount);
 		transaction.setBannerPlacement(placement);
 		transaction.setTimestamp(new Date());

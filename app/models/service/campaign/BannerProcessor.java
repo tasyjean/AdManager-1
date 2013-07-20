@@ -18,6 +18,7 @@ import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Http.MultipartFormData.FilePart;
+import models.custom_helper.Angka;
 import models.custom_helper.file_manager.FileManagerInterface;
 import models.custom_helper.file_manager.SaveToEnum;
 import models.data.Banner;
@@ -28,6 +29,7 @@ import models.data.FileUpload;
 import models.data.User;
 import models.data.Zone;
 import models.data.enumeration.CampaignTypeEnum;
+import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.ZoneTypeEnum;
 import models.form.backendForm.campaignForm.BannerForm;
 
@@ -285,20 +287,24 @@ public class BannerProcessor {
 	 * array 1 buat value
 	 * array 2 buat nama yang tampil (entah channel atau zona)
 	 */
-	public List<String[]> getZoneAvailableGrouped(List<Zone> zones){
+	public List<String[]> getZoneAvailableGrouped(List<Zone> zones, Banner banner){
 		
 		try {
 			int channel=0;
 			int i=0;
 			List<String[]> result=new ArrayList<String[]>();
 			for(Zone zone:zones){
+				int bidPrice=banner.getCampaign().getBid_price();
+				String prefix=getPrefix(banner.getCampaign());
+				String price=Angka.toRupiah(bidPrice+bidPrice*zone.getPriceFactor())+" "+prefix;
+				
 				if(!(zone.getZone_channel().getId_zone_channel()==channel)){
 					String[] add={"CHANNEL","",zone.getZone_channel().getChannel_name()};
-					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()};
+					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()+" ("+price+")"};
 					result.add(add);
 					result.add(add2);
 				}else{
-					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()};
+					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()+" ("+price+")"};
 					result.add(add);				
 				}
 				channel=zone.getZone_channel().getId_zone_channel();	
@@ -309,14 +315,29 @@ public class BannerProcessor {
 			return null;
 		}
 	}
+	private String getPrefix(Campaign campaign){
+		if(campaign.getPricing_model().equals(PricingModelEnum.CPA)){
+			return "Per Klik";
+		}else if(campaign.getPricing_model().equals(PricingModelEnum.CPM)){
+			return "Per 1000 impressi";
+		}else if(campaign.getPricing_model().equals(PricingModelEnum.FLAT)){
+			return "Per Hari";
+		}else{
+			return "";
+		}
+	}
 	//untuk menandai mana yang udah kepilih
-	public List<String[]> getZoneAvailableGrouped(List<Zone> zones, List<BannerPlacement> selected){
+	public List<String[]> getZoneAvailableGrouped(List<Zone> zones, List<BannerPlacement> selected, Banner banner){
 		
 		try {
 			int channel=0;
 			int i=0;
 			List<String[]> result=new ArrayList<String[]>();
 			for(Zone zone:zones){
+				int bidPrice=banner.getCampaign().getBid_price();
+				String prefix=getPrefix(banner.getCampaign());
+				String price=Angka.toRupiah(bidPrice+bidPrice*zone.getPriceFactor())+" "+prefix;
+
 				String string_selected="";
 				for(BannerPlacement place:selected){
 					if(place.getZone().getId_zone()==zone.getId_zone() && place.isActive()==true){
@@ -325,11 +346,11 @@ public class BannerProcessor {
 				}
 				if(!(zone.getZone_channel().getId_zone_channel()==channel)){
 					String[] add={"CHANNEL","",zone.getZone_channel().getChannel_name()};
-					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(),string_selected};
+					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()+" ("+price+")",string_selected};
 					result.add(add);
 					result.add(add2);
 				}else{
-					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(), string_selected};
+					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name()+" ("+price+")", string_selected};
 					result.add(add);				
 				}
 				channel=zone.getZone_channel().getId_zone_channel();	

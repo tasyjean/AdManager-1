@@ -26,7 +26,7 @@
 			            </div>
 			       }      
 			      <h4>Detail Untuk Zona @zone.getZone_name</h4>
-			      <table class="single-view">
+			      <table class="single-view" style="width:500px">
 			        <tr>
 			          <td>Nama zona</td><td>:</td>
 			          <td>@zone.getZone_name</td>
@@ -51,6 +51,34 @@
 			          <td>Tipe Zona</td><td>:</td>
 			          <td>@zone.getZone_type</td>
 			        </tr>     
+					@if(zone.getPriceFactor>=0.2 && zone.getPriceFactor<1){
+			        <tr>
+			          <td>Faktor Harga</td><td>:</td>
+			          <td>@zone.getPriceFactor (zona premium)</td>
+			        </tr>     					
+					}
+					@if(zone.getPriceFactor>=1){
+			        <tr>
+			          <td>Faktor Harga</td><td>:</td>
+			          <td>@zone.getPriceFactor (zona ultimate)</td>
+			        </tr>     					
+					}
+					@if(zone.getPriceFactor<0.2 && zone.getPriceFactor>=0){
+			        <tr>
+			          <td>Faktor Harga</td><td>:</td>
+			          <td>@zone.getPriceFactor (zona standar)</td>
+			        </tr>     					
+					}					
+					@if(zone.getPriceFactor<0){
+			        <tr>
+			          <td>Faktor Harga</td><td>:</td>
+			          <td>@zone.getPriceFactor (zona hemat)</td>
+			        </tr>     					
+					}
+			        <tr>
+			          <td></td><td></td>
+			          <td><i>Harga zona ini @(zone.getPriceFactor*100)% lebih mahal dari harga normal</i></td>
+			        </tr>
 			    @restrict(la(as("administrator"), as("manager"))){    
 			        <tr>
 			          <td>Default Code</td><td>:</td>

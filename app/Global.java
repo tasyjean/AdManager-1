@@ -22,6 +22,6 @@ public class Global extends GlobalSettings {
 //		data.setZoneChannel();
 //		data.setCampaignData();
 //		data.createBanner();
-////		data.simulasi();
+//		data.simulasi();
 	}
 }

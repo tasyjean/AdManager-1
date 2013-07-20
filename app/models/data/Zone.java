@@ -35,6 +35,8 @@ public class Zone extends Model {
 	@Column(columnDefinition="TEXT")
 	private String zone_default_code;
 	private boolean isDeleted;
+	//Price factor rentang 0-1
+	private float priceFactor;
 	
 	public static Model.Finder<Integer, Zone> find = new Model.Finder(Integer.class, Zone.class);
 	
@@ -111,6 +113,12 @@ public class Zone extends Model {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public float getPriceFactor() {
+		return priceFactor;
+	}
+	public void setPriceFactor(float priceFactor) {
+		this.priceFactor = priceFactor;
 	}
 	
 	

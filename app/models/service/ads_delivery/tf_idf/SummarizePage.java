@@ -33,7 +33,6 @@ public class SummarizePage {
 		//clean text
 		text=cleaner.clean(text);
 		System.out.println("Clean Text :"+(System.currentTimeMillis()-y)+" milisecond");
-		
 
 		//buat daftar nama terms
 		long z=System.currentTimeMillis();
@@ -71,7 +70,7 @@ public class SummarizePage {
 				itr.remove();
 			}
 		}
-		//ekstrak 20 teratas
+		//ekstrak 30 teratas
 		List<String> result=new ArrayList<String>();
 		for(TFIDF tfidf:getTopTerm(idfList)){
 			result.add(tfidf.getTerms());
@@ -82,7 +81,6 @@ public class SummarizePage {
 		System.out.println("\n Waktu proses total :"+(System.currentTimeMillis()-x)+" milisecond");
 
 		return result;
-
 	}
 	private  List<TFIDF> getTopTerm(List<TFIDF> list){
 		if(list.size()>30){
