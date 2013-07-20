@@ -52,6 +52,7 @@ import models.service.ads_delivery.AdActionProcessor;
 import models.service.ads_delivery.AdSelector;
 import models.custom_helper.simulasi.FlatProcessor;
 import models.service.ads_delivery.ImpressionProcessor;
+import models.service.ads_delivery.tf_idf.BannerRelevancy;
 import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 import models.service.finance.DepositoOperator;
@@ -70,7 +71,8 @@ public class SetInitialData {
 	CampaignProcessor campaignProc=new CampaignProcessor(binder, bannerproc);
 	NotificationCenter notif=new NotificationCenter();
 	DepositoOperator deposito=new DepositoOperator(notif);
-	AdSelector selector=new AdSelector(bannerproc, campaignProc, binder, notif);
+	BannerRelevancy relevancy=new BannerRelevancy();
+	AdSelector selector=new AdSelector(bannerproc, campaignProc, binder, notif, relevancy);
 	AdActionProcessor action=new AdActionProcessor();
 	
 	
@@ -604,7 +606,7 @@ public class SetInitialData {
 		calendar.set(Calendar.DATE, -90);
 		for(int i=0;i<10000;i++){
 			
-			List<BannerPlacement> result=selector.get(zone.get(random.nextInt(zoneCount)));
+			List<BannerPlacement> result=selector.get(zone.get(random.nextInt(zoneCount)),null);
 			List<Impression> impression=new ArrayList<Impression>();
 			List<Banner> banner=new ArrayList<Banner>();
 			if(result==null){

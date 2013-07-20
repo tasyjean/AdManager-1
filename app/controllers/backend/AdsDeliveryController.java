@@ -26,6 +26,7 @@ import models.service.ads_delivery.AdSelector;
 import models.service.ads_delivery.AdsDeliverer;
 import models.service.ads_delivery.FlatProcessor;
 import models.service.ads_delivery.ImpressionProcessor;
+import models.service.ads_delivery.tf_idf.BannerRelevancy;
 import models.service.campaign.BannerProcessor;
 import models.service.campaign.CampaignProcessor;
 import models.service.notification.NotificationCenter;
@@ -44,7 +45,8 @@ public class AdsDeliveryController extends CompressController {
 	static DateBinder binder=new DateBinder();
 	static CampaignProcessor campaign=new CampaignProcessor(binder,banner);
 	static NotificationCenter notif=new NotificationCenter();
-	static AdSelector ad_selector=new AdSelector(banner,campaign,binder,notif);
+	static BannerRelevancy relevancy=new BannerRelevancy();
+	static AdSelector ad_selector=new AdSelector(banner,campaign,binder,notif, relevancy);
 	static FlatProcessor flatProcessor=new FlatProcessor();
 	static ImpressionProcessor impression=new ImpressionProcessor(flatProcessor);
 	static AdActionProcessor adAction=new AdActionProcessor();
@@ -55,7 +57,7 @@ public class AdsDeliveryController extends CompressController {
 	public static Result banner(int zone, String source){
 		Zone zone_object=Zone.find.byId(zone);
 		
-		List<BannerPlacement> result=ad_selector.get(zone_object);
+		List<BannerPlacement> result=ad_selector.get(zone_object, source);
 		if(result!=null){
 			if (result.size()!=0) {
 				Logger.debug("Daftar Banner= " + result.toString());

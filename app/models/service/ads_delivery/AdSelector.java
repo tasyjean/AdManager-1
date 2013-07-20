@@ -23,6 +23,7 @@ import models.data.Zone;
 import models.data.enumeration.CampaignTypeEnum;
 import models.data.enumeration.PricingModelEnum;
 import models.data.enumeration.ZoneTypeEnum;
+import models.service.ads_delivery.tf_idf.BannerRelevancy;
 /*
  * Untuk menyeleksi iklan
  */
@@ -71,19 +72,21 @@ public class AdSelector {
 	DateBinder 		   binder;
 	NotificationCenter notif;
 	Random random;
+	BannerRelevancy relevancy;
 	
 	public AdSelector(BannerProcessor bannerProc,
 					  CampaignProcessor campaignProc,
 					  DateBinder binder,
-					  NotificationCenter notif){
+					  NotificationCenter notif, BannerRelevancy relevancy){
 		this.bannerProc=bannerProc;
 		this.campaignProc=campaignProc;
 		this.binder=binder;
 		this.notif=notif;
+		this.relevancy=relevancy;
 		this.random=new Random();
 	}
 	//return value[]= id banner, [0]=0 jika zona kosong
-	public List<BannerPlacement> get(Zone zone){
+	public List<BannerPlacement> get(Zone zone, String url){
 
 		//langkah 1, populasikan placement aktif
 		List<BannerPlacement> banners=BannerPlacement.find.where().
@@ -102,6 +105,14 @@ public class AdSelector {
 		if(selected>0){
 			return populateFromInt(banners, new int[]{selected});
 		}
+		//Revisi TA
+		//Jika banner placement yang ada lebih dari 5, maka dipilih yang isinya relevan doang
+		int selectBanner=5;
+		if(url!=null){
+			if(banners.size()>selectBanner){
+				relevancy.filterRelevantBanner(banners, url, selectBanner);
+			}
+		}
 		//langkah 3 populasikan banner yang campaign non eklusif
 		int[] textBanner ={0};
 		if(zone.getZone_type()==ZoneTypeEnum.TEXT){
@@ -111,7 +122,6 @@ public class AdSelector {
 			if(zone.getBanner_size().getName().equals("Medium Rectangle")){
 				textBanner=selectBannerNonExclusive(banners, 3);
 			}
-			
 			return populateFromInt(banners, textBanner);
 		}
 		
