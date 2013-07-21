@@ -165,7 +165,7 @@
 			        @if(campaign.getBanner.size==0){
 			        	<h5>Campaign ini belum memiliki banner</h5>
 			        	<p>Klik <a href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">
-			        	disini</a> untuk membuat banner baru</p>
+			        	disini</a> atau <a href="@controllers.backend.routes.CampaignController.createBannerByPlacement(campaign.getId_campaign)"> disini</a> untuk membuat banner baru</p>
 			        }else{
 			        	<h5>@campaign.countNonDeletedBanner Buah Banner</h5>
 				        @for(banner<-campaign.getBanner){
@@ -380,7 +380,10 @@
 				     	</a> 
 		     		 	<a style="margin:0px 5px 0 10px" class="btn btn-success" 
 						      href="@controllers.backend.routes.CampaignController.newBanner(campaign.getId_campaign)">Tambah Banner</a>
-				     	  				     				     	  				      
+		     		 	<a style="margin:0px 5px 0 10px" class="btn btn-success" 
+						      href="@controllers.backend.routes.CampaignController.createBannerByPlacement(campaign.getId_campaign)">Tambah Banner Berdasar Zona</a>
+				     	  
+				     	 				     				     	  				      
 				    </div>
 
 			@**********Modal Delete*********@
