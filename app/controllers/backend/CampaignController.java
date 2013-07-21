@@ -124,6 +124,7 @@ public class CampaignController extends CompressController {
 		TemplateData data = (TemplateData) 
 				Http.Context.current().args.get("templateData");	
 		Campaign campaign=Campaign.find.byId(idCampaign);
+		bannerProc.cleanBanner(campaign);
 		User user=auth.getUserLogin(session());
 		if(user.getRole().getName().equals("advertiser")){
 			if(campProc.isOwnerOF(campaign, user)){
@@ -370,6 +371,87 @@ public class CampaignController extends CompressController {
 		}
 		
 	}
+	
+//BLok revisi TA=========================================================================================
+	
+	@Restrict({@Group("administrator"), @Group("advertiser")})
+	@With(DataFiller.class)
+	public static Result createBannerByPlacement(int idCampaign){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		
+		Campaign campaign=Campaign.find.byId(idCampaign);
+		List<Zone> zones=bannerProc.getZoneAvailable();
+		List<String[]> zones_group=bannerProc.getZoneAvailableGrouped(zones, campaign);
+		return ok(create_banner_by_placement.render(data, zones_group, campaign));			
+
+	}
+	@Restrict({@Group("administrator"), @Group("advertiser")})
+	@With(DataFiller.class)
+	public static Result saveBannerByPlacement(int idCampaign){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		DynamicForm filledForm=Form.form().bindFromRequest();
+		Banner banner=bannerProc.saveBannerByPlacement(filledForm, idCampaign);
+		if(banner!=null){
+			flash("success","Silahkan Isikan data banner");
+			return redirect(controllers.backend.routes.CampaignController.newBannerFromPlacement(banner.getId_banner()));
+		}else{
+			flash("error","Gagal Menyimpan data");
+			return redirect(controllers.backend.routes.CampaignController.createBannerByPlacement(idCampaign));
+		}
+	}		
+	@Restrict({@Group("administrator"), @Group("advertiser")})
+	@With(DataFiller.class)
+	public static Result newBannerFromPlacement(int idBanner){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");
+		Banner banner=Banner.find.byId(idBanner);
+		return ok(create_banner_from_placement.render(data, banner, bannerForm));
+	}
+	//Madan kaya method update banner
+	@SubjectPresent
+	@With(DataFiller.class)
+	public static Result saveBannerFromPlacement(int idBanner){
+		TemplateData data = (TemplateData) 
+				Http.Context.current().args.get("templateData");	
+		Form<BannerForm> filledForm=Form.form(BannerForm.class).bindFromRequest();
+		Banner banner=Banner.find.byId(idBanner);
+		
+		if(filledForm.hasErrors()){			
+			return ok(create_banner_from_placement.render(data, banner, filledForm));
+		}else{
+			//upload file dulu
+			MultipartFormData body = request().body().asMultipartFormData();
+			//jika file upload ngga null, maka ngga ada yang perlu diganti
+			FileUpload upload=null;
+			FilePart part = body.getFile("bannerContent");
+			if (part!= null) {
+				String bannerType=filledForm.get().bannerType;
+				int result=bannerProc.saveFile(part, bannerType);
+				if(result==-1){
+					flash("error","Kesalahan saat upload file");					
+					return ok(create_banner_from_placement.render(data, banner, filledForm));
+				}else if(result==-2){
+					flash("error","Tipe File tidak didukung");
+					return ok(create_banner_from_placement.render(data, banner, filledForm));
+				}else{
+					upload=FileUpload.find.byId(result);
+				}
+			}
+			//baru ngesave
+			Banner bannerSave=bannerProc.updateBanner(filledForm, idBanner , upload);
+			if(bannerSave!=null){
+				flash("success","Banner dibuat ");
+				return redirect(controllers.backend.routes.CampaignController.editBanner(bannerSave.getId_banner()));
+			}else{
+				flash("error","Kesalahan saat menyimpan data");
+				return ok(create_banner_from_placement.render(data, banner, filledForm));
+			}
+		}
+	}	
+//END BLok revisi TA=====================================================================================	
+	
 	@Restrict({@Group("administrator"), @Group("advertiser")})
 	@With(DataFiller.class)
 	public static Result saveBannerPlacement(int idBanner){

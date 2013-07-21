@@ -46,6 +46,13 @@ POST   /dashboard/campaign/banner/:idBanner/placement							controllers.backend.
 GET   /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backend.CampaignController.editBannerPlacement(idBanner:Integer)
 POST  /dashboard/campaign/banner/:idBanner/placement/edit						controllers.backend.CampaignController.updateBannerPlacement(idBanner:Integer)
 
+#campaign-revisi
+GET   /dashboard/campaign/banner/create/:idCampaign								controllers.backend.CampaignController.createBannerByPlacement(idCampaign:Integer)
+POST  /dashboard/campaign/banner/create/:idCampaign								controllers.backend.CampaignController.saveBannerByPlacement(idCampaign:Integer)
+GET   /dashboard/campaign/banner/createBanner/:idBanner							controllers.backend.CampaignController.newBannerFromPlacement(idBanner:Integer)
+POST  /dashboard/campaign/banner/createBanner/:idBanner							controllers.backend.CampaignController.saveBannerFromPlacement(idBanner:Integer)
+
+
 #finance
 GET   /dashboard/finance/show/:idUser						controllers.backend.FinanceController.index(idUser:Integer)
 GET   /dashboard/finance/show/								controllers.backend.FinanceController.index_default()

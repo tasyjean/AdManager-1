@@ -67,7 +67,18 @@ public class BannerProcessor {
 		}
 		return banner;
 	}
-	
+	public void cleanBanner(Campaign campaign){
+		List<Banner> banners=Banner.find.where().eq("campaign",campaign).findList();
+		for(Banner banner:banners){
+			if(!banner.isActive()){
+				if(banner.getTitle()==null){
+					if(banner.getContent_text()==null){
+						banner.delete();
+					}
+				}
+			}
+		}
+	}
 	public int  saveFile(FilePart part, String type){
 			/*
 			 * validasi type
@@ -255,6 +266,7 @@ public class BannerProcessor {
 			return null;
 		}
 	}
+	
 	//free dari yang eklusif
 	//Tapi misalnya yang nempatin banner itu sendiri, maka dianggap tetep free
 	//Misalnya banner yang nempatin punya campaign yang sama, maka tetep free juga
@@ -280,6 +292,45 @@ public class BannerProcessor {
 		}
 		return true;
 		
+	}
+	private boolean isZoneFree(Zone zone){
+		List<BannerPlacement> banners=BannerPlacement.find.
+													  where().
+												      eq("zone",zone).
+												      findList();
+		Logger.debug("Ukuran zone free " + banners.size());		
+		for(BannerPlacement place:banners){
+			if(place.getBanner().getCampaign().
+					getCampaign_type().equals(CampaignTypeEnum.EXCLUSIVE)){
+				if(!place.getBanner().isDeleted()){  //pastikan banner ngga kedelet
+					return false;							
+					}
+			}
+		}
+		return true;
+		
+	}	
+	//Revisi TA
+	public List<Zone> getZoneAvailable(){
+		try {
+			List<Zone> zones=null;
+			//jika teks
+			zones=Zone.find.where().order().asc("zone_channel").findList();
+			int[] delete=new int[zones.size()];
+			int deleteCount=0;
+			Logger.debug("Ukuran Zones 1 " + zones.size());
+			//buang zona yang udah di isi oleh campaign eklusif
+			for(int x=0;x<zones.size();x++){
+				if(!isZoneFree(zones.get(x))){
+					zones.remove(x);				
+				}
+			}
+			Logger.debug("Ukuran Zones " + zones.size());
+			return zones;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
 	}
 	/*
 	 * Spek array 
@@ -315,6 +366,43 @@ public class BannerProcessor {
 			return null;
 		}
 	}
+	/*
+	 * Spek array 
+	 * array 0 tipe data
+	 * array 1 buat value
+	 * array 2 buat nama yang tampil (entah channel atau zona)
+	 * array 3 buat price
+	 * array 4 buat deskripsi
+	 */
+	public List<String[]> getZoneAvailableGrouped(List<Zone> zones, Campaign campaign){
+		
+		try {
+			int channel=0;
+			int i=0;
+			List<String[]> result=new ArrayList<String[]>();
+			for(Zone zone:zones){
+				int bidPrice=campaign.getBid_price();
+				String prefix=getPrefix(campaign);
+				String price=Angka.toRupiah(bidPrice+bidPrice*zone.getPriceFactor())+" "+prefix;
+				
+				if(!(zone.getZone_channel().getId_zone_channel()==channel)){
+					String[] add={"CHANNEL","",zone.getZone_channel().getChannel_name()};
+					String[] add2={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(),price, zone.getDescription()};
+					result.add(add);
+					result.add(add2);
+				}else{
+					String[] add={"ZONE",Integer.toString(zone.getId_zone()),zone.getZone_name(),price, zone.getDescription()};
+					result.add(add);				
+				}
+				channel=zone.getZone_channel().getId_zone_channel();	
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	private String getPrefix(Campaign campaign){
 		if(campaign.getPricing_model().equals(PricingModelEnum.CPA)){
 			return "Per Klik";
@@ -382,7 +470,36 @@ public class BannerProcessor {
 		}
 		return true;
 	}
-	
+	/*
+	 * Nyimpen banner placement untuk revisi TA
+	 * langsung insert aja, kalo update baru agak ribet
+	 */
+	public Banner saveBannerByPlacement(DynamicForm form, int idCampaign){
+		try {
+			//inisialisasi
+			int idZone=Integer.parseInt(form.get("placement"));
+			Zone zone=Zone.find.byId(idZone);
+			Campaign campaign=Campaign.find.byId(idCampaign);
+			
+			//new
+			Banner banner=new Banner();
+			banner.setBannerSize(zone.getBanner_size());
+			banner.setBannerType(zone.getZone_type());
+			banner.setCampaign(campaign);
+			banner.setActive(false);
+			banner.save();
+			
+			BannerPlacement placement=new BannerPlacement();
+			placement.setBanner(banner);
+			placement.setZone(zone);
+			placement.save();
+			
+			return banner;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
 	/* dihapus dulu atau falsekan semua placement yang udah ada 
 	 * Cari udah ada penempatan belum, yang lagi kondisi false;
 	 * kalo udah ada dan ga aktif(false) maka diaktifkan, kalo belum ada, diaktifin lagi
