@@ -73,7 +73,16 @@ public class BannerProcessor {
 			if(!banner.isActive()){
 				if(banner.getTitle()==null){
 					if(banner.getContent_text()==null){
-						banner.delete();
+						try {
+							List<BannerPlacement> placement=banner.getPlacement();
+							for(BannerPlacement place:placement){
+								place.delete();
+							}
+							banner.delete();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -136,7 +145,9 @@ public class BannerProcessor {
 				FileUpload upload=banner.getContent_link();				
 				banner.setContent_link(file);	
 				banner.update();
-				upload.delete();
+				if(upload!=null){
+					upload.delete();					
+				}
 
 			}
 			banner.update();

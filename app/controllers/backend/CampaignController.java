@@ -443,7 +443,7 @@ public class CampaignController extends CompressController {
 			Banner bannerSave=bannerProc.updateBanner(filledForm, idBanner , upload);
 			if(bannerSave!=null){
 				flash("success","Banner dibuat ");
-				return redirect(controllers.backend.routes.CampaignController.editBanner(bannerSave.getId_banner()));
+				return redirect(controllers.backend.routes.CampaignController.showSingleCampaign(banner.getCampaign().getId_campaign()));
 			}else{
 				flash("error","Kesalahan saat menyimpan data");
 				return ok(create_banner_from_placement.render(data, banner, filledForm));
