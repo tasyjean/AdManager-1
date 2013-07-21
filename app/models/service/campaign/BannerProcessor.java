@@ -134,6 +134,9 @@ public class BannerProcessor {
 		Banner banner=null;
 		try {
 			banner=Banner.find.byId(idBanner);
+			if(banner.getTitle()==null){
+				banner.setActive(true);
+			}
 			banner.setName(form.get().name);
 			banner.setDescription(form.get().description);
 			banner.setTitle(form.get().title);
@@ -141,6 +144,7 @@ public class BannerProcessor {
 			banner.setTarget(form.get().target);
 			banner.setAlt_text(form.get().alt_text);
 			banner.setWeight(Integer.parseInt(form.get().weight));
+			
 			if(file!=null){
 				FileUpload upload=banner.getContent_link();				
 				banner.setContent_link(file);	
